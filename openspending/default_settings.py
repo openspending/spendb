@@ -64,3 +64,5 @@ CELERY_ROUTES = {
         'queue': 'loading'
     },
 }
+
+MAX_CONTENT_LENGTH = 1024 * 1024 * 500 # 500 MB
