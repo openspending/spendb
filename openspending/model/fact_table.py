@@ -11,7 +11,6 @@ from sqlalchemy.types import Unicode
 from sqlalchemy.sql.expression import select, func
 
 from openspending.core import db
-from openspending.lib.util import hash_values
 
 from openspending.model.common import decode_row, TableHandler
 from openspending.model.dimension import CompoundDimension
@@ -68,21 +67,6 @@ class FactTable(TableHandler):
             self._is_generated = self.table.exists()
         return self._is_generated
 
-    def _make_key(self, data):
-        """ Generate a unique identifier for an entry. This is better
-        than SQL auto-increment because it is stable across mutltiple
-        loads and thus creates stable URIs for entries.
-        """
-        uniques = [self.dataset.name]
-        for field in self.fields:
-            if not field.key:
-                continue
-            obj = data.get(field.name)
-            if isinstance(obj, dict):
-                obj = obj.get('name', obj.get('id'))
-            uniques.append(obj)
-        return hash_values(uniques)
-
     def load(self, data):
         """ Handle a single entry of data in the mapping source format,
         i.e. with all needed columns. This will propagate to all dimensions
@@ -102,21 +86,6 @@ class FactTable(TableHandler):
         for dimension in self.model.dimensions:
             dimension.drop(self.bind)
         self._is_generated = False
-
-    def key(self, key):
-        """ For a given ``key``, find a column to indentify it in a query.
-        A ``key`` is either the name of a simple attribute (e.g. ``time``)
-        or of an attribute of a complex dimension (e.g. ``to.label``). The
-        returned key is using an alias, so it can be used in a query
-        directly. """
-        attr = None
-        if '.' in key:
-            key, attr = key.split('.', 1)
-        dimension = self.model[key]
-        if hasattr(dimension, 'alias'):
-            attr_name = dimension[attr].column.name if attr else 'name'
-            return dimension.alias.c[attr_name]
-        return self.alias.c[dimension.column.name]
 
     def entries(self, conditions="1=1", order_by=None, limit=None,
                 offset=0, step=10000, fields=None):
@@ -171,16 +140,17 @@ class FactTable(TableHandler):
         Returns a tuple of (first timestamp, last timestamp) where timestamp
         is a datetime object
         """
-        try:
-            # Get the time column
-            time = self.key('time')
-            # We use SQL's min and max functions to get the timestamps
-            query = db.session.query(func.min(time), func.max(time))
-            # We just need one result to get min and max time
-            return [datetime.strptime(date, '%Y-%m-%d') if date else None
-                    for date in query.one()]
-        except:
+        if not self.is_generated:
             return (None, None)
+    
+        # Get the time column
+        time = self.model['time']
+        time = time.alias.c['name']
+        # We use SQL's min and max functions to get the timestamps
+        query = db.session.query(func.min(time), func.max(time))
+        # We just need one result to get min and max time
+        return [datetime.strptime(date, '%Y-%m-%d') if date else None
+                for date in query.one()]
 
     def num_entries(self):
         if not self.is_generated:
