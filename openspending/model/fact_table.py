@@ -1,93 +1,118 @@
-"""
-The ``FactTable`` serves as a controller object for a given ``Model``,
-handling the creation, filling and migration of the table schema
-associated with the dataset.
-"""
-import logging
-from datetime import datetime
+import json
 from itertools import count
-from sqlalchemy import ForeignKeyConstraint, MetaData
-from sqlalchemy.types import Unicode
+from datetime import datetime
+
+from sqlalchemy import MetaData
+from sqlalchemy.schema import Table, Column
+from sqlalchemy.types import Unicode, Integer, Date, Float
 from sqlalchemy.sql.expression import select, func
 
 from openspending.core import db
-
-from openspending.model.common import decode_row, TableHandler
-from openspending.model.dimension import CompoundDimension
-
-log = logging.getLogger(__name__)
+from openspending.lib.util import cache_hash
+from openspending.model.common import decode_row
 
 
-class FactTable(TableHandler):
+TYPES = {
+    'string': Unicode,
+    'integer': Integer,
+    'float': Float,
+    'date': Date
+}
 
-    def __init__(self, dataset, model):
+
+class FactTable(object):
+    """ The ``FactTable`` serves as a controller object for
+    a given ``Model``, handling the creation, filling and migration
+    of the table schema associated with the dataset. """
+    
+    def __init__(self, dataset):
         self.dataset = dataset
-        self.model = model
-        self.init()
-
-    def init(self):
-        """ Create a SQLAlchemy model for the current dataset model,
-        without creating the tables and columns. This needs to be
-        called both for access to the data and in order to generate
-        the model physically. """
+        
         self.bind = db.engine
-
-        # HACK HACK LOOSE WHEN THERE'S ONLY ONE FACT TABLE:
-        self.model.bind = self.bind
         self.meta = MetaData()
         self.meta.bind = self.bind
+        self._table = None
         
-        self._init_table(self.meta, self.dataset.name, 'entry',
-                         id_type=Unicode(42))
-        for field in self.model.fields:
-            field.column = field.init(self.meta, self.table)
-        self.alias = self.table.alias('entry')
-
-        # HACK HACK LOOSE WHEN THERE'S ONLY ONE FACT TABLE:
-        self.model.alias = self.alias
-        self._is_generated = None
-
-    def generate(self):
-        """ Create the tables and columns necessary for this dataset
-        to keep data.
-        """
-        for field in self.model.fields:
-            field.generate(self.meta, self.table)
-        for dim in self.model.dimensions:
-            if isinstance(dim, CompoundDimension):
-                self.table.append_constraint(ForeignKeyConstraint(
-                    [dim.name + '_id'], [dim.table.name + '.id'],
-                    # use_alter=True,
-                    name='fk_' + self.dataset.name + '_' + dim.name
-                ))
-        self._generate_table()
-        self._is_generated = None
+    @property
+    def table(self):
+        """ Generate an appropriate table representation to mirror the
+        fields known for this table. """
+        if self._table is None:
+            name = '%s__facts' % self.dataset.name
+            self._table = Table(name, self.meta)
+            id_col = Column('_id', Unicode(42), primary_key=True)
+            self._table.append_column(id_col)
+            json_col = Column('_json', Unicode())
+            self._table.append_column(json_col)
+            self._fields_columns(self._table)
+        return self._table
 
     @property
-    def is_generated(self):
-        if self._is_generated is None:
-            self._is_generated = self.table.exists()
-        return self._is_generated
+    def alias(self):
+        """ An alias used for queries. """
+        if not hasattr(self, '_alias'):
+            self._alias = self.table.alias('entry')
+        return self._alias
 
-    def load(self, data):
-        """ Handle a single entry of data in the mapping source format,
-        i.e. with all needed columns. This will propagate to all dimensions
-        and set values as appropriate. """
-        entry = dict()
-        for field in self.model.fields:
-            field_data = data[field.name]
-            entry.update(field.load(self.bind, field_data))
-        entry['id'] = self.model._make_key(data)
-        self._upsert(self.bind, entry, ['id'])
+    @property
+    def exists(self):
+        return db.engine.has_table(self.table.name)
+
+    def _fields_columns(self, table):
+        """ Transform the (auto-detected) fields into a set of column
+        specifications. """
+
+        for name, field in self.dataset.fields.items():
+            data_type = TYPES.get(field.get('type'), Unicode)
+            col = Column(name, data_type, nullable=True)
+            table.append_column(col)
+
+    def load_iter(self, iterable, chunk_size=1000):
+        """ Bulk load all the data in an artifact to a matching database
+        table. """
+        chunk = []
+        conn = self.bind.connect()
+        tx = conn.begin()
+        try:
+            for record in iterable:
+                chunk.append(self._expand_record(record))
+                if len(chunk) >= chunk_size:
+                    stmt = self.table.insert(chunk)
+                    conn.execute(stmt)
+                    chunk = []
+
+            if len(chunk):
+                stmt = self.table.insert(chunk)
+                conn.execute(stmt)
+            tx.commit()
+        except:
+            tx.rollback()
+            raise
+
+    def _expand_record(self, record):
+        """ Transform an incoming record into a form that matches the
+        fields schema. """
+        record['_id'] = cache_hash(record)
+        record['_json'] = json.dumps(record)
+        return record
+
+    def create(self):
+        """ Create the fact table if it does not exist. """
+        if not self.exists:
+            self.table.create(self.bind)
 
     def drop(self):
-        """ Drop all tables created as part of this dataset, i.e. by calling
-        ``generate()``. This will of course also delete the data itself.
-        """
-        self._drop(self.bind)
-        for dimension in self.model.dimensions:
-            dimension.drop(self.bind)
-        self._is_generated = False
+        """ Drop the fact table if it does exist. """
+        if self.exists:
+            self.table.drop()
+        self._table = None
+
+    def num_entries(self):
+        """ Get the number of facts that are currently loaded. """
+        if not self.exists:
+            return 0
+        rp = self.bind.execute(self.table.count())
+        return rp.fetchone()[0]
 
     def entries(self, conditions="1=1", order_by=None, limit=None,
                 offset=0, step=10000, fields=None):
@@ -102,12 +127,12 @@ class FactTable(TableHandler):
             return
 
         if fields is None:
-            fields = self.model.fields
+            fields = self.dataset.model.axes
 
-        joins = self.alias
-        for d in self.model.dimensions:
-            if d in fields:
-                joins = d.join(joins)
+        #joins = self.alias
+        #for d in self.model.dimensions:
+        #    if d in fields:
+        #        joins = d.join(joins)
         selects = [f.selectable for f in fields] + [self.alias.c.id]
 
         # enforce stable sorting:
@@ -122,7 +147,7 @@ class FactTable(TableHandler):
             if qlimit <= 0:
                 break
 
-            query = select(selects, conditions, joins, order_by=order_by,
+            query = select(selects, conditions, [], order_by=order_by,
                            use_labels=True, limit=qlimit, offset=qoffset)
             rp = self.bind.execute(query)
 
@@ -146,20 +171,13 @@ class FactTable(TableHandler):
             return (None, None)
     
         # Get the time column
-        time = self.model['time']
+        time = self.dataset.model['time']
         time = time.alias.c['name']
         # We use SQL's min and max functions to get the timestamps
         query = db.session.query(func.min(time), func.max(time))
         # We just need one result to get min and max time
         return [datetime.strptime(date, '%Y-%m-%d') if date else None
                 for date in query.one()]
-
-    def num_entries(self):
-        """ Get the number of facts that are currently loaded. """
-        if not self.is_generated:
-            return 0
-        rp = self.bind.execute(self.alias.count())
-        return rp.fetchone()[0]
 
     def __repr__(self):
         return "<FactTable(%r)>" % (self.dataset)

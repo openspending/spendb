@@ -81,7 +81,7 @@ class Dataset(db.Model):
     @reconstructor
     def _load_model(self):
         self.model = Model(self)
-        self.fact_table = FactTable(self, self.model)
+        self.fact_table = FactTable(self)
 
     def touch(self):
         """ Update the dataset timestamp. This is used for cache

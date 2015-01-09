@@ -4,7 +4,6 @@ representing its measures, dimensions and attributes.
 """
 import logging
 
-from openspending.lib.util import hash_values
 from openspending.model.dimension import (CompoundDimension, DateDimension,
                                           AttributeDimension, Measure)
 
@@ -14,16 +13,13 @@ log = logging.getLogger(__name__)
 class Model(object):
 
     def __init__(self, dataset):
-        self.dataset = dataset
-        self.init()
-
-    def init(self):
         """ Construct the in-memory object representation of this
         dataset's dimension and measures model.
 
         This is called upon initialization and deserialization of
         the dataset from the SQLAlchemy store.
         """
+        self.dataset = dataset
         self.dimensions = []
         self.measures = []
         for dim, data in self.dataset.mapping.items():
@@ -39,11 +35,16 @@ class Model(object):
                 dimension = CompoundDimension(self, dim, data)
             self.dimensions.append(dimension)
 
+    @property
+    def exists(self):
+        axes = len(self.dimensions) + len(self.measures)
+        return axes > 0
+
     def __getitem__(self, name):
-        """ Access a field (dimension or measure) by name. """
-        for field in self.fields:
-            if field.name == name:
-                return field
+        """ Access a axis (dimension or measure) by name. """
+        for axis in self.axes:
+            if axis.name == name:
+                return axis
         raise KeyError()
 
     def __contains__(self, name):
@@ -54,7 +55,7 @@ class Model(object):
             return False
 
     @property
-    def fields(self):
+    def axes(self):
         """ Both the dimensions and metrics in this dataset. """
         return self.dimensions + self.measures
 
@@ -67,21 +68,6 @@ class Model(object):
     @property
     def facet_dimensions(self):
         return [d for d in self.dimensions if d.facet]
-
-    def _make_key(self, data):
-        """ Generate a unique identifier for an entry. This is better
-        than SQL auto-increment because it is stable across mutltiple
-        loads and thus creates stable URIs for entries.
-        """
-        uniques = [self.dataset.name]
-        for field in self.fields:
-            if not field.key:
-                continue
-            obj = data.get(field.name)
-            if isinstance(obj, dict):
-                obj = obj.get('name', obj.get('id'))
-            uniques.append(obj)
-        return hash_values(uniques)
 
     def __repr__(self):
         return "<Model(%r)>" % (self.dataset)

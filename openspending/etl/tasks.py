@@ -4,7 +4,6 @@ from loadkit import extract, transform, logfile
 from loadkit import Source, Artifact
 
 from openspending.core import data_manager, db
-from openspending.model.denorm_fact_table import FactTable
 
 log = logging.getLogger(__name__)
 
@@ -73,12 +72,8 @@ def load(dataset):
         db.session.commit()
 
         artifact = Artifact(package, ARTIFACT_NAME)
-        fact_table = FactTable(dataset)
-        fact_table.create()
-        fact_table.load_iter(artifact.records())
-        
-        # TODO: log when there was no data.
-        return fact_table
+        dataset.fact_table.create()
+        dataset.fact_table.load_iter(artifact.records())
     except Exception, e:
         log.exception(e)
     finally:

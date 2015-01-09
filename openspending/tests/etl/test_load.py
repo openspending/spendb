@@ -72,7 +72,8 @@ class TestLoad(DatabaseTestCase):
         source = tasks.extract_fileobj(self.ds, fp,
                                        file_name='cra2.csv')
         tasks.transform_source(self.ds, source.name)
-        fact_table = tasks.load(self.ds)
-        assert fact_table.num_entries() == 36, fact_table.num_entries()
-        
+        tasks.load(self.ds)
+        assert self.ds.fact_table.num_entries() == 36, \
+            self.ds.fact_table.num_entries()
+
         
