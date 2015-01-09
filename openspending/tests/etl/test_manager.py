@@ -15,4 +15,5 @@ class TestDataManager(DatabaseTestCase):
         
     def test_manager(self):
         assert data_manager.bucket is not None, data_manager.bucket
-        assert False, dir(data_manager.bucket)
+        package = data_manager.package('cra')
+        assert package.id == 'cra', package

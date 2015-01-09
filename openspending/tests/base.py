@@ -16,6 +16,8 @@ class TestCase(FlaskTestCase):
         app = create_web_app(**{
             'DEBUG': True,
             'TESTING': True,
+            # if this ever exists, something went horribly wrong:
+            'AWS_DATA_BUCKET': 'unittest.openspending.org',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
             'CELERY_ALWAYS_EAGER': True,
             'UPLOADS_DEFAULT_DEST': tempfile.mkdtemp()
