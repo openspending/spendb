@@ -31,6 +31,7 @@ class FactTable(TableHandler):
         called both for access to the data and in order to generate
         the model physically. """
         self.bind = db.engine
+
         # HACK HACK LOOSE WHEN THERE'S ONLY ONE FACT TABLE:
         self.model.bind = self.bind
         self.meta = MetaData()
@@ -41,6 +42,7 @@ class FactTable(TableHandler):
         for field in self.model.fields:
             field.column = field.init(self.meta, self.table)
         self.alias = self.table.alias('entry')
+
         # HACK HACK LOOSE WHEN THERE'S ONLY ONE FACT TABLE:
         self.model.alias = self.alias
         self._is_generated = None
@@ -153,6 +155,7 @@ class FactTable(TableHandler):
                 for date in query.one()]
 
     def num_entries(self):
+        """ Get the number of facts that are currently loaded. """
         if not self.is_generated:
             return 0
         rp = self.bind.execute(self.alias.count())
