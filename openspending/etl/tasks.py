@@ -4,6 +4,7 @@ from loadkit import extract, transform, logfile
 from loadkit import Source, Artifact
 
 from openspending.core import data_manager, db
+from openspending.model.denorm_fact_table import FactTable
 
 log = logging.getLogger(__name__)
 
@@ -11,10 +12,14 @@ ARTIFACT_NAME = 'table.json'
 MODULES = ['openspending', 'messytables']
 
 
+def capture_logs(package, run):
+    pass
+
+
 def extract_fileobj(dataset, fh, file_name=None):
     """ Upload contents of an opened fh to the data repository. """
     package = data_manager.package(dataset.name)
-    handler = logfile.capture(package, 'test', modules=['openspending'])
+    handler = logfile.capture(package, 'test', MODULES)
     try:
         source = extract.from_fileobj(package, fh, source_name=file_name)
         return source
@@ -68,11 +73,12 @@ def load(dataset):
         db.session.commit()
 
         artifact = Artifact(package, ARTIFACT_NAME)
+        fact_table = FactTable(dataset)
+        fact_table.create()
+        fact_table.load_iter(artifact.records())
         
-        for row in artifact.records():
-            print row
-
         # TODO: log when there was no data.
+        return fact_table
     except Exception, e:
         log.exception(e)
     finally:

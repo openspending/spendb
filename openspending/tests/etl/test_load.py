@@ -67,3 +67,12 @@ class TestLoad(DatabaseTestCase):
         amt = fields.get('amount')
         assert amt['type'] == 'integer', amt
 
+    def test_load_data(self):
+        fp = csvimport_fixture_file('../data', 'cra.csv')
+        source = tasks.extract_fileobj(self.ds, fp,
+                                       file_name='cra2.csv')
+        tasks.transform_source(self.ds, source.name)
+        fact_table = tasks.load(self.ds)
+        assert fact_table.num_entries() == 36, fact_table.num_entries()
+        
+        
