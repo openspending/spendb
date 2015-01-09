@@ -22,7 +22,7 @@ class TestCase(FlaskTestCase):
             'CELERY_ALWAYS_EAGER': True,
             'UPLOADS_DEFAULT_DEST': tempfile.mkdtemp()
         })
-        self.s3_mock.stop()
+        #self.s3_mock.stop()
         return app
 
     def setUp(self):

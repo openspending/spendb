@@ -8,23 +8,8 @@ from openspending.lib import json
 from openspending.importer import CSVImporter
 
 from openspending.tests.base import DatabaseTestCase
-from openspending.tests.helpers import fixture_path, make_account
-
-
-def csvimport_fixture_path(name, path):
-    return urlparse.urljoin('file:', urllib.pathname2url(fixture_path('csv_import/%s/%s' % (name, path))))
-
-
-def csvimport_fixture_file(name, path):
-    try:
-        fp = urllib.urlopen(csvimport_fixture_path(name, path))
-    except IOError:
-        if name == 'default':
-            fp = None
-        else:
-            fp = csvimport_fixture_file('default', path)
-
-    return fp
+from openspending.tests.helpers import csvimport_fixture_file, make_account
+from openspending.tests.helpers import csvimport_fixture_path
 
 
 def csvimport_fixture(name):

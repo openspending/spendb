@@ -1,13 +1,16 @@
-from openspending.validation.data import convert_types
-from openspending.model.dataset import Dataset
-from openspending.core import db
-from openspending.lib import solr_util as solr
-
-from datetime import datetime
+import urllib
 import os
 import shutil
 import json
 import csv
+import urlparse
+from StringIO import StringIO
+from datetime import datetime
+
+from openspending.validation.data import convert_types
+from openspending.model.dataset import Dataset
+from openspending.core import db
+from openspending.lib import solr_util as solr
 
 
 def fixture_file(name):
@@ -36,6 +39,25 @@ def fixture_path(name):
     test_directory = os.path.dirname(__file__)
     # Fixture is a directory in the test directory
     return os.path.join(test_directory, 'fixtures', name)
+
+
+def csvimport_fixture_path(name, path):
+    url = urllib.pathname2url(fixture_path('csv_import/%s/%s' % (name, path)))
+    return urlparse.urljoin('file:', url)
+
+
+def csvimport_fixture_file(name, path):
+    try:
+        fp = urllib.urlopen(csvimport_fixture_path(name, path))
+    except IOError:
+        if name == 'default':
+            fp = None
+        else:
+            fp = csvimport_fixture_file('default', path)
+
+    if fp:
+        fp = StringIO(fp.read())
+    return fp
 
 
 def load_fixture(name, manager=None):
