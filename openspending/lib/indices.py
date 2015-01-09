@@ -3,7 +3,8 @@ import logging
 from sqlalchemy.sql.expression import select, func
 from sqlalchemy.orm import aliased
 
-from openspending.core import db
+from openspending.core import db, cache
+from openspending.lib.util import cache_hash
 from openspending.lib.helpers import url_for
 from openspending.model.dataset import (Dataset, DatasetLanguage,
                                         DatasetTerritory)
@@ -82,3 +83,23 @@ def dataset_index(account, languages=[], territories=[], category=None):
         results = results.filter(Dataset.category == category)
 
     return list(results)
+
+
+@cache.memoize()
+def cached_index(account, languages=[], territories=[], category=None):
+    """ A proxy function to run cached calls against the dataset
+    index (dataset index page and dataset.json). """
+    datasets = dataset_index(account, languages, territories, category)
+    return {
+        'datasets': map(lambda d: d.as_dict(), datasets),
+        'languages': language_index(datasets),
+        'territories': territory_index(datasets),
+        'categories': category_index(datasets)
+    }
+
+cached_index.make_cache_key = cache_hash
+
+
+def clear_index_cache():
+    """ Delete all cached index representations. """
+    cache.delete_memoized(cached_index)

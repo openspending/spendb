@@ -17,7 +17,7 @@ from openspending.lib.csvexport import write_csv
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.paramparser import DatasetIndexParamParser
 from openspending import auth
-from openspending.lib.cache import cached_index
+from openspending.lib.indices import cached_index
 from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.views import request_set_views
 from openspending.lib.hypermedia import dataset_apply_links

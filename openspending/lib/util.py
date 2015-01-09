@@ -1,3 +1,4 @@
+import types
 from hashlib import sha1
 from slugify import slugify # noqa
 
@@ -41,6 +42,10 @@ def cache_hash(*a, **kw):
     """ Try to hash an arbitrary object for caching. """
 
     def cache_str(o):
+        if isinstance(o, (types.FunctionType, types.BuiltinFunctionType,
+                          types.MethodType, types.BuiltinMethodType,
+                          types.UnboundMethodType)):
+            return getattr(o, 'func_name', 'func')
         if isinstance(o, dict):
             o = [k + ':' + cache_str(v) for k, v in o.items()]
         if isinstance(o, (list, tuple, set)):

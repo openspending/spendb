@@ -2,17 +2,36 @@ import logging
 
 from flask import request
 
+from openspending.core import cache
 from openspending.auth import require
+from openspending.lib.util import cache_hash
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.csvexport import write_csv
 from openspending.lib.paramparser import AggregateParamParser
-from openspending.lib.cache import cached_aggregate
+from openspending.inflation.aggregation import aggregate as inf_aggregate
 from openspending.lib.hypermedia import drilldowns_apply_links
 from openspending.views.cache import etag_cache_keygen
-from openspending.views.api_v2.search import blueprint
+from openspending.views.api_v2.common import blueprint
 
 
 log = logging.getLogger(__name__)
+
+
+@cache.memoize()
+def cached_aggregate(dataset, measures=['amount'], drilldowns=None, cuts=None,
+                     page=1, pagesize=10000, order=None, inflate=None):
+    """ A proxy object to run cached calls against the dataset
+    aggregation function. This is neither a concern of the data
+    model itself, nor should it be repeated at each location
+    where caching of aggregates should occur - thus it ends up
+    here.
+    For call docs, see ``model.Dataset.aggregate``. """
+    return inf_aggregate(dataset, measures=measures,
+                         drilldowns=drilldowns, cuts=cuts,
+                         page=page, pagesize=pagesize,
+                         order=order, inflate=inflate)
+
+cached_aggregate.make_cache_key = cache_hash
 
 
 @blueprint.route('/api/2/aggregate')
