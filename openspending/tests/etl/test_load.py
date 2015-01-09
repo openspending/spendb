@@ -1,4 +1,4 @@
-from StringIO import StringIO
+from loadkit import logfile
 
 from openspending.core import db, data_manager
 from openspending.model import Dataset
@@ -24,10 +24,14 @@ class TestLoad(DatabaseTestCase):
         source = tasks.extract_url(self.ds, self.cra_url)
         assert 'cra.csv' == source.name, source.name
         
-    #def test_extract_missing_url(self):
-    #    url = csvimport_fixture_path('../data', 'xcra.csv')
-    #    source = tasks.extract_url(self.ds.name, url)
-    #    assert 'cra.csv' == source.name, source.name
+    def test_extract_missing_url(self):
+        url = csvimport_fixture_path('../data', 'xcra.csv')
+        source = tasks.extract_url(self.ds, url)
+        assert source is None, source
+
+        package = data_manager.package(self.ds.name)
+        messages = list(logfile.load(package, 'test'))
+        assert len(messages) > 2, messages
     
     def test_extract_file(self):
         fp = csvimport_fixture_file('../data', 'cra.csv')

@@ -70,6 +70,14 @@ class Dataset(db.Model):
     def mapping(self):
         return self.data.get('mapping', {})
 
+    @property
+    def fields(self):
+        return self.data.get('fields', {})
+
+    @fields.setter
+    def fields(self, value):
+        self.data['fields'] = value
+    
     @reconstructor
     def _load_model(self):
         self.model = Model(self)
