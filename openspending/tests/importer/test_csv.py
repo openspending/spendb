@@ -34,7 +34,7 @@ def csvimport_fixture(name):
     if mapping_fp:
         model['mapping'] = json.load(mapping_fp)
     dataset = Dataset(model)
-    dataset.model.generate()
+    dataset.fact_table.generate()
     db.session.add(dataset)
     data_path = csvimport_fixture_path(name, 'data.csv')
     user = make_account()
@@ -55,11 +55,11 @@ class TestCSVImporter(DatabaseTestCase):
         assert dataset is not None, "Dataset should not be None"
         assert dataset.name == "test-csv"
 
-        entries = dataset.model.entries()
+        entries = dataset.fact_table.entries()
         assert len(list(entries)) == 4, len(list(entries))
 
         # TODO: provenance
-        entry = list(dataset.model.entries(limit=1, offset=1)).pop()
+        entry = list(dataset.fact_table.entries(limit=1, offset=1)).pop()
         assert entry is not None, "Entry with name could not be found"
         assert entry['amount'] == 66097.77
 
@@ -81,7 +81,7 @@ class TestCSVImporter(DatabaseTestCase):
         dataset = db.session.query(Dataset).first()
         assert dataset is not None, "Dataset should not be None"
 
-        entries = list(dataset.model.entries())
+        entries = list(dataset.fact_table.entries())
         assert len(entries) == 5
 
         entry = entries[0]
@@ -172,7 +172,7 @@ class TestCSVImportDatasets(DatabaseTestCase):
 
         # check correct number of entries
         dataset = db.session.query(Dataset).first()
-        entries = list(dataset.entries())
+        entries = list(dataset.fact_table.entries())
         assert len(entries) == lines
 
     def test_all_imports(self):

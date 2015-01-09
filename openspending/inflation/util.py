@@ -1,5 +1,7 @@
 import datetime
 
+from economics import Inflation
+
 from openspending.reference import country
 
 
@@ -83,9 +85,7 @@ def inflate(amount, target, reference, territories):
     dataset_country = get_sole_country(territories)
 
     # Inflate the amount from reference date to the target date
-
     # TODO: where do we set this up?
-    from economics import Inflation
     inflation = Inflation()
     inflated_amount = inflation.inflate(amount, target_date,
                                         reference_date,

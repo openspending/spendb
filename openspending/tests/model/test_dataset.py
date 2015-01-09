@@ -54,9 +54,9 @@ class TestDataset(DatabaseTestCase):
         assert not hasattr(dim, 'alias')
 
     def test_generate_db_entry_table(self):
-        assert self.ds.model.table.name == 'test__entry', \
-            self.ds.model.table.name
-        cols = self.ds.model.table.c
+        assert self.ds.fact_table.table.name == 'test__entry', \
+            self.ds.fact_table.table.name
+        cols = self.ds.fact_table.table.c
         assert 'id' in cols
         assert isinstance(cols['id'].type, Unicode)
 
@@ -83,12 +83,13 @@ class TestDatasetLoad(DatabaseTestCase):
         self.ds = Dataset(model_fixture('simple'))
         db.session.add(self.ds)
         db.session.commit()
-        self.ds.model.generate()
+        self.ds.fact_table.generate()
         self.engine = db.engine
 
     def test_load_all(self):
         load_dataset(self.ds)
-        resn = self.engine.execute(self.ds.model.table.select()).fetchall()
+        q = self.ds.fact_table.table.select()
+        resn = self.engine.execute(q).fetchall()
         assert len(resn) == 6, resn
         row0 = resn[0]
         assert row0['amount'] == 200, row0.items()
@@ -100,7 +101,7 @@ class TestDatasetLoad(DatabaseTestCase):
         assert 'test__to' in tn, tn
         assert 'test__function' in tn, tn
 
-        self.ds.model.drop()
+        self.ds.fact_table.drop()
         tn = self.engine.table_names()
         assert 'test__entry' not in tn, tn
         assert 'test__to' not in tn, tn
@@ -108,7 +109,8 @@ class TestDatasetLoad(DatabaseTestCase):
 
     def test_dataset_count(self):
         load_dataset(self.ds)
-        assert len(self.ds.model) == 6, len(self.ds.model)
+        assert self.ds.fact_table.num_entries() == 6, \
+            self.ds.fact_table.num_entries()
 
     def test_aggregate_simple(self):
         load_dataset(self.ds)
@@ -149,7 +151,7 @@ class TestDatasetLoad(DatabaseTestCase):
 
     def test_materialize_table(self):
         load_dataset(self.ds)
-        itr = self.ds.model.entries()
+        itr = self.ds.fact_table.entries()
         tbl = list(itr)
         assert len(tbl) == 6, len(tbl)
         row = tbl[0]

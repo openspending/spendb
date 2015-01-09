@@ -8,6 +8,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from openspending.core import db
 
 from openspending.model.model import Model
+from openspending.model.fact_table import FactTable
 from openspending.model.common import (MutableDict, JSONType,
                                        DatasetFacetMixin)
 
@@ -72,6 +73,7 @@ class Dataset(db.Model):
     @reconstructor
     def _load_model(self):
         self.model = Model(self)
+        self.fact_table = FactTable(self, self.model)
 
     def touch(self):
         """ Update the dataset timestamp. This is used for cache

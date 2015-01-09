@@ -11,8 +11,6 @@ ALIAS_PLACEHOLDER = u'‽'
 
 
 def decode_row(row, dataset):
-    from openspending.model.dimension import CompoundDimension
-
     result = {}
     for key, value in row.items():
         if '_' in key:
@@ -23,11 +21,6 @@ def decode_row(row, dataset):
             else:
                 if dimension not in result:
                     result[dimension] = {}
-
-                    # TODO: backwards-compat?
-                    if isinstance(dataset[dimension], CompoundDimension):
-                        result[dimension]['taxonomy'] = \
-                            dataset[dimension].taxonomy
                 result[dimension][attribute] = value
         else:
             if key == 'entries':

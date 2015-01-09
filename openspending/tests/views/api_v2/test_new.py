@@ -34,7 +34,7 @@ class TestApiNewDataset(ControllerTestCase):
         }
         response = self.client.post(u, data=params,
                                     query_string={'api_key': user.api_key})
-        assert "200" in response.status
+        assert "200" in response.status, response.data
         dataset = Dataset.by_name('openspending-example')
         assert dataset is not None
         assert dataset.private is False

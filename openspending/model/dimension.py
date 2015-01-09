@@ -237,7 +237,7 @@ class CompoundDimension(Dimension, TableHandler):
     def to_cubes(self, mappings, joins):
         """ Convert this dimension to a ``cubes`` dimension. """
         attributes = ['id'] + [a.name for a in self.attributes]
-        fact_table = self.model.table.name
+        fact_table = self.model.dataset.name + '__entry'
         joins.append({
             'master': '%s.%s' % (fact_table, self.name + '_id'),
             'detail': '%s.id' % self.table.name
@@ -317,7 +317,7 @@ class DateDimension(CompoundDimension):
 
     def to_cubes(self, mappings, joins):
         """ Convert this dimension to a ``cubes`` dimension. """
-        fact_table = self.model.table.name
+        fact_table = self.model.dataset.name + '__entry'
         joins.append({
             'master': '%s.%s' % (fact_table, self.name + '_id'),
             'detail': '%s.id' % self.table.name

@@ -153,8 +153,9 @@ def _get_entries(docs):
     entries = []
     for ds_name, ds_ids in by_dataset.iteritems():
         dataset = Dataset.by_name(ds_name)
-        query = dataset.model.alias.c.id.in_(ds_ids)
-        entries.extend([(dataset, e) for e in dataset.model.entries(query)])
+        query = dataset.fact_table.alias.c.id.in_(ds_ids)
+        ents = dataset.fact_table.entries(query)
+        entries.extend([(dataset, e) for e in ents])
 
     entries = util.sort_by_reference(ids, entries, lambda x: x[1]['id'])
     for dataset, entry in entries:

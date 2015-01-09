@@ -49,12 +49,12 @@ def load_fixture(name, manager=None):
         dataset.managers.append(manager)
     db.session.add(dataset)
     db.session.commit()
-    dataset.model.generate()
+    dataset.fact_table.generate()
     data = data_fixture(name)
     reader = csv.DictReader(data)
     for row in reader:
         entry = convert_types(model['mapping'], row)
-        dataset.model.load(entry)
+        dataset.fact_table.load(entry)
     data.close()
     return dataset
 
@@ -65,7 +65,7 @@ def load_dataset(dataset):
     reader = csv.DictReader(data)
     for row in reader:
         row = convert_types(simple_model['mapping'], row)
-        dataset.model.load(row)
+        dataset.fact_table.load(row)
     data.close()
 
 

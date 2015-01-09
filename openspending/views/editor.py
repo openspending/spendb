@@ -35,7 +35,7 @@ def index(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
 
-    entries_count = len(dataset.model)
+    entries_count = dataset.fact_table.num_entries()
     has_sources = dataset.sources.count() > 0
     source = dataset.sources.first()
     index_count = solr.dataset_entries(dataset.name)
@@ -126,7 +126,7 @@ def dimensions_edit(dataset, errors={}, mapping=None,
         mapping = source.analysis['mapping']
 
     fill = {'mapping': mapping}
-    if len(dataset.model):
+    if dataset.fact_table.num_entries():
         return render_template('editor/dimensions_errors.html',
                                dataset=dataset, source=source)
 
@@ -140,7 +140,7 @@ def dimensions_update(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
 
-    if len(dataset.model):
+    if dataset.fact_table.num_entries():
         raise BadRequest(_("You cannot edit the dimensions model when "
                            "data is loaded for the dataset."))
 
@@ -152,9 +152,9 @@ def dimensions_update(dataset):
         schema = mapping_schema(ValidationState(model))
         new_mapping = schema.deserialize(mapping)
         dataset.data['mapping'] = new_mapping
-        dataset.model.drop()
+        dataset.fact_table.drop()
         dataset._load_model()
-        dataset.model.generate()
+        dataset.fact_table.generate()
         db.session.commit()
         # h.flash_success(_("The mapping has been updated."))
         saved = True
@@ -268,10 +268,10 @@ def drop(dataset):
     require.dataset.update(dataset)
 
     dataset.updated_at = datetime.utcnow()
-    dataset.model.drop()
+    dataset.fact_table.drop()
     solr.drop_index(dataset.name)
-    dataset.model.init()
-    dataset.model.generate()
+    dataset.fact_table.init()
+    dataset.fact_table.generate()
     dataset.touch()
 
     # For every source in the dataset we set the status to removed
@@ -326,7 +326,7 @@ def delete(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
 
-    dataset.model.drop()
+    dataset.fact_table.drop()
     solr.drop_index(dataset.name)
     db.session.delete(dataset)
     db.session.commit()

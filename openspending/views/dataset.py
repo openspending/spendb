@@ -204,7 +204,7 @@ def view(dataset, format='html'):
         # num_entries = len(dataset)
 
         timerange = None
-        (earliest_timestamp, latest_timestamp) = dataset.model.timerange()
+        (earliest_timestamp, latest_timestamp) = dataset.fact_table.timerange()
         if earliest_timestamp is not None:
             timerange = {'from': earliest_timestamp,
                          'to': latest_timestamp}

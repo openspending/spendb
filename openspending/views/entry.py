@@ -87,7 +87,7 @@ def view(dataset, id, format='html'):
     # Get the entry that matches the given id. dataset.entries is
     # a generator so we create a list from it's responses based on the
     # given constraint
-    entries = list(dataset.model.entries(dataset.model.alias.c.id == id))
+    entries = list(dataset.fact_table.entries(dataset.fact_table.alias.c.id == id))
     # Since we're trying to get a single entry the list should only
     # contain one entry, if not then we return an error
     if not len(entries) == 1:

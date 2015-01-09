@@ -25,7 +25,7 @@ class OpenSpendingModelProvider(ModelProvider):
 
         mappings = {}
         joins = []
-        fact_table = dataset.model.table.name
+        fact_table = dataset.fact_table.table.name
 
         aggregates = [MeasureAggregate('num_entries',
                                        label='Numer of entries',

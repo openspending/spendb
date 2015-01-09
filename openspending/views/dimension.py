@@ -148,7 +148,7 @@ def entries(dataset, dimension, name, format='html'):
 
     request_set_views(dataset, member, dimension=dimension.name)
     
-    entries = dataset.model.entries(
+    entries = dataset.fact_table.entries(
         dimension.alias.c.name == member['name'])
     entries = (entry_apply_links(dataset, e) for e in entries)
     return render_template('dimension/entries.html', dataset=dataset,
