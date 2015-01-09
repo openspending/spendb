@@ -1,5 +1,6 @@
 import tempfile
 
+from moto import mock_s3
 from flask.ext.testing import TestCase as FlaskTestCase
 
 from openspending.core import create_web_app
@@ -9,6 +10,9 @@ from openspending.tests.helpers import clean_db, init_db
 class TestCase(FlaskTestCase):
 
     def create_app(self):
+        self.s3_mock = mock_s3()
+        self.s3_mock.start()
+        
         app = create_web_app(**{
             'DEBUG': True,
             'TESTING': True,

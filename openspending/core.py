@@ -16,6 +16,7 @@ from cubes.extensions import extensions
 from openspending import default_settings
 from openspending.lib.routing import NamespaceRouteRule
 from openspending.lib.routing import FormatConverter, NoDotConverter
+from openspending.etl.manager import DataManager
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -30,6 +31,7 @@ login_manager = LoginManager()
 cache = Cache()
 mail = Mail()
 assets = Environment()
+data_manager = DataManager()
 
 badge_images = UploadSet('badgeimages', IMAGES)
 
@@ -56,6 +58,7 @@ def create_app(**config):
     assets.init_app(app)
     login_manager.init_app(app)
     configure_uploads(app, (badge_images,))
+    data_manager.init_app(app)
 
     # HACKY SHIT IS HACKY
     from openspending.lib.solr_util import configure as configure_solr

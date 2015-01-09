@@ -22,3 +22,7 @@ UPLOADS_DEFAULT_DEST = '/tmp/openspending-uploads'
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 
 CELERY_ALWAYS_EAGER = False
+
+AWS_KEY_ID = None
+AWS_SECRET = None
+AWS_DATA_BUCKET = 'data.openspending.org'
