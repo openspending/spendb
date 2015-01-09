@@ -10,22 +10,17 @@ from openspending.core import db
 ALIAS_PLACEHOLDER = u'‽'
 
 
-def decode_row(row, dataset):
-    result = {}
-    for key, value in row.items():
-        if '_' in key:
-            dimension, attribute = key.split('_', 1)
-            dimension = dimension.replace(ALIAS_PLACEHOLDER, '_')
-            if dimension == 'entry':
-                result[attribute] = value
-            else:
-                if dimension not in result:
-                    result[dimension] = {}
-                result[dimension][attribute] = value
+def decode_row(row, model):
+    row = dict(row.items())
+    result = {'id': row['_id']}
+    for axis in model.axes:
+        if hasattr(axis, 'attributes'):
+            value = {}
+            for attr in axis.attributes:
+                value[attr.name] = row.get(attr.column)
         else:
-            if key == 'entries':
-                key = 'num_entries'
-            result[key] = value
+            value = row.get(axis.column)
+        result[axis.name] = value
     return result
 
 

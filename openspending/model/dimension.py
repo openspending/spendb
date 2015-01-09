@@ -1,16 +1,15 @@
-from sqlalchemy.schema import Column
-from sqlalchemy.types import Integer
-from sqlalchemy.sql.expression import select, func
+# from sqlalchemy.schema import Column
+# from sqlalchemy.types import Integer
+# from sqlalchemy.sql.expression import select, func
 
 from openspending.model.attribute import Attribute
-from openspending.model.common import TableHandler, ALIAS_PLACEHOLDER
+# from openspending.model.common import TableHandler, ALIAS_PLACEHOLDER
 from openspending.model.constants import DATE_CUBES_TEMPLATE
 
 
 class Dimension(object):
-
     """ A base class for dimensions. A dimension is any property of an entry
-    that can serve to describe it beyond its purely numeric ``Measure``.  """
+    that can serve to describe it beyond its purely numeric ``Measures``.  """
 
     def __init__(self, model, name, data):
         self._data = data
@@ -111,7 +110,7 @@ class Measure(Attribute):
         return "<Measure(%s)>" % self.name
 
 
-class CompoundDimension(Dimension, TableHandler):
+class CompoundDimension(Dimension):
 
     """ A compound dimension is an outer table on the star schema, i.e. an
     associated table that is referenced from the fact table. It can have
@@ -126,6 +125,10 @@ class CompoundDimension(Dimension, TableHandler):
         self.attributes = []
         for name, attr in data.get('attributes', {}).items():
             self.attributes.append(Attribute(self, name, attr))
+
+    @property
+    def columns(self):
+        return [a.column for a in self.attributes]
 
     #     # TODO: possibly use a LRU later on?
     #     self._pk_cache = {}
@@ -261,9 +264,7 @@ class DateDimension(CompoundDimension):
         'quarter': {'datatype': 'string'},
         'month': {'datatype': 'string'},
         'week': {'datatype': 'string'},
-        'day': {'datatype': 'string'},
-        # legacy query support:
-        'yearmonth': {'datatype': 'string'},
+        'day': {'datatype': 'string'}
     }
 
     def __init__(self, model, name, data):
@@ -295,8 +296,7 @@ class DateDimension(CompoundDimension):
     #         'quarter': str(value.month / 4),
     #         'month': value.strftime('%m'),
     #         'week': value.strftime('%W'),
-    #         'day': value.strftime('%d'),
-    #         'yearmonth': value.strftime('%Y%m')
+    #         'day': value.strftime('%d')
     #     }
     #     return super(DateDimension, self).load(bind, data)
 

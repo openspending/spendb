@@ -13,6 +13,10 @@ class Attribute(object):
         self.column = data.get('column')
         self.description = data.get('description')
 
+    @property
+    def columns(self):
+        return [self.column]
+
     def __repr__(self):
         return "<Attribute(%s)>" % self.name
 

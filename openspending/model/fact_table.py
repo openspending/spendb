@@ -115,29 +115,22 @@ class FactTable(object):
         return rp.fetchone()[0]
 
     def entries(self, conditions="1=1", order_by=None, limit=None,
-                offset=0, step=10000, fields=None):
+                offset=0, step=10000):
         """ Generate a fully denormalized view of the entries on this
         table. This view is nested so that each dimension will be a hash
-        of its attributes.
-
-        This is somewhat similar to the entries collection in the fully
-        denormalized schema before OpenSpending 0.11 (MongoDB).
-        """
-        if not self.is_generated:
+        of its attributes. """
+        if not self.exists:
             return
 
-        if fields is None:
-            fields = self.dataset.model.axes
-
-        #joins = self.alias
-        #for d in self.model.dimensions:
-        #    if d in fields:
-        #        joins = d.join(joins)
-        selects = [f.selectable for f in fields] + [self.alias.c.id]
+        selects = [self.alias.c._id]
+        for axis in self.dataset.model.axes:
+            for column in axis.columns:
+                if column is not None:
+                    selects.append(self.alias.c[column])
 
         # enforce stable sorting:
         if order_by is None:
-            order_by = [self.alias.c.id.asc()]
+            order_by = [self.alias.c._id.asc()]
 
         for i in count():
             qoffset = offset + (step * i)
@@ -148,7 +141,7 @@ class FactTable(object):
                 break
 
             query = select(selects, conditions, [], order_by=order_by,
-                           use_labels=True, limit=qlimit, offset=qoffset)
+                           use_labels=False, limit=qlimit, offset=qoffset)
             rp = self.bind.execute(query)
 
             first_row = True
@@ -159,7 +152,7 @@ class FactTable(object):
                         return
                     break
                 first_row = False
-                yield decode_row(row, self)
+                yield decode_row(row, self.dataset.model)
 
     def timerange(self):
         """
@@ -167,7 +160,7 @@ class FactTable(object):
         Returns a tuple of (first timestamp, last timestamp) where timestamp
         is a datetime object
         """
-        if not self.is_generated:
+        if not self.dataset.model.exists:
             return (None, None)
     
         # Get the time column

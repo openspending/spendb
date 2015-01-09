@@ -12,9 +12,9 @@
     "from": {
       "type": "entity",
       "attributes": {
-        "name": {"column": "from.name", "datatype": "string"},
-        "label": {"column": "from.label", "datatype": "string"},
-        "description": {"column": "from.description", "datatype": "string", 
+        "name": {"column": "from_name", "datatype": "string"},
+        "label": {"column": "from_label", "datatype": "string"},
+        "description": {"column": "from_description", "datatype": "string", 
           "default_value": ""}
       },
       "label": "Paid by",
@@ -23,16 +23,16 @@
     "to": {
       "type": "entity",
       "attributes": {
-        "name": {"column": "to.name", "datatype": "string"},
-        "label": {"column": "to.label", "datatype": "string"},
-        "description": {"column": "to.description", "datatype": "string"}
+        "name": {"column": "to_name", "datatype": "string"},
+        "label": {"column": "to_label", "datatype": "string"},
+        "description": {"column": "to_description", "datatype": "string"}
       },
       "label": "Paid to",
       "description": "The entity that the money was paid to"
     },
     "time": {
       "type": "value",
-      "column": "time.from.year",
+      "column": "time_from_year",
       "label": "Tax year",
       "description": "The accounting period in which the spending happened",
       "datatype": "date"
@@ -91,8 +91,8 @@
     "pog": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "pog.name", "datatype": "string"},
-        "label": {"column": "pog.label", "datatype": "string"}
+        "name": {"column": "pog_name", "datatype": "string"},
+        "label": {"column": "pog_label", "datatype": "string"}
       },
       "label": "Programme Object Group",
       "taxonomy": "pog"
@@ -100,15 +100,15 @@
     "cofog1": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "cofog1.name", "datatype": "string", 
+        "name": {"column": "cofog1_name", "datatype": "string", 
           "default_value": "XX"},
-        "label": {"column": "cofog1.label", "datatype": "string", 
+        "label": {"column": "cofog1_label", "datatype": "string", 
           "default_value": "(Undefined)"},
-        "description": {"column": "cofog1.description", "datatype": "string", 
+        "description": {"column": "cofog1_description", "datatype": "string", 
           "default_value": ""},
-        "level": {"column": "cofog1.level", "datatype": "string", 
+        "level": {"column": "cofog1_level", "datatype": "string", 
           "default_value": ""},
-        "change_date": {"column": "cofog1.change_date", "datatype": "string", 
+        "change_date": {"column": "cofog1_change_date", "datatype": "string", 
           "default_value": ""}
       },
       "label": "COFOG level 1",
@@ -119,15 +119,15 @@
     "cofog2": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "cofog2.name", "datatype": "string", 
+        "name": {"column": "cofog2_name", "datatype": "string", 
           "default_value": "XX.X"},
-        "label": {"column": "cofog2.label", "datatype": "string", 
+        "label": {"column": "cofog2_label", "datatype": "string", 
           "default_value": "(Undefined)"},
-        "description": {"column": "cofog2.description", "datatype": "string", 
+        "description": {"column": "cofog2_description", "datatype": "string", 
           "default_value": ""},
-        "level": {"column": "cofog2.level", "datatype": "string", 
+        "level": {"column": "cofog2_level", "datatype": "string", 
           "default_value": ""},
-        "change_date": {"column": "cofog2.change_date", "datatype": "string", 
+        "change_date": {"column": "cofog2_change_date", "datatype": "string", 
           "default_value": ""}
       },
       "label": "COFOG level 2",
@@ -137,15 +137,15 @@
     "cofog3": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "cofog3.name", "datatype": "string", 
+        "name": {"column": "cofog3_name", "datatype": "string", 
           "default_value": "XX.X.X"},
-        "label": {"column": "cofog3.label", "datatype": "string", 
+        "label": {"column": "cofog3_label", "datatype": "string", 
           "default_value": "(Undefined)"},
-        "description": {"column": "cofog3.description", "datatype": "string", 
+        "description": {"column": "cofog3_description", "datatype": "string", 
           "default_value": ""},
-        "level": {"column": "cofog3.level", "datatype": "string", 
+        "level": {"column": "cofog3_level", "datatype": "string", 
           "default_value": ""},
-        "change_date": {"column": "cofog3.change_date", "datatype": "string", 
+        "change_date": {"column": "cofog3_change_date", "datatype": "string", 
           "default_value": ""}
       },
       "label": "COFOG level 3",
