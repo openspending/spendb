@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, UnicodeText, Float, Unicode
 from nose.tools import assert_raises
 
-from openspending.tests.helpers import model_fixture, load_dataset
+from openspending.tests.helpers import model_fixture, load_fixture
 from openspending.tests.base import DatabaseTestCase
 
 from openspending.core import db
@@ -15,8 +15,7 @@ class TestDataset(DatabaseTestCase):
 
     def setUp(self):
         super(TestDataset, self).setUp()
-        self.model = model_fixture('simple')
-        self.ds = Dataset(self.model)
+        self.ds = load_fixture('simple')
 
     def test_load_model_properties(self):
         assert self.ds.name == self.model['dataset']['name'], self.ds.name
@@ -36,36 +35,22 @@ class TestDataset(DatabaseTestCase):
         assert isinstance(self.ds.model['amount'], Measure), \
             self.ds.model['amount']
 
-    def test_value_dimensions_as_attributes(self):
-        dim = self.ds.model['field']
-        assert isinstance(dim.column.type, UnicodeText), dim.column
-        assert 'field' == dim.column.name, dim.column
-        assert dim.name == 'field', dim.name
-        assert dim.source_column == self.model['mapping']['field']['column'],\
-            dim.source_column
-        assert dim.label == self.model['mapping']['field']['label'], \
-            dim.label
-        assert dim.constant is None, dim.constant
-        assert dim.model == self.ds.model, dim.model
-        assert not hasattr(dim, 'table')
-        assert not hasattr(dim, 'alias')
-
     def test_generate_db_entry_table(self):
         assert self.ds.fact_table.table.name == 'test__facts', \
             self.ds.fact_table.table.name
         cols = self.ds.fact_table.table.c
-        assert '_id' in cols
+        assert '_id' in cols, cols
         assert isinstance(cols['_id'].type, Unicode)
-        assert 'time' in cols
-        assert isinstance(cols['time'].type, Integer)
+        assert 'year' in cols, cols
+        assert isinstance(cols['year'].type, Integer)
         assert 'amount' in cols
-        assert isinstance(cols['amount'].type, Float)
+        assert isinstance(cols['amount'].type, Integer)
         assert 'field' in cols
-        assert isinstance(cols['field'].type, UnicodeText)
-        assert 'to_id' in cols
-        assert isinstance(cols['to_id'].type, Integer)
-        assert 'function_id' in cols
-        assert isinstance(cols['function_id'].type, Integer)
+        assert isinstance(cols['field'].type, Unicode)
+        assert 'to_label' in cols, cols
+        assert isinstance(cols['to_label'].type, Unicode)
+        assert 'func_label' in cols
+        assert isinstance(cols['func_label'].type, Unicode)
         assert_raises(KeyError, cols.__getitem__, 'foo')
 
     def test_facet_dimensions(self):
@@ -76,14 +61,10 @@ class TestDatasetLoad(DatabaseTestCase):
 
     def setUp(self):
         super(TestDatasetLoad, self).setUp()
-        self.ds = Dataset(model_fixture('simple'))
-        db.session.add(self.ds)
-        db.session.commit()
-        self.ds.fact_table.create()
+        self.ds = load_fixture('simple')
         self.engine = db.engine
 
     def test_load_all(self):
-        load_dataset(self.ds)
         q = self.ds.fact_table.table.select()
         resn = self.engine.execute(q).fetchall()
         assert len(resn) == 6, resn
@@ -100,49 +81,41 @@ class TestDatasetLoad(DatabaseTestCase):
         assert 'test__facts' not in tn, tn
 
     def test_dataset_count(self):
-        load_dataset(self.ds)
         assert self.ds.fact_table.num_entries() == 6, \
             self.ds.fact_table.num_entries()
 
     def test_aggregate_simple(self):
-        load_dataset(self.ds)
         res = analytics.aggregate(self.ds)
         assert res['summary']['num_entries'] == 6, res
         assert res['summary']['amount'] == 2690.0, res
 
     def test_aggregate_basic_cut(self):
-        load_dataset(self.ds)
         res = analytics.aggregate(self.ds, cuts=[('field', u'foo')])
         assert res['summary']['num_entries'] == 3, res
         assert res['summary']['amount'] == 1000, res
 
     def test_aggregate_dimensions_drilldown(self):
-        load_dataset(self.ds)
         res = analytics.aggregate(self.ds, drilldowns=['function'])
         assert res['summary']['num_entries'] == 6, res
         assert res['summary']['amount'] == 2690, res
         assert len(res['drilldown']) == 2, res['drilldown']
 
     def test_aggregate_two_dimensions_drilldown(self):
-        load_dataset(self.ds)
         res = analytics.aggregate(self.ds, drilldowns=['function', 'field'])
         assert res['summary']['num_entries'] == 6, res
         assert res['summary']['amount'] == 2690, res
         assert len(res['drilldown']) == 5, res['drilldown']
 
     def test_aggregate_by_attribute(self):
-        load_dataset(self.ds)
         res = analytics.aggregate(self.ds, drilldowns=['function.label'])
         assert len(res['drilldown']) == 2, res['drilldown']
 
     def test_aggregate_two_attributes_same_dimension(self):
-        load_dataset(self.ds)
         res = analytics.aggregate(self.ds, drilldowns=['function.name',
                                                        'function.label'])
         assert len(res['drilldown']) == 2, res['drilldown']
 
     def test_materialize_table(self):
-        load_dataset(self.ds)
         itr = self.ds.fact_table.entries()
         tbl = list(itr)
         assert len(tbl) == 6, len(tbl)

@@ -92,13 +92,11 @@ def load_fixture(name, manager=None):
     return dataset
 
 
-def load_dataset(dataset):
-    model = model_fixture('simple')
-    data = data_fixture('simple')
-    reader = csv.DictReader(data)
-    rows = [convert_types(model['mapping'], r) for r in reader]
-    dataset.fact_table.load_iter(rows)
-    data.close()
+#def load_dataset(dataset):
+#    fields, rows = csvimport_table('simple')
+    #dataset.data['mapping'] = model = model_fixture('simple')
+#    dataset.fields = fields
+#    dataset.fact_table.load_iter(rows)
 
 
 def make_account(name='test', fullname='Test User',
