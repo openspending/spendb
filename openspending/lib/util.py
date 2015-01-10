@@ -110,7 +110,8 @@ def expand_facets(facets, dataset):
     # Loop over all facets (their names)
     for (facet_name, facet_members) in facets.iteritems():
         # We only act on facets which are compound dimensions
-        if facet_name in dimension_names and dataset.model[facet_name].is_compound:
+        if facet_name in dimension_names and \
+                hasattr(dataset.model[facet_name], 'attributes'):
             # Get the dimension from the dataset
             dimension = dataset.model[facet_name]
             # We get the member names and their facet values into
@@ -128,7 +129,7 @@ def expand_facets(facets, dataset):
             members = dimension.members(dimension.alias.c.name.
                                         in_(member_names))
             # We need to sort them by the member names so that they retain
-            # the same order as the facet_alues
+            # the same order as the facet_values
             members = sort_by_reference(member_names, members,
                                         lambda x: x['name'])
 
