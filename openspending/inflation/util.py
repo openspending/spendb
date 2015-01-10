@@ -19,9 +19,7 @@ def get_date_object(unparsed_date):
     if isinstance(unparsed_date, dict):
         try:
             # Year is necessary, month and day can default to 1
-            return datetime.date(int(unparsed_date['year']),
-                                 int(unparsed_date.get('month', 1)),
-                                 int(unparsed_date.get('day', 1)))
+            return datetime.date(int(unparsed_date['year']), 1, 1)
         except KeyError:
             # The creation of the datetime.date might return a KeyError but we
             # catch it and just ignore the error. This will mean that we will
