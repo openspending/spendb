@@ -153,7 +153,7 @@ def _get_entries(docs):
     entries = []
     for ds_name, ds_ids in by_dataset.iteritems():
         dataset = Dataset.by_name(ds_name)
-        query = dataset.fact_table.alias.c.id.in_(ds_ids)
+        query = dataset.fact_table.alias.c._id.in_(ds_ids)
         ents = dataset.fact_table.entries(query)
         entries.extend([(dataset, e) for e in ents])
 

@@ -12,7 +12,6 @@ class TestSearchApiController(ControllerTestCase):
     def setUp(self):
         super(TestSearchApiController, self).setUp()
         load_fixture('cra')
-        self.s3_mock.stop()
         # clean_and_reindex_solr()
 
     def test_aggregate(self):

@@ -12,7 +12,6 @@ class TestCase(FlaskTestCase):
     def create_app(self):
         self.s3_mock = mock_s3()
         
-        self.s3_mock.start()
         app = create_web_app(**{
             'DEBUG': True,
             'TESTING': True,
@@ -22,7 +21,6 @@ class TestCase(FlaskTestCase):
             'CELERY_ALWAYS_EAGER': True,
             'UPLOADS_DEFAULT_DEST': tempfile.mkdtemp()
         })
-        #self.s3_mock.stop()
         return app
 
     def setUp(self):

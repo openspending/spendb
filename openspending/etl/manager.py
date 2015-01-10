@@ -13,27 +13,34 @@ class DataManager(object):
     ETL data storage. """
 
     def __init__(self):
-        self.bucket = None
+        self.app = None
+        self._index = None
 
     @property
     def configured(self):
-        return self.bucket is not None
+        return self.app is not None
 
     def init_app(self, app):
-        self.bucket = self.get_bucket(app.config)
-        if self.configured:
-            self.index = PackageIndex(self.bucket)
+        self.app = app
 
     def package(self, dataset):
         """ Get a package for a given dataset name. """
         assert self.configured, 'Data manager not configured!'
         return self.index.get(dataset)
 
-    def get_bucket(self, config):
+    @property
+    def index(self):
+        if self.configured:
+            if self._index is None:
+                self._index = PackageIndex(self.get_bucket())
+            return self._index
+
+    def get_bucket(self):
         """ Connect to the S3 bucket. """
-        conn = S3Connection(config.get('AWS_KEY_ID'),
-                            config.get('AWS_SECRET'))
-        bucket_name = config.get('AWS_DATA_BUCKET', 'data.openspending.org')
+        conn = S3Connection(self.app.config.get('AWS_KEY_ID'),
+                            self.app.config.get('AWS_SECRET'))
+        bucket_name = self.app.config.get('AWS_DATA_BUCKET',
+                                          'data.openspending.org')
 
         try:
             return conn.get_bucket(bucket_name)

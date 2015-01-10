@@ -126,8 +126,9 @@ def expand_facets(facets, dataset):
                 facet_values.append(member[1])
 
             # Get all the members for this dimension
-            members = dimension.members(dimension.alias.c.name.
-                                        in_(member_names))
+            name = '%s.name' % dimension.name
+            condition = dataset.fact_table.mapping.columns.get(name)
+            members = dataset.fact_table.dimension_members(dimension, condition)
             # We need to sort them by the member names so that they retain
             # the same order as the facet_values
             members = sort_by_reference(member_names, members,

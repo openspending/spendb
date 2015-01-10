@@ -175,15 +175,17 @@ class FactTable(object):
         rp = self.bind.execute(self.table.count())
         return rp.fetchone()[0]
 
-    def dimension_members(self, dimension, offset=0, limit=None):
+    def dimension_members(self, dimension, conditions="1=1", offset=0,
+                          limit=None):
         prefix = dimension.name + '.'
         selects = []
         for path, col in self.mapping.columns.items():
             if path == dimension.name or path.startswith(prefix):
                 selects.append(col)
         order_by = [s.asc() for s in selects]
-        for entry in self.entries(order_by=order_by, selects=selects,
-                                  distinct=True, offset=offset, limit=limit):
+        for entry in self.entries(conditions=conditions, order_by=order_by,
+                                  selects=selects, distinct=True,
+                                  offset=offset, limit=limit):
             yield entry.get(dimension.name)
 
     def entries(self, conditions="1=1", order_by=None, limit=None,
