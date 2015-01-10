@@ -24,6 +24,11 @@ def decode_row(row, model):
     return result
 
 
+def df_column(dimension, field):
+    """ Field names for auto-generated date denormalizations. """
+    return '_df_%s_%s' % (dimension, field)
+
+
 class MutableDict(Mutable, dict):
 
     """
@@ -80,51 +85,6 @@ class JSONType(TypeDecorator):
 
     def copy_value(self, value):
         return loads(dumps(value))
-
-
-class TableHandler(object):
-    """ Used by automatically generated objects such as models
-    and dimensions to generate, write and clear the table under
-    its management. """
-
-    def _init_table(self, meta, namespace, name, id_type=Integer):
-        """ Create the given table if it does not exist, otherwise
-        reflect the current table schema from the database.
-        """
-        name = namespace + '__' + name
-        self.table = Table(name, meta)
-        if id_type is not None:
-            col = Column('id', id_type, primary_key=True)
-            self.table.append_column(col)
-
-    def _generate_table(self):
-        """ Create the given table if it does not exist. """
-        # TODO: make this support some kind of migration?
-        if not db.engine.has_table(self.table.name):
-            self.table.create(db.engine)
-
-    def _upsert(self, bind, data, unique_columns):
-        """ Upsert a set of values into the table. This will
-        query for the set of unique columns and either update an
-        existing row or create a new one. In both cases, the ID
-        of the changed row will be returned. """
-        key = and_(*[self.table.c[c] == data.get(c)
-                     for c in unique_columns])
-        q = self.table.update(key, data)
-        if bind.execute(q).rowcount == 0:
-            q = self.table.insert(data)
-            rs = bind.execute(q)
-            return rs.inserted_primary_key[0]
-        else:
-            q = self.table.select(key)
-            row = bind.execute(q).fetchone()
-            return row['id']
-
-    def _drop(self, bind):
-        """ Drop the table and the local reference to it. """
-        if db.engine.has_table(self.table.name):
-            self.table.drop()
-        del self.table
 
 
 class DatasetFacetMixin(object):

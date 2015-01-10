@@ -9,7 +9,8 @@ from sqlalchemy.sql.expression import select, func
 
 from openspending.core import db
 from openspending.lib.util import cache_hash
-from openspending.model.common import decode_row
+from openspending.model.dimension import DateDimension
+from openspending.model.common import decode_row, df_column
 
 
 TYPES = {
@@ -17,6 +18,16 @@ TYPES = {
     'integer': Integer,
     'float': Float,
     'date': Date
+}
+
+DATE_FORMS = {
+    'name': lambda value: value.isoformat(),
+    'label': lambda value: value.strftime("%d. %B %Y"),
+    'year': lambda value: value.strftime('%Y'),
+    'quarter': lambda value: str(value.month / 4),
+    'month': lambda value: value.strftime('%m'),
+    'week': lambda value: value.strftime('%W'),
+    'day': lambda value: value.strftime('%d')
 }
 
 
@@ -67,6 +78,12 @@ class FactTable(object):
             col = Column(name, data_type, nullable=True)
             table.append_column(col)
 
+            # Another date hack
+            if field.get('type') == 'date':
+                for k in DATE_FORMS.keys():
+                    col = Column(df_column(name, k), Unicode, nullable=True)
+                    table.append_column(col)
+
     def load_iter(self, iterable, chunk_size=1000):
         """ Bulk load all the data in an artifact to a matching database
         table. """
@@ -92,6 +109,15 @@ class FactTable(object):
     def _expand_record(self, record):
         """ Transform an incoming record into a form that matches the
         fields schema. """
+
+        for name, field in self.dataset.fields.items():
+            v = record.get(name)
+
+            # Another date hack
+            if field.get('type') == 'date':
+                for k, f in DATE_FORMS.items():
+                    record[df_column(name, k)] = f(v)
+
         record['_id'] = cache_hash(record)
         record['_json'] = json.dumps(record)
         return record
@@ -124,8 +150,24 @@ class FactTable(object):
 
         selects = [self.alias.c._id]
         for axis in self.dataset.model.axes:
-            for column in axis.columns:
-                if column is not None:
+
+            # TODO: find a cleaner way to do this.
+            if isinstance(axis, DateDimension):
+                field = self.dataset.fields.get(axis.column, {})
+                if field.get('type') == 'integer':
+                    for k in ['name', 'label', 'year']:
+                        label = df_column(axis.name, k)
+                        selects.append(self.alias.c[axis.column].label(label))
+                elif field.get('type') == 'date':
+                    for k in DATE_FORMS:
+                        k = df_column(axis.name, k)
+                        if k in self.alias.columns:
+                            selects.append(self.alias.c[k])
+
+            else:
+                for column in axis.columns:
+                    if column is None or column not in self.alias.columns:
+                        continue
                     selects.append(self.alias.c[column])
 
         # enforce stable sorting:
@@ -160,7 +202,7 @@ class FactTable(object):
         Returns a tuple of (first timestamp, last timestamp) where timestamp
         is a datetime object
         """
-        if not self.dataset.model.exists:
+        if not self.exists or not self.dataset.model.exists:
             return (None, None)
     
         # Get the time column

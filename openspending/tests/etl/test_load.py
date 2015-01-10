@@ -76,8 +76,7 @@ class TestLoad(DatabaseTestCase):
         assert self.ds.fact_table.num_entries() == 36, \
             self.ds.fact_table.num_entries()
 
-        from pprint import pprint
-        pprint(list(self.ds.fact_table.entries()))
-        assert False
+        entries = list(self.ds.fact_table.entries())
+        assert len(entries) == 36, entries
 
         

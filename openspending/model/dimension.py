@@ -5,6 +5,7 @@
 from openspending.model.attribute import Attribute
 # from openspending.model.common import TableHandler, ALIAS_PLACEHOLDER
 from openspending.model.constants import DATE_CUBES_TEMPLATE
+from openspending.model.common import df_column
 
 
 class Dimension(object):
@@ -269,13 +270,17 @@ class DateDimension(CompoundDimension):
 
     def __init__(self, model, name, data):
         Dimension.__init__(self, model, name, data)
-        self.taxonomy = name
+        self.column = data.get('column')
 
         self.attributes = []
-        for name, attr in self.DATE_ATTRIBUTES.items():
-            self.attributes.append(Attribute(self, name, attr))
+        for attr_name, attr in self.DATE_ATTRIBUTES.items():
+            attr = Attribute(self, attr_name, attr)
+            attr.column = df_column(name, attr_name)
+            self.attributes.append(attr)
 
-        self._pk_cache = {}
+    @property
+    def columns(self):
+        return [self.column]
 
     # def load(self, bind, value):
     #     """ Given a Python datetime.date, generate a date dimension with the
