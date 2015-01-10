@@ -30,6 +30,7 @@ class CubesModelVisitor(ModelVisitor):
                                      measure=measure.name,
                                      function='sum')
         self.aggregates.append(aggregate)
+        self.mappings[measure.name] = measure.column
 
     def add_dimension(self, dimension, meta):
         meta.update({'name': dimension.name, 'label': dimension.label})

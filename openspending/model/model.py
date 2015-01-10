@@ -35,8 +35,7 @@ class Model(object):
 
     @property
     def exists(self):
-        axes = len(self.dimensions) + len(self.measures)
-        return axes > 0
+        return len(self.axes) > 0
 
     def __getitem__(self, name):
         """ Access a axis (dimension or measure) by name. """

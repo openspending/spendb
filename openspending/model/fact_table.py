@@ -22,6 +22,9 @@ TYPES = {
 
 
 class FactTableMapping(ModelVisitor):
+    """ The mapping helps to establish a link between the physical
+    columns on the fact table and the dimensions, measures etc. of
+    the model. """
 
     def __init__(self, alias, fields, model):
         self.alias = alias

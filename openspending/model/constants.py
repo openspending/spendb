@@ -50,7 +50,8 @@ NUM_DATE_CUBES_TEMPLATE = {
     "levels": [
         {
             "name": "year",
-            "label": "Year"
+            "label": "Year",
+            "attributes": ['year', 'name']
         }
     ],
     "hierarchies": []

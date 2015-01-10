@@ -18,7 +18,7 @@ def entry_apply_links(dataset_name, entry):
 
 
 def dimension_apply_links(dataset_name, dimension):
-    name = dimension.get('name', dimension.get('key'))
+    name = dimension.get('name')
     dimension['html_url'] = url_for('dimension.view', dataset=dataset_name,
                                     dimension=name)
     return dimension
@@ -26,8 +26,9 @@ def dimension_apply_links(dataset_name, dimension):
 
 def member_apply_links(dataset_name, dimension, data):
     if isinstance(data, dict) and 'name' in data:
+        name = unicode(data['name'])
         data['html_url'] = url_for('dimension.member', dataset=dataset_name,
-                                   dimension=dimension, name=data['name'])
+                                   dimension=dimension, name=name)
     return data
 
 

@@ -12,6 +12,7 @@ class TestSearchApiController(ControllerTestCase):
     def setUp(self):
         super(TestSearchApiController, self).setUp()
         load_fixture('cra')
+        self.s3_mock.stop()
         # clean_and_reindex_solr()
 
     def test_aggregate(self):
@@ -112,8 +113,7 @@ class TestSearchApiController(ControllerTestCase):
         assert response.status == '200 OK'
         result = json.loads(response.data)
         order = [cell['time']['year'] for cell in result['drilldown']]
-        expected_result = map(unicode, [2003, 2004, 2005, 2006, 2007,
-                                        2008, 2009, 2010])
+        expected_result = [2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010]
         assert unique(order) == expected_result
 
         response = self.client.get(url_for('api_v2.aggregate',
@@ -122,8 +122,7 @@ class TestSearchApiController(ControllerTestCase):
         assert response.status == '200 OK'
         result = json.loads(response.data)
         order = [cell['time']['year'] for cell in result['drilldown']]
-        expected_result = map(unicode, [2010, 2009, 2008, 2007, 2006,
-                                        2005, 2004, 2003])
+        expected_result = [2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003]
         assert unique(order) == expected_result
 
     def test_inflation(self):
