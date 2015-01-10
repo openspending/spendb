@@ -262,30 +262,11 @@ class TestAccountController(ControllerTestCase):
         assert 'http://okfn.org/terms-of-use' in response.data, \
             'Terms of use url not in response'
 
-        # Headers to immitate a browser
-        headers = {'User-Agent': 'OpenSpending in-site browser',
-                   'Accept': ','.join(['text/html', 'application/xhtml+xml',
-                                       'application/xml;q=0.9', '*/*;q=0.8'])
-                   }
-
-        # We use urllib2 instead of webtest's get because of redirects
-        request = urllib2.Request('http://okfn.org/terms-of-use',
-                                  headers=headers)
-        external_response = urllib2.urlopen(request)
-        assert 200 == external_response.getcode(), \
-            'External terms of use page not found'
-
         # Check whether the privay policy url is in the response
         # For now we rely on an external privacy policy and we therefore
         # check whether that page also exists.
         assert 'http://okfn.org/privacy-policy' in response.data, \
             'Privacy policy url not in response'
-
-        request = urllib2.Request('http://okfn.org/privacy-policy',
-                                  headers=headers)
-        external_response = urllib2.urlopen(request)
-        assert 200 == external_response.getcode(), \
-            'External privacy policy page not found'
 
         # Check that not filling up the field throws a 'required' response
         # if the terms box is not in the post request (not checked)
