@@ -32,7 +32,8 @@ class ModelVisitor(object):
     def visit_dimension(self, dimension):
         if isinstance(dimension, AttributeDimension):
             self.visit_attribute_dimension(dimension)
-        elif isinstance(dimension, CompoundDimension):
-            self.visit_compound_dimension(dimension)
         elif isinstance(dimension, DateDimension):
             self.visit_date_dimension(dimension)
+        elif isinstance(dimension, CompoundDimension):
+            self.visit_compound_dimension(dimension)
+        

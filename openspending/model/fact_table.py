@@ -5,12 +5,12 @@ from datetime import date
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
 from sqlalchemy.types import Unicode, Integer, Date, Float
-from sqlalchemy.sql.expression import select, func
+from sqlalchemy.sql.expression import select, func, extract
 
 from openspending.core import db
 from openspending.lib.util import cache_hash
-from openspending.model.dimension import DateDimension
-from openspending.model.common import df_column, json_default
+from openspending.model.visitor import ModelVisitor
+from openspending.model.common import json_default
 
 
 TYPES = {
@@ -20,15 +20,54 @@ TYPES = {
     'date': Date
 }
 
-DATE_FORMS = {
-    'name': lambda value: value.isoformat(),
-    'label': lambda value: value.strftime("%d. %B %Y"),
-    'year': lambda value: value.strftime('%Y'),
-    'quarter': lambda value: str(value.month / 4),
-    'month': lambda value: value.strftime('%m'),
-    'week': lambda value: value.strftime('%W'),
-    'day': lambda value: value.strftime('%d')
-}
+
+class FactTableMapping(ModelVisitor):
+
+    def __init__(self, alias, fields, model):
+        self.alias = alias
+        self.fields = fields
+        self.model = model
+        self.columns = {}
+
+    def apply(self):
+        self.visit(self.model)
+
+    def visit_attribute(self, attribute):
+        if attribute.column not in self.alias.columns:
+            return
+        col = self.alias.c[attribute.column]
+        self.columns[attribute.path] = col
+
+    def visit_date_dimension(self, dimension):
+        if dimension.column not in self.alias.columns:
+            return
+        col = self.alias.c[dimension.column]
+        name_attr = dimension['name']
+        self.columns[name_attr.path] = col.label(name_attr.column)
+        
+        field_type = self.fields.get(dimension.column).get('type')
+        if field_type == 'date':
+            for a in ['year', 'quarter', 'month', 'week', 'day']:
+                attr = dimension[a]
+                self.columns[attr.path] = extract(col, a).label(attr.column, a)
+        elif field_type == 'integer':
+            year_attr = dimension['year']
+            self.columns[year_attr.path] = col.label(year_attr.column)
+
+    def unpack_entry(self, row):
+        """ Convert a database-returned row into a nested and mapped
+        fact representation. """
+        row = dict(row.items())
+        result = {'id': row.get('_id')}
+        for axis in self.model.axes:
+            if hasattr(axis, 'attributes'):
+                value = {}
+                for attr in axis.attributes:
+                    value[attr.name] = row.get(attr.column)
+            else:
+                value = row.get(axis.column)
+            result[axis.name] = value
+        return result
 
 
 class FactTable(object):
@@ -66,6 +105,14 @@ class FactTable(object):
         return self._alias
 
     @property
+    def mapping(self):
+        if not hasattr(self, '_mapping'):
+            self._mapping = FactTableMapping(self.alias, self.dataset.fields,
+                                             self.dataset.model)
+            self._mapping.apply()
+        return self._mapping
+        
+    @property
     def exists(self):
         return db.engine.has_table(self.table.name)
 
@@ -77,12 +124,6 @@ class FactTable(object):
             data_type = TYPES.get(field.get('type'), Unicode)
             col = Column(name, data_type, nullable=True)
             table.append_column(col)
-
-            # Another date hack
-            if field.get('type') == 'date':
-                for k in DATE_FORMS.keys():
-                    col = Column(df_column(name, k), Unicode, nullable=True)
-                    table.append_column(col)
 
     def load_iter(self, iterable, chunk_size=1000):
         """ Bulk load all the data in an artifact to a matching database
@@ -109,15 +150,6 @@ class FactTable(object):
     def _expand_record(self, record):
         """ Transform an incoming record into a form that matches the
         fields schema. """
-
-        for name, field in self.dataset.fields.items():
-            v = record.get(name)
-
-            # Another date hack
-            if field.get('type') == 'date':
-                for k, f in DATE_FORMS.items():
-                    record[df_column(name, k)] = f(v)
-
         record['_id'] = cache_hash(record)
         record['_json'] = json.dumps(record, default=json_default)
         return record
@@ -140,54 +172,33 @@ class FactTable(object):
         rp = self.bind.execute(self.table.count())
         return rp.fetchone()[0]
 
-    def _unpack_entry(self, row):
-        """ Convert a database-returned row into a nested and mapped
-        fact representation. """
-        row = dict(row.items())
-        result = {'id': row['_id']}
-        for axis in self.dataset.model.axes:
-            if hasattr(axis, 'attributes'):
-                value = {}
-                for attr in axis.attributes:
-                    value[attr.name] = row.get(attr.column)
-            else:
-                value = row.get(axis.column)
-            result[axis.name] = value
-        return result
+    def dimension_members(self, dimension, offset=0, limit=None):
+        prefix = dimension.name + '.'
+        selects = []
+        for path, col in self.mapping.columns.items():
+            if path == dimension.name or path.startswith(prefix):
+                selects.append(col)
+        order_by = [s.asc() for s in selects]
+        for entry in self.entries(order_by=order_by, selects=selects,
+                                  distinct=True, offset=offset, limit=limit):
+            yield entry.get(dimension.name)
 
     def entries(self, conditions="1=1", order_by=None, limit=None,
-                offset=0, step=10000):
+                selects=[], distinct=False, offset=0, step=10000):
         """ Generate a fully denormalized view of the entries on this
         table. This view is nested so that each dimension will be a hash
         of its attributes. """
         if not self.exists:
             return
 
-        selects = [self.alias.c._id]
-        for axis in self.dataset.model.axes:
+        if not selects:
+            selects = [self.alias.c._id] + self.mapping.columns.values()
 
-            # TODO: find a cleaner way to do this.
-            if isinstance(axis, DateDimension):
-                field = self.dataset.fields.get(axis.column, {})
-                if field.get('type') == 'integer':
-                    for k in ['name', 'label', 'year']:
-                        label = df_column(axis.name, k)
-                        selects.append(self.alias.c[axis.column].label(label))
-                elif field.get('type') == 'date':
-                    for k in DATE_FORMS:
-                        k = df_column(axis.name, k)
-                        if k in self.alias.columns:
-                            selects.append(self.alias.c[k])
-
-            else:
-                for column in axis.columns:
-                    if column is None or column not in self.alias.columns:
-                        continue
-                    selects.append(self.alias.c[column])
-
-        # enforce stable sorting:
-        if order_by is None:
-            order_by = [self.alias.c._id.asc()]
+            # enforce stable sorting:
+            if order_by is None:
+                order_by = [self.alias.c._id.asc()]
+        
+        assert order_by is not None
 
         for i in count():
             qoffset = offset + (step * i)
@@ -198,9 +209,8 @@ class FactTable(object):
                 break
 
             query = select(selects, conditions, [], order_by=order_by,
-                           use_labels=False, limit=qlimit, offset=qoffset)
+                           distinct=distinct, limit=qlimit, offset=qoffset)
             rp = self.bind.execute(query)
-
             first_row = True
             while True:
                 row = rp.fetchone()
@@ -209,7 +219,7 @@ class FactTable(object):
                         return
                     break
                 first_row = False
-                yield self._unpack_entry(row)
+                yield self.mapping.unpack_entry(row)
 
     def timerange(self):
         """

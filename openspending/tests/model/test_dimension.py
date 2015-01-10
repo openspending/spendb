@@ -31,10 +31,5 @@ class TestCompoundDimension(DatabaseTestCase):
         assert self.entity['name'].name == 'name'
 
     def test_members(self):
-        members = list(self.entity.members())
+        members = list(self.ds.fact_table.dimension_members(self.entity))
         assert len(members) == 5
-
-        members = list(
-            self.entity.members(
-                self.entity.alias.c.name == 'Dept032'))
-        assert len(members) == 1

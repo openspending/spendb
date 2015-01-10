@@ -18,11 +18,6 @@ def json_default(obj):
     return obj
 
 
-def df_column(dimension, field):
-    """ Field names for auto-generated date denormalizations. """
-    return '_df_%s_%s' % (dimension, field)
-
-
 class MutableDict(Mutable, dict):
 
     """

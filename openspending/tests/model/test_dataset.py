@@ -90,3 +90,8 @@ class TestDatasetLoad(DatabaseTestCase):
         assert isinstance(row['field'], unicode), row
         assert isinstance(row['function'], dict), row
         assert isinstance(row['to'], dict), row
+
+    def test_entries_are_sane(self):
+        itr = self.ds.fact_table.entries()
+        tbl = list(itr)
+        assert tbl[0]['time']['year'] == 2010, tbl[0]['time']

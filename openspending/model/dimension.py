@@ -1,6 +1,29 @@
 
-from openspending.model.attribute import Attribute
-from openspending.model.common import df_column
+class Attribute(object):
+
+    """ An attribute describes some concrete value stored in the data model.
+    This value can either be stored directly on the facts table or on a
+    separate dimension table, which is associated to the facts table through
+    a reference. """
+
+    def __init__(self, parent, name, data):
+        self._data = data
+        self.parent = parent
+        self.name = name
+        self.column = data.get('column')
+        self.description = data.get('description')
+
+    @property
+    def path(self):
+        if isinstance(self.parent, Dimension):
+            return '%s.%s' % (self.parent.name, self.name)
+        return self.name
+
+    def __repr__(self):
+        return "<Attribute(%s)>" % self.name
+
+    def as_dict(self):
+        return self._data
 
 
 class Dimension(object):
@@ -78,10 +101,6 @@ class CompoundDimension(Dimension):
         for name, attr in data.get('attributes', {}).items():
             self.attributes.append(Attribute(self, name, attr))
 
-    @property
-    def columns(self):
-        return [a.column for a in self.attributes]
-
     def __getitem__(self, name):
         for attr in self.attributes:
             if attr.name == name:
@@ -108,12 +127,8 @@ class DateDimension(CompoundDimension):
         self.attributes = []
         for attr_name in self.DATE_ATTRIBUTES:
             attr = Attribute(self, attr_name, {})
-            attr.column = df_column(name, attr_name)
+            attr.column = '_df_%s_%s' % (name, attr_name)
             self.attributes.append(attr)
-
-    @property
-    def columns(self):
-        return [self.column]
 
     def __repr__(self):
         return "<DateDimension(%s)>" % self.name
