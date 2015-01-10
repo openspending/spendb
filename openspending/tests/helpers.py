@@ -7,7 +7,6 @@ import urlparse
 from StringIO import StringIO
 from datetime import datetime
 
-from openspending.validation.data import convert_types
 from openspending.model.dataset import Dataset
 from openspending.core import db
 from openspending.lib import solr_util as solr
@@ -39,6 +38,13 @@ def fixture_path(name):
     test_directory = os.path.dirname(__file__)
     # Fixture is a directory in the test directory
     return os.path.join(test_directory, 'fixtures', name)
+
+
+CPI = []
+for row in csv.DictReader(fixture_file('cpi.csv')):
+    row['CPI'] = float(row['CPI'])
+    row['Year'] = datetime(year=int(row['Year']), month=1, day=1).date()
+    CPI.append(row)
 
 
 def csvimport_fixture_path(name, path):

@@ -1,4 +1,5 @@
 from flask import url_for
+from mock import patch
 
 from openspending.tests.base import ControllerTestCase
 from openspending.tests.helpers import make_account, load_fixture
@@ -13,10 +14,16 @@ from openspending.importer import CSVImporter
 class TestSourceController(ControllerTestCase):
 
     def setUp(self):
-
         super(TestSourceController, self).setUp()
         self.user = make_account('test')
         self.dataset = load_fixture('cra', self.user)
+        self.patcher = patch('openspending.tasks.analyze_source.delay')
+        self.patcher.return_value = None
+        self.patcher.start()
+
+    def tearDown(self):
+        self.patcher.stop()
+        super(TestSourceController, self).tearDown()
 
     def test_view_source(self):
         url_ = 'http://banana.com/split.csv'

@@ -1,5 +1,4 @@
-from economics import Inflation
-from openspending.inflation.fake import FakeInflation
-from openspending.inflation.util import inflate
+from economics import Inflation # noqa
+from openspending.inflation.util import inflate # noqa
 
 

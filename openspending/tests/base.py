@@ -1,10 +1,11 @@
 import tempfile
 
 from moto import mock_s3
+from mock import patch
 from flask.ext.testing import TestCase as FlaskTestCase
 
 from openspending.core import create_web_app
-from openspending.tests.helpers import clean_db, init_db
+from openspending.tests.helpers import clean_db, init_db, CPI
 
 
 class TestCase(FlaskTestCase):
@@ -25,7 +26,10 @@ class TestCase(FlaskTestCase):
 
     def setUp(self):
         init_db(self.app)
-
+        patcher = patch('economics.data.get')
+        mod = patcher.start()
+        mod.return_value = CPI
+        
     def tearDown(self):
         clean_db(self.app)
 
