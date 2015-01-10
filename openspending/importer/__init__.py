@@ -106,7 +106,7 @@ class BaseImporter(object):
         try:
             data = convert_types(self.dataset.mapping, line)
             if not self.dry_run:
-                self.dataset.fact_table.load(data)
+                self.dataset.fact_table.load_iter([data])
             else:
                 # Check uniqueness
                 unique_value = ', '.join([unicode(data[k]) for k in self.key])

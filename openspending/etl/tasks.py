@@ -11,10 +11,6 @@ ARTIFACT_NAME = 'table.json'
 MODULES = ['openspending', 'messytables']
 
 
-def capture_logs(package, run):
-    pass
-
-
 def extract_fileobj(dataset, fh, file_name=None):
     """ Upload contents of an opened fh to the data repository. """
     package = data_manager.package(dataset.name)

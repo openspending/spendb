@@ -19,7 +19,7 @@ def csvimport_fixture(name):
     if mapping_fp:
         model['mapping'] = json.load(mapping_fp)
     dataset = Dataset(model)
-    dataset.fact_table.generate()
+    dataset.fact_table.create()
     db.session.add(dataset)
     data_path = csvimport_fixture_path(name, 'data.csv')
     user = make_account()
