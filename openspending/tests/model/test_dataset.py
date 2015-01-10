@@ -1,12 +1,10 @@
-from sqlalchemy import Integer, UnicodeText, Float, Unicode
+from sqlalchemy import Integer, Unicode
 from nose.tools import assert_raises
 
-from openspending.tests.helpers import model_fixture, load_fixture
+from openspending.tests.helpers import load_fixture
 from openspending.tests.base import DatabaseTestCase
 
 from openspending.core import db
-from openspending.model.dataset import Dataset
-from openspending.model import analytics
 from openspending.model.dimension import (AttributeDimension, Measure,
                                           CompoundDimension, DateDimension)
 
@@ -18,8 +16,8 @@ class TestDataset(DatabaseTestCase):
         self.ds = load_fixture('simple')
 
     def test_load_model_properties(self):
-        assert self.ds.name == self.model['dataset']['name'], self.ds.name
-        assert self.ds.label == self.model['dataset']['label'], self.ds.label
+        assert self.ds.name == self.ds.model_data['dataset']['name'], self.ds.name
+        assert self.ds.label == self.ds.model_data['dataset']['label'], self.ds.label
 
     def test_load_model_dimensions(self):
         assert len(self.ds.model.dimensions) == 4, self.ds.model.dimensions
@@ -83,37 +81,6 @@ class TestDatasetLoad(DatabaseTestCase):
     def test_dataset_count(self):
         assert self.ds.fact_table.num_entries() == 6, \
             self.ds.fact_table.num_entries()
-
-    def test_aggregate_simple(self):
-        res = analytics.aggregate(self.ds)
-        assert res['summary']['num_entries'] == 6, res
-        assert res['summary']['amount'] == 2690.0, res
-
-    def test_aggregate_basic_cut(self):
-        res = analytics.aggregate(self.ds, cuts=[('field', u'foo')])
-        assert res['summary']['num_entries'] == 3, res
-        assert res['summary']['amount'] == 1000, res
-
-    def test_aggregate_dimensions_drilldown(self):
-        res = analytics.aggregate(self.ds, drilldowns=['function'])
-        assert res['summary']['num_entries'] == 6, res
-        assert res['summary']['amount'] == 2690, res
-        assert len(res['drilldown']) == 2, res['drilldown']
-
-    def test_aggregate_two_dimensions_drilldown(self):
-        res = analytics.aggregate(self.ds, drilldowns=['function', 'field'])
-        assert res['summary']['num_entries'] == 6, res
-        assert res['summary']['amount'] == 2690, res
-        assert len(res['drilldown']) == 5, res['drilldown']
-
-    def test_aggregate_by_attribute(self):
-        res = analytics.aggregate(self.ds, drilldowns=['function.label'])
-        assert len(res['drilldown']) == 2, res['drilldown']
-
-    def test_aggregate_two_attributes_same_dimension(self):
-        res = analytics.aggregate(self.ds, drilldowns=['function.name',
-                                                       'function.label'])
-        assert len(res['drilldown']) == 2, res['drilldown']
 
     def test_materialize_table(self):
         itr = self.ds.fact_table.entries()
