@@ -19,10 +19,10 @@ class TestDimensionController(ControllerTestCase):
         for dimension in self.cra.model.dimensions:
             if isinstance(dimension, CompoundDimension) and \
                     dimension.name == 'cofog1':
-                members = list(dimension.members(
-                    dimension.alias.c.name == '3',
-                    limit=1))
-                self.member = members.pop()
+                col = self.cra.fact_table.mapping.columns['cofog1.name']
+                members = self.cra.fact_table.dimension_members(dimension,
+                                                                col == 3)
+                self.member = members.next()
                 break
 
     def test_index(self):
@@ -59,7 +59,7 @@ class TestDimensionController(ControllerTestCase):
                                            dimension='from', format='json'))
         obj = json.loads(response.data)['results']
         assert len(obj) == 5, obj
-        assert obj[0]['name'] == 'Dept032', obj[0]
+        assert obj[0]['name'] == 'Dept022', obj[0]
 
         q = 'Ministry of Ju'
         response = self.client.get(url_for('dimension.distinct', dataset='cra',
@@ -71,9 +71,9 @@ class TestDimensionController(ControllerTestCase):
     def test_view_member_html(self):
         url_ = url_for('dimension.member', dataset=self.cra.name, dimension='cofog1',
                        name=self.member['name'])
-        result = self.client.get(url_)
+        result = self.client.get(url_, follow_redirects=True)
 
-        assert result.status == '200 OK'
+        assert result.status == '200 OK', result.data
 
         # Links to entries json and csv and entries listing
         assert '/cra/cofog1/3.json">' in result.data
@@ -89,9 +89,8 @@ class TestDimensionController(ControllerTestCase):
         assert result.content_type == 'application/json', result.content_type
 
         json_data = json.loads(result.data)
-        assert json_data['name'] == u'3'
+        assert json_data['name'] in [u'3', 3]
         assert json_data['label'] == self.member['label']
-        assert json_data['id'] == self.member['id']
 
     def test_view_entries_json(self):
         url_ = url_for('dimension.entries', format='json',

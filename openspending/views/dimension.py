@@ -37,14 +37,16 @@ def get_member(dataset, dimension_name, name):
     dataset = get_dataset(dataset)
     for dimension in dataset.model.compounds:
         if dimension.name == dimension_name:
-            cond = dimension.alias.c.name == name
-            members = list(dimension.members(cond, limit=1))
+            col = '%s.name' % dimension_name
+            col = dataset.fact_table.mapping.columns.get(col)
+            members = list(dataset.fact_table.dimension_members(dimension,
+                col == name, limit=1)) # noqa
             if not len(members):
                 raise NotFound(_('Sorry, there is no member named %(name)s',
                                  name=name))
             dimension = dimension
             member = members.pop()
-            num_entries = dimension.num_entries(cond)
+            num_entries = dataset.fact_table.num_members(dimension)
             return dataset, dimension, member, num_entries
     raise NotFound(_('Sorry, there is no dimension named %(name)',
                      name=dimension_name))
@@ -92,13 +94,15 @@ def distinct(dataset, dimension, format='json'):
 
     etag_cache_keygen(dataset.updated_at, format, parser.key())
 
-    q = params.get('attribute').column_alias.ilike(params.get('q') + '%')
+    attr = params.get('attribute')
+    col = dataset.fact_table.mapping.columns.get(attr.path)
+    q = col.ilike(params.get('q') + '%')
     offset = int((params.get('page') - 1) * params.get('pagesize'))
-    members = dimension.members(q, offset=offset, limit=params.get('pagesize'))
+    members = dataset.fact_table.dimension_members(dimension, q, offset=offset,
+                limit=params.get('pagesize')) # noqa
 
     return jsonify({
-        'results': list(members),
-        'count': dimension.num_entries(q)
+        'results': list(members)
     })
 
 
@@ -148,10 +152,10 @@ def entries(dataset, dimension, name, format='html'):
 
     request_set_views(dataset, member, dimension=dimension.name)
     
-    entries = dataset.fact_table.entries(
-        dimension.alias.c.name == member['name'])
+    col = dataset.fact_table.mapping.columns.get('%s.name' % dimension)
+    entries = dataset.fact_table.entries(col == member['name'])
     entries = (entry_apply_links(dataset, e) for e in entries)
     return render_template('dimension/entries.html', dataset=dataset,
                            dimension=dimension, member=member,
-                           num_entries=num_entries)
+                           entries=entries, num_entries=num_entries)
 

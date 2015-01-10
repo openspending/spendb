@@ -21,7 +21,7 @@ class TestRestController(ControllerTestCase):
         assert '"name": "cra"' in response.data, response.data
 
     def test_entry(self):
-        q = self.cra.model['from'].alias.c.name == 'Dept047'
+        q = self.cra.fact_table.mapping.columns['from.name'] == 'Dept047'
         example = list(self.cra.fact_table.entries(q, limit=1)).pop()
 
         response = self.client.get(url_for('entry.view',
@@ -63,7 +63,7 @@ class TestEntryController(ControllerTestCase):
         # pop it and know that it is for the year 2010 but we assert it
         # to be absolutely sure
         t = list(self.cra.fact_table.entries('amount=-22400000')).pop()
-        assert t['time']['year'] == '2010', \
+        assert t['time']['year'] in ['2010', 2010], \
             "Test entry isn't from the year 2010"
 
         # Get an inflated response

@@ -17,9 +17,7 @@ def default_year(dataset):
     """ Guess a reasonable default year for this dataset or use
     the year specified on the dataset object. """
     current_year = str(datetime.utcnow().year)
-    dim = dataset.model['time']
-    times = [m['year'] for m in dataset.fact_table.dimension_members(dim)]
-    times = list(set(times))
+    times = dataset.fact_table.years()
     if dataset.default_time:
         return dataset.default_time
     if not len(times) or current_year in times:

@@ -87,7 +87,8 @@ def view(dataset, id, format='html'):
     # Get the entry that matches the given id. dataset.entries is
     # a generator so we create a list from it's responses based on the
     # given constraint
-    entries = list(dataset.fact_table.entries(dataset.fact_table.alias.c.id == id))
+    cond = dataset.fact_table.alias.c._id == id
+    entries = list(dataset.fact_table.entries(cond))
     # Since we're trying to get a single entry the list should only
     # contain one entry, if not then we return an error
     if not len(entries) == 1:
@@ -126,8 +127,7 @@ def view(dataset, id, format='html'):
             inflation['label'] = 'Inflation adjustment'
             tmpl_context['entry']['inflation_adjustment'] = inflation
             tmpl_context['inflation'] = inflation
-        except Exception, e:
-            print "FUCK", e
+        except Exception:
             # If anything goes wrong in the try clause (and there's a lot
             # that can go wrong). We just say that we can't adjust for
             # inflation and set the context amount as the original amount

@@ -63,12 +63,7 @@ def core_edit(dataset, errors={}):
     languages = sorted(LANGUAGES.items(), key=lambda k_v2: k_v2[1])
     territories = sorted(COUNTRIES.items(), key=lambda k_v3: k_v3[1])
     categories = sorted(CATEGORIES.items(), key=lambda k_v4: k_v4[1])
-
-    if 'time' in dataset.model:
-        available_times = [m['year'] for m in dataset.model['time'].members()]
-        available_times = sorted(set(available_times), reverse=True)
-    else:
-        available_times = []
+    times = sorted(set(dataset.fact_table.years()), reverse=True)
 
     errors = [(k[len('dataset.'):], v) for k, v in errors.items()]
     fill = dataset.as_dict()
@@ -76,6 +71,7 @@ def core_edit(dataset, errors={}):
         fill.update(dict(request.form.items()))
     return render_template('editor/core.html', dataset=dataset,
                            form_errors=dict(errors), form_fill=fill,
+                           available_times=times,
                            key_currencies=key_currencies,
                            all_currencies=all_currencies,
                            languages=languages,
@@ -152,11 +148,8 @@ def dimensions_update(dataset):
         schema = mapping_schema(ValidationState(model))
         new_mapping = schema.deserialize(mapping)
         dataset.data['mapping'] = new_mapping
-        dataset.fact_table.drop()
         dataset._load_model()
-        dataset.fact_table.generate()
         db.session.commit()
-        # h.flash_success(_("The mapping has been updated."))
         saved = True
     except (ValueError, TypeError, AttributeError):
         raise BadRequest(_("The mapping data could not be decoded as JSON!"))
@@ -270,8 +263,6 @@ def drop(dataset):
     dataset.updated_at = datetime.utcnow()
     dataset.fact_table.drop()
     solr.drop_index(dataset.name)
-    dataset.fact_table.init()
-    dataset.fact_table.generate()
     dataset.touch()
 
     # For every source in the dataset we set the status to removed

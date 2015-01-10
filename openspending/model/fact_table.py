@@ -35,6 +35,16 @@ class FactTableMapping(ModelVisitor):
     def apply(self):
         self.visit(self.model)
 
+    def dimension_columns(self, dimension):
+        """ Filter the generated columns for those related to a
+        particular dimension. """
+        prefix = dimension.name + '.'
+        columns = []
+        for path, col in self.columns.items():
+            if path == dimension.name or path.startswith(prefix):
+                columns.append(col)
+        return columns
+
     def visit_attribute(self, attribute):
         if attribute.column not in self.alias.columns:
             return
@@ -175,13 +185,17 @@ class FactTable(object):
         rp = self.bind.execute(self.table.count())
         return rp.fetchone()[0]
 
+    def num_members(self, dimension):
+        """ Get the number of members for the given dimension. """
+        if not self.exists:
+            return 0
+        q = select(self.mapping.dimension_columns(dimension), distinct=True)
+        rp = self.bind.execute(q.count())
+        return rp.fetchone()[0]
+
     def dimension_members(self, dimension, conditions="1=1", offset=0,
                           limit=None):
-        prefix = dimension.name + '.'
-        selects = []
-        for path, col in self.mapping.columns.items():
-            if path == dimension.name or path.startswith(prefix):
-                selects.append(col)
+        selects = self.mapping.dimension_columns(dimension)
         order_by = [s.asc() for s in selects]
         for entry in self.entries(conditions=conditions, order_by=order_by,
                                   selects=selects, distinct=True,
@@ -237,7 +251,7 @@ class FactTable(object):
     
         # Get the time column
         time = self.dataset.model['time']
-        time = time.alias.c[time.column]
+        time = self.alias.c[time.column]
         # We use SQL's min and max functions to get the timestamps
         query = db.session.query(func.min(time), func.max(time))
         # We just need one result to get min and max time
@@ -248,6 +262,15 @@ class FactTable(object):
             if isinstance(d, int):
                 return date(d, 1, 1)
         return [convert(d) for d in query.one()]
+
+    def years(self):
+        """ Return all the years represented in the current fact table. """
+        try:
+            dim = self.dataset.model['time']
+            times = [m['year'] for m in self.dimension_members(dim)]
+            return list(set(times))
+        except KeyError:
+            return []
 
     def __repr__(self):
         return "<FactTable(%r)>" % (self.dataset)

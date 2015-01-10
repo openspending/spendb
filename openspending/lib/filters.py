@@ -69,7 +69,7 @@ def entry_description(entry):
                 fragments.append(v.get('label'))
             elif isinstance(v, basestring):
                 fragments.append(v)
-    description = " - ".join(fragments)
+    description = " - ".join([f for f in fragments if f is not None])
     return markdown_preview(description)
 
 

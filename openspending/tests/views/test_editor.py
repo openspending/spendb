@@ -101,9 +101,6 @@ class TestEditorController(ControllerTestCase):
 
     def test_dimensions_edit_mask(self):
         cra = Dataset.by_name('cra')
-        cra.fact_table.drop()
-        cra.fact_table.init()
-        cra.fact_table.generate()
         src = Source(cra, self.user, 'file:///dev/null')
         src.analysis = {'columns': ['amount', 'etc']}
         db.session.add(src)
@@ -126,20 +123,12 @@ class TestEditorController(ControllerTestCase):
         assert 'Update' not in response.data
 
     def test_dimensions_update_invalid_json(self):
-        cra = Dataset.by_name('cra')
-        cra.fact_table.drop()
-        cra.fact_table.init()
-        cra.fact_table.generate()
         response = self.client.post(url_for('editor.dimensions_update', dataset='cra'),
                                     data={'mapping': 'banana'},
                                     query_string={'api_key': self.user.api_key})
         assert '400' in response.status, response.status
 
     def test_dimensions_update_valid_json(self):
-        cra = Dataset.by_name('cra')
-        cra.fact_table.drop()
-        cra.fact_table.init()
-        cra.fact_table.generate()
         response = self.client.post(url_for('editor.dimensions_update', dataset='cra'),
                                     data={'mapping': """{
                                                           "amount": {
