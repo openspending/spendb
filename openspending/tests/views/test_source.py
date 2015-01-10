@@ -17,10 +17,9 @@ class TestSourceController(ControllerTestCase):
         super(TestSourceController, self).setUp()
         self.user = make_account('test')
         self.dataset = load_fixture('cra', self.user)
-        self.patcher = patch('openspending.tasks.analyze_source.delay')
-        self.patcher.return_value = None
+        self.patcher = patch('openspending.tasks.analyze_source.apply_async')
         self.patcher.start()
-
+        
     def tearDown(self):
         self.patcher.stop()
         super(TestSourceController, self).tearDown()

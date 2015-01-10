@@ -1,5 +1,6 @@
 import json
 from flask import url_for
+from mock import patch
 
 from openspending.core import db
 from openspending.model.dataset import Dataset
@@ -21,6 +22,15 @@ class TestApiNewDataset(ControllerTestCase):
         super(TestApiNewDataset, self).setUp()
         self.user = make_account('test_new')
         self.user2 = make_account('test_new2')
+        self.ls_patch = patch('openspending.tasks.load_source.delay')
+        self.ls_patch.start()
+        self.bdp_patch = patch('openspending.tasks.analyze_budget_data_package.delay')
+        self.bdp_patch.start()
+
+    def tearDown(self):
+        self.ls_patch.stop()
+        self.bdp_patch.stop()
+        super(TestApiNewDataset, self).tearDown()
 
     def test_new_dataset(self):
         user = Account.by_name('test_new')
