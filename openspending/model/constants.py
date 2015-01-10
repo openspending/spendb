@@ -1,5 +1,5 @@
 
-DATE_CUBES_TEMPLATE = {
+FULL_DATE_CUBES_TEMPLATE = {
     "role": "time",
     "levels": [
         {
@@ -42,4 +42,16 @@ DATE_CUBES_TEMPLATE = {
             "levels": ["year", "quarter", "month"]
         }
     ]
+}
+
+
+NUM_DATE_CUBES_TEMPLATE = {
+    "role": "time",
+    "levels": [
+        {
+            "name": "year",
+            "label": "Year"
+        }
+    ],
+    "hierarchies": []
 }

@@ -1,6 +1,5 @@
 
 from openspending.model.attribute import Attribute
-from openspending.model.constants import DATE_CUBES_TEMPLATE
 from openspending.model.common import df_column
 
 
@@ -46,18 +45,6 @@ class AttributeDimension(Dimension, Attribute):
     def __repr__(self):
         return "<AttributeDimension(%s)>" % self.name
 
-    def to_cubes(self, mappings, joins):
-        """ Convert this dimension to a ``cubes`` dimension. """
-        mappings['%s.%s' % (self.name, self.name)] = unicode(self.column)
-        return {
-            'levels': [{
-                'name': self.name,
-                'label': self.label,
-                'key': self.name,
-                'attributes': [self.name]
-            }]
-        }
-
 
 class Measure(Attribute):
     """ A value on the facts table that can be subject to aggregation,
@@ -101,71 +88,32 @@ class CompoundDimension(Dimension):
                 return attr
         raise KeyError()
 
-    def to_cubes(self, mappings, joins):
-        """ Convert this dimension to a ``cubes`` dimension. """
-        attributes = ['id'] + [a.name for a in self.attributes]
-        fact_table = self.model.dataset.name + '__entry'
-        joins.append({
-            'master': '%s.%s' % (fact_table, self.name + '_id'),
-            'detail': '%s.id' % self.table.name
-        })
-        for a in attributes:
-            mappings['%s.%s' % (self.name, a)] = '%s.%s' % (self.table.name, a)
-
-        return {
-            'levels': [{
-                'name': self.name,
-                'label': self.label,
-                'key': 'name',
-                'attributes': attributes
-            }]
-        }
-
     def __repr__(self):
         return "<CompoundDimension(%s:%s)>" % (self.name, self.attributes)
 
 
 class DateDimension(CompoundDimension):
-
     """ DateDimensions are closely related to :py:class:`CompoundDimensions`
     but the value is set up from a Python date object to automatically contain
     several properties of the date in their own attributes (e.g. year, month,
     quarter, day). """
 
-    DATE_ATTRIBUTES = {
-        'name': {'datatype': 'string'},
-        'label': {'datatype': 'string'},
-        'year': {'datatype': 'string'},
-        'quarter': {'datatype': 'string'},
-        'month': {'datatype': 'string'},
-        'week': {'datatype': 'string'},
-        'day': {'datatype': 'string'}
-    }
+    DATE_ATTRIBUTES = ['name', 'label', 'year', 'quarter', 'month', 'week',
+                       'day']
 
     def __init__(self, model, name, data):
         Dimension.__init__(self, model, name, data)
         self.column = data.get('column')
 
         self.attributes = []
-        for attr_name, attr in self.DATE_ATTRIBUTES.items():
-            attr = Attribute(self, attr_name, attr)
+        for attr_name in self.DATE_ATTRIBUTES:
+            attr = Attribute(self, attr_name, {})
             attr.column = df_column(name, attr_name)
             self.attributes.append(attr)
 
     @property
     def columns(self):
         return [self.column]
-
-    def to_cubes(self, mappings, joins):
-        """ Convert this dimension to a ``cubes`` dimension. """
-        fact_table = self.model.dataset.name + '__entry'
-        joins.append({
-            'master': '%s.%s' % (fact_table, self.name + '_id'),
-            'detail': '%s.id' % self.table.name
-        })
-        for a in ['name', 'year', 'quarter', 'month', 'week', 'day']:
-            mappings['%s.%s' % (self.name, a)] = '%s.%s' % (self.table.name, a)
-        return DATE_CUBES_TEMPLATE.copy()
 
     def __repr__(self):
         return "<DateDimension(%s)>" % self.name

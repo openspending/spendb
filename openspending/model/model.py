@@ -1,7 +1,3 @@
-"""
-The ``Model`` serves as an abstract representation of a dataset,
-representing its measures, dimensions and attributes.
-"""
 import logging
 
 from openspending.model.dimension import (CompoundDimension, DateDimension,
@@ -11,6 +7,8 @@ log = logging.getLogger(__name__)
 
 
 class Model(object):
+    """ The ``Model`` serves as an abstract representation of a dataset,
+    representing its measures, dimensions and attributes. """
 
     def __init__(self, dataset):
         """ Construct the in-memory object representation of this
