@@ -46,22 +46,18 @@ class TestDataset(DatabaseTestCase):
         assert dim.label == self.model['mapping']['field']['label'], \
             dim.label
         assert dim.constant is None, dim.constant
-        assert dim.default_value is None, dim.default_value
-        assert dim.constant is None, dim.constant
         assert dim.model == self.ds.model, dim.model
-        assert dim.datatype == 'string', dim.datatype
         assert not hasattr(dim, 'table')
         assert not hasattr(dim, 'alias')
 
     def test_generate_db_entry_table(self):
-        assert self.ds.fact_table.table.name == 'test__entry', \
+        assert self.ds.fact_table.table.name == 'test__facts', \
             self.ds.fact_table.table.name
         cols = self.ds.fact_table.table.c
-        assert 'id' in cols
-        assert isinstance(cols['id'].type, Unicode)
-
-        assert 'time_id' in cols
-        assert isinstance(cols['time_id'].type, Integer)
+        assert '_id' in cols
+        assert isinstance(cols['_id'].type, Unicode)
+        assert 'time' in cols
+        assert isinstance(cols['time'].type, Integer)
         assert 'amount' in cols
         assert isinstance(cols['amount'].type, Float)
         assert 'field' in cols
@@ -83,7 +79,7 @@ class TestDatasetLoad(DatabaseTestCase):
         self.ds = Dataset(model_fixture('simple'))
         db.session.add(self.ds)
         db.session.commit()
-        self.ds.fact_table.generate()
+        self.ds.fact_table.create()
         self.engine = db.engine
 
     def test_load_all(self):
@@ -91,21 +87,17 @@ class TestDatasetLoad(DatabaseTestCase):
         q = self.ds.fact_table.table.select()
         resn = self.engine.execute(q).fetchall()
         assert len(resn) == 6, resn
-        row0 = resn[0]
+        row0 = dict(resn[0].items())
         assert row0['amount'] == 200, row0.items()
         assert row0['field'] == 'foo', row0.items()
 
     def test_drop(self):
         tn = self.engine.table_names()
-        assert 'test__entry' in tn, tn
-        assert 'test__to' in tn, tn
-        assert 'test__function' in tn, tn
+        assert 'test__facts' in tn, tn
 
         self.ds.fact_table.drop()
         tn = self.engine.table_names()
-        assert 'test__entry' not in tn, tn
-        assert 'test__to' not in tn, tn
-        assert 'test__function' not in tn, tn
+        assert 'test__facts' not in tn, tn
 
     def test_dataset_count(self):
         load_dataset(self.ds)

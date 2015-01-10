@@ -1,8 +1,8 @@
 # coding=utf-8
+import datetime
 from json import dumps, loads
-from sqlalchemy.types import Text, TypeDecorator, Integer
-from sqlalchemy.schema import Table, Column
-from sqlalchemy.sql.expression import and_, select, func
+from sqlalchemy.types import Text, TypeDecorator
+from sqlalchemy.sql.expression import select, func
 from sqlalchemy.ext.mutable import Mutable
 
 from openspending.core import db
@@ -10,18 +10,12 @@ from openspending.core import db
 ALIAS_PLACEHOLDER = u'‽'
 
 
-def decode_row(row, model):
-    row = dict(row.items())
-    result = {'id': row['_id']}
-    for axis in model.axes:
-        if hasattr(axis, 'attributes'):
-            value = {}
-            for attr in axis.attributes:
-                value[attr.name] = row.get(attr.column)
-        else:
-            value = row.get(axis.column)
-        result[axis.name] = value
-    return result
+def json_default(obj):
+    if isinstance(obj, datetime.datetime):
+        obj = obj.date()
+    if isinstance(obj, datetime.date):
+        obj = obj.isoformat()
+    return obj
 
 
 def df_column(dimension, field):
@@ -78,7 +72,7 @@ class JSONType(TypeDecorator):
         super(JSONType, self).__init__()
 
     def process_bind_param(self, value, dialect):
-        return dumps(value)
+        return dumps(value, default=json_default)
 
     def process_result_value(self, value, dialiect):
         return loads(value)

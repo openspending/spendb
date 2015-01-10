@@ -60,6 +60,20 @@ def csvimport_fixture_file(name, path):
     return fp
 
 
+def csvimport_table(name):
+    from messytables import CSVTableSet
+    from loadkit.transform import parse_table
+    table_set = CSVTableSet(data_fixture(name))
+    row_set = table_set.tables[0]
+    rows = []
+
+    def save_row(row):
+        rows.append(row)
+    
+    num_rows, fields = parse_table(row_set, save_row)
+    return fields, rows
+
+
 def load_fixture(name, manager=None):
     """
     Load fixture data into the database.
@@ -69,25 +83,21 @@ def load_fixture(name, manager=None):
     dataset.updated_at = datetime.utcnow()
     if manager is not None:
         dataset.managers.append(manager)
+    fields, rows = csvimport_table(name)
+    dataset.fields = fields
     db.session.add(dataset)
     db.session.commit()
-    dataset.fact_table.generate()
-    data = data_fixture(name)
-    reader = csv.DictReader(data)
-    for row in reader:
-        entry = convert_types(model['mapping'], row)
-        dataset.fact_table.load(entry)
-    data.close()
+    dataset.fact_table.create()
+    dataset.fact_table.load_iter(rows)
     return dataset
 
 
 def load_dataset(dataset):
-    simple_model = model_fixture('simple')
+    model = model_fixture('simple')
     data = data_fixture('simple')
     reader = csv.DictReader(data)
-    for row in reader:
-        row = convert_types(simple_model['mapping'], row)
-        dataset.fact_table.load(row)
+    rows = [convert_types(model['mapping'], r) for r in reader]
+    dataset.fact_table.load_iter(rows)
     data.close()
 
 

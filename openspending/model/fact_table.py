@@ -1,6 +1,6 @@
 import json
 from itertools import count
-from datetime import datetime
+from datetime import date
 
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
@@ -10,7 +10,7 @@ from sqlalchemy.sql.expression import select, func
 from openspending.core import db
 from openspending.lib.util import cache_hash
 from openspending.model.dimension import DateDimension
-from openspending.model.common import decode_row, df_column
+from openspending.model.common import df_column, json_default
 
 
 TYPES = {
@@ -119,7 +119,7 @@ class FactTable(object):
                     record[df_column(name, k)] = f(v)
 
         record['_id'] = cache_hash(record)
-        record['_json'] = json.dumps(record)
+        record['_json'] = json.dumps(record, default=json_default)
         return record
 
     def create(self):
@@ -139,6 +139,21 @@ class FactTable(object):
             return 0
         rp = self.bind.execute(self.table.count())
         return rp.fetchone()[0]
+
+    def _unpack_entry(self, row):
+        """ Convert a database-returned row into a nested and mapped
+        fact representation. """
+        row = dict(row.items())
+        result = {'id': row['_id']}
+        for axis in self.dataset.model.axes:
+            if hasattr(axis, 'attributes'):
+                value = {}
+                for attr in axis.attributes:
+                    value[attr.name] = row.get(attr.column)
+            else:
+                value = row.get(axis.column)
+            result[axis.name] = value
+        return result
 
     def entries(self, conditions="1=1", order_by=None, limit=None,
                 offset=0, step=10000):
@@ -194,7 +209,7 @@ class FactTable(object):
                         return
                     break
                 first_row = False
-                yield decode_row(row, self.dataset.model)
+                yield self._unpack_entry(row)
 
     def timerange(self):
         """
@@ -207,12 +222,17 @@ class FactTable(object):
     
         # Get the time column
         time = self.dataset.model['time']
-        time = time.alias.c['name']
+        time = time.alias.c[time.column]
         # We use SQL's min and max functions to get the timestamps
         query = db.session.query(func.min(time), func.max(time))
         # We just need one result to get min and max time
-        return [datetime.strptime(date, '%Y-%m-%d') if date else None
-                for date in query.one()]
+        
+        def convert(d):
+            if isinstance(d, date):
+                return d
+            if isinstance(d, int):
+                return date(d, 1, 1)
+        return [convert(d) for d in query.one()]
 
     def __repr__(self):
         return "<FactTable(%r)>" % (self.dataset)
