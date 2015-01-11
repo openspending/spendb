@@ -6,7 +6,6 @@ from sqlalchemy.types import Integer, Unicode, DateTime
 
 from openspending.core import db
 from openspending.model.dataset import Dataset
-from openspending.model.source import Source
 
 
 class Run(db.Model):
@@ -22,13 +21,10 @@ class Run(db.Model):
     STATUS_FAILED = 'failed'
     STATUS_REMOVED = 'removed'
 
-    # Operation values for database, two operations possible
-    OPERATION_SAMPLE = 'sample'
-    OPERATION_IMPORT = 'import'
-
     id = Column(Integer, primary_key=True)
-    operation = Column(Unicode(2000))
-    status = Column(Unicode(2000))
+    operation = Column(Unicode())
+    status = Column(Unicode())
+    source = Column(Unicode())
     time_start = Column(DateTime, default=datetime.utcnow)
     time_end = Column(DateTime)
     dataset_id = Column(Integer, ForeignKey('dataset.id'), nullable=True)
@@ -38,16 +34,11 @@ class Run(db.Model):
                            backref=backref('runs',
                                            order_by='Run.time_start.desc()',
                                            lazy='dynamic'))
-    source = relationship(Source,
-                          backref=backref('runs',
-                                          order_by='Run.time_start.desc()',
-                                          lazy='dynamic'))
 
-    def __init__(self, operation, status, dataset, source):
+    def __init__(self, operation, status, dataset):
         self.operation = operation
         self.status = status
         self.dataset = dataset
-        self.source = source
 
     @property
     def successful_sample(self):
@@ -79,4 +70,4 @@ class Run(db.Model):
         return db.session.query(cls).filter_by(id=id).first()
 
     def __repr__(self):
-        return "<Run(%r, %r)>" % (self.source.id, self.id)
+        return "<Run(%r, %r, %r)>" % (self.source, self.id, self.status)

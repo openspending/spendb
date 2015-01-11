@@ -1,7 +1,7 @@
 from loadkit import logfile
 
 from openspending.core import db, data_manager
-from openspending.model import Dataset
+from openspending.model import Dataset, Run
 from openspending.etl import tasks
 
 from openspending.tests.helpers import model_fixture
@@ -35,8 +35,9 @@ class TestLoad(DatabaseTestCase):
         source = tasks.extract_url(self.ds, url)
         assert source is None, source
 
+        run = db.session.query(Run).first()
         package = data_manager.package(self.ds.name)
-        messages = list(logfile.load(package, 'test'))
+        messages = list(logfile.load(package, run.id))
         assert len(messages) > 2, messages
     
     def test_extract_file(self):

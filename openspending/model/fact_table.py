@@ -62,7 +62,7 @@ class FactTableMapping(ModelVisitor):
         if field_type == 'date':
             for a in ['year', 'quarter', 'month', 'week', 'day']:
                 attr = dimension[a]
-                self.columns[attr.path] = extract(col, a).label(attr.column, a)
+                self.columns[attr.path] = extract(a, col).label(attr.column)
         elif field_type == 'integer':
             year_attr = dimension['year']
             self.columns[year_attr.path] = col.label(year_attr.column)
