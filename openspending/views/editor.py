@@ -321,5 +321,7 @@ def delete(dataset):
     solr.drop_index(dataset.name)
     db.session.delete(dataset)
     db.session.commit()
+    
+    clear_index_cache()
     flash_success(_("The dataset has been deleted."))
     return redirect(url_for('dataset.index'))

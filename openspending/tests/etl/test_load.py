@@ -50,6 +50,17 @@ class TestLoad(DatabaseTestCase):
         source = tasks.extract_fileobj(self.ds, fp,
                                        file_name='cra2 HUHU.csv')
         assert 'cra2-huhu.csv' == source.name, source.name
+
+    def test_duplicate_file(self):
+        fp = csvimport_fixture_file('../data', 'cra.csv')
+        source = tasks.extract_fileobj(self.ds, fp,
+                                       file_name='cra2.csv')
+        assert 'cra2.csv' == source.name, source.name
+
+        fp = csvimport_fixture_file('../data', 'cra.csv')
+        source = tasks.extract_fileobj(self.ds, fp,
+                                       file_name='cra2.csv')
+        assert 'cra2-2.csv' == source.name, source.name
         
     def test_transform_source(self):
         fp = csvimport_fixture_file('../data', 'cra.csv')
@@ -66,9 +77,8 @@ class TestLoad(DatabaseTestCase):
         fp = csvimport_fixture_file('../data', 'cra.csv')
         source = tasks.extract_fileobj(self.ds, fp,
                                        file_name='cra2.csv')
-        tasks.transform_source(self.ds, source.name)
-        package = data_manager.package(self.ds.name)
-        fields = package.manifest.get('fields')
+        source = tasks.transform_source(self.ds, source.name)
+        fields = source.meta.get('fields')
         assert len(fields) == 34, len(fields)
         assert 'amount' in fields, fields
         amt = fields.get('amount')

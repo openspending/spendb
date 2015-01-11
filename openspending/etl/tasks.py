@@ -44,13 +44,13 @@ def load(job, dataset, source_name=None):
     """ Load the table artifact for this dataset into the fact
     table. """
     job.set_source(source_name)
-    dataset.fields = job.package.manifest.get('fields', {})
+    artifact = Artifact(job.package, ARTIFACT_NAME)
+    dataset.fields = artifact.meta.get('fields', {})
     if not len(dataset.fields):
         raise ValueError('No columns recognized in source data.')
 
     db.session.commit()
 
-    artifact = Artifact(job.package, ARTIFACT_NAME)
     dataset.fact_table.drop()
     dataset.fact_table.create()
     dataset.fact_table.load_iter(artifact.records())
