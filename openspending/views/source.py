@@ -12,7 +12,7 @@ from openspending.auth import require
 from openspending.lib.helpers import url_for, get_dataset, obj_or_404
 from openspending.lib.helpers import flash_success, flash_error
 from openspending.lib.jsonexport import jsonify
-from openspending.tasks import analyze_source, load_source
+from openspending.tasks import load_from_url
 from openspending.lib.validation import source_schema
 from openspending.views.cache import disable_cache
 
@@ -45,10 +45,8 @@ def create(dataset):
     values = dict(request.form.items())
     try:
         data = source_schema().deserialize(values)
-        source = Source(dataset, current_user, data['url'])
-        db.session.add(source)
-        db.session.commit()
-        analyze_source.apply_async(args=[source.id], countdown=2)
+        load_from_url.apply_async(args=[dataset.name, data['url']],
+                                  countdown=2)
         flash_success(_("The source has been created."))
         return redirect(url_for('editor.index', dataset=dataset.name))
     except Invalid as i:

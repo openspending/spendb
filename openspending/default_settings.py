@@ -38,31 +38,19 @@ CELERY_ALWAYS_EAGER = False
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
 
-CELERY_DEFAULT_QUEUE = 'analysis'
+CELERY_DEFAULT_QUEUE = 'loading'
 CELERY_QUEUES = (
-    Queue('analysis', Exchange('openspending'), routing_key='openspending'),
+    Queue('indexing', Exchange('openspending'), routing_key='openspending'),
     Queue('loading', Exchange('openspending'), routing_key='openspending'),
 )
 
 CELERY_ROUTES = {
-    'openspending.tasks.analyze_all_sources': {
-        'queue': 'analysis'
-    },
-    'openspending.tasks.analyze_source': {
-        'queue': 'analysis'
-    },
-    'openspending.tasks.analyze_budget_data_package': {
-        'queue': 'analysis'
-    },
-    'openspending.tasks.load_source': {
-        'queue': 'loading'
-    },
-    'openspending.tasks.load_budgetdatapackage': {
+    'openspending.tasks.load_from_url': {
         'queue': 'loading'
     },
     'openspending.tasks.index_dataset': {
-        'queue': 'loading'
+        'queue': 'indexing'
     },
 }
 
-MAX_CONTENT_LENGTH = 1024 * 1024 * 500 # 500 MB
+MAX_CONTENT_LENGTH = 1024 * 1024 * 500  # 500 MB

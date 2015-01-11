@@ -261,6 +261,7 @@ def drop(dataset):
     require.dataset.update(dataset)
 
     dataset.updated_at = datetime.utcnow()
+    dataset.fields = {}
     dataset.fact_table.drop()
     solr.drop_index(dataset.name)
     dataset.touch()

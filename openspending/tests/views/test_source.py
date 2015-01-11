@@ -3,12 +3,11 @@ from mock import patch
 
 from openspending.tests.base import ControllerTestCase
 from openspending.tests.helpers import make_account, load_fixture
-from openspending.tests.importer.test_csv import csvimport_fixture
+from openspending.tests.etl.test_import_fixtures import import_fixture
 
 from openspending.core import db
 from openspending.model.source import Source
 from openspending.model.account import Account
-from openspending.importer import CSVImporter
 
 
 class TestSourceController(ControllerTestCase):
@@ -72,11 +71,9 @@ class TestSourceController(ControllerTestCase):
         # Add and import source with errors (we want to remove it)
         # The source is added to a dataset called 'test-csv' (but
         # we'll just use source.dataset.name in case it changes)
-        source = csvimport_fixture('import_errors')
+        source = import_fixture('import_errors')
         source.dataset.managers.append(Account.by_name('test'))
-        importer = CSVImporter(source)
-        importer.run()
-
+        
         # Make sure the source is imported
         assert db.session.query(Source).filter_by(id=source.id).count() == 1, \
             "Import of csv failed. Source not found"
@@ -100,11 +97,9 @@ class TestSourceController(ControllerTestCase):
         # Add and import source without errors.
         # The source is added to a dataset called 'test-csv' (but
         # we'll just use source.dataset.name in case it changes)
-        source = csvimport_fixture('successful_import')
+        source = import_fixture('successful_import')
         source.dataset.managers.append(Account.by_name('test'))
-        importer = CSVImporter(source)
-        importer.run()
-
+        
         # Make sure the source is imported
         assert db.session.query(Source).filter_by(id=source.id).count() == 1, \
             "Import of csv failed. Source not found"

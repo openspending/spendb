@@ -10,11 +10,10 @@ from openspending import auth as can
 from openspending.core import db
 from openspending.auth import require
 from openspending.model.dataset import Dataset
-from openspending.model.source import Source
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.paramparser import LoadingAPIParamParser
 from openspending.lib.hypermedia import dataset_apply_links
-from openspending.tasks import load_source, analyze_budget_data_package
+from openspending.tasks import load_from_url
 from openspending.validation.model import validate_model
 from openspending.views.api_v2.common import blueprint
 
@@ -36,30 +35,19 @@ def create():
 
     # Precedence of budget data package over other methods
     if 'budget_data_package' in params:
-        return load_with_budget_data_package(
-            params['budget_data_package'], params['private'])
-    else:
-        return load_with_model_and_csv(
-            params['metadata'], params['csv_file'], params['private'])
-
-
-def load_with_budget_data_package(bdp_url, private):
-    """ Analyze and load data using a budget data package """
-    analyze_budget_data_package.delay(bdp_url, current_user, private)
-
-
-def load_with_model_and_csv(metadata, csv_file, private):
-    """ Load a dataset using a metadata model file and a csv file """
-
-    if metadata is None:
+        err = {'errors': 'BDP loading is disabled in 0.17'}
+        return jsonify(err, status=400)
+    
+    # params['metadata'], params['csv_file'], params['private'])
+    if params['metadata'] is None:
         return jsonify({'errors': 'metadata is missing'}, status=400)
 
-    if csv_file is None:
+    if params['csv_file'] is None:
         return jsonify({'errors': 'csv_file is missing'}, status=400)
         
     # We proceed with the dataset
     try:
-        model = json.load(urllib2.urlopen(metadata))
+        model = json.load(urllib2.urlopen(params['metadata']))
     except:
         return jsonify({'errors': 'JSON model could not be parsed'}, status=400)
     try:
@@ -75,25 +63,16 @@ def load_with_model_and_csv(metadata, csv_file, private):
         dataset = Dataset(model)
         require.dataset.create()
         dataset.managers.append(current_user)
-        dataset.private = private
+        dataset.private = params['private']
         db.session.add(dataset)
     else:
         require.dataset.update(dataset)
 
     log.info("Dataset: %s", dataset.name)
-    source = Source(dataset=dataset, creator=current_user,
-                    url=csv_file)
-
-    log.info(source)
-    for source_ in dataset.sources:
-        if source_.url == csv_file:
-            source = source_
-            break
-    db.session.add(source)
     db.session.commit()
 
     # Send loading of source into celery queue
-    load_source.delay(source.id)
+    load_from_url.delay(dataset.name, params['csv_file'])
     return jsonify(dataset_apply_links(dataset.as_dict()))
 
 

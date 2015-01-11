@@ -7,14 +7,10 @@ import urlparse
 
 from openspending.lib import json
 
-from openspending.model import Source, Dataset, Account, View
+from openspending.model import Dataset, Account, View
 from openspending.core import db
-
-from openspending.importer import CSVImporter
-from openspending.importer.analysis import analyze_csv
-
+from openspending.tasks import load_from_url
 from openspending.command.archive import get_url_filename
-
 from openspending.validation.model import validate_model
 from openspending.validation.model import Invalid
 
@@ -131,39 +127,6 @@ def get_or_create_dataset(model):
     return dataset
 
 
-def import_csv(dataset, url, args):
-    """
-    Import the csv data into the dataset
-    """
-
-    csv_data_url, source_url = url
-    source = Source(dataset, shell_account(),
-                    csv_data_url)
-    # Analyse the csv data and add it to the source
-    # If we don't analyse it we'll be left with a weird message
-    source.analysis = analyze_csv(csv_data_url)
-    # Check to see if the dataset already has this source
-    for source_ in dataset.sources:
-        if source_.url == csv_data_url:
-            source = source_
-            break
-    db.session.add(source)
-    db.session.commit()
-
-    dataset.generate()
-    importer = CSVImporter(source)
-    importer.run(**args)
-
-    # Check if imported from the file system (source and data url differ)
-    if csv_data_url != source_url:
-        # If we did, then we must update the source url based on the
-        # sources in the dataset model (so we need to fetch the source again
-        # or else we'll add a new one)
-        source = Source.by_id(source.id)
-        source.url = source_url
-        db.session.commit()
-
-
 def import_views(dataset, views_url):
     """
     Import views into the provided dataset which are defined in a json object
@@ -224,7 +187,7 @@ def add_import_commands(manager):
 
         # For every url in mapped dataset_urls (arguments) we import it
         for urlmap in source_map.iteritems():
-            import_csv(dataset, urlmap, args)
+            load_from_url(dataset, urlmap)
 
         # Import visualisations if there are any
         if args['views']:
