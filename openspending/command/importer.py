@@ -1,7 +1,6 @@
 import argparse
 import logging
 import sys
-import os
 import urllib2
 import urlparse
 
@@ -10,7 +9,6 @@ from openspending.lib import json
 from openspending.model import Dataset, Account, View
 from openspending.core import db
 from openspending.tasks import load_from_url
-from openspending.command.archive import get_url_filename
 from openspending.validation.model import validate_model
 from openspending.validation.model import Invalid
 
@@ -138,21 +136,6 @@ def import_views(dataset, views_url):
         create_view(dataset, view)
 
 
-def map_source_urls(model, urls):
-    """
-    Go through the source urls of the dataset model and map them to the
-    files or urls. Returns a dict where the key is the url and the value
-    is how it should be represented in the dataset.
-    """
-
-    # Create map from file to model sources
-    source_files = {get_url_filename(s): s
-                    for s in model['dataset'].get('sources', [])}
-
-    # Return a map for the representation of csv urls
-    return {u: source_files.get(os.path.basename(u), u) for u in urls}
-
-
 def add_import_commands(manager):
 
     @manager.option('-n', '--dry-run', dest='dry_run', action='store_true',
@@ -179,15 +162,12 @@ def add_import_commands(manager):
         # Get the model
         model = get_model(args['model'])
 
-        # Get the source map (data urls to models)
-        source_map = map_source_urls(model, args['dataset_urls'])
-
         # Get the dataset for the model
         dataset = get_or_create_dataset(model)
 
         # For every url in mapped dataset_urls (arguments) we import it
-        for urlmap in source_map.iteritems():
-            load_from_url(dataset, urlmap)
+        for url in args['dataset_urls']:
+            load_from_url(dataset, url)
 
         # Import visualisations if there are any
         if args['views']:

@@ -9,23 +9,6 @@
 
 <div class="row">
   <div class="span8 offset4">
-    {% if dataset.fact_table.num_entries() %}
-    <div class="alert block-message alert-warning">
-      <p>
-        <strong>{% trans %}You cannot edit dimensions while data is loaded.{% endtrans %}</strong>
-        {% trans %}In order to modify the dimensions model, you'll have to 
-        delete all the data that is currently loaded from the database.{% endtrans %}
-      </p>
-      <a href="{{ url_for('editor.index', dataset=dataset.name) }}" class="btn">
-        {% trans %}Go to dashboard{% endtrans %}
-      </a>
-      <a href="{{ url_for('dimension.index', dataset=dataset.name) }}" class="btn">
-        {% trans %}See dimensions{% endtrans %}
-      </a>
-    </div>
-    {% endif %}
-        
-    {% if not source %}
     <div class="alert block-message alert-warning">
       <p>
         <strong>{% trans %}You need to define at least one data source.{% endtrans %}</strong>
@@ -33,7 +16,6 @@
         needs to be available.{% endtrans %}
       </p>
     </div>
-    {% endif %}
   </div>
 </div>
 {% endblock %}

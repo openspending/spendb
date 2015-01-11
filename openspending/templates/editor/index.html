@@ -33,7 +33,7 @@
       </div>
       {% endif %}
       
-      {% if source and not source.analysis %}
+      {% if source and not dataset.fields %}
       <div class="alert block-message alert-info">
         <strong>{% trans %}Let me see...{% endtrans %}</strong> {% trans %}The data is now being checked to
         see if it can be imported. This should not take very long.{% endtrans %}

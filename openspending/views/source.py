@@ -7,7 +7,6 @@ from werkzeug.exceptions import BadRequest
 from colander import Invalid
 
 from openspending.core import db
-from openspending.model.source import Source
 from openspending.auth import require
 from openspending.lib.helpers import url_for, get_dataset, obj_or_404
 from openspending.lib.helpers import flash_success, flash_error
@@ -111,9 +110,3 @@ def delete(dataset, id):
         db.session.commit()
 
     return redirect(url_for('editor.index', dataset=dataset.name))
-
-
-@blueprint.route('/<dataset>/sources/<id>/analysis.json', methods=['GET'])
-def analysis(dataset, id):
-    datset, source = get_source(dataset, id)
-    return jsonify(source.analysis)

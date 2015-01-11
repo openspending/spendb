@@ -8,7 +8,7 @@ from flask.ext.babel import gettext as _
 from werkzeug.exceptions import BadRequest
 from colander import Invalid
 
-from openspending.core import db
+from openspending.core import db, data_manager
 from openspending.model import Account, Run
 from openspending.auth import require
 from openspending.lib import solr_util as solr
@@ -36,8 +36,10 @@ def index(dataset):
     require.dataset.update(dataset)
 
     entries_count = dataset.fact_table.num_entries()
-    has_sources = dataset.sources.count() > 0
-    source = dataset.sources.first()
+    package = data_manager.package(dataset.name)
+    sources = sorted(package.sources, key=lambda s: s.meta.get('created_at'))
+    has_sources = len(sources) > 0
+    source = sources[0] if has_sources else None
     index_count = solr.dataset_entries(dataset.name)
     index_percentage = 0 if not entries_count else \
         int((float(index_count) / float(entries_count)) * 1000)
@@ -111,24 +113,18 @@ def dimensions_edit(dataset, errors={}, mapping=None,
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
 
-    # TODO: really split up dimensions and mapping editor.
-    source = dataset.sources.first()
-    if source is None:
+    if not dataset.fields:
         return render_template('editor/dimensions_errors.html',
-                               dataset=dataset, source=None)
+                               dataset=dataset)
 
     mapping = mapping or dataset.data.get('mapping', {})
-    if not len(mapping) and source and 'mapping' in source.analysis:
-        mapping = source.analysis['mapping']
-
     fill = {'mapping': mapping}
-    if dataset.fact_table.num_entries():
+    if not dataset.fact_table.num_entries():
         return render_template('editor/dimensions_errors.html',
-                               dataset=dataset, source=source)
+                               dataset=dataset)
 
     return render_template('editor/dimensions.html', dataset=dataset,
-                           form_fill=fill, errors=errors, saved=saved,
-                           source=source)
+                           form_fill=fill, errors=errors, saved=saved)
 
 
 @blueprint.route('/<dataset>/editor/dimensions', methods=['POST'])

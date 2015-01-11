@@ -12,6 +12,7 @@ from openspending.model.run import Run
 class Job(object):
     
     def __init__(self, dataset, operation):
+        self.log = logging.getLogger('openspending.etl')
         self.dataset = dataset
         self.operation = operation
         self.run = None
@@ -22,7 +23,6 @@ class Job(object):
         db.session.commit()
 
         self.package = data_manager.package(self.dataset.name)
-        self.log = logging.getLogger('openspending.etl')
         modules = [self.log, 'loadkit']
         self.log_handler = capture(self.package, self.run.id, modules)
         self.log.info("Starting: %s", self.operation)

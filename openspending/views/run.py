@@ -4,7 +4,6 @@ from flask import Blueprint, render_template
 from flask.ext.babel import gettext as _
 from werkzeug.exceptions import BadRequest
 
-from openspending.model.source import Source
 from openspending.model.run import Run
 from openspending.model.log_record import LogRecord
 from openspending.auth import require
@@ -16,22 +15,17 @@ log = logging.getLogger(__name__)
 blueprint = Blueprint('run', __name__)
 
 
-def get_run(dataset, source, id):
+def get_run(dataset, id):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
-    source = obj_or_404(Source.by_id(source))
-    if source.dataset != dataset:
-        raise BadRequest(_("There is no source '%(source)s'", source=source))
     run = obj_or_404(Run.by_id(id))
-    if run.source != source:
-        raise BadRequest(_("There is no run '%(run)s'", run=id))
-    return dataset, source, run
+    return dataset, run
 
 
-@blueprint.route('/<dataset>/sources/<source>/runs/<id>', methods=['GET'])
-def view(dataset, source, id, format='html'):
+@blueprint.route('/<dataset>/runs/<id>', methods=['GET'])
+def view(dataset, id, format='html'):
     disable_cache()
-    dataset, source, run = get_run(dataset, source, id)
+    dataset, run = get_run(dataset, id)
     system = run.records.filter_by(category=LogRecord.CATEGORY_SYSTEM)
     num_system = system.count()
     system_page = Page(system.order_by(LogRecord.timestamp.asc()),
@@ -43,6 +37,6 @@ def view(dataset, source, id, format='html'):
                      page=get_page('data_page'),
                      items_per_page=20)
     return render_template('run/view.html', dataset=dataset,
-                           source=source, run=run, num_system=num_system,
+                           run=run, num_system=num_system,
                            system_page=system_page, num_data=num_data,
                            data_page=data_page)

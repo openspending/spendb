@@ -28,8 +28,7 @@ class Run(db.Model):
     time_start = Column(DateTime, default=datetime.utcnow)
     time_end = Column(DateTime)
     dataset_id = Column(Integer, ForeignKey('dataset.id'), nullable=True)
-    source_id = Column(Integer, ForeignKey('source.id'), nullable=True)
-
+    
     dataset = relationship(Dataset,
                            backref=backref('runs',
                                            order_by='Run.time_start.desc()',

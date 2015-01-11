@@ -6,7 +6,6 @@ from openspending.tests.helpers import make_account, load_fixture
 from openspending.tests.etl.test_import_fixtures import import_fixture
 
 from openspending.core import db
-from openspending.model.source import Source
 from openspending.model.account import Account
 
 
@@ -16,7 +15,7 @@ class TestSourceController(ControllerTestCase):
         super(TestSourceController, self).setUp()
         self.user = make_account('test')
         self.dataset = load_fixture('cra', self.user)
-        self.patcher = patch('openspending.tasks.analyze_source.apply_async')
+        self.patcher = patch('openspending.tasks.load_from_url.apply_async')
         self.patcher.start()
         
     def tearDown(self):
@@ -47,10 +46,7 @@ class TestSourceController(ControllerTestCase):
         response = self.client.post(url_for('source.create', dataset='cra'),
                                     data={'url': url_},
                                     query_string={'api_key': self.user.api_key})
-
-        response = self.client.get(url_for('editor.index', dataset='cra'),
-                                   query_string={'api_key': self.user.api_key})
-        assert url_ in response.data, response.data
+        assert '302' in response.status, response.status
 
     def test_create_source_invalid_url(self):
         url_ = 'banana'
