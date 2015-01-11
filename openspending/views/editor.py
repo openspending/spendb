@@ -14,7 +14,6 @@ from openspending.auth import require
 from openspending.lib import solr_util as solr
 from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.helpers import flash_success
-from openspending.lib.cache import clear_index_cache
 from openspending.reference.currency import CURRENCIES
 from openspending.reference.country import COUNTRIES
 from openspending.reference.category import CATEGORIES
@@ -279,18 +278,3 @@ def retract(dataset):
     flash_success(_("The dataset has been retracted. "
                     "It is no longer visible to others."))
     return redirect(url_for('editor.index', dataset=dataset.name))
-
-
-@blueprint.route('/<dataset>/editor/delete', methods=['POST'])
-def delete(dataset):
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-
-    dataset.fact_table.drop()
-    solr.drop_index(dataset.name)
-    db.session.delete(dataset)
-    db.session.commit()
-    
-    clear_index_cache()
-    flash_success(_("The dataset has been deleted."))
-    return redirect(url_for('dataset.index'))

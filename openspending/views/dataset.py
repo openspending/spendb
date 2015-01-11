@@ -83,12 +83,7 @@ def index(format='html'):
     territory_options = results['territories']
     category_options = results['categories']
 
-    if format == 'json':
-        # Apply links to the dataset lists before returning the json
-        results['datasets'] = [dataset_apply_links(r)
-                               for r in results['datasets']]
-        return jsonify(results)
-    elif format == 'csv':
+    if format == 'csv':
         # The CSV response only shows datasets, not languages,
         # territories, etc.
         return write_csv(results['datasets'])
@@ -184,33 +179,29 @@ def view(dataset, format='html'):
 
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
-    
-    if format == 'json':
-        # If requested format is json we return the json representation
-        return jsonify(dataset_apply_links(dataset.as_dict()))
-    else:
-        request_set_views(dataset, dataset)
-        if request._ds_view is None:
-            # If handle request didn't return a view we return the
-            # entry index
-            return entry_index(dataset.name)
-        if 'embed' in request.args:
-            # If embed is requested using the url parameters we return
-            # a redirect to an embed page for the default view
-            return redirect(url_for('view.embed', dataset=dataset.name,
-                            widget=request._ds_view.vis_widget.get('name'),
-                            state=json.dumps(request._ds_view.vis_state)))
 
-        # num_entries = len(dataset)
+    request_set_views(dataset, dataset)
+    if request._ds_view is None:
+        # If handle request didn't return a view we return the
+        # entry index
+        return entry_index(dataset.name)
+    if 'embed' in request.args:
+        # If embed is requested using the url parameters we return
+        # a redirect to an embed page for the default view
+        return redirect(url_for('view.embed', dataset=dataset.name,
+                        widget=request._ds_view.vis_widget.get('name'),
+                        state=json.dumps(request._ds_view.vis_state)))
 
-        timerange = None
-        (earliest_timestamp, latest_timestamp) = dataset.fact_table.timerange()
-        if earliest_timestamp is not None:
-            timerange = {'from': earliest_timestamp,
-                         'to': latest_timestamp}
+    # num_entries = len(dataset)
 
-        return render_template('dataset/view.html', dataset=dataset,
-                               timerange=timerange)
+    timerange = None
+    (earliest_timestamp, latest_timestamp) = dataset.fact_table.timerange()
+    if earliest_timestamp is not None:
+        timerange = {'from': earliest_timestamp,
+                     'to': latest_timestamp}
+
+    return render_template('dataset/view.html', dataset=dataset,
+                           timerange=timerange)
 
 
 @blueprint.route('/<nodot:dataset>/meta')
