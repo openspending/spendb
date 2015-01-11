@@ -15,6 +15,8 @@ class AppEncoder(JSONEncoder):
     def default(self, obj):
         if hasattr(obj, 'as_dict'):
             return obj.as_dict()
+        if hasattr(obj, 'to_dict'):
+            return obj.to_dict()
         elif isinstance(obj, datetime):
             return obj.isoformat() + 'Z'
         elif isinstance(obj, date):

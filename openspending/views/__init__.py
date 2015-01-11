@@ -17,6 +17,7 @@ from openspending.views.run import blueprint as run
 from openspending.views.dimension import blueprint as dimension
 from openspending.views.error import handle_error
 from openspending.views import api_v2
+from openspending.views.api_v3.dataset import blueprint as datasets_v3
 
 
 def register_views(app, babel):
@@ -33,6 +34,8 @@ def register_views(app, babel):
     app.register_blueprint(run)
     app.register_blueprint(api_v2.blueprint)
     app.register_blueprint(dimension)
+    
+    app.register_blueprint(datasets_v3, url_prefix='/api/3')
 
     # expose ``cubes``:
     app.register_blueprint(slicer, url_prefix='/api/slicer', config={})
