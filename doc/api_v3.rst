@@ -3,6 +3,7 @@ OpenSpending API, Version 3
 ===========================
 
 
+* GET /api/3/reference - static reference data (countries, currencies etc)
 * GET /api/3/datasets - dataset listing
 * POST /api/3/datasets - create a dataset
 * GET /api/3/datasets/<name> - get basic metadata

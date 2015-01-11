@@ -25,3 +25,16 @@ class TestSearchApiController(ControllerTestCase):
         res = self.client.get(url)
         assert res.json.get('total') == 0, res.json
         assert len(res.json.get('results')) == 0, res.json
+
+    def test_view_dataset(self):
+        url = url_for('datasets_api3.view', name=self.cra.name)
+        res = self.client.get(url)
+        assert res.json.get('name') == self.cra.name, res.json
+        assert res.json.get('label') == self.cra.label, res.json
+
+    def test_view_private_dataset(self):
+        self.cra.private = True
+        db.session.commit()
+        url = url_for('datasets_api3.view', name=self.cra.name)
+        res = self.client.get(url)
+        assert '403' in res.status, res.status
