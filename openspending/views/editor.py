@@ -155,34 +155,6 @@ def dimensions_update(dataset):
                            mapping=mapping, saved=saved)
 
 
-@blueprint.route('/<dataset>/editor/templates', methods=['GET'])
-def templates_edit(dataset, errors={}, values=None):
-    disable_cache()
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-
-    fill = values or {'serp_title': dataset.serp_title,
-                      'serp_teaser': dataset.serp_teaser}
-    return render_template('editor/templates.html', dataset=dataset,
-                           errors=errors, form_fill=fill)
-
-
-@blueprint.route('/<dataset>/editor/templates', methods=['POST'])
-def templates_update(dataset):
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-
-    errors, values = {}, dict(request.form.items())
-    try:
-        dataset.serp_title = values.get('serp_title', None)
-        dataset.serp_teaser = values.get('serp_teaser', None)
-        db.session.commit()
-        flash_success(_("The templates have been updated."))
-    except Invalid as i:
-        errors = i.asdict()
-    return templates_edit(dataset.name, errors=errors, values=values)
-
-
 @blueprint.route('/<dataset>/editor/views', methods=['GET'])
 def views_edit(dataset, errors={}, views=None,
                format='html'):

@@ -207,19 +207,6 @@ class TestEditorController(ControllerTestCase):
         cra = Dataset.by_name('cra')
         assert len(cra.managers.all()) == 1, cra.managers
 
-    def test_templates_edit_mask(self):
-        response = self.client.get(url_for('editor.templates_edit', dataset='cra'),
-                                   query_string={'api_key': self.user.api_key})
-        assert 'Update' in response.data
-
-    def test_templates_update(self):
-        response = self.client.post(url_for('editor.templates_update', dataset='cra'),
-                                    data={'serp_title': 'BANANA'},
-                                    query_string={'api_key': self.user.api_key})
-        assert '200' in response.status, response.status
-        cra = Dataset.by_name('cra')
-        assert cra.serp_title == 'BANANA', cra.serp_title
-
     def test_drop(self):
         cra = Dataset.by_name('cra')
         assert cra.fact_table.num_entries() == 36, cra.fact_table.num_entries()

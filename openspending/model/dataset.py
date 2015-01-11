@@ -33,8 +33,6 @@ class Dataset(db.Model):
     default_time = Column(Unicode())
     schema_version = Column(Unicode())
     category = Column(Unicode())
-    serp_title = Column(Unicode(), nullable=True)
-    serp_teaser = Column(Unicode(), nullable=True)
     private = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow,
@@ -53,8 +51,6 @@ class Dataset(db.Model):
         self.description = dataset.get('description')
         self.currency = dataset.get('currency')
         self.category = dataset.get('category')
-        self.serp_title = dataset.get('serp_title')
-        self.serp_teaser = dataset.get('serp_teaser')
         self.default_time = dataset.get('default_time')
         self.languages = dataset.get('languages', [])
         self.territories = dataset.get('territories', [])
@@ -109,8 +105,6 @@ class Dataset(db.Model):
             'schema_version': self.schema_version,
             'currency': self.currency,
             'category': self.category,
-            'serp_title': self.serp_title,
-            'serp_teaser': self.serp_teaser,
             'timestamps': {
                 'created': self.created_at,
                 'last_modified': self.updated_at

@@ -46,11 +46,6 @@
         {% trans %}Meta{% endtrans %}
       </a>
     </li>
-    <li class="{{ 'active' if section == 'templates' else '' }}">
-      <a href="{{ url_for('editor.templates_edit', dataset=dataset.name) }}">
-        {% trans %}Templates{% endtrans %}
-      </a>
-    </li>
   </ul>
 </div>
 
