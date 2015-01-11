@@ -8,7 +8,9 @@ from openspending.tests.etl.test_import_fixtures import import_fixture
 from openspending.core import db
 from openspending.model.account import Account
 
+from unittest import skip
 
+@skip('Need to re-do editor')
 class TestSourceController(ControllerTestCase):
 
     def setUp(self):
