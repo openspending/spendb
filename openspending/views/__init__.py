@@ -1,4 +1,5 @@
 from cubes.server import slicer
+from colander import Invalid
 
 from openspending.lib import filters
 
@@ -15,7 +16,7 @@ from openspending.views.editor import blueprint as editor
 from openspending.views.source import blueprint as source
 from openspending.views.run import blueprint as run
 from openspending.views.dimension import blueprint as dimension
-from openspending.views.error import handle_error
+from openspending.views.error import handle_error, handle_invalid
 from openspending.views import api_v2
 from openspending.views.api_v3.dataset import blueprint as datasets_v3
 from openspending.views.api_v3.meta import blueprint as meta_v3
@@ -49,7 +50,11 @@ def register_views(app, babel):
     app.error_handler_spec[None][404] = handle_error
     app.error_handler_spec[None][500] = handle_error
 
-    app.error_handler_spec[None][NotModified] = handle_not_modified
+    custom = (
+        (Invalid, handle_invalid),
+        (NotModified, handle_not_modified)
+    )
+    app.error_handler_spec[None][None] = custom
 
     app.jinja_env.filters.update({
         'markdown_preview': filters.markdown_preview,

@@ -12,6 +12,7 @@ from openspending.lib.helpers import url_for
 
 @home.before_app_request
 def before_request():
+    request._return_json = False
     request._ds_available_views = []
     request._ds_view = None
     setup_caching()

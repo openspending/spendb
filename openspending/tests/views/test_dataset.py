@@ -160,23 +160,6 @@ class TestDatasetController(ControllerTestCase):
                                    query_string={'api_key': self.user.api_key})
         assert "Import a dataset" in response.data
 
-    def test_create_dataset(self):
-        response = self.client.post(url_for('dataset.create'),
-                                    query_string={'api_key': self.user.api_key})
-        assert "Import a dataset" in response.data
-        assert "Required" in response.data
-
-        params = {'name': 'testds', 'label': 'Test Dataset',
-                  'category': 'budget', 'description': 'I\'m a banana!',
-                  'currency': 'EUR'}
-
-        response = self.client.post(url_for('dataset.create'), data=params,
-                                    query_string={'api_key': self.user.api_key})
-        assert "302" in response.status
-
-        ds = Dataset.by_name('testds')
-        assert ds.label == params['label'], ds
-
     def test_feeds(self):
         # Anonymous user with one public dataset
         response = self.client.get(url_for('dataset.feed_rss'))

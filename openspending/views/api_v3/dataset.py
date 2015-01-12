@@ -1,7 +1,9 @@
 import logging
 
-from flask import Blueprint
+from flask import Blueprint, request
 from flask.ext.login import current_user
+from flask.ext.babel import gettext as _
+from colander import SchemaNode, String, Invalid
 from restpager import Pager
 
 from openspending.core import db
@@ -12,6 +14,9 @@ from openspending.lib.jsonexport import jsonify
 from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.indices import clear_index_cache
 from openspending.views.cache import etag_cache_keygen
+from openspending.views.error import api_json_errors
+from openspending.validation.model.dataset import dataset_schema
+from openspending.validation.model.common import ValidationState
 
 
 log = logging.getLogger(__name__)
@@ -19,6 +24,7 @@ blueprint = Blueprint('datasets_api3', __name__)
 
 
 @blueprint.route('/datasets')
+@api_json_errors
 def index():
     q = Dataset.all_by_account(current_user)
     # TODO: Facets for territories and languages
@@ -28,6 +34,7 @@ def index():
 
 
 @blueprint.route('/datasets/<name>')
+@api_json_errors
 def view(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
@@ -35,11 +42,28 @@ def view(name):
 
 
 @blueprint.route('/datasets', methods=['POST', 'PUT'])
+@api_json_errors
 def create():
-    return jsonify({})
+    require.dataset.create()
+    dataset = request.json
+    # dataset['territories'] = request.form.getlist('territories')
+    # dataset['languages'] = request.form.getlist('languages')
+    print "DS", dataset
+    schema = dataset_schema(ValidationState({'dataset': dataset}))
+    data = schema.deserialize(dataset)
+    if Dataset.by_name(data['name']) is not None:
+        raise Invalid(SchemaNode(String(), name='dataset.name'),
+                      _("A dataset with this identifer already exists!"))
+    dataset = Dataset({'dataset': data})
+    dataset.private = True
+    dataset.managers.append(current_user)
+    db.session.add(dataset)
+    db.session.commit()
+    return jsonify(dataset)
 
 
 @blueprint.route('/datasets/<name>', methods=['DELETE'])
+@api_json_errors
 def delete(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)

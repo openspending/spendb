@@ -113,57 +113,6 @@ def index(format='html'):
                            del_filter=del_filter)
 
 
-@blueprint.route('/datasets/new', methods=['GET'])
-def new(errors={}):
-    disable_cache()
-    if not auth.dataset.create():
-        return render_template('dataset/new_cta.html')
-
-    auth.require.dataset.create()
-    key_currencies = sorted(
-        [(r, n) for (r, (n, k)) in CURRENCIES.items() if k],
-        key=lambda k_v: k_v[1])
-    all_currencies = sorted(
-        [(r, n) for (r, (n, k)) in CURRENCIES.items() if not k],
-        key=lambda k_v1: k_v1[1])
-
-    languages = sorted(LANGUAGES.items(), key=lambda k_v2: k_v2[1])
-    territories = sorted(COUNTRIES.items(), key=lambda k_v3: k_v3[1])
-    categories = sorted(CATEGORIES.items(), key=lambda k_v4: k_v4[1])
-    
-    errors = [(k[len('dataset.'):], v) for k, v in errors.items()]
-    defaults = request.form if errors else {'currency': 'USD'}
-    return render_template('dataset/new.html', form_errors=dict(errors),
-                           form_fill=defaults, key_currencies=key_currencies,
-                           all_currencies=all_currencies, languages=languages,
-                           territories=territories, categories=categories)
-
-
-@blueprint.route('/datasets', methods=['POST'])
-def create():
-    auth.require.dataset.create()
-    try:
-        dataset = dict(request.form.items())
-        dataset['territories'] = request.form.getlist('territories')
-        dataset['languages'] = request.form.getlist('languages')
-        model = {'dataset': dataset}
-        schema = dataset_schema(ValidationState(model))
-        data = schema.deserialize(dataset)
-        if Dataset.by_name(data['name']) is not None:
-            raise Invalid(
-                SchemaNode(String(), name='dataset.name'),
-                _("A dataset with this identifer already exists!"))
-        dataset = Dataset({'dataset': data})
-        dataset.private = True
-        dataset.managers.append(current_user)
-        db.session.add(dataset)
-        db.session.commit()
-        return redirect(url_for('editor.index', dataset=dataset.name))
-    except Invalid as i:
-        errors = i.asdict()
-        return new(errors=errors)
-
-
 @blueprint.route('/<nodot:dataset>')
 @blueprint.route('/<nodot:dataset>.<fmt:format>')
 def view(dataset, format='html'):

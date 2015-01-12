@@ -1,3 +1,4 @@
+import json
 from flask import url_for
 
 from openspending.core import db
@@ -6,10 +7,10 @@ from openspending.tests.base import ControllerTestCase
 from openspending.tests.helpers import load_fixture, make_account
 
 
-class TestSearchApiController(ControllerTestCase):
+class TestDatasetApiController(ControllerTestCase):
 
     def setUp(self):
-        super(TestSearchApiController, self).setUp()
+        super(TestDatasetApiController, self).setUp()
         self.cra = load_fixture('cra')
         self.user = make_account('test')
         self.auth_qs = {'api_key': self.user.api_key}
@@ -48,6 +49,27 @@ class TestSearchApiController(ControllerTestCase):
         url = url_for('datasets_api3.view', name=self.cra.name)
         res = self.client.get(url)
         assert '403' in res.status, res.status
+
+    def test_create_dataset(self):
+        url = url_for('datasets_api3.create')
+        res = self.client.post(url, data=json.dumps({}),
+                               query_string=self.auth_qs,
+                               headers={'content-type': 'application/json'})
+        assert '400' in res.status, res.status
+        assert 'errors' in res.json, res.json
+
+        params = {'name': 'testds', 'label': 'Test Dataset',
+                  'category': 'budget', 'description': 'I\'m a banana!',
+                  'currency': 'EUR'}
+        data = json.dumps(params)
+        res = self.client.post(url, data=data,
+                               query_string=self.auth_qs,
+                               headers={'content-type': 'application/json'})
+        assert "200" in res.status, res.status
+        assert res.json['name'] == 'testds', res.json
+
+        ds = Dataset.by_name('testds')
+        assert ds.label == params['label'], ds
 
     def test_delete_dataset(self):
         name = self.cra.name
