@@ -5,16 +5,15 @@ from openspending.core import assets
 
 # Javscript bundles
 
-js = Bundle('js/json2.js',
-            filters='jsmin', output='prod/packed.js')
-assets.register('js_all', js)
+js_base = Bundle('js/app.js',
+                 filters='uglifyjs', output='prod/base.js')
+assets.register('js_base', js_base)
 
 
 # CSS / Stylesheet bundles
 
-css_main = Bundle('style/bootstrap.css',
-                  'style/pygments.css',
-                  'style/style.css',
+css_main = Bundle('style/base.less',
+                  'style/bs2_style.less',
                   'style/views.less',
                   'style/dimensions.less',
                   filters='less,cssmin',

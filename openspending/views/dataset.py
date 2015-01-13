@@ -113,6 +113,11 @@ def index(format='html'):
                            del_filter=del_filter)
 
 
+@blueprint.route('/datasets/new')
+def new():
+    return render_template('datasets/new_cta.html')
+
+
 @blueprint.route('/<nodot:dataset>')
 @blueprint.route('/<nodot:dataset>.<fmt:format>')
 def view(dataset, format='html'):
