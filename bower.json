@@ -13,6 +13,9 @@
     "openspending/static/vendor"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.1"
+    "bootstrap": "~3.3.1",
+    "angular": "~1.2.28",
+    "angular-cookies": "~1.2.28",
+    "angular-bootstrap": "~0.12.0"
   }
 }

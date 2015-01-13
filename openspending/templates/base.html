@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% from "_util.html" import google_analytics with context %}
-<html lang="{{ current_language }}">
+<html lang="{{ current_language }}" ng-app="openspending">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +31,8 @@
   </head>
 
   <!-- templates/layout.html body -->
-  <body class="bp-{{request.endpoint.split('.')[0]}} view-{{request.endpoint.split('.')[1]}}">
+  <body ng-controller="AppCtrl"
+    class="bp-{{request.endpoint.split('.')[0]}} view-{{request.endpoint.split('.')[1]}}">
     <div id="page">
       {% include '_nav.html' %}
 
@@ -59,13 +60,13 @@
       </div>
     </div>
 
-    <div id="catapult-cookie-bar">
+    <div id="catapult-cookie-bar" ng-show="showCookieWarning">
       {% trans %}This site uses cookies{% endtrans %}
-      <button id="catapultCookie" tabindex="1">
+      <button id="catapultCookie" ng-click="hideCookieWarning()">
         {% trans %}Okay, thanks{% endtrans %}
       </button>
 
-      <a tabindex="1" href="http://okfn.org/cookie-policy">
+      <a href="http://okfn.org/cookie-policy">
         {% trans %}Find out more{% endtrans %}
       </a>
     </div>
