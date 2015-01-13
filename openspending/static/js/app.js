@@ -5,11 +5,11 @@ openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', 
   function($scope, $location, $http, $cookies, $window) {
 
     // EU cookie warning
-    $scope.showCookieWarning = !$cookies.kroesCookie;
+    $scope.showCookieWarning = !$cookies.neelieCookie;
 
     $scope.hideCookieWarning = function() {
-      $cookies.kroesCookie = true;
-      $scope.showCookieWarning = !$cookies.kroesCookie;
+      $cookies.neelieCookie = true;
+      $scope.showCookieWarning = !$cookies.neelieCookie;
     }
 
     // Language selector
@@ -19,5 +19,12 @@ openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', 
       });
       return false;
     }
+
+}]);
+
+
+openspending.controller('DatasetNewCtrl', ['$scope', '$http',
+  function($scope, $http) {
+
 
 }]);

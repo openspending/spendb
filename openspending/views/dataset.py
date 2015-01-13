@@ -115,7 +115,7 @@ def index(format='html'):
 
 @blueprint.route('/datasets/new')
 def new():
-    return render_template('datasets/new_cta.html')
+    return render_template('dataset/new.html')
 
 
 @blueprint.route('/<nodot:dataset>')
