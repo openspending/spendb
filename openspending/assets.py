@@ -15,7 +15,6 @@ assets.register('js_base', js_base)
 css_main = Bundle('style/base.less',
                   'style/bs2_style.less',
                   'style/views.less',
-                  'style/dimensions.less',
                   filters='less,cssmin',
                   output='prod/main.css')
 
