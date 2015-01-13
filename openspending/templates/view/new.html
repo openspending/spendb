@@ -36,7 +36,7 @@
 
   <script id="widget-finalize" type="text/x-handlebars-template">
     <div class='row'>
-      <div class='span6'>
+      <div class='col-md-6'>
         <form class='form-horizontal' method='POST' id='save-view'
           action="{{url_for('view.create', dataset=dataset.name)}}">
 
@@ -66,7 +66,7 @@
           {% endif %}
         </form>
       </div>
-      <div class='span6' id='embedder'>
+      <div class='col-md-6' id='embedder'>
         <form class='form-horizontal'>
           <div class='row'>
             <h3>{% trans %}Embed in another website{% endtrans %}</h3>

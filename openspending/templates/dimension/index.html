@@ -6,11 +6,15 @@
 
 {% block content %}
   <div>
-    <h2 class="page-header">{{ dataset.label }}: {% trans %}Dimensions{% endtrans %}
-      <small>{% trans %}Facets of the dataset.{% endtrans %}</small></h2>
+    <h2 class="page-header">
+      {{ dataset.label }}: {% trans %}Dimensions{% endtrans %}
+      <small>{% trans %}Facets of the dataset.{% endtrans %}</small>
+    </h2>
     <div class="row">
-      <div class="span12">
-        <p>{% trans dataset=dataset.label %}{{dataset}} has the following dimensions{% endtrans %}:</p>
+      <div class="col-md-12">
+        <p>
+          {% trans dataset=dataset.label %}{{dataset}} has the following dimensions{% endtrans %}:
+        </p>
         {{ dimensions_list(dataset) }}
       </div>
     </div>

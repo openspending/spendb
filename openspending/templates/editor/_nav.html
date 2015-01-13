@@ -11,7 +11,7 @@
     <i class="icon-home"></i>
     <a href="{{ url_for('dataset.view', dataset=dataset.name) }}">
       {{ dataset.label }}</a>
-      <span class="divider">/</span>
+      <span class="divider"></span>
   </li>
   <li class="active">{% trans %}Manage the dataset{% endtrans %}</li>
 </ul>
@@ -44,6 +44,11 @@
     <li class="{{ 'active' if section == 'core' else '' }}">
       <a href="{{ url_for('editor.core_edit', dataset=dataset.name) }}">
         {% trans %}Meta{% endtrans %}
+      </a>
+    </li>
+    <li class="{{ 'active' if section == 'templates' else '' }}">
+      <a href="{{ url_for('editor.templates_edit', dataset=dataset.name) }}">
+        {% trans %}Templates{% endtrans %}
       </a>
     </li>
   </ul>

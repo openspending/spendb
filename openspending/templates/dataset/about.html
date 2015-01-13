@@ -18,14 +18,14 @@
     <!-- templates/dataset/about.html -->
     {{dataset_nav(dataset, can, legacy_views, 'about')}}
 
-    <div class="representations">
+    <!--div class="representations">
       <a href="{{url_for('dataset.model', dataset=dataset.name, format='json')}}">
         <img src="{{ static_path('img/icons/json.png')}}" alt="JSON" xml:lang="en" />
       </a>
-    </div>
+    </div-->
 
     <div class="row">
-      <div class="span8">
+      <div class="col-md-8">
         <h3>{% trans %}Description{% endtrans %}</h3>
 		    {% if not dataset.description %}
         <div class="help-block" i18n:msg="label">
@@ -35,7 +35,7 @@
         {{ dataset.description | markdown }}
 
         <div class="row">
-          <div class="span4">
+          <div class="col-md-12">
             <h3>{% trans %}Sources{% endtrans %}</h3>
             <span class="help-block">
               {% trans %}This is a listing of all source data that was registered
@@ -52,7 +52,7 @@
             </ul>
 			      {% endif %}
           </div>
-          <div class="span4">
+          <div class="col-md-12">
             <h3>{% trans %}Team{% endtrans %}</h3>
             <span class="help-block">
               {% trans %}These people are the managers of the dataset. They can
@@ -76,7 +76,7 @@
 
 	<div class="row">
 	{% if dataset.has_badges or current_user.admin %}
-	  <div class="span4">
+	  <div class="col-md-12">
 	    <h3>{% trans %}Badges{% endtrans %}</h3>
 	    <span class="help-block">
         <p>{% trans %}This dataset has been awarded{% endtrans %}
@@ -90,20 +90,23 @@
 	      {{ badge.description | markdown }}
 	    {% endfor %}
 	    {% if current_user.admin %}
-	      <hr>
 	      <h4>{% trans %}Give badge{% endtrans %}</h4>
-	      <form class="form-horizontal" action="{{ url_for('badge.give', dataset=dataset.name) }}" method="post">
-	        <select name="badge">
-		        {% for badge in badges %}
-		          <option value="{{ badge.id }}">{{ badge.label }}</option>
-		        {% endfor %}
-	        </select>
-	        <button class="btn btn-success">{% trans %}Give{% endtrans %}</button>
+	      <form class="form-inline" action="{{ url_for('badge.give', dataset=dataset.name) }}" method="post">
+          <div class="form-group">
+  	        <select name="badge" class="form-control col-md-6">
+  		        {% for badge in badges %}
+  		          <option value="{{ badge.id }}">{{ badge.label }}</option>
+  		        {% endfor %}
+  	        </select>
+          </div>
+	        <button class="btn btn-success">
+            {% trans %}Give{% endtrans %}
+          </button>
 	      </form>
 	    {% endif %}
 	  </div>
 	{% endif %}
-	  <div class="span4">
+	  <div class="col-md-12">
 	    <h3>Timestamps</h3>
       <p class="help-block">
         This dataset was created on <strong>{{ dataset.created_at | format_date }}</strong>.
@@ -114,7 +117,7 @@
     </div>
 	</div>
       </div>
-      <div class="span4">
+      <div class="col-md-4">
         <h3>{% trans %}Measures{% endtrans %}</h3>
         <span class="help-block">
           {% trans %}Measures are the numeric properties of each entry in this

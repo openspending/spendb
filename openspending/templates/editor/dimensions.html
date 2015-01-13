@@ -38,7 +38,7 @@
 <div id="m1">
   <div class="dimensions_widget">
     <div class="row">
-      <div class="span3">
+      <div class="col-md-3">
         <p>
           <a class='btn btn-primary' data-backdrop="true"
              data-toggle="modal"
@@ -65,99 +65,132 @@
         </div>
         
         <!-- Unique dimensions selector window. --> 
-        <div id="check-uniques" class="modal hide fade">
-          <div class="modal-header">
-            <h3>{% trans %}Specify which dimensions identify an entry uniquely{% endtrans %}</h3>
+        <div id="check-uniques" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>
+                  {% trans %}Set Unique Dimensions{% endtrans %}
+                </h3>
+              </div>
+              <form action='#'>
+                <div class="modal-body">
+                  <p>
+                    {% trans %}Specify which dimensions identify an entry uniquely{% endtrans %}
+                  </p>
+                  <ul id="uniques" style="list-style: none;">
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <a class='btn set_uniques btn-success'>{% trans %}Update{% endtrans %}</a>
+                </div>
+              </form>
+            </div>
           </div>
-          <form action='#'>
-            <div class="modal-body">
-              <ul id="uniques" style="list-style: none;">
-              </ul>
-            </div>
-            <div class="modal-footer">
-              <a class='btn set_uniques btn-success'>{% trans %}Update{% endtrans %}</a>
-            </div>
-          </form>
         </div>
         
         <!-- Add dimension window. -->
-        <div id="add-dimension" class="modal big-modal hide fade">
-          <div class="modal-header">
-            <h3>{% trans %}Add new dimension{% endtrans %}</h3>
-          </div>
-          <form action='#' class="form-horizontal">
-            <div class="modal-body">
-              <div class="row">
-                <div class="span6">
-                  <div class="control-group">
-                    <label for="new-dimension-name">{% trans %}Name{% endtrans %}</label>
-                    <div class="controls">
-                      <input type='text' name='new-dimension-name' value='' />
-                      <p class="help-block">
-                        {% trans %}The name you choose should only contain letters, numbers and dashes (i.e., no spaces){% endtrans %}
-                      </p>
-                      <p class="help-block">
-                        {% trans %}Where the dimension represents the ultimate source or destination of the funds, call it <code>from</code> or <code>to</code>{% endtrans %}.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label for="new-dimension-type">{% trans %}Type{% endtrans %}</label>
-                    <div class="controls">
-                      <label class="checkbox">
-                        <input id='dimension_type' type="radio" name="new-dimension-type" value="compound" />
-                        {% trans %}Dimension{% endtrans %}
-                        <p class="help-block">
-                          {% trans %}A defined set, like suppliers or classifications, with multiple attributes (e.g. supplier name and VAT number).{% endtrans %}
-                        </p>
-                      </label>
-                      <label class="checkbox">
-                        <input id='dimension_type' type="radio" name="new-dimension-type" value="attribute" />
-                        {% trans %}Attribute{% endtrans %}
-                        <p class="help-block">
-                          {% trans %}A simple value, e.g. descriptions or transaction IDs.{% endtrans %}
-                        </p>
-                      </label>
-                      <label class="checkbox">
-                        <input id='dimension_type' type="radio" name="new-dimension-type" value="date" />
-                        {% trans %}Date{% endtrans %}
-                        <p class="help-block">
-                          {% trans %}Temporal value, e.g. start of project, date of disbursement.{% endtrans %}
-                        </p>
-                      </label>
-                      <label class="checkbox">
-                        <input id='dimension_type' type="radio" name="new-dimension-type" value="measure" />
-                        {% trans %}Measure{% endtrans %}
-                        <p class="help-block">
-                          {% trans %}Monetary information, e.g. amount disbursed or allocated.{% endtrans %}
-                        </p>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="span3">
-                  <h3>{% trans %}Unmapped source data columns{% endtrans %}</h3>
-                  <div class="well">
-                    <ul id="new-dimension-columns"></ul>
-                  </div>
-                </div>
+        <div id="add-dimension" class="modal fade">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3>{% trans %}Add new dimension{% endtrans %}</h3>
               </div>
+              <form action='#' class="form-horizontal">
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="form-group">
+                        <label for="new-dimension-name" class="col-sm-3 control-label">
+                          {% trans %}Name{% endtrans %}
+                        </label>
+                        <div class="col-sm-9">
+                          <input type='text' name='new-dimension-name' value='' class="form-control" />
+                          <p class="help-block">
+                            {% trans %}The name you choose should only contain letters, numbers and dashes (i.e., no spaces){% endtrans %}
+                          </p>
+                          <p class="help-block">
+                            {% trans %}Where the dimension represents the ultimate source or destination of the funds, call it <code>from</code> or <code>to</code>{% endtrans %}.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                          {% trans %}Type{% endtrans %}
+                        </div>
+                        <div class="col-sm-9">
+                          <div class="checkbox">
+                            <input id='dimension_type' type="radio" name="new-dimension-type"
+                              value="compound" />
+                            {% trans %}Dimension{% endtrans %}
+                            <p class="help-block">
+                              {% trans %}A defined set, like suppliers or classifications, with multiple attributes (e.g. supplier name and VAT number).{% endtrans %}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-9">
+                          <div class="checkbox">
+                            <input id='dimension_type' type="radio" name="new-dimension-type"
+                              value="attribute" />
+                            {% trans %}Attribute{% endtrans %}
+                            <p class="help-block">
+                              {% trans %}A simple value, e.g. descriptions or transaction IDs.{% endtrans %}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-9">
+                          <div class="checkbox">
+                            <input id='dimension_type' type="radio" name="new-dimension-type"
+                              value="date" />
+                            {% trans %}Date{% endtrans %}
+                            <p class="help-block">
+                              {% trans %}Temporal value, e.g. start of project, date of disbursement.{% endtrans %}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-9">
+                          <div class="checkbox">
+                            <input id='dimension_type' type="radio" name="new-dimension-type"
+                              value="measure" />
+                            {% trans %}Measure{% endtrans %}
+                            <p class="help-block">
+                              {% trans %}Monetary information, e.g. amount disbursed or allocated.{% endtrans %}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <h3>{% trans %}Unmapped source data columns{% endtrans %}</h3>
+                      <div class="well">
+                        <ul id="new-dimension-columns"></ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a class='btn cancel_add_dimension btn-danger'>{% trans %}Cancel{% endtrans %}</a>
+                  <a class='btn add_dimension btn-success'>{% trans %}Add{% endtrans %}</a>
+                </div>
+              </form>
             </div>
-            <div class="modal-footer">
-              <a class='btn cancel_add_dimension btn-danger'>{% trans %}Cancel{% endtrans %}</a>
-              <a class='btn add_dimension btn-success'>{% trans %}Add{% endtrans %}</a>
-            </div>
-          </form>
+          </div>
         </div>
-        
       </div>
       
-      <div class="span9">
+      <div class="col-md-9">
         {% if saved %}
-        <div class="alert block-message alert-success">
+        <div class="alert alert-success">
           <strong>{% trans %}Your model was saved.{% endtrans %}</strong> {% trans %}You can now try to load a sample of the data by returning back to the dashboard.{% endtrans %}
           <div class="alert-actions">
-            <a class="btn btn-small" href="{{ url_for('editor.index', dataset=dataset.name) }}">
+            <a class="btn btn-default" href="{{ url_for('editor.index', dataset=dataset.name) }}">
               {% trans %}Visit dashboard{% endtrans %}</a>
           </div>
         </div>
@@ -238,17 +271,13 @@
                       dataset.{% endtrans %}</li>
                   </ul>
                   <p>
-                    {% trans %}After you've done these basic things,
-                    make sure to also create dimensions
-                    to cover any other aspects present in 
-                    the source data. You can group
-                    related columns into a single
-                    dimension, for example if each row 
-                    mentions both a company's name and
-                    its VAT number.{% endtrans %}
+                    {% trans %}After you've done these basic things, make sure to also create dimensions
+                    to cover any other aspects present in the source data. You can group
+                    related columns into a single dimension, for example if each row 
+                    mentions both a company's name and its VAT number.{% endtrans %}
                   </p>
                 </div> <!-- /.forms -->
-                
+
                 <!-- Dimension column field template -->
                 {% raw %}
                 <script id='tpl_dimension_field' type='text/x-jquery-tmpl'>
@@ -389,19 +418,21 @@
             </div>
           </form>
         </div>
-        
       </div>
     </div>
+    
     <form  class="basic" id="form" method="POST"
            action="{{ url_for('editor.dimensions_update', dataset=dataset.name) }}">
 
       <textarea id="mapping" name="mapping" style="display: none">{{ form_fill.mapping | tojson }}</textarea>
       <div class="form-actions">
-        <input id="save" value="{% trans %}Save Dimensions{% endtrans %}" class="btn btn-success" type="submit" />
+        <input id="save" value="{% trans %}Save Dimensions{% endtrans %}"
+          class="btn btn-success" type="submit" />
         <input type="button" class='btn btn-danger rm_all_dimensions'
           value="{% trans %}Delete All Dimensions{% endtrans %}" />
       </div>
     </form>
+                
   </div>
 </div>
 

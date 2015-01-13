@@ -17,39 +17,47 @@
 {% endblock %}
 
 {% block content %}
-  <div>
-    {% if legacy_views.active %}
-      {{ dataset_nav(dataset, can, legacy_views, legacy_views.active.name) }}
-	  {% else %}
-      {{ dataset_nav(dataset, can, legacy_views, 'search') }}
-	  {% endif %}
-    
-  	{% if legacy_views.active %}
-      <div class="row">
-        <div class="span12"><div id="vis_widget" style="width: auto; height: 400px"></div></div>
-      </div>
-  	{% endif %}
-
-  	{% if legacy_views.active %}
-      <div class="well widget-context">
-        <div class="pull-right">
-          <a href="#" class="btn btn-mini" id="widget-embed-link"><i class="icon-share"></i> {% trans %}Embed{% endtrans %}</a>
-          <a href="#" class="btn btn-mini hidden" id="widget-edit-link"><i class="icon-cog"></i> {% trans %}Change{% endtrans %}</a>
-          <a href="#" class="btn btn-mini hidden" id="widget-download-link"><i class="icon-download"></i> {% trans %}Data{% endtrans %}</a>
-        </div>
-        <h3>{{ legacy_views.active.label }}</h3>
-      </div>
-  	{% endif %}
-
-  	{% if legacy_views.active %}
-      <div class="row">
-        <div class="span12"><div id="table_widget"/></div>
-      </div>
-  	{% endif %}
-
-    {% if timerange %}
+  {% if legacy_views.active %}
+    {{ dataset_nav(dataset, can, legacy_views, legacy_views.active.name) }}
+  {% else %}
+    {{ dataset_nav(dataset, can, legacy_views, 'search') }}
+  {% endif %}
+  
+	{% if legacy_views.active %}
     <div class="row">
-      <div class="span4">
+      <div class="col-md-12"><div id="vis_widget" style="width: auto; height: 400px"></div></div>
+    </div>
+	{% endif %}
+
+	{% if legacy_views.active %}
+    <div class="well widget-context">
+      <div class="pull-right">
+        <a href="#" class="btn btn-default btn-sm" id="widget-embed-link">
+          <i class="fa fa-share"></i>
+          {% trans %}Embed{% endtrans %}
+        </a>
+        <a href="#" class="btn btn-default btn-sm hidden" id="widget-edit-link">
+          <i class="fa fa-cog"></i>
+          {% trans %}Change{% endtrans %}
+        </a>
+        <a href="#" class="btn btn-default btn-sm hidden" id="widget-download-link">
+          <i class="fa fa-download"></i>
+          {% trans %}Data{% endtrans %}
+        </a>
+      </div>
+      <h3>{{ legacy_views.active.label }}</h3>
+    </div>
+	{% endif %}
+
+	{% if legacy_views.active %}
+    <div class="row">
+      <div class="col-md-12"><div id="table_widget"/></div>
+    </div>
+	{% endif %}
+
+  {% if timerange %}
+    <div class="row">
+      <div class="col-md-4">
 	      <p>
           <small>
             Time range for dataset: {{ timerange.from | format_date }} - {{ timerange.to | format_date }}
@@ -57,9 +65,7 @@
         </p>
       </div>
     </div>
-    {% endif %}
+  {% endif %}
 
-    {{share_body()}}
-  </div>
-  
+  {{share_body()}}  
 {% endblock %}

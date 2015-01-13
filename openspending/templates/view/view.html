@@ -29,13 +29,13 @@
     {% if can.view.update(dataset, named_view) %}
       <form id="widget-save-form" action="{{url_for('view.update', dataset=dataset.name, name=named_view.name)}}"
         style="display:none;" method="post">
-        <div class="span7">
-          <input type="text" class="span6" name="label" value="{{named_view.label}}"/>
-          <textarea class="span6" rows="6" name="description">{{named_view.description}}</textarea>
+        <div class="col-md-7">
+          <input type="text" class="form-control" name="label" value="{{named_view.label}}"/>
+          <textarea class="form-control" rows="6" name="description">{{named_view.description}}</textarea>
           <input type="hidden" id="widget-save-state" name="state" value="{{named_view.state}}"/>
         </div>
         
-        <div class="span5">
+        <div class="col-md-5">
           <p>
             <div class="help-block">
               {% trans %}Here you can rename your widget and/or update the description.
@@ -57,13 +57,13 @@
   </div>
 
   <div class="row">
-    <div class="span12">
+    <div class="col-md-12">
       <div id="widget" style="width: auto; min-height: 400px"/>
     </div>
   </div>
 
   <div class="row">
-    <div class="span12">
+    <div class="col-md-12">
       <div class="well widget-context">
         <div class="pull-right">
           {% if can.view.delete(dataset, named_view) %}
@@ -74,17 +74,17 @@
           {% endif %}
           
           <a href="#" class="btn btn-mini" id="widget-embed-link">
-            <i class="icon-share"></i>
+            <i class="fa fa-share"></i>
             {% trans %}Embed{% endtrans %}
           </a>
           
           <a href="#" class="btn btn-mini hidden" id="widget-edit-link">
-            <i class="icon-cog"></i>
+            <i class="fa fa-cog"></i>
             {% trans %}Change{% endtrans %}
           </a>
           
           <a href="#" class="btn btn-mini hidden" id="widget-download-link">
-            <i class="icon-download"></i>
+            <i class="fa fa-download"></i>
             {% trans %}Data{% endtrans %}
           </a>
         </div>

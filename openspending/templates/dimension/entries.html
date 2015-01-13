@@ -41,32 +41,32 @@
     {{ member_nav(dataset, dimension, member, legacy_views, legacy_views.active.name if legacy_views.active else 'search') }}
 
     <div id="openspending_browser" class="row">
-      <div class="span9 browser_datatable">
+      <div class="col-md-9 browser_datatable">
       </div>
-      <div class="span3 ">
+      <div class="col-md-3">
         <div class="browser_faceter">
         </div>
         <div class="download-links">
           <p>
-            <a class="input-large btn btn-small" href="{{ url_for('dimension.entries', dataset=dataset.name, pagesize=100,
+            <a class="input-large btn btn-sm" href="{{ url_for('dimension.entries', dataset=dataset.name, pagesize=100,
           name=member['name'], dimension=dimension.name, format='json')}}" data-pagesize="100">
               <i class="icon-download"></i> {% trans %}Download first 100 entries as JSON{% endtrans %}
             </a>
           </p>
           <p>
-            <a class="input-large btn btn-small" href="{{ url_for('dimension.entries', dataset=dataset.name, pagesize=100,
+            <a class="input-large btn btn-sm" href="{{ url_for('dimension.entries', dataset=dataset.name, pagesize=100,
           name=member['name'], dimension=dimension.name, format='csv')}}" data-pagesize="100">
               <i class="icon-download"></i> {% trans %}Download first 100 entries as CSV{% endtrans %}
             </a>
           </p>
           <p>
-            <a class="input-large btn btn-small" href="{{ url_for('dimension.entries', dataset=dataset.name,
+            <a class="input-large btn btn-sm" href="{{ url_for('dimension.entries', dataset=dataset.name,
           name=member['name'], dimension=dimension.name, format='json')}}">
               <i class="icon-download"></i> {% trans %}Download all entries as JSON{% endtrans %}
             </a>
           </p>
           <p>
-            <a class="input-large btn btn-small" href="{{ url_for('dimension.entries', dataset=dataset.name,
+            <a class="input-large btn btn-sm" href="{{ url_for('dimension.entries', dataset=dataset.name,
           name=member['name'], dimension=dimension.name, format='csv')}}">
               <i class="icon-download"></i> {% trans %}Download all entries as CSV{% endtrans %}
             </a>
@@ -76,7 +76,7 @@
     </div>
     <hr/>
     <div class="row">
-      <div class="span9">
+      <div class="col-md-9">
         <div class="well">
           <h3>{% trans member=member['label'] %}Total of {{member}} by year{% endtrans %}</h3>
           <table class="table">

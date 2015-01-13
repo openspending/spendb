@@ -21,7 +21,7 @@
           <img src="{{ static_path('img/icons/json.png') }}" alt="JSON"/>
       </div>
       <li>
-        <i class="icon-home"></i>
+        <i class="fa fa-home"></i>
         <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
           {{dataset.label}}</a>
         <span class="divider">/</span>
@@ -35,17 +35,26 @@
     </h2>
 
     <div class="row">
-      <div class='span12'>
+      <div class='col-md-12'>
         <div class="well widget-context">
           <div class="pull-right">
-            <a href="#" class="btn btn-mini" id="widget-embed-link"><i class="icon-share"></i> {% trans %}Embed{% endtrans %}</a>
-            <a href="#" class="btn btn-mini hidden" id="widget-edit-link"><i class="icon-cog"></i> {% trans %}Change{% endtrans %}</a>
-            <a href="#" class="btn btn-mini hidden" id="widget-download-link"><i class="icon-download"></i> {% trans %}Data{% endtrans %}</a>
+            <a href="#" class="btn btn-sm btn-default" id="widget-embed-link">
+              <i class="fa fa-share"></i>
+              {% trans %}Embed{% endtrans %}
+            </a>
+            <a href="#" class="btn btn-sm btn-default hidden" id="widget-edit-link">
+              <i class="fa fa-cog"></i>
+              {% trans %}Change{% endtrans %}
+            </a>
+            <a href="#" class="btn btn-sm btn-default hidden" id="widget-download-link">
+              <i class="fa fa-download"></i>
+              {% trans %}Data{% endtrans %}
+            </a>
           </div>
           <p>{{dimension.description}} &nbsp;</p>
         </div>
       </div>
-      <div class='span12'>
+      <div class='col-md-12'>
         <div id="widget" style="width: auto; height: auto"/>
       </div>
     </div>

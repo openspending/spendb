@@ -20,10 +20,11 @@
     {{dataset_nav(dataset, can, legacy_views, 'search')}}
 
     <div class="row">
-      <div class="span9">
+      <div class="col-md-9">
         <div role="grid">
           <form class="form-horizontal" action="" method="get">
-            <input type="text" name="q" class="span9" placeholder="Search..." value="{{ search }}">
+            <input type="text" name="q" class="form-control"
+              placeholder="Search..." value="{{ search }}">
           </form>
           <hr/>
           <table class="table table-striped table-condensed" cellspacing="0" cellpadding="0" border="0">
@@ -73,7 +74,7 @@
           {{ entries.pager() }}
         </div>
       </div>
-      <div class="span3">
+      <div class="col-md-3">
         {% for facet, values in facets.iteritems() %}
         <h4>{{ facet_dimensions[facet].label }}</h4>
         <table class="table table-condensed facets">
@@ -106,7 +107,7 @@
     </div>
     {% if timerange %}
       <div class="row">
-        <div class="span4">
+        <div class="col-md-4">
   	      <p>
             <small>
               {% trans %}Time range for dataset:{% endtrans %}
