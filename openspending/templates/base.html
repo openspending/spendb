@@ -74,7 +74,7 @@
 
     <!-- script boot section -->
     <script defer="defer">
-	    OpenSpending.scriptRoot = "{{ static_path('openspendingjs') }}";
+      var OpenSpending = OpenSpending || {};
 	    OpenSpending.localeGroupSeparator = "{{ number_symbols_group }}";
 	    OpenSpending.localeDecimalSeparator = "{{ number_symbols_decimal }}";
     </script>
@@ -82,20 +82,5 @@
 
   	{% block scripts %}{% endblock %}
     {{ google_analytics() }}
-
-  	<script type="text/javascript">
-      jQuery(document).ready(function() {
-        if($.cookie("cookiecheck")) {
-          //If the cookie has been set
-          jQuery("#catapult-cookie-bar").hide();
-          jQuery("html").css("margin-top","0");
-        }
-        $('#catapultCookie').click(function() {
-          $.cookie('cookiecheck', 'True', { path: '/' });
-          jQuery("#catapult-cookie-bar").hide();
-          jQuery("html").css("margin-top","0");
-        });
-      });
-    </script>
   </body>
 </html>
