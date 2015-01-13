@@ -1,10 +1,10 @@
 
-var openspending = angular.module('openspending', ['ngCookies']);
+var openspending = angular.module('openspending', ['ngCookies', 'ui.bootstrap']);
 
-openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies',
-  function($scope, $location, $http, $cookies) {
+openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window',
+  function($scope, $location, $http, $cookies, $window) {
 
-    // EU cookie warning.
+    // EU cookie warning
     $scope.showCookieWarning = !$cookies.kroesCookie;
 
     $scope.hideCookieWarning = function() {
@@ -12,6 +12,12 @@ openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies',
       $scope.showCookieWarning = !$cookies.kroesCookie;
     }
 
-
+    // Language selector
+    $scope.setLocale = function(locale) {
+      $http.post('/set-locale', {'locale': locale}).then(function(res) {
+        $window.location.reload();
+      });
+      return false;
+    }
 
 }]);

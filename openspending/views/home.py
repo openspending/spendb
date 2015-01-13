@@ -5,6 +5,7 @@ from flask.ext.babel import gettext
 from openspending.views.i18n import set_session_locale
 from openspending.model.dataset import Dataset, DatasetTerritory
 from openspending.lib.solr_util import dataset_entries
+from openspending.lib.jsonexport import jsonify
 from openspending.views.cache import disable_cache
 
 
@@ -23,11 +24,11 @@ def index():
 @blueprint.route('/set-locale', methods=['POST'])
 def set_locale():
     disable_cache()
-    locale = request.form.get('locale')
+    locale = request.json.get('locale')
 
     if locale is not None:
         set_session_locale(locale)
-    return ''
+    return jsonify({'locale': locale})
 
 
 @blueprint.route('/__version__')

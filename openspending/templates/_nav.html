@@ -100,15 +100,15 @@
             </li>
           {% endif %}
           
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">
+          <li class="dropdown" dropdown>
+            <a class="dropdown-toggle" dropdown-toggle>
               {% trans %}Language{% endtrans %}
             </a>
-            <ul class="dropdown-menu locale-dropdown">
+            <ul class="dropdown-menu locale-dropdown" role="menu">
               {% for l in languages %}
                 {% set current = l.lang_code == current_locale %}
                 <li class="locale {{ 'current_locale' if current else '' }}">
-                  <a class="select-locale" data-locale="{{ l.lang_code }}">
+                  <a href='#' ng-click="setLocale('{{ l.lang_code }}')">
                     {{ l.lang_name }}
                   </a>
                 </li>

@@ -6,6 +6,7 @@ from openspending.core import assets
 # Javscript bundles
 
 js_vendor = Bundle('vendor/angular/angular.js',
+                   #'vendor/angular-bootstrap/ui-bootstrap.js',
                    'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
                    'vendor/angular-cookies/angular-cookies.js')
 
