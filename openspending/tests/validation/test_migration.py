@@ -1,6 +1,6 @@
-from openspending.validation.model.migration import migrate_model
+from openspending.validation.migration import migrate_model
 from openspending.validation.model import validate_model
-from openspending.validation.model.migration import \
+from openspending.validation.migration import \
     m2011_11_20_require_name_attribute, \
     m2011_11_21_normalize_types, \
     m2011_11_22_unique_keys, \

@@ -26,8 +26,8 @@ from openspending.reference.currency import CURRENCIES
 from openspending.reference.country import COUNTRIES
 from openspending.reference.category import CATEGORIES
 from openspending.reference.language import LANGUAGES
-from openspending.validation.model.dataset import dataset_schema
-from openspending.validation.model.common import ValidationState
+from openspending.validation.dataset import dataset_schema
+from openspending.validation.common import ValidationState
 from openspending.views.entry import index as entry_index
 from openspending.views.cache import etag_cache_keygen, disable_cache
 

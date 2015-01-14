@@ -16,8 +16,8 @@ from openspending.lib.indices import clear_index_cache
 from openspending.views.cache import etag_cache_keygen
 from openspending.views.context import api_form_data
 from openspending.views.error import api_json_errors
-from openspending.validation.model.dataset import dataset_schema
-from openspending.validation.model.common import ValidationState
+from openspending.validation.dataset import dataset_schema
+from openspending.validation.common import ValidationState
 
 
 log = logging.getLogger(__name__)

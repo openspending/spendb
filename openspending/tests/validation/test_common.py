@@ -1,4 +1,4 @@
-from openspending.validation.model.common import ValidationState
+from openspending.validation.common import ValidationState
 
 from openspending.tests.base import TestCase
 from openspending.tests.helpers import validation_fixture

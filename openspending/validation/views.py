@@ -1,6 +1,6 @@
-from openspending.validation.model.common import mapping, sequence
-from openspending.validation.model.common import key
-from openspending.validation.model.predicates import chained, \
+from openspending.validation.common import mapping, sequence
+from openspending.validation.common import key
+from openspending.validation.predicates import chained, \
         database_name, nonempty_string
 
 def key_is_attribute(state):

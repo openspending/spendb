@@ -57,7 +57,7 @@ def migrate():
 @manager.command
 def modelmigrate():
     """ Run pending data model migrations """
-    from openspending.validation.model.migration import migrate_model
+    from openspending.validation.migration import migrate_model
     dataset = db.Table('dataset', db.metadata, autoload=True)
     rp = db.engine.execute(dataset.select())
     while True:

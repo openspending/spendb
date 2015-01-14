@@ -18,10 +18,10 @@ from openspending.reference.currency import CURRENCIES
 from openspending.reference.country import COUNTRIES
 from openspending.reference.category import CATEGORIES
 from openspending.reference.language import LANGUAGES
-from openspending.validation.model.dataset import dataset_schema
-from openspending.validation.model.mapping import mapping_schema
-from openspending.validation.model.views import views_schema
-from openspending.validation.model.common import ValidationState
+from openspending.validation.dataset import dataset_schema
+from openspending.validation.mapping import mapping_schema
+from openspending.validation.views import views_schema
+from openspending.validation.common import ValidationState
 from openspending.views.cache import disable_cache
 
 log = logging.getLogger(__name__)
