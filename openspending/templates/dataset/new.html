@@ -31,23 +31,27 @@
       </div>
     </div>
     <div class="col-md-8 dataset-info" ng-controller="DatasetNewCtrl">
-      <form class="form-horizontal" ng-submit="save()">
-        <div class="form-group">
+      <form class="form-horizontal" name="form" ng-submit="save(form)">
+        <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
           <label for="label" class="col-sm-2 control-label">
             {% trans %}Title{% endtrans %}
           </label>
           <div class="col-sm-10">
             <input name="label" ng-model="dataset.label" class="form-control"
               placeholder="{% trans %}My Dataset{% endtrans %}">
+            <p class="help-block" ng-show="form.label.$invalid"
+              ng-bind="form.label.$message"></p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': form.name.$invalid}">
           <label for="name" class="col-sm-2 control-label">
             {% trans %}Identifier{% endtrans %}
           </label>
           <div class="col-sm-10">
             <input name="name" ng-model="dataset.name" class="form-control"
               placeholder="{% trans %}my_dataset{% endtrans %}">
+            <p class="help-block" ng-show="form.name.$invalid"
+              ng-bind="form.name.$message"></p>
             <p class="help-block">
               {% trans %}The identifier will become part of the
               dataset URL and cannot be changed later. It may only 
@@ -55,7 +59,7 @@
             </p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': form.category.$invalid}">
           <label for="category" class="col-sm-2 control-label">
             {% trans %}Category{% endtrans %}
           </label>
@@ -64,20 +68,24 @@
               ng-model="dataset.category" disable-search="true"
               ng-options="c.code as c.label for c in reference.categories">
             </select>
+            <p class="help-block" ng-show="form.category.$invalid"
+              ng-bind="form.category.$message"></p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': form.currency.$invalid}">
           <label for="currency" class="col-sm-2 control-label">
             {% trans %}Currency{% endtrans %}
           </label>
           <div class="col-sm-10">
-            <select name="currencies" chosen class="form-control"
-              ng-model="dataset.currencies"
+            <select name="currency" chosen class="form-control"
+              ng-model="dataset.currency"
               ng-options="c.code as c.label for c in reference.currencies">
             </select>
+            <p class="help-block" ng-show="form.currency.$invalid"
+              ng-bind="form.currency.$message"></p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': form.territories.$invalid}">
           <label for="territories" class="col-sm-2 control-label">
             {% trans %}Countries{% endtrans %}
           </label>
@@ -86,9 +94,11 @@
               ng-model="dataset.territories"
               ng-options="t.code as t.label for t in reference.territories">
             </select>
+            <p class="help-block" ng-show="form.territories.$invalid"
+              ng-bind="form.territories.$message"></p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': form.languages.$invalid}">
           <label for="languages" class="col-sm-2 control-label">
             {% trans %}Languages{% endtrans %}
           </label>
@@ -97,13 +107,17 @@
               ng-model="dataset.languages"
               ng-options="l.code as l.label for l in reference.languages">
             </select>
+            <p class="help-block" ng-show="form.languages.$invalid"
+              ng-bind="form.languages.$message"></p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': form.description.$invalid}">
           <label for="description" class="col-sm-2 control-label">
             {% trans %}Description{% endtrans %}
           </label>
           <div class="col-sm-10">
+            <p class="help-block" ng-show="form.description.$invalid"
+              ng-bind="form.description.$message"></p>
             <textarea ng-model="dataset.description" class="xxlarge form-control"
               rows="4" name="description"></textarea>
           </div>

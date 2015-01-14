@@ -1,9 +1,34 @@
 
 var openspending = angular.module('openspending', ['ngCookies', 'ui.bootstrap', 'localytics.directives']);
 
+openspending.handleValidation = function(form) {
+  return function(res) {
+    if (res.status == 400) {
+        var errors = [];
+        console.log(res.data.errors);
+        for (var field in res.data.errors) {
+            form[field].$setValidity('value', false);
+            form[field].$message = res.data.errors[field];
+            errors.push(field);
+        }
+        if (angular.isDefined(form._errors)) {
+            angular.forEach(form._errors, function(field) {
+                if (errors.indexOf(field) == -1) {
+                    form[field].$setValidity('value', true);
+                }
+            });
+        }
+        form._errors = errors;
+    } else {
+      console.log(res)
+    }
+  };
+};
+
+
 openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce',
   function($scope, $location, $http, $cookies, $window, $sce) {
-
+  
   // EU cookie warning
   $scope.showCookieWarning = !$cookies.neelieCookie;
 
@@ -41,24 +66,23 @@ openspending.factory('referenceData', ['$http', function($http) {
 }]);
 
 
-
 openspending.controller('DatasetNewCtrl', ['$scope', '$http', 'referenceData',
   function($scope, $http, referenceData) {
   
   $scope.reference = {};
-  $scope.dataset = {'category': 'budget', 'territories': [], 'category': null};
+  $scope.dataset = {'category': 'budget', 'territories': []};
 
   referenceData.get(function(reference) {
     $scope.reference = reference;
   });
 
-  $scope.save = function() {
+  $scope.save = function(form) {
     var dfd = $http.post('/api/3/datasets', $scope.dataset);
     dfd.then(function(res) {
+
       console.log('NEW DATASET', res);
-    }, function(fail) {
-      console.log('FAILURE', fail);
-    });
+
+    }, openspending.handleValidation(form));
   };
 
 }]);

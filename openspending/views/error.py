@@ -38,6 +38,7 @@ def handle_error(exc):
 
 
 def handle_invalid(exc):
+    exc.node.name = ''
     data = {
         'status': 400,
         'errors': exc.asdict()
