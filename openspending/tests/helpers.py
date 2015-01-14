@@ -24,6 +24,13 @@ def model_fixture(name):
     return model
 
 
+def validation_fixture(name):
+    model_fp = fixture_file('validation/' + name + '.json')
+    model = json.load(model_fp)
+    model_fp.close()
+    return model
+
+
 def data_fixture(name):
     return fixture_file('data/' + name + '.csv')
 

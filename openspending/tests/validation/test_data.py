@@ -1,7 +1,10 @@
 import datetime
 
-from ... import TestCase, helpers as h
 from openspending.validation.data import convert_types
+
+from openspending.tests.base import TestCase
+from openspending.tests.helpers import validation_fixture
+
 
 class TestTypes(TestCase):
 

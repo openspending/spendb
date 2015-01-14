@@ -1,13 +1,15 @@
-
 from openspending.reference import currency
 from openspending.validation.model.dataset import valid_currency
 
-from ... import TestCase, helpers as h
+from openspending.tests.base import TestCase
+
 
 class TestCurrency(TestCase):
     def test_currency_constant(self):
-        h.assert_equal(currency.CURRENCIES['EUR'], ('Euro', True))
-        h.assert_equal(currency.CURRENCIES['USD'], ('US Dollar', True))
+        assert currency.CURRENCIES['EUR'] == ('Euro', True), \
+            currency.CURRENCIES['EUR']
+        assert currency.CURRENCIES['USD'] == ('US Dollar', True), \
+            currency.CURRENCIES['USD']
 
     def test_currency_type_raises_invalid(self):
         assert valid_currency('not-a-code') is not True
