@@ -14,6 +14,7 @@ from openspending.lib.jsonexport import jsonify
 from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.indices import clear_index_cache
 from openspending.views.cache import etag_cache_keygen
+from openspending.views.context import api_form_data
 from openspending.views.error import api_json_errors
 from openspending.validation.model.dataset import dataset_schema
 from openspending.validation.model.common import ValidationState
@@ -45,10 +46,7 @@ def view(name):
 @api_json_errors
 def create():
     require.dataset.create()
-    dataset = request.json
-    # dataset['territories'] = request.form.getlist('territories')
-    # dataset['languages'] = request.form.getlist('languages')
-    print "DS", dataset
+    dataset = api_form_data()
     schema = dataset_schema(ValidationState({'dataset': dataset}))
     data = schema.deserialize(dataset)
     if Dataset.by_name(data['name']) is not None:

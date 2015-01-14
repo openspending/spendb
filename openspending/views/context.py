@@ -29,6 +29,13 @@ def after_request(resp):
     return cache_response(resp)
 
 
+def api_form_data():
+    data = request.get_json(silent=True)
+    if data is None:
+        data = dict(request.form.items())
+    return data
+
+
 def languages():
     current_locale = get_locale()
 

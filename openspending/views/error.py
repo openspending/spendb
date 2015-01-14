@@ -2,7 +2,6 @@ from functools import wraps
 
 from werkzeug.exceptions import HTTPException
 from flask import request, render_template, Response
-from colander import Invalid
 
 from openspending.lib.jsonexport import jsonify
 
@@ -41,7 +40,6 @@ def handle_error(exc):
 def handle_invalid(exc):
     data = {
         'status': 400,
-        'message': unicode(exc),
         'errors': exc.asdict()
     }
     return jsonify(data, status=400)

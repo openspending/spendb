@@ -50,7 +50,6 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', 'referenceData',
 
   referenceData.get(function(reference) {
     $scope.reference = reference;
-    //console.log($scope.reference);
   });
 
   $scope.save = function() {
