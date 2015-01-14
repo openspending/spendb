@@ -21,8 +21,6 @@ assets.register('js_base', js_base)
 # CSS / Stylesheet bundles
 
 css_main = Bundle('style/base.less',
-                  'vendor/angular-ui-select/dist/select.css',
-                  'style/bs2_style.less',
                   'style/views.less',
                   filters='less,cssmin',
                   output='prod/main.css')

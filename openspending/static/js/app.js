@@ -66,8 +66,8 @@ openspending.factory('referenceData', ['$http', function($http) {
 }]);
 
 
-openspending.controller('DatasetNewCtrl', ['$scope', '$http', 'referenceData',
-  function($scope, $http, referenceData) {
+openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData',
+  function($scope, $http, $window, referenceData) {
   
   $scope.reference = {};
   $scope.dataset = {'category': 'budget', 'territories': []};
@@ -79,9 +79,7 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', 'referenceData',
   $scope.save = function(form) {
     var dfd = $http.post('/api/3/datasets', $scope.dataset);
     dfd.then(function(res) {
-
-      console.log('NEW DATASET', res);
-
+      $window.location.href = '/' + res.data.name + '/meta';
     }, openspending.handleValidation(form));
   };
 
