@@ -43,28 +43,27 @@ def valid_country(code):
 def dataset_schema(state):
     schema = mapping('dataset')
     schema.add(key('name', validator=chained(
-            nonempty_string,
-            reserved_name,
-            database_name,
-            no_double_underscore
-        ),
-        preparer=lambda x: x.lower().strip() if x else None))
+        nonempty_string,
+        reserved_name,
+        database_name,
+        no_double_underscore
+    ), preparer=lambda x: x.lower().strip() if x else None))
     schema.add(key('currency', validator=chained(
-            valid_currency
-        )))
+        valid_currency
+    )))
     schema.add(key('category', validator=chained(
-            valid_category
-        )))
+        valid_category
+    )))
     schema.add(key('label', validator=chained(
-            nonempty_string,
-        )))
-    schema.add(key('description', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
+    schema.add(key('description'))
     schema.add(sequence('languages',
-        key('language', validator=valid_language), 
-        missing=[]))
+                        key('language',
+                            validator=valid_language),
+                        missing=[]))
     schema.add(sequence('territories',
-        key('territory', validator=valid_country), 
-        missing=[]))
+                        key('territory',
+                            validator=valid_country),
+                        missing=[]))
     return schema
