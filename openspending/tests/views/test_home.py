@@ -1,3 +1,4 @@
+import json
 from flask import url_for
 
 from openspending.tests.base import ControllerTestCase
@@ -10,4 +11,7 @@ class TestHomeController(ControllerTestCase):
         assert 'OpenSpending' in response.data
 
     def test_locale(self):
-        self.client.post(url_for('home.set_locale'))
+        set_l = url_for('home.set_locale')
+        data = json.dumps({'locale': 'en'})
+        self.client.post(set_l, data=data,
+                         headers={'Content-Type': 'application/json'})

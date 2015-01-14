@@ -165,7 +165,6 @@ def about(dataset, format='html'):
     
     request_set_views(dataset, dataset)
 
-    sources = list(dataset.sources)
     managers = list(dataset.managers)
 
     # Get all badges if user is admin because they can then
@@ -175,7 +174,7 @@ def about(dataset, format='html'):
         badges = list(Badge.all())
 
     return render_template('dataset/about.html', dataset=dataset,
-                           sources=sources, managers=managers,
+                           managers=managers,
                            badges=badges)
 
 

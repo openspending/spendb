@@ -4,13 +4,13 @@ import sys
 import urllib2
 import urlparse
 
-from openspending.lib import json
+from colander import Invalid
 
+from openspending.lib import json
 from openspending.model import Dataset, Account, View
 from openspending.core import db
 from openspending.tasks import load_from_url
 from openspending.validation.model import validate_model
-from openspending.validation.model import Invalid
 
 log = logging.getLogger(__name__)
 

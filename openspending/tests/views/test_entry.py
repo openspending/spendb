@@ -1,6 +1,5 @@
 from flask import url_for
 
-from openspending.core import db
 from openspending.model.dataset import Dataset
 from openspending.tests.base import ControllerTestCase
 from openspending.tests.helpers import load_fixture
@@ -12,13 +11,6 @@ class TestRestController(ControllerTestCase):
         super(TestRestController, self).setUp()
         load_fixture('cra')
         self.cra = Dataset.by_name('cra')
-
-    def test_dataset(self):
-        response = self.client.get(url_for('dataset.view',
-                                    format='json',
-                                    dataset=self.cra.name))
-
-        assert '"name": "cra"' in response.data, response.data
 
     def test_entry(self):
         q = self.cra.fact_table.mapping.columns['from.name'] == 'Dept047'
