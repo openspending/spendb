@@ -1,6 +1,9 @@
 from openspending.command.util import create_submanager
 from openspending.command.util import CommandException
 
+from openspending.core import db
+from openspending.model.account import Account
+
 manager = create_submanager(description='User operations')
 
 
@@ -8,8 +11,6 @@ manager = create_submanager(description='User operations')
 #@manager.option('username')
 def grantadmin(username):
     """ Grant admin privileges to given user """
-    from openspending.model import meta as db
-    from openspending.model.account import Account
 
     a = Account.by_name(username)
 
