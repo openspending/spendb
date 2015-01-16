@@ -88,9 +88,10 @@ This should be pretty painless. Just run::
     $ pip install -r requirements.txt -e .
 
 > For Windows users, run::
-```
+
+
     $pip install -r windows_reqs.txt
-```
+
 
 Additionally to the core repository, you will need to check out two auxilliary
 repositories and symlink them into OpenSpending. The repos contain the 
@@ -132,6 +133,25 @@ URL is set::
 Initialize the database::
 
     $ ostool db init
+
+Openspending now uses Amazon S3 for log storage.  For development or testing
+purposes, you can run a mock S3 server locally.  With your python environment
+activated, run the command::
+
+    $moto_server s3 -p3000
+
+Navigate to localhost:3000 in your browser.
+
+Back on Openspending, create a new environment variable.
+
+    $export BOTO_CONFIG=/path/to/openspending/repo/boto.config
+
+Go back to your Openspending settings file, and update the with the values
+displayed from http://localhost:3000/ -- this may not be required since there 
+is no security.  Just any old value may work.
+
+    AWS_KEY_ID = "bcaf1ffd86f41161ca5fb16fd081034f"
+    AWS_SECRET = "webfile"
 
 Generate the help system documentation (this is used by the front-end
 and must be available, developer documents are separate). The output 
