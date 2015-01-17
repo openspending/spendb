@@ -53,12 +53,24 @@ def create():
         raise Invalid(SchemaNode(String(), name='dataset.name'),
                       _("A dataset with this identifer already exists!"))
     dataset = Dataset({'dataset': data})
-    dataset.private = True
     dataset.managers.append(current_user)
     db.session.add(dataset)
     db.session.commit()
     clear_index_cache()
-    return jsonify(dataset)
+    return view(dataset.name)
+
+
+@blueprint.route('/datasets/<name>', methods=['POST', 'PUT'])
+@api_json_errors
+def update(name):
+    dataset = get_dataset(name)
+    require.dataset.update(dataset)
+    schema = dataset_schema(ValidationState(dataset.model_data))
+    data = schema.deserialize(api_form_data())
+    dataset.update(data)
+    db.session.commit()
+    clear_index_cache()
+    return view(name)
 
 
 @blueprint.route('/datasets/<name>', methods=['DELETE'])

@@ -46,6 +46,10 @@ class Dataset(db.Model):
         self.data = data.copy()
         dataset = self.data['dataset']
         del self.data['dataset']
+        self.update(dataset)
+        self._load_model()
+
+    def update(self, dataset):
         self.label = dataset.get('label')
         self.name = dataset.get('name')
         self.private = dataset.get('private')
@@ -55,7 +59,6 @@ class Dataset(db.Model):
         self.default_time = dataset.get('default_time')
         self.languages = dataset.get('languages', [])
         self.territories = dataset.get('territories', [])
-        self._load_model()
 
     @property
     def model_data(self):
