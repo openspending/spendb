@@ -57,6 +57,7 @@ def create():
     dataset.managers.append(current_user)
     db.session.add(dataset)
     db.session.commit()
+    clear_index_cache()
     return jsonify(dataset)
 
 

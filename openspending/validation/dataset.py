@@ -1,5 +1,5 @@
 from openspending.validation.common import mapping
-from openspending.validation.common import key, sequence
+from openspending.validation.common import key, sequence, boolean
 from openspending.validation.predicates import chained, \
         reserved_name, database_name, nonempty_string
 from openspending.reference.currency import CURRENCIES
@@ -48,6 +48,7 @@ def dataset_schema(state):
         database_name,
         no_double_underscore
     ), preparer=lambda x: x.lower().strip() if x else None))
+    schema.add(boolean('private', missing=True))
     schema.add(key('currency', validator=chained(
         valid_currency
     )))

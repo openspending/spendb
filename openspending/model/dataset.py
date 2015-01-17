@@ -48,6 +48,7 @@ class Dataset(db.Model):
         del self.data['dataset']
         self.label = dataset.get('label')
         self.name = dataset.get('name')
+        self.private = dataset.get('private')
         self.description = dataset.get('description')
         self.currency = dataset.get('currency')
         self.category = dataset.get('category')

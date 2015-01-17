@@ -1,4 +1,6 @@
 from colander import SchemaNode, Function, String, Mapping, Sequence
+from colander import Boolean
+
 
 class ValidationState(object):
     """ ValidationState is carried through the validation system to
@@ -14,8 +16,8 @@ class ValidationState(object):
 
     @property
     def attributes(self):
-        """ Return all attributes (including measures, atteribute 
-        dimensions and compound dimension attributes) of the model. 
+        """ Return all attributes (including measures, atteribute
+        dimensions and compound dimension attributes) of the model.
         """
         for prop, meta in self.mapping_items:
             yield prop
@@ -42,15 +44,21 @@ def _node(schema, name, *children, **kw):
                       name=name,
                       **kw)
 
+
 def mapping(name, **kw):
     return _node(Mapping(unknown='preserve'),
                  name=name, **kw)
+
 
 def sequence(name, *children, **kw):
     return _node(Sequence(), name, 
                  *children, **kw)
 
+
 def key(name, **kw):
     return _node(String(), name, **kw)
 
+
+def boolean(name, **kw):
+    return _node(Boolean(), name, **kw)
 
