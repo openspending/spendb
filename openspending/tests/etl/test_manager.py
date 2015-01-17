@@ -15,6 +15,6 @@ class TestDataManager(DatabaseTestCase):
         self.s3_mock.stop()
 
     def test_manager(self):
-        assert data_manager.index is not None, data_manager.index
+        assert data_manager.collection is not None, data_manager.collection
         package = data_manager.package('cra')
         assert package.id == 'cra', package

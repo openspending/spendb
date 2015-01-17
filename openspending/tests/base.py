@@ -2,9 +2,10 @@ import tempfile
 
 from moto import mock_s3
 from mock import patch
+from barn import create
 from flask.ext.testing import TestCase as FlaskTestCase
 
-from openspending.core import create_web_app
+from openspending.core import create_web_app, data_manager
 from openspending.tests.helpers import clean_db, init_db, CPI
 
 
@@ -16,12 +17,11 @@ class TestCase(FlaskTestCase):
         app = create_web_app(**{
             'DEBUG': True,
             'TESTING': True,
-            # if this ever exists, something went horribly wrong:
-            'AWS_DATA_BUCKET': 'unittest.openspending.org',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
             'CELERY_ALWAYS_EAGER': True,
             'UPLOADS_DEFAULT_DEST': tempfile.mkdtemp()
         })
+        data_manager._coll = create('file', path=tempfile.mkdtemp())
         return app
 
     def setUp(self):

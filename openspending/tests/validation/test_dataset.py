@@ -87,11 +87,3 @@ class TestDataset(TestCase):
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
     
-    @raises(Invalid)
-    def test_empty_description(self):
-        ds = self.model['dataset'].copy()
-        ds['description'] = '  '
-        schema = dataset_schema(self.state)
-        schema.deserialize(ds)
-    
-

@@ -1,6 +1,6 @@
 import logging
 
-from loadkit import PackageIndex
+from loadkit import create
 
 from boto.s3.connection import S3Connection, S3ResponseError
 from boto.s3.connection import Location
@@ -14,7 +14,7 @@ class DataManager(object):
 
     def __init__(self):
         self.app = None
-        self._index = None
+        self._coll = None
 
     @property
     def configured(self):
@@ -26,27 +26,14 @@ class DataManager(object):
     def package(self, dataset):
         """ Get a package for a given dataset name. """
         assert self.configured, 'Data manager not configured!'
-        return self.index.get(dataset)
+        return self.collection.get(dataset)
 
     @property
-    def index(self):
+    def collection(self):
         if self.configured:
-            if self._index is None:
-                self._index = PackageIndex(self.get_bucket())
-            return self._index
-
-    def get_bucket(self):
-        """ Connect to the S3 bucket. """
-        conn = S3Connection(self.app.config.get('AWS_KEY_ID'),
-                            self.app.config.get('AWS_SECRET'))
-        bucket_name = self.app.config.get('AWS_DATA_BUCKET',
-                                          'data.openspending.org')
-
-        try:
-            return conn.get_bucket(bucket_name)
-        except S3ResponseError, se:
-            if se.status == 404:
-                return conn.create_bucket(bucket_name,
-                                          location=Location.EU)
-            else:
-                log.exception(se)
+            if self._coll is None:
+                env = self.app.config
+                self._coll = create('s3', aws_key_id=env.get('AWS_KEY_ID'),
+                                    aws_secret=env.get('AWS_SECRET'),
+                                    bucket_name=env.get('AWS_DATA_BUCKET'))
+            return self._coll

@@ -14,7 +14,9 @@ ARTIFACT_NAME = 'table.json'
 @job(operation='Load from file')
 def extract_fileobj(job, dataset, fh, file_name=None):
     """ Upload contents of an opened fh to the data repository. """
-    source = extract.from_fileobj(job.package, fh, source_name=file_name)
+    meta = {'source_file': file_name}
+    source = job.package.ingest(fh, meta=meta, overwrite=False)
+    source.save()
     job.set_source(source)
     return source
 
@@ -22,7 +24,8 @@ def extract_fileobj(job, dataset, fh, file_name=None):
 @job(operation='Load from URL')
 def extract_url(job, dataset, url):
     """ Upload contents of a URL to the data repository. """
-    source = extract.from_url(job.package, url)
+    source = job.package.ingest(url, overwrite=False)
+    source.save()
     job.set_source(source)
     return source
 
