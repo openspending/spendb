@@ -42,6 +42,22 @@ def view(name):
     return jsonify(dataset)
 
 
+@blueprint.route('/datasets/<name>/model')
+@api_json_errors
+def model(name):
+    dataset = get_dataset(name)
+    etag_cache_keygen(dataset)
+    return jsonify(dataset.mapping)
+
+
+@blueprint.route('/datasets/<name>/fields')
+@api_json_errors
+def fields(name):
+    dataset = get_dataset(name)
+    etag_cache_keygen(dataset)
+    return jsonify(dataset.fields)
+
+
 @blueprint.route('/datasets', methods=['POST', 'PUT'])
 @api_json_errors
 def create():

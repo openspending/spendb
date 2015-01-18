@@ -177,6 +177,31 @@ class TestDatasetApiController(ControllerTestCase):
         cra = Dataset.by_name('cra')
         assert cra.private is False, cra.private
 
+    def test_view_model(self):
+        url = url_for('datasets_api3.model', name='cra')
+        res = self.client.get(url)
+        assert '200' in res.status, res.status
+        assert 'cap_or_cur' in res.json, res.json
+        assert 'cofog3' in res.json, res.json
+        assert isinstance(res.json['cofog3'], dict), res.json['cofog3']
+
+    def test_view_fields(self):
+        url = url_for('datasets_api3.fields', name='cra')
+        res = self.client.get(url)
+        assert '200' in res.status, res.status
+        assert 'cap_or_cur' in res.json, res.json
+        assert 'cofog1_name' in res.json, res.json
+        c1n = res.json['cofog1_name']
+        assert c1n['title'] == 'cofog1.name', c1n
+
+    def test_view_fields_empty(self):
+        cra = Dataset.by_name('cra')
+        cra.fields = {}
+        db.session.commit()
+        url = url_for('datasets_api3.fields', name='cra')
+        res = self.client.get(url)
+        assert 'cap_or_cur' not in res.json, res.json
+
     def test_delete_dataset(self):
         name = self.cra.name
         url = url_for('datasets_api3.delete', name=name)
