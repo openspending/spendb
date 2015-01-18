@@ -6,10 +6,9 @@ from urllib import urlencode
 from webhelpers.feedgenerator import Rss201rev2Feed
 from werkzeug.exceptions import BadRequest
 from flask import Blueprint, render_template, request, redirect
-from flask import Response
+from flask import Response, current_app
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
-from colander import SchemaNode, String, Invalid
 
 from openspending.core import db
 from openspending.model import Dataset, Badge
@@ -22,14 +21,9 @@ from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.views import request_set_views
 from openspending.lib.hypermedia import dataset_apply_links
 from openspending.lib.pagination import Page
-from openspending.reference.currency import CURRENCIES
-from openspending.reference.country import COUNTRIES
-from openspending.reference.category import CATEGORIES
-from openspending.reference.language import LANGUAGES
-from openspending.validation.dataset import dataset_schema
-from openspending.validation.common import ValidationState
 from openspending.views.entry import index as entry_index
-from openspending.views.cache import etag_cache_keygen, disable_cache
+from openspending.views.cache import etag_cache_keygen
+from openspending.views.context import angular_templates
 
 log = logging.getLogger(__name__)
 
@@ -164,7 +158,8 @@ def view(dataset, format='html'):
 def manage(dataset):
     dataset = get_dataset(dataset)
     auth.require.dataset.update(dataset)
-    return render_template('dataset/manage.html', dataset=dataset)
+    return render_template('dataset/manage.html', dataset=dataset,
+                           templates=angular_templates(current_app))
 
 
 @blueprint.route('/<nodot:dataset>/meta')

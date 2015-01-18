@@ -54,6 +54,9 @@ openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', 
 
 
 openspending.factory('referenceData', ['$http', function($http) {
+  /* This is used to cache reference data once it has been retrieved from the 
+  server. Reference data includes the canonical lists of country names,
+  currencies, etc. */
   var referenceData = $http.get('/api/3/reference');
 
   var getData = function(cb) {
@@ -68,6 +71,8 @@ openspending.factory('referenceData', ['$http', function($http) {
 
 openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData',
   function($scope, $http, $window, referenceData) {
+  /* This controller is not activated via routing, but explicitly through the 
+  dataset.new flask route. */
   
   $scope.reference = {};
   $scope.canCreate = false;
@@ -135,7 +140,7 @@ openspending.config(['$routeProvider', '$locationProvider',
   });
 
   $routeProvider.when('/:name/manage/meta', {
-    templateUrl: '/static/templates/dataset_edit.html',
+    templateUrl: '/static/templates/dataset_meta.html',
     controller: 'DatasetMetaCtrl'
   });
 

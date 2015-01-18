@@ -1,3 +1,5 @@
+import os
+
 from flask import current_app, request
 from flask.ext.babel import get_locale
 from flask.ext.login import current_user
@@ -34,6 +36,19 @@ def api_form_data():
     if data is None:
         data = dict(request.form.items())
     return data
+
+
+def angular_templates(app):
+    """ Find all angular templates and make them available in a variable
+    which can be included in a Jinja template so that angular can load
+    templates without doing a server round trip. """
+    partials_dir = os.path.join(app.static_folder, 'templates')
+    for (root, dirs, files) in os.walk(partials_dir):
+        for file_name in files:
+            file_path = os.path.join(root, file_name)
+            with open(file_path, 'rb') as fh:
+                file_name = file_path[len(partials_dir) + 1:]
+                yield (file_name, fh.read().decode('utf-8'))
 
 
 def languages():
