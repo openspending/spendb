@@ -159,6 +159,8 @@ def view(dataset, format='html'):
 
 
 @blueprint.route('/<nodot:dataset>/manage', methods=['GET'])
+@blueprint.route('/<nodot:dataset>/manage/meta', methods=['GET'])
+@blueprint.route('/<nodot:dataset>/manage/model', methods=['GET'])
 def manage(dataset):
     dataset = get_dataset(dataset)
     auth.require.dataset.update(dataset)

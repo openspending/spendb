@@ -1,5 +1,5 @@
 
-var openspending = angular.module('openspending', ['ngCookies', 'ui.bootstrap', 'localytics.directives']);
+var openspending = angular.module('openspending', ['ngCookies', 'ngRoute', 'ui.bootstrap', 'localytics.directives']);
 
 openspending.handleValidation = function(form) {
   return function(res) {
@@ -87,5 +87,63 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
   $http.get('/api/2/permissions?dataset=new').then(function(res) {
     $scope.canCreate = res.data.create;
   });
+
+}]);
+
+
+openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window',
+  function($scope, $http, $window, referenceData) {
+  
+  $scope.dataset = {};
+
+}]);
+
+
+openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$window', 'referenceData',
+  function($scope, $http, $window, referenceData) {
+  
+  $scope.reference = {};
+  $scope.dataset = {};
+
+  referenceData.get(function(reference) {
+    $scope.reference = reference;
+  });
+
+  $scope.save = function(form) {
+  };
+
+}]);
+
+
+openspending.controller('DatasetModelCtrl', ['$scope', '$http', '$window',
+  function($scope, $http, $window, referenceData) {
+  
+  $scope.dataset = {};
+
+  $scope.save = function(form) {
+  };
+
+}]);
+
+
+openspending.config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
+
+  $routeProvider.when('/:name/manage', {
+    templateUrl: '/static/templates/dataset_manage.html',
+    controller: 'DatasetManageCtrl'
+  });
+
+  $routeProvider.when('/:name/manage/meta', {
+    templateUrl: '/static/templates/dataset_edit.html',
+    controller: 'DatasetMetaCtrl'
+  });
+
+  $routeProvider.when('/:name/manage/model', {
+    templateUrl: '/static/templates/dataset_model.html',
+    controller: 'DatasetModelCtrl'
+  });
+
+  $locationProvider.html5Mode(true);
 
 }]);

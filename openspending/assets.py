@@ -7,6 +7,7 @@ from openspending.core import assets
 
 js_vendor = Bundle('vendor/jquery/dist/jquery.js',
                    'vendor/angular/angular.js',
+                   'vendor/angular-route/angular-route.js',
                    'vendor/chosen/chosen.jquery.js',
                    'vendor/angular-chosen-localytics/chosen.js',
                    'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
