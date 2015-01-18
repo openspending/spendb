@@ -1,34 +1,12 @@
 
 var openspending = angular.module('openspending', ['ngCookies', 'ngRoute', 'ui.bootstrap', 'localytics.directives']);
 
-openspending.handleValidation = function(form) {
-  return function(res) {
-    if (res.status == 400) {
-        var errors = [];
-        console.log(res.data.errors);
-        for (var field in res.data.errors) {
-            form[field].$setValidity('value', false);
-            form[field].$message = res.data.errors[field];
-            errors.push(field);
-        }
-        if (angular.isDefined(form._errors)) {
-            angular.forEach(form._errors, function(field) {
-                if (errors.indexOf(field) == -1) {
-                    form[field].$setValidity('value', true);
-                }
-            });
-        }
-        form._errors = errors;
-    } else {
-      console.log(res)
-    }
-  };
-};
 
-
-openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce',
-  function($scope, $location, $http, $cookies, $window, $sce) {
+openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash',
+  function($scope, $location, $http, $cookies, $window, $sce, flash) {
   
+  $scope.flash = flash;
+
   // EU cookie warning
   $scope.showCookieWarning = !$cookies.neelieCookie;
 
@@ -53,6 +31,56 @@ openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', 
 }]);
 
 
+openspending.factory('flash', ['$rootScope', function($rootScope) {
+  // Message flashing.
+  var currentMessage = null;
+
+  $rootScope.$on("$routeChangeSuccess", function() {
+    currentMessage = null;
+  });
+
+  return {
+    setMessage: function(message, type) {
+      currentMessage = [message, type];
+    },
+    getMessage: function() {
+      return currentMessage;
+    }
+  };
+}]);
+
+
+openspending.factory('validation', ['flash', function(flash) {
+  // handle server-side form validation errors.
+  return {
+    handle: handle = function(form) {
+      return function(res) {
+        if (res.status == 400 || !form) {
+            var errors = [];
+            console.log(res.data.errors);
+            for (var field in res.data.errors) {
+                form[field].$setValidity('value', false);
+                form[field].$message = res.data.errors[field];
+                errors.push(field);
+            }
+            if (angular.isDefined(form._errors)) {
+                angular.forEach(form._errors, function(field) {
+                    if (errors.indexOf(field) == -1) {
+                        form[field].$setValidity('value', true);
+                    }
+                });
+            }
+            form._errors = errors;
+        } else {
+          console.log(res)
+          flash.setMessage(res.data.message || res.data.title || 'Server error', 'danger');
+        }
+      }
+    }
+  };
+}]);
+
+
 openspending.factory('referenceData', ['$http', function($http) {
   /* This is used to cache reference data once it has been retrieved from the 
   server. Reference data includes the canonical lists of country names,
@@ -69,7 +97,7 @@ openspending.factory('referenceData', ['$http', function($http) {
 }]);
 
 
-openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData',
+openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData', 'validation',
   function($scope, $http, $window, referenceData) {
   /* This controller is not activated via routing, but explicitly through the 
   dataset.new flask route. */
@@ -86,7 +114,7 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
     var dfd = $http.post('/api/3/datasets', $scope.dataset);
     dfd.then(function(res) {
       $window.location.href = '/' + res.data.name + '/meta';
-    }, openspending.handleValidation(form));
+    }, validation.handle(form));
   };
 
   $http.get('/api/2/permissions?dataset=new').then(function(res) {
@@ -96,16 +124,21 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
 }]);
 
 
-openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window',
-  function($scope, $http, $window, referenceData) {
+openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams',
+  function($scope, $http, $window, $routeParams) {
+  var datasetApi = '/api/3/datasets/' + $routeParams.name;
   
   $scope.dataset = {};
+
+  $http.get(datasetApi).then(function(res) {
+      $scope.dataset = res.data;
+  });
 
 }]);
 
 
-openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$window', '$routeParams', 'referenceData',
-  function($scope, $http, $window, $routeParams, referenceData) {
+openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'referenceData', 'flash', 'validation',
+  function($scope, $http, $location, $routeParams, referenceData, flash, validation) {
   var datasetApi = '/api/3/datasets/' + $routeParams.name;
 
   $scope.reference = {};
@@ -116,6 +149,7 @@ openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$window', '$rout
     // delay loading the dataset so that the selects are populated.
     $http.get(datasetApi).then(function(res) {
       $scope.dataset = res.data;
+
     });
   });
 
@@ -123,8 +157,8 @@ openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$window', '$rout
     var dfd = $http.post(datasetApi, $scope.dataset);
     dfd.then(function(res) {
       $scope.dataset = res.data;
-      // TODO: flash success!
-    }, openspending.handleValidation(form));
+      flash.setMessage("Your changes have been saved!", "success");
+    }, validation.handle(form));
   };
 
 }]);

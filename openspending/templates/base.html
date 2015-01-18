@@ -51,6 +51,11 @@
               </div>
             {% endif %}
           {% endwith %}
+          {% raw %}
+            <div ng-show="flash.getMessage()" class="alert alert-{{flash.getMessage()[1]}}">
+              <p>{{flash.getMessage()[0]}}</p>
+            </div>
+          {% endraw %}
           {% block banner %}{% endblock %}
         </div>
       </div>
