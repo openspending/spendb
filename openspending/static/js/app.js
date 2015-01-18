@@ -70,6 +70,7 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
   function($scope, $http, $window, referenceData) {
   
   $scope.reference = {};
+  $scope.canCreate = false;
   $scope.dataset = {'category': 'budget', 'territories': []};
 
   referenceData.get(function(reference) {
@@ -82,5 +83,9 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
       $window.location.href = '/' + res.data.name + '/meta';
     }, openspending.handleValidation(form));
   };
+
+  $http.get('/api/2/permissions?dataset=new').then(function(res) {
+    $scope.canCreate = res.data.create;
+  });
 
 }]);
