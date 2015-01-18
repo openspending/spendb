@@ -193,6 +193,9 @@ openspending.config(['$routeProvider', '$locationProvider',
     controller: 'DatasetModelCtrl'
   });
 
+  // Router hack to enable plain old links. 
+  angular.element("a").prop("target", "_self");
+
   $locationProvider.html5Mode(true);
 
 }]);
