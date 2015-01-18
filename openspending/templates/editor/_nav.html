@@ -31,11 +31,6 @@
         {% trans %}Dimensions &amp; Measures{% endtrans %}
       </a>
     </li>
-    <li class="{{ 'active' if section == 'views' else '' }}">
-      <a href="{{ url_for('editor.views_edit', dataset=dataset.name) }}">
-        {% trans %}Views{% endtrans %}
-      </a>
-    </li>
     <li class="{{ 'active' if section == 'team' else '' }}">
       <a href="{{ url_for('editor.team_edit', dataset=dataset.name) }}">
         {% trans %}Team{% endtrans %}
@@ -44,11 +39,6 @@
     <li class="{{ 'active' if section == 'core' else '' }}">
       <a href="{{ url_for('editor.core_edit', dataset=dataset.name) }}">
         {% trans %}Meta{% endtrans %}
-      </a>
-    </li>
-    <li class="{{ 'active' if section == 'templates' else '' }}">
-      <a href="{{ url_for('editor.templates_edit', dataset=dataset.name) }}">
-        {% trans %}Templates{% endtrans %}
       </a>
     </li>
   </ul>

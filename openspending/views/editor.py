@@ -154,38 +154,6 @@ def dimensions_update(dataset):
                            mapping=mapping, saved=saved)
 
 
-@blueprint.route('/<dataset>/editor/views', methods=['GET'])
-def views_edit(dataset, errors={}, views=None,
-               format='html'):
-    disable_cache()
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-
-    views = views or dataset.data.get('views', [])
-    fill = {'views': views}
-    return render_template('editor/views.html', dataset=dataset,
-                           errors=errors, form_fill=fill)
-
-
-@blueprint.route('/<dataset>/editor/views', methods=['POST'])
-def views_update(dataset):
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-
-    errors, views = {}, {}
-    try:
-        views = json.loads(request.form.get('views'))
-        schema = views_schema(ValidationState(dataset.model_data))
-        dataset.data['views'] = schema.deserialize(views)
-        db.session.commit()
-        flash_success(_("The views have been updated."))
-    except (ValueError, TypeError):
-        raise BadRequest(_("The views could not be decoded as JSON!"))
-    except Invalid as i:
-        errors = i.asdict()
-    return views_edit(dataset.name, errors=errors, views=views)
-
-
 @blueprint.route('/<dataset>/editor/team', methods=['GET'])
 def team_edit(dataset, errors={}, accounts=None):
     disable_cache()
@@ -221,60 +189,3 @@ def team_update(dataset):
         flash_success(_("The team has been updated."))
     return team_edit(dataset.name, errors=errors, accounts=accounts)
 
-
-@blueprint.route('/<dataset>/editor/drop', methods=['POST'])
-def drop(dataset):
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-
-    dataset.updated_at = datetime.utcnow()
-    dataset.fields = {}
-    dataset.fact_table.drop()
-    solr.drop_index(dataset.name)
-    dataset.touch()
-
-    # For every source in the dataset we set the status to removed
-    for source in dataset.sources:
-        for run in source.runs:
-            run.status = Run.STATUS_REMOVED
-
-    db.session.commit()
-    flash_success(_("The dataset has been cleared."))
-    return redirect(url_for('editor.index', dataset=dataset.name))
-
-
-@blueprint.route('/<dataset>/editor/publish', methods=['POST'])
-def publish(dataset):
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-    if not dataset.private:
-        raise BadRequest(_("This dataset is already public!"))
-    dataset.private = False
-    dataset.updated_at = datetime.utcnow()
-    db.session.commit()
-
-    # Need to invalidate the cache of the dataset index
-    clear_index_cache()
-
-    public_url = url_for('dataset.view', dataset=dataset.name)
-    flash_success(
-        _("Congratulations, the dataset has been "
-          "published. It is now available at: %(url)s", url=public_url))
-    return redirect(url_for('editor.index', dataset=dataset.name))
-
-
-@blueprint.route('/<dataset>/editor/retract', methods=['POST'])
-def retract(dataset):
-    dataset = get_dataset(dataset)
-    require.dataset.update(dataset)
-    if dataset.private:
-        raise BadRequest(_("This dataset is already private!"))
-
-    dataset.private = True
-    dataset.touch()
-    clear_index_cache()
-    db.session.commit()
-
-    flash_success(_("The dataset has been retracted. "
-                    "It is no longer visible to others."))
-    return redirect(url_for('editor.index', dataset=dataset.name))

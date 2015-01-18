@@ -70,29 +70,6 @@ class TestEditorController(ControllerTestCase):
                                     query_string={'api_key': self.user.api_key})
         assert '200' in response.status, response.status
 
-    def test_views_edit_mask(self):
-        response = self.client.get(url_for('editor.views_edit', dataset='cra'),
-                                   query_string={'api_key': self.user.api_key})
-        assert '"default"' in response.data
-        assert 'Update' in response.data
-
-    def test_views_update(self):
-        cra = Dataset.by_name('cra')
-        views = cra.data['views']
-        views[0]['label'] = 'Banana'
-        response = self.client.post(url_for('editor.views_update', dataset='cra'),
-                                    data={'views': json.dumps(views)},
-                                    query_string={'api_key': self.user.api_key})
-        assert '200' in response.status, response.status
-        cra = Dataset.by_name('cra')
-        assert 'Banana' in repr(cra.data['views'])
-
-    def test_views_update_invalid_json(self):
-        response = self.client.post(url_for('editor.views_update', dataset='cra'),
-                                    data={'views': 'banana'},
-                                    query_string={'api_key': self.user.api_key})
-        assert '400' in response.status, response.status
-
     def test_team_edit_mask(self):
         response = self.client.get(url_for('editor.team_edit', dataset='cra'),
                                    query_string={'api_key': self.user.api_key})
