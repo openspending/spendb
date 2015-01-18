@@ -104,17 +104,27 @@ openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window',
 }]);
 
 
-openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$window', 'referenceData',
-  function($scope, $http, $window, referenceData) {
-  
+openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$window', '$routeParams', 'referenceData',
+  function($scope, $http, $window, $routeParams, referenceData) {
+  var datasetApi = '/api/3/datasets/' + $routeParams.name;
+
   $scope.reference = {};
   $scope.dataset = {};
 
   referenceData.get(function(reference) {
     $scope.reference = reference;
+    // delay loading the dataset so that the selects are populated.
+    $http.get(datasetApi).then(function(res) {
+      $scope.dataset = res.data;
+    });
   });
 
   $scope.save = function(form) {
+    var dfd = $http.post(datasetApi, $scope.dataset);
+    dfd.then(function(res) {
+      $scope.dataset = res.data;
+      // TODO: flash success!
+    }, openspending.handleValidation(form));
   };
 
 }]);
