@@ -22,7 +22,7 @@ def before_request():
 def after_request(resp):
     resp.headers['Server'] = 'OpenSpending/%s' % _version.__version__
     
-    if resp.is_streamed:
+    if resp.is_streamed and request.endpoint != 'static':
         # http://wiki.nginx.org/X-accel#X-Accel-Buffering
         resp.headers['X-Accel-Buffering'] = 'no'
     
