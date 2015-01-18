@@ -50,6 +50,31 @@ class TestDatasetApiController(ControllerTestCase):
         res = self.client.get(url)
         assert '403' in res.status, res.status
 
+    def test_view_model(self):
+        url = url_for('datasets_api3.model', name='cra')
+        res = self.client.get(url)
+        assert '200' in res.status, res.status
+        assert 'cap_or_cur' in res.json, res.json
+        assert 'cofog3' in res.json, res.json
+        assert isinstance(res.json['cofog3'], dict), res.json['cofog3']
+
+    def test_view_fields(self):
+        url = url_for('datasets_api3.fields', name='cra')
+        res = self.client.get(url)
+        assert '200' in res.status, res.status
+        assert 'cap_or_cur' in res.json, res.json
+        assert 'cofog1_name' in res.json, res.json
+        c1n = res.json['cofog1_name']
+        assert c1n['title'] == 'cofog1.name', c1n
+
+    def test_view_fields_empty(self):
+        cra = Dataset.by_name('cra')
+        cra.fields = {}
+        db.session.commit()
+        url = url_for('datasets_api3.fields', name='cra')
+        res = self.client.get(url)
+        assert 'cap_or_cur' not in res.json, res.json
+
     def test_create_dataset(self):
         url = url_for('datasets_api3.create')
         res = self.client.post(url, data=json.dumps({}),
@@ -158,6 +183,38 @@ class TestDatasetApiController(ControllerTestCase):
         cra = Dataset.by_name('cra')
         assert cra.currency == 'GBP', cra.label
 
+    def test_update_model(self):
+        url = url_for('datasets_api3.update_model', name='cra')
+        data = self.cra.mapping.copy()
+        del data['cofog3']
+        res = self.client.post(url, data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert 'cofog3' not in res.json, res.json
+        assert 'cofog1' in res.json, res.json
+
+        res2 = self.client.get(url,
+                               query_string={'api_key': self.user.api_key})
+        assert res.json.keys() == res2.json.keys(), res2.json
+        
+    def test_update_model_invalid(self):
+        url = url_for('datasets_api3.update_model', name='cra')
+        data = self.cra.mapping.copy()
+        del data['cofog3']['label']
+        res = self.client.post(url, data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert '400' in res.status, res.status
+        assert 'cofog3' in res.data, res.data
+
+    def test_update_model_invalid_json(self):
+        url = url_for('datasets_api3.update_model', name='cra')
+        data = 'huhu'
+        res = self.client.post(url, data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert '400' in res.status, res.status
+        
     def test_publish(self):
         cra = Dataset.by_name('cra')
         cra.private = True
@@ -176,31 +233,6 @@ class TestDatasetApiController(ControllerTestCase):
         assert '200' in response.status, response.json
         cra = Dataset.by_name('cra')
         assert cra.private is False, cra.private
-
-    def test_view_model(self):
-        url = url_for('datasets_api3.model', name='cra')
-        res = self.client.get(url)
-        assert '200' in res.status, res.status
-        assert 'cap_or_cur' in res.json, res.json
-        assert 'cofog3' in res.json, res.json
-        assert isinstance(res.json['cofog3'], dict), res.json['cofog3']
-
-    def test_view_fields(self):
-        url = url_for('datasets_api3.fields', name='cra')
-        res = self.client.get(url)
-        assert '200' in res.status, res.status
-        assert 'cap_or_cur' in res.json, res.json
-        assert 'cofog1_name' in res.json, res.json
-        c1n = res.json['cofog1_name']
-        assert c1n['title'] == 'cofog1.name', c1n
-
-    def test_view_fields_empty(self):
-        cra = Dataset.by_name('cra')
-        cra.fields = {}
-        db.session.commit()
-        url = url_for('datasets_api3.fields', name='cra')
-        res = self.client.get(url)
-        assert 'cap_or_cur' not in res.json, res.json
 
     def test_delete_dataset(self):
         name = self.cra.name

@@ -22,54 +22,6 @@ class TestEditorController(ControllerTestCase):
                                    query_string={'api_key': self.user.api_key})
         assert 'Manage the dataset' in response.data
 
-    def test_dimensions_update_invalid_json(self):
-        response = self.client.post(url_for('editor.dimensions_update', dataset='cra'),
-                                    data={'mapping': 'banana'},
-                                    query_string={'api_key': self.user.api_key})
-        assert '400' in response.status, response.status
-
-    def test_dimensions_update_valid_json(self):
-        response = self.client.post(url_for('editor.dimensions_update', dataset='cra'),
-                                    data={'mapping': """{
-                                                          "amount": {
-                                                            "column": "IMPORTE PEF",
-                                                            "datatype": "float",
-                                                            "default_value": "",
-                                                            "description": null,
-                                                            "label": "Amount",
-                                                            "type": "measure"
-                                                          },
-                                                          "theid": {
-                                                            "attributes": {
-                                                              "label": {
-                                                                "column": "FF",
-                                                                "datatype": "string",
-                                                                "default_value": ""
-                                                              },
-                                                              "name": {
-                                                                "column": "id",
-                                                                "datatype": "id",
-                                                                "default_value": ""
-                                                              }
-                                                            },
-                                                            "description": null,
-                                                            "key": true,
-                                                            "label": "Theid",
-                                                            "type": "compound"
-                                                          },
-                                                          "time": {
-                                                            "column": "DATE",
-                                                            "datatype": "date",
-                                                            "default_value": "",
-                                                            "description": null,
-                                                            "format": null,
-                                                            "label": "Time",
-                                                            "type": "date"
-                                                          }
-                                                        }"""},
-                                    query_string={'api_key': self.user.api_key})
-        assert '200' in response.status, response.status
-
     def test_team_edit_mask(self):
         response = self.client.get(url_for('editor.team_edit', dataset='cra'),
                                    query_string={'api_key': self.user.api_key})

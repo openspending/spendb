@@ -12,7 +12,7 @@
     "from": {
       "type": "entity",
       "attributes": {
-        "name": {"column": "from_name", "datatype": "string"},
+        "name": {"column": "from_name", "datatype": "id"},
         "label": {"column": "from_label", "datatype": "string"},
         "description": {"column": "from_description", "datatype": "string", 
           "default_value": ""}
@@ -23,7 +23,7 @@
     "to": {
       "type": "entity",
       "attributes": {
-        "name": {"column": "to_name", "datatype": "string"},
+        "name": {"column": "to_name", "datatype": "id"},
         "label": {"column": "to_label", "datatype": "string"},
         "description": {"column": "to_description", "datatype": "string"}
       },
@@ -39,14 +39,14 @@
     },
     "amount": {
       "column": "amount",
-      "label": "",
+      "label": "Amount",
       "description": "",
       "datatype": "float",
       "type": "value"
     },
     "total": {
       "column": "amount",
-      "label": "",
+      "label": "Total amount",
       "description": "",
       "datatype": "float",
       "type": "measure"
@@ -91,7 +91,7 @@
     "pog": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "pog_name", "datatype": "string"},
+        "name": {"column": "pog_name", "datatype": "id"},
         "label": {"column": "pog_label", "datatype": "string"}
       },
       "label": "Programme Object Group",
@@ -100,7 +100,7 @@
     "cofog1": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "cofog1_name", "datatype": "string", 
+        "name": {"column": "cofog1_name", "datatype": "id", 
           "default_value": "XX"},
         "label": {"column": "cofog1_label", "datatype": "string", 
           "default_value": "(Undefined)"},
@@ -119,7 +119,7 @@
     "cofog2": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "cofog2_name", "datatype": "string", 
+        "name": {"column": "cofog2_name", "datatype": "id", 
           "default_value": "XX.X"},
         "label": {"column": "cofog2_label", "datatype": "string", 
           "default_value": "(Undefined)"},
@@ -137,7 +137,7 @@
     "cofog3": {
       "type": "classifier",
       "attributes": {
-        "name": {"column": "cofog3_name", "datatype": "string", 
+        "name": {"column": "cofog3_name", "datatype": "id", 
           "default_value": "XX.X.X"},
         "label": {"column": "cofog3_label", "datatype": "string", 
           "default_value": "(Undefined)"},

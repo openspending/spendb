@@ -11,12 +11,13 @@ from openspending.model import Dataset
 from openspending.auth import require
 from openspending.lib import solr_util as solr
 from openspending.lib.jsonexport import jsonify
-from openspending.lib.helpers import url_for, get_dataset
+from openspending.lib.helpers import get_dataset
 from openspending.lib.indices import clear_index_cache
 from openspending.views.cache import etag_cache_keygen
 from openspending.views.context import api_form_data
 from openspending.views.error import api_json_errors
 from openspending.validation.dataset import dataset_schema
+from openspending.validation.mapping import mapping_schema
 from openspending.validation.common import ValidationState
 
 
@@ -87,6 +88,20 @@ def update(name):
     db.session.commit()
     clear_index_cache()
     return view(name)
+
+
+@blueprint.route('/datasets/<name>/model', methods=['POST', 'PUT'])
+@api_json_errors
+def update_model(name):
+    dataset = get_dataset(name)
+    require.dataset.update(dataset)
+    model_data = dataset.model_data
+    model_data['mapping'] = api_form_data()
+    schema = mapping_schema(ValidationState(model_data))
+    new_mapping = schema.deserialize(model_data['mapping'])
+    dataset.data['mapping'] = new_mapping
+    db.session.commit()
+    return model(name)
 
 
 @blueprint.route('/datasets/<name>', methods=['DELETE'])

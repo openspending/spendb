@@ -12,7 +12,11 @@ class ValidationState(object):
 
     @property
     def mapping_items(self):
-        return self.model.get('mapping', {}).items()
+        if not isinstance(self.model, dict):
+            return []
+        if not isinstance(self.model.get('mapping'), dict):
+            return []
+        return self.model.get('mapping').items()
 
     @property
     def attributes(self):
