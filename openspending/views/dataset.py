@@ -158,6 +158,13 @@ def view(dataset, format='html'):
                            timerange=timerange)
 
 
+@blueprint.route('/<nodot:dataset>/manage', methods=['GET'])
+def manage(dataset):
+    dataset = get_dataset(dataset)
+    auth.require.dataset.update(dataset)
+    return render_template('dataset/manage.html', dataset=dataset)
+
+
 @blueprint.route('/<nodot:dataset>/meta')
 def about(dataset, format='html'):
     dataset = get_dataset(dataset)

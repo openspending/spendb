@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block page_title %}{{ dataset.label or dataset.name }}{% endblock %}
+{% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+  <div></div>
+{% endblock %}
