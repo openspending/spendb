@@ -1,9 +1,6 @@
 import logging
 
-from loadkit import create
-
-from boto.s3.connection import S3Connection, S3ResponseError
-from boto.s3.connection import Location
+from barn import open_collection
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +30,10 @@ class DataManager(object):
         if self.configured:
             if self._coll is None:
                 env = self.app.config
-                self._coll = create('s3', aws_key_id=env.get('AWS_KEY_ID'),
-                                    aws_secret=env.get('AWS_SECRET'),
-                                    bucket_name=env.get('AWS_DATA_BUCKET'))
+                args = {
+                    'aws_key_id': env.get('AWS_KEY_ID'),
+                    'aws_secret': env.get('AWS_SECRET'),
+                    'bucket_name': env.get('AWS_DATA_BUCKET')
+                }
+                self._coll = open_collection('s3', **args)
             return self._coll
