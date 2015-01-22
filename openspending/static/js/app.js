@@ -124,57 +124,6 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
 }]);
 
 
-openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams',
-  function($scope, $http, $window, $routeParams) {
-  var datasetApi = '/api/3/datasets/' + $routeParams.name;
-  
-  $scope.dataset = {};
-
-  $http.get(datasetApi).then(function(res) {
-      $scope.dataset = res.data;
-  });
-
-}]);
-
-
-openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'referenceData', 'flash', 'validation',
-  function($scope, $http, $location, $routeParams, referenceData, flash, validation) {
-  var datasetApi = '/api/3/datasets/' + $routeParams.name;
-
-  $scope.reference = {};
-  $scope.dataset = {};
-
-  referenceData.get(function(reference) {
-    $scope.reference = reference;
-    // delay loading the dataset so that the selects are populated.
-    $http.get(datasetApi).then(function(res) {
-      $scope.dataset = res.data;
-
-    });
-  });
-
-  $scope.save = function(form) {
-    var dfd = $http.post(datasetApi, $scope.dataset);
-    dfd.then(function(res) {
-      $scope.dataset = res.data;
-      flash.setMessage("Your changes have been saved!", "success");
-    }, validation.handle(form));
-  };
-
-}]);
-
-
-openspending.controller('DatasetModelCtrl', ['$scope', '$http', '$window',
-  function($scope, $http, $window, referenceData) {
-  
-  $scope.dataset = {};
-
-  $scope.save = function(form) {
-  };
-
-}]);
-
-
 openspending.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
