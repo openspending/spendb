@@ -35,5 +35,5 @@ class DataManager(object):
                     'aws_secret': env.get('AWS_SECRET'),
                     'bucket_name': env.get('AWS_DATA_BUCKET')
                 }
-                self._coll = open_collection('s3', **args)
+                self._coll = open_collection('datasets', 's3', **args)
             return self._coll

@@ -2,7 +2,7 @@ import tempfile
 
 from moto import mock_s3
 from mock import patch
-from barn import create
+from barn import open_collection
 from flask.ext.testing import TestCase as FlaskTestCase
 
 from openspending.core import create_web_app, data_manager
@@ -21,7 +21,8 @@ class TestCase(FlaskTestCase):
             'CELERY_ALWAYS_EAGER': True,
             'UPLOADS_DEFAULT_DEST': tempfile.mkdtemp()
         })
-        data_manager._coll = create('file', path=tempfile.mkdtemp())
+        data_manager._coll = open_collection('test', 'file',
+                                             path=tempfile.mkdtemp())
         return app
 
     def setUp(self):
