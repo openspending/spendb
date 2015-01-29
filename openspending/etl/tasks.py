@@ -1,7 +1,8 @@
 import logging
 
-from loadkit import extract, transform
-from loadkit import Source, Artifact
+from barn import Source
+from loadkit import transform
+from loadkit import Artifact
 
 from openspending.core import db
 from openspending.etl.job import job

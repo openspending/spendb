@@ -2,7 +2,7 @@ import logging
 from functools import wraps
 from datetime import datetime
 
-from loadkit import Source
+from barn import Source
 from loadkit.logfile import capture
 
 from openspending.core import data_manager, db
