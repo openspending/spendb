@@ -98,7 +98,7 @@ openspending.factory('referenceData', ['$http', function($http) {
 
 
 openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData', 'validation',
-  function($scope, $http, $window, referenceData) {
+  function($scope, $http, $window, referenceData, validation) {
   /* This controller is not activated via routing, but explicitly through the 
   dataset.new flask route. */
   
