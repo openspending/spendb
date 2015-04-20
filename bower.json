@@ -1,7 +1,7 @@
 {
-  "name": "openspending",
+  "name": "spendb",
   "version": "0.17",
-  "homepage": "https://github.com/openspending/openspending/",
+  "homepage": "https://github.com/mapthemoney/spendb",
   "authors": [],
   "description": "",
   "license": "AGPL v3",
@@ -10,7 +10,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "openspending/static/vendor"
+    "spendb/static/vendor"
   ],
   "dependencies": {
     "bootstrap": "~3.3.1",
