@@ -1,7 +1,6 @@
-from openspending.lib.paramparser import (ParamParser, AggregateParamParser)
+from openspending.lib.paramparser import ParamParser
 
 from openspending.tests.base import TestCase
-from mock import Mock, patch
 
 
 class TestParamParser(TestCase):
@@ -38,80 +37,3 @@ class TestParamParser(TestCase):
 
         out, err = ParamParser({'order': 'foo:boop'}).parse()
         assert 'Order direction can be "asc" or "desc"' in err[0]
-
-
-class TestAggregateParamParser(TestCase):
-
-    def test_defaults(self):
-        out, err = AggregateParamParser({}).parse()
-        assert out['page'] == 1
-        assert out['pagesize'] == 10000
-        assert err[0] == 'dataset name not provided'
-
-    @patch('openspending.lib.paramparser.Dataset')
-    def test_dataset(self, model_mock):
-        ds = Mock()
-        ds.model = Mock()
-        ds.model.measures = []
-        model_mock.by_name.return_value = ds
-
-        out, err = AggregateParamParser({'dataset': 'foo'}).parse()
-        assert out['dataset'] == ds
-
-    def test_drilldown(self):
-        out, err = AggregateParamParser({'drilldown': 'foo|bar|baz'}).parse()
-        assert out['drilldown'] == ['foo', 'bar', 'baz']
-
-    def test_format(self):
-        out, err = AggregateParamParser({'format': 'json'}).parse()
-        assert out['format'] == 'json'
-
-        out, err = AggregateParamParser({'format': 'csv'}).parse()
-        assert out['format'] == 'csv'
-
-        out, err = AggregateParamParser({'format': 'html'}).parse()
-        assert out['format'] == 'json'
-
-    @patch('openspending.lib.paramparser.Dataset')
-    def test_cut(self, model_mock):
-        ds = Mock()
-        ds.model = Mock()
-        ds.model.measures = []
-        model_mock.by_name.return_value = ds
-
-        out, err = AggregateParamParser(
-            {'dataset': 'foo', 'cut': 'foo:one|bar:two'}).parse()
-        assert out['cut'] == [('foo', 'one'), ('bar', 'two')]
-
-        out, err = AggregateParamParser(
-            {'dataset': 'foo', 'cut': 'foo:one|bar'}).parse()
-        assert 'Wrong format for "cut"' in err[0]
-
-    @patch('openspending.lib.paramparser.Dataset')
-    def test_measure(self, model_mock):
-        ds = Mock()
-        ds.model = Mock()
-        amt = Mock()
-        amt.name = 'amount'
-        bar = Mock()
-        bar.name = 'bar'
-        ds.model.measures = [amt, bar]
-        model_mock.by_name.return_value = ds
-
-        out, err = AggregateParamParser({'dataset': 'foo'}).parse()
-        assert out['measure'] == ['amount']
-
-        out, err = AggregateParamParser(
-            {'dataset': 'foo', 'measure': 'bar'}).parse()
-        assert out['measure'] == ['bar']
-
-        out, err = AggregateParamParser(
-            {'dataset': 'foo', 'measure': 'amount|bar'}).parse()
-        assert 'amount' in out['measure'], \
-            "AggregateParamParser doesn't return amount measure"
-        assert 'bar' in out['measure'], \
-            "AggregateParamParser doesn't return bar measure"
-
-        out, err = AggregateParamParser(
-            {'dataset': 'foo', 'measure': 'baz'}).parse()
-        assert 'no measure with name "baz"' in err[0]

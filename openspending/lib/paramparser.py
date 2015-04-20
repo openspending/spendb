@@ -1,9 +1,6 @@
 from ordereddict import OrderedDict
 import hashlib
 
-from openspending.model.dataset import Dataset
-from openspending.model.dimension import CompoundDimension
-
 from openspending.reference.category import CATEGORIES
 from openspending.reference.country import COUNTRIES
 from openspending.reference.language import LANGUAGES
@@ -178,90 +175,6 @@ class DatasetIndexParamParser(ParamParser):
         return None
 
 
-class AggregateParamParser(ParamParser):
-    defaults = ParamParser.defaults.copy()
-    defaults['dataset'] = None
-    defaults['drilldown'] = None
-    defaults['cut'] = None
-    defaults['order'] = None
-    defaults['inflate'] = None
-    defaults['format'] = 'json'
-    defaults['measure'] = 'amount'
-
-    def parse_dataset(self, dataset_name):
-        if not dataset_name:
-            self._error('dataset name not provided')
-            return
-
-        dataset = Dataset.by_name(dataset_name)
-        if dataset is None:
-            self._error('no dataset with name "%s"' % dataset_name)
-            return
-
-        return dataset
-
-    def parse_drilldown(self, drilldown):
-        if not drilldown:
-            return []
-        return drilldown.split('|')
-
-    def parse_format(self, format):
-        format = format.lower().strip()
-        if not format or format not in ('json', 'csv'):
-            return 'json'
-        return format
-
-    def parse_cut(self, cuts):
-        if not cuts:
-            return []
-
-        result = []
-        for cut in cuts.split('|'):
-            try:
-                dimension, value = cut.split(':')
-            except ValueError:
-                self._error('Wrong format for "cut". It has to be specified '
-                            'with request cut_parameters in the form '
-                            '"cut=dimension:value|dimension:value". '
-                            'We got: "cut=%s"' %
-                            cuts)
-                return
-            else:
-                result.append((dimension, value))
-        return result
-
-    def parse_measure(self, measures):
-        """
-        Parse the measure parameter which can be either a single measure or
-        multiple measures separated by a pipe ('|'). The parser also checks
-        to see if the measure is in fact a measure in the dataset model.
-
-        Returns a list of measures even if it is only a single measure.
-        Returns None if noe dataset or measure is not in the dataset's model
-        (along with an error).
-        """
-
-        # Get the dataset which should already have been parsed
-        if self._output.get('dataset') is None:
-            return
-
-        # Get a list of all measurement names for the given dataset
-        measure_names = [m.name for m in self._output['dataset'].model.measures]
-
-        result = []
-
-        # Split the measures on | and check if it is in dataset if so append
-        # it to our results, if not raise and error and return None
-        for measure in measures.split('|'):
-            if measure not in measure_names:
-                self._error('no measure with name "%s"' % measure)
-                return
-
-            result.append(measure)
-
-        return result
-
-
 class DistinctParamParser(ParamParser):
     defaults = ParamParser.defaults.copy()
     defaults['q'] = ''
@@ -270,31 +183,3 @@ class DistinctParamParser(ParamParser):
 
     def parse_pagesize(self, pagesize):
         return min(100, self._to_int('pagesize', pagesize))
-
-
-class DistinctFieldParamParser(DistinctParamParser):
-    defaults = DistinctParamParser.defaults.copy()
-    defaults['attribute'] = None
-
-    def __init__(self, dimension, params):
-        self.dimension = dimension
-        super(DistinctFieldParamParser, self).__init__(params)
-
-    def parse_attribute(self, attribute):
-        if not isinstance(self.dimension, CompoundDimension):
-            return self.dimension
-        try:
-            return self.dimension[attribute]
-        except KeyError:
-            return self.dimension['label']
-
-
-class LoadingAPIParamParser(ParamParser):
-    defaults = ParamParser.defaults.copy()
-    defaults['budget_data_package'] = None
-    defaults['csv_file'] = None
-    defaults['metadata'] = None
-    defaults['private'] = 'false'
-
-    def parse_private(self, private):
-        return self._to_bool(private)
