@@ -30,4 +30,3 @@ settings.py
 tmp/*
 coverage/*
 .coverage
-fiscalmodel/*
