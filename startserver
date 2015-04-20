@@ -1,5 +1,0 @@
-#!/bin/bash
-cd /vagrant
-# TODO: configuration envvar?
-ostool runserver &
-celery -A openspending.tasks worker -l info &
