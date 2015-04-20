@@ -11,12 +11,10 @@ from openspending.model.dataset import Dataset
 from openspending.model.account import (Account, AccountRegister,
                                         AccountSettings)
 from openspending.lib.paramparser import DistinctParamParser
-from openspending.lib.mailman import subscribe_lists
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.mailer import send_reset_link
 from openspending.lib.helpers import url_for, obj_or_404
-from openspending.lib.helpers import flash_error
-from openspending.lib.helpers import flash_notice, flash_success
+from openspending.lib.helpers import flash_error, flash_success
 from openspending.lib.pagination import Page
 from openspending.views.cache import disable_cache
 
@@ -97,13 +95,6 @@ def register():
 
         # Perform a login for the user
         login_user(account, remember=True)
-
-        # Subscribe the user to the mailing lists
-        errors = subscribe_lists(('community', 'developer'), data)
-        if errors:
-            flash_notice(_("Subscription to the following mailing " +
-                           "lists probably failed: %(errors)s.",
-                           errors=', '.join(errors)))
 
         # Registration successful - Redirect to the front page
         return redirect(url_for('home.index'))

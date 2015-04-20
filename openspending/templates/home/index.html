@@ -157,43 +157,4 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
-      <h3>
-        {% trans %}Join our discussion list!{% endtrans %}
-      </h3>
-      
-      <form action="http://lists.okfn.org/mailman/subscribe/openspending" method="POST"
-        class="form-inline">
-        <input type="text" class="form-control" name="email"
-          placeholder="{% trans %}Email{% endtrans %}" />
-        <button type="submit" class="btn btn-default">
-          {% trans %}Sign up{% endtrans %}
-        </button>
-      </form>
-    </div>
-    <div class="col-md-6">
-      <h3>
-        {% trans %}Join our developer list!{% endtrans %}
-      </h3>
-      <form action="http://lists.okfn.org/mailman/subscribe/openspending-dev" method="POST" class="form-inline">
-        <input type="text" class="form-control" name="email"
-          placeholder="{% trans %}Email{% endtrans %}" />
-        <button type="submit" class="btn btn-default">
-          {% trans %}Sign up{% endtrans %}
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 social-links">  
-      <a href="http://twitter.com/openspending">
-        <img src="//d8r2br52tx8wq.cloudfront.net/branding/images/grey_twitter_icon.png" />
-      </a>
-      <a href="http://feeds.feedburner.com/openspending">
-        <img src="//d8r2br52tx8wq.cloudfront.net/branding/images/grey_feed_icon.png" />
-      </a>
-    </div>
-  </div>
 {% endblock %}

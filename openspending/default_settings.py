@@ -10,9 +10,6 @@ SOLR_URL = 'http://localhost:8983/solr'
 
 BABEL_DEFAULT_LOCALE = 'en'
 
-SUBSCRIBE_COMMUNITY = 'http://lists.okfn.org/mailman/subscribe/openspending'
-SUBSCRIBE_DEVELOPER = 'http://lists.okfn.org/mailman/subscribe/openspending-dev'
-
 MAIL_SERVER = 'localhost'
 # MAIL_PORT = 25
 # MAIL_USE_TLS = False
