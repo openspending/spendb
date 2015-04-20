@@ -13,10 +13,10 @@ from openspending.model import Account, Run
 from openspending.auth import require
 from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.helpers import flash_success
-from openspending.reference.currency import CURRENCIES
-from openspending.reference.country import COUNTRIES
-from openspending.reference.category import CATEGORIES
-from openspending.reference.language import LANGUAGES
+from openspending.reference import CURRENCIES
+from openspending.reference import COUNTRIES
+from openspending.reference import CATEGORIES
+from openspending.reference import LANGUAGES
 from openspending.validation.dataset import dataset_schema
 from openspending.validation.mapping import mapping_schema
 from openspending.validation.views import views_schema

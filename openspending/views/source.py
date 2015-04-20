@@ -1,7 +1,6 @@
 import logging
 
 from flask import Blueprint, render_template, redirect, request
-from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 from werkzeug.exceptions import BadRequest
 from colander import Invalid
