@@ -12,7 +12,6 @@ from openspending.lib.views import request_set_views
 from openspending.lib.paramparser import DistinctFieldParamParser
 from openspending.lib.hypermedia import dimension_apply_links, \
     member_apply_links, entry_apply_links
-from openspending.lib.csvexport import write_csv
 from openspending.lib.jsonexport import jsonify
 from openspending.views.cache import etag_cache_keygen
 
@@ -115,8 +114,6 @@ def member(dataset, dimension, name, format="html"):
 
     if format == 'json':
         return jsonify(member)
-    elif format == 'csv':
-        return write_csv(member)
 
     request_set_views(dataset, member, dimension=dimension.name)
 

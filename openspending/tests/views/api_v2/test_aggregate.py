@@ -42,16 +42,6 @@ class TestSearchApiController(ControllerTestCase):
         assert result['summary']['num_drilldowns'] == 6
         assert result['summary']['amount'] == -371500000.0
 
-    def test_aggregate_drilldown_format_csv(self):
-        response = self.client.get(url_for('api_v2.aggregate',
-                                           dataset='cra',
-                                           drilldown='cofog1|cofog2',
-                                           format='csv'))
-        assert '200' in response.status
-        result = list(DictReader(response.data.split('\n')))
-        assert len(result) == 6
-        assert result[0]['cofog2.name'] == '10.1', result[0]
-
     def test_aggregate_measures(self):
         response = self.client.get(url_for('api_v2.aggregate',
                                            dataset='cra', cut='year:2009',

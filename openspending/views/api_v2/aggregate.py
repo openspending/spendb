@@ -6,7 +6,6 @@ from openspending.core import cache
 from openspending.auth import require
 from openspending.lib.util import cache_hash
 from openspending.lib.jsonexport import jsonify
-from openspending.lib.csvexport import write_csv
 from openspending.lib.paramparser import AggregateParamParser
 from openspending.inflation.aggregation import aggregate as inf_aggregate
 from openspending.lib.hypermedia import drilldowns_apply_links
@@ -59,7 +58,6 @@ def aggregate():
 
     # Get the dataset and the format and remove from the parameters
     dataset = params.pop('dataset')
-    format = params.pop('format')
 
     # User must have the right to read the dataset to perform aggregation
     require.dataset.read(dataset)
@@ -86,8 +84,4 @@ def aggregate():
         log.exception(ve)
         return jsonify({'errors': [unicode(ve)]}, status=400)
 
-    # If the requested format is csv we write the drilldown results into
-    # a csv file and return it, if not we return a jsonp result (default)
-    if format == 'csv':
-        return write_csv(result['drilldown'], filename=dataset.name + '.csv')
     return jsonify(result)

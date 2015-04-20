@@ -6,7 +6,6 @@ from werkzeug.exceptions import BadRequest
 
 from openspending.lib.hypermedia import entry_apply_links
 from openspending.lib.helpers import url_for, get_dataset, flash_notice
-from openspending.lib.csvexport import write_csv
 from openspending.lib.jsonexport import jsonify
 from openspending.inflation import inflate
 from openspending.lib.pagination import Page
@@ -19,13 +18,6 @@ blueprint = Blueprint('entry', __name__)
 @blueprint.route('/<dataset>/entries.<fmt:format>')
 def index(dataset, format='html'):
     dataset = get_dataset(dataset)
-
-    # If the format is either json or csv we direct the user to the search
-    # API instead
-    if format in ['json', 'csv']:
-        return redirect(url_for('api.search', format=format, dataset=dataset,
-                                **dict(request.args.items())))
-
     return render_template('entry/index.html')
 
 
@@ -86,7 +78,7 @@ def view(dataset, id, format='html'):
             # that can go wrong). We just say that we can't adjust for
             # inflation and set the context amount as the original amount
             flash_notice(_('Unable to adjust for inflation'))
-    
+
     # Add the rest of the dimensions relating to this entry into a
     # extras dictionary. We first need to exclude all dimensions that
     # are already shown and then we can loop through the dimensions
@@ -110,8 +102,6 @@ def view(dataset, id, format='html'):
     # Return entry based on
     if format == 'json':
         return jsonify(entry)
-    elif format == 'csv':
-        return write_csv([entry])
     else:
         return render_template('entry/view.html', **tmpl_context)
 

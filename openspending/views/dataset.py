@@ -12,7 +12,6 @@ from flask.ext.babel import gettext as _
 
 from openspending.core import db
 from openspending.model import Dataset, Badge
-from openspending.lib.csvexport import write_csv
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.paramparser import DatasetIndexParamParser
 from openspending import auth
@@ -76,11 +75,6 @@ def index(format='html'):
     language_options = results['languages']
     territory_options = results['territories']
     category_options = results['categories']
-
-    if format == 'csv':
-        # The CSV response only shows datasets, not languages,
-        # territories, etc.
-        return write_csv(results['datasets'])
 
     # Create facet filters (so we can look at a single country,
     # language etc.)

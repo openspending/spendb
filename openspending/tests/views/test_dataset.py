@@ -25,14 +25,6 @@ class TestDatasetController(ControllerTestCase):
         assert 'The database contains the following datasets' in response.data
         assert 'cra' in response.data
 
-    def test_index_csv(self):
-        response = self.client.get(url_for('dataset.index', format='csv'))
-        r = csv.DictReader(StringIO(response.data))
-        obj = [l for l in r]
-        assert len(obj) == 1
-        assert obj[0]['name'] == 'cra'
-        assert obj[0]['label'] == 'Country Regional Analysis v2009'
-
     def test_view(self):
         """
         Test view page for a dataset
