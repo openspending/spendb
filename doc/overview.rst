@@ -1,10 +1,10 @@
 Conceptual Overview
 ===================
 
-OpenSpending is an open data project aimed at tracking public finance all 
+SpenDB is an open data project aimed at tracking public finance all 
 over the world. The software is capable of loading and presenting many 
 different types of data, including budgetary and spending data. In technical
-terms, OpenSpending is an OLAP-inspired multi-tenant datamart that offers 
+terms, SpenDB is an OLAP-inspired multi-tenant datamart that offers 
 web interfaces to generate data models, trigger data imports, run searches, 
 aggregation queries and REST-style requests against individual resources.
 
@@ -12,7 +12,7 @@ aggregation queries and REST-style requests against individual resources.
 Rationale
 '''''''''
 
-The design of OpenSpending is based on the assumption of a three-stage
+The design of SpenDB is based on the assumption of a three-stage
 process that underlies most government finance transparency projects, 
 independently of whether they are managed by transparency NGOs, civic 
 hackers or journalists:
@@ -26,7 +26,7 @@ hackers or journalists:
   and improving the quality of the data, such as its completeness, 
   regularity and expressiveness.
 
-  As these steps are very specific to each dataset, OpenSpending cannot 
+  As these steps are very specific to each dataset, SpenDB cannot 
   provide generic means to address these problems. Therefore, we aim to 
   document common patterns and practices with a specific focus on 
   governemnt finance.
@@ -39,7 +39,7 @@ hackers or journalists:
   OLAP systems used for enterprise business intelligence. Further services, 
   such as full-text search, can be used to augment the platform.
 
-  OpenSpending aims to fully supply the technology needed to perform these
+  SpenDB aims to fully supply the technology needed to perform these
   tasks, both as a shared, web-based platform and as a software system that
   can be deployed as needed.
 
@@ -50,7 +50,7 @@ hackers or journalists:
   dimensions) or they can be generic. 
 
   Generic applications are key to the idea
-  of OpenSpending, as they enable groups working on various datasets to share
+  of SpenDB, as they enable groups working on various datasets to share
   visualizations, browser compontents or other means of analyzing the data.
 
 Using this approach we aim to make tracing the money simpler for those who

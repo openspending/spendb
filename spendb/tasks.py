@@ -1,8 +1,8 @@
 from celery.utils.log import get_task_logger
 
-from openspending.core import create_app, create_celery
-from openspending.model import Dataset
-from openspending.etl import tasks
+from spendb.core import create_app, create_celery
+from spendb.model import Dataset
+from spendb.etl import tasks
 
 
 log = get_task_logger(__name__)

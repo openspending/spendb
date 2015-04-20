@@ -1,11 +1,11 @@
 from sqlalchemy import Integer, Unicode
 from nose.tools import assert_raises
 
-from openspending.tests.helpers import load_fixture
-from openspending.tests.base import DatabaseTestCase
+from spendb.tests.helpers import load_fixture
+from spendb.tests.base import DatabaseTestCase
 
-from openspending.core import db
-from openspending.model.dimension import (AttributeDimension, Measure,
+from spendb.core import db
+from spendb.model.dimension import (AttributeDimension, Measure,
                                           CompoundDimension, DateDimension)
 
 

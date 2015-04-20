@@ -5,10 +5,10 @@ from flask import current_app
 import migrate.versioning.api as migrate_api
 from migrate.exceptions import DatabaseNotControlledError
 
-from openspending.core import db
-from openspending.model import Dataset
-from openspending.command.util import create_submanager
-from openspending.command.util import CommandException
+from spendb.core import db
+from spendb.model import Dataset
+from spendb.command.util import create_submanager
+from spendb.command.util import CommandException
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ def migrate():
 @manager.command
 def modelmigrate():
     """ Run pending data model migrations """
-    from openspending.validation.migration import migrate_model
+    from spendb.validation.migration import migrate_model
     dataset = db.Table('dataset', db.metadata, autoload=True)
     rp = db.engine.execute(dataset.select())
     while True:

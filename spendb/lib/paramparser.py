@@ -1,9 +1,7 @@
 from ordereddict import OrderedDict
 import hashlib
 
-from openspending.reference.category import CATEGORIES
-from openspending.reference.country import COUNTRIES
-from openspending.reference.language import LANGUAGES
+from spendb.reference import CATEGORIES, COUNTRIES, LANGUAGES
 
 
 class ParamParser(object):
@@ -129,7 +127,7 @@ class DatasetIndexParamParser(ParamParser):
         # We force the language codes to lowercase and strip whitespace
         languages = [l.lower().strip()
                      for l in self.request_params.getlist('languages')]
-        # Check if this language is supported by OpenSpending
+        # Check if this language is supported by SpenDB
         # If not we add an error
         for lang in languages:
             if lang.lower().strip() not in LANGUAGES:
@@ -149,7 +147,7 @@ class DatasetIndexParamParser(ParamParser):
         territories = [t.upper().strip()
                        for t in self.request_params.getlist('territories')]
 
-        # Check if this territory is supported by OpenSpending
+        # Check if this territory is supported by SpenDB
         # If not we add an error
         for country in territories:
             if country not in COUNTRIES:

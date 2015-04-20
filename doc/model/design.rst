@@ -1,7 +1,7 @@
 Domain Model Design
 ===================
 
-The following documentations aims to outline the way in which OpenSpending 
+The following documentations aims to outline the way in which SpenDB 
 stores and queries data. Note that this documentation is aimed at developers
 who want to modify core functions of the platform. For anyone who wants to 
 simply load data or use publicly accessible APIs, online help is provided 
@@ -9,10 +9,10 @@ from within the application.
 
 .. _olap-intro:
 
-Offline analytics in OpenSpending
+Offline analytics in SpenDB
 ---------------------------------
 
-OpenSpending provides a multi-tenant OLAP-style data store, a concept sometimes
+SpenDB provides a multi-tenant OLAP-style data store, a concept sometimes
 referred to as a *data mart*. The system aims to allow the addition of further 
 datasets at run-time and via the web, while keeping loaded data immutable. For
 each dataset, a reference is managed within the core data model, and a specific 
@@ -22,19 +22,19 @@ The generated data model usually represents a *star schema* representation of
 some set of financial transactions. In a star schema, each individual *entry* 
 (i.e. each transaction) is stored in a core table, the *fact table*. This fact
 table may have two types of attributes: *measures* and *dimensions*. Measures
-describe the actual values of the entry - in the case of OpenSpending, this is
+describe the actual values of the entry - in the case of SpenDB, this is
 some financial unit. Dimensions serve to augument these facts with explanatory
 information, e.g. the time of the transaction, the spender, recipient, IDs, 
 descriptions and classifications that can be applied to the data.
 
-Unlike most OLAP systems, OpenSpending knows two different types of dimensions:
+Unlike most OLAP systems, SpenDB knows two different types of dimensions:
 attribute dimensions and compound dimensions. While attribute dimensions only
 keep a single value, compound dimensions store multiple attributes (e.g. the 
 name, address and vat ID of a supplier who recieves funds).
 
 When querying the data, one can either access indiviudal entries or run 
 *aggregations* which sum up the measures based on some criterion. Two types of
-criteria supported in OpenSpending are *cuts* and *drilldowns*. Cuts reduce 
+criteria supported in SpenDB are *cuts* and *drilldowns*. Cuts reduce 
 the set of aggregated entries by applying some filter criterion to a set of 
 dimensions of each entry (e.g. one can only include the spending in a single
 year). Drilldowns, instead of generating a single sum, calculate the sum for 
@@ -45,7 +45,7 @@ seperately).
 Modeling/mapping schema
 -----------------------
 
-OpenSpending keeps an extensive set of metadata for each :py:class:`~.Dataset`. 
+SpenDB keeps an extensive set of metadata for each :py:class:`~.Dataset`. 
 The metadata is used to create the physical model, query the generated data 
 structures, pre-define reports (views) to run off the data and provide general 
 information about the dataset.
@@ -90,9 +90,9 @@ Dimension and mapping definitions
 '''''''''''''''''''''''''''''''''
 
 The second section of the model, ``mapping``, serves a duplicate function: it 
-is both used to define how the data should be modelled in OpenSpending and how
+is both used to define how the data should be modelled in SpenDB and how
 values for each attribute can be located within a source CSV file. Future 
-versions of OpenSpending may break this up, defining both a ``model`` and 
+versions of SpenDB may break this up, defining both a ``model`` and 
 ``mapping``. 
 
 The ``mapping`` section defines a set of fields to define the dataset model, each 
@@ -226,7 +226,7 @@ commonly used and expected attribute names).
 Views and pre-defined visualizations
 ''''''''''''''''''''''''''''''''''''
 
-A frontend feature of OpenSpending is the option to display pre-defined 
+A frontend feature of SpenDB is the option to display pre-defined 
 visualizations on the resource pages for datasets and dimensions. These 
 views show the (total) amount of all entries matching the individual 
 dataset or dimension member (e.g. ``/cra/cofog1/3`` - all UK healthcare
@@ -291,7 +291,7 @@ to be ambiguous: the user must ensure that the value tuples of
 Physical model
 --------------
 
-When loading a :py:class:`~.Dataset`, OpenSpending will generate a set of 
+When loading a :py:class:`~.Dataset`, SpenDB will generate a set of 
 tables (and columns) to represent the data. A table called 
 ``<dataset_name>__entry`` will be generated for each dataset with an ``id`` 
 column. The ``id`` is generated from a defined set of attributes 
@@ -325,7 +325,7 @@ fail and require you to add a ``name`` attribute.
 Attribute name conventions
 ''''''''''''''''''''''''''
 
-OpenSpending also gives special importance to a set of other attributes of
+SpenDB also gives special importance to a set of other attributes of
 compound dimensions so that it makes sense to define as many of them as 
 possible:
 
@@ -363,7 +363,7 @@ joined to the facts table, e.g.::
 Alternatively, multiple entries can be aggregated using SQL's GROUP BY, SUM
 and COUNT function. This is an :py:meth:`~.Dataset.aggregate` query that 
 generates output to satify the simple cubes API used by most of visualizations 
-running on OpenSpending::
+running on SpenDB::
 
   SELECT sum(entry.amount) AS amount, count(entry.id) AS entries,
          function.id AS function_id, function.name AS function_name,

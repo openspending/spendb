@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% from "_util.html" import google_analytics with context %}
-<html lang="{{ current_language }}" ng-app="openspending">
+<html lang="{{ current_language }}" ng-app="spendb">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="{{ static_path('img/favicon.ico') }}"
       type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml"
-      title="{% trans %}Latest Datasets on OpenSpending{% endtrans %}"
+      title="{% trans %}Latest Datasets on SpenDB{% endtrans %}"
       href="{{ url_for('dataset.feed_rss') }}" />
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600'
@@ -79,9 +79,9 @@
 
     <!-- script boot section -->
     <script defer="defer">
-      var OpenSpending = OpenSpending || {};
-	    OpenSpending.localeGroupSeparator = "{{ number_symbols_group }}";
-	    OpenSpending.localeDecimalSeparator = "{{ number_symbols_decimal }}";
+      var SpenDB = SpenDB || {};
+	    SpenDB.localeGroupSeparator = "{{ number_symbols_group }}";
+	    SpenDB.localeDecimalSeparator = "{{ number_symbols_decimal }}";
     </script>
     <!-- end script boot section -->
 

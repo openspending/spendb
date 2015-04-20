@@ -1,4 +1,4 @@
-from openspending.reference.util import get_csv, get_json
+from spendb.reference.util import get_csv, get_json
 
 CATEGORIES = {
     "budget": "Budget",

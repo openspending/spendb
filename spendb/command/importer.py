@@ -7,10 +7,10 @@ import json
 
 from colander import Invalid
 
-from openspending.model import Dataset, Account
-from openspending.core import db
-from openspending.tasks import load_from_url
-from openspending.validation.model import validate_model
+from spendb.model import Dataset, Account
+from spendb.core import db
+from spendb.tasks import load_from_url
+from spendb.validation.model import validate_model
 
 log = logging.getLogger(__name__)
 

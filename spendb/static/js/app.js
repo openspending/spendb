@@ -1,8 +1,8 @@
 
-var openspending = angular.module('openspending', ['ngCookies', 'ngRoute', 'ui.bootstrap', 'localytics.directives']);
+var spendb = angular.module('spendb', ['ngCookies', 'ngRoute', 'ui.bootstrap', 'localytics.directives']);
 
 
-openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash',
+spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash',
   function($scope, $location, $http, $cookies, $window, $sce, flash) {
   
   $scope.flash = flash;
@@ -31,7 +31,7 @@ openspending.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', 
 }]);
 
 
-openspending.factory('flash', ['$rootScope', function($rootScope) {
+spendb.factory('flash', ['$rootScope', function($rootScope) {
   // Message flashing.
   var currentMessage = null;
 
@@ -50,7 +50,7 @@ openspending.factory('flash', ['$rootScope', function($rootScope) {
 }]);
 
 
-openspending.factory('validation', ['flash', function(flash) {
+spendb.factory('validation', ['flash', function(flash) {
   // handle server-side form validation errors.
   return {
     handle: handle = function(form) {
@@ -81,7 +81,7 @@ openspending.factory('validation', ['flash', function(flash) {
 }]);
 
 
-openspending.factory('referenceData', ['$http', function($http) {
+spendb.factory('referenceData', ['$http', function($http) {
   /* This is used to cache reference data once it has been retrieved from the 
   server. Reference data includes the canonical lists of country names,
   currencies, etc. */
@@ -97,7 +97,7 @@ openspending.factory('referenceData', ['$http', function($http) {
 }]);
 
 
-openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData', 'validation',
+spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData', 'validation',
   function($scope, $http, $window, referenceData, validation) {
   /* This controller is not activated via routing, but explicitly through the 
   dataset.new flask route. */
@@ -124,7 +124,7 @@ openspending.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'refere
 }]);
 
 
-openspending.config(['$routeProvider', '$locationProvider',
+spendb.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
   $routeProvider.when('/:name/manage', {

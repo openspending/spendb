@@ -5,11 +5,11 @@ from flask import Blueprint, render_template
 # from werkzeug.exceptions import BadRequest
 from apikit import obj_or_404
 
-from openspending.model.run import Run
-from openspending.auth import require
-from openspending.lib.helpers import get_dataset, get_page
-# from openspending.lib.pagination import Page
-from openspending.views.cache import disable_cache
+from spendb.model.run import Run
+from spendb.auth import require
+from spendb.lib.helpers import get_dataset, get_page
+# from spendb.lib.pagination import Page
+from spendb.views.cache import disable_cache
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('run', __name__)

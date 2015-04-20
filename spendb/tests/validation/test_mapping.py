@@ -1,11 +1,11 @@
 from colander import Invalid
 from nose.tools import raises
 
-from openspending.validation.mapping import mapping_schema
-from openspending.validation.common import ValidationState
+from spendb.validation.mapping import mapping_schema
+from spendb.validation.common import ValidationState
 
-from openspending.tests.base import TestCase
-from openspending.tests.helpers import validation_fixture
+from spendb.tests.base import TestCase
+from spendb.tests.helpers import validation_fixture
 
 
 class TestMapping(TestCase):

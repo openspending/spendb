@@ -1,7 +1,7 @@
-from openspending.validation.common import mapping as mapping_node, \
+from spendb.validation.common import mapping as mapping_node, \
     ValidationState
-from openspending.validation.dataset import dataset_schema
-from openspending.validation.mapping import mapping_schema
+from spendb.validation.dataset import dataset_schema
+from spendb.validation.mapping import mapping_schema
 
 
 def model_schema(state):

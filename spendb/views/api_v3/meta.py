@@ -3,9 +3,9 @@ import logging
 from flask import Blueprint
 from apikit import jsonify
 
-from openspending.reference import CURRENCIES, COUNTRIES
-from openspending.reference import CATEGORIES, LANGUAGES
-from openspending.views.cache import etag_cache_keygen
+from spendb.reference import CURRENCIES, COUNTRIES
+from spendb.reference import CATEGORIES, LANGUAGES
+from spendb.views.cache import etag_cache_keygen
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('meta_api3', __name__)

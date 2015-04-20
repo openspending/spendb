@@ -5,14 +5,14 @@ from datetime import datetime
 from archivekit import Source
 from loadkit.logger import capture
 
-from openspending.core import data_manager, db
-from openspending.model.run import Run
+from spendb.core import data_manager, db
+from spendb.model.run import Run
 
 
 class Job(object):
 
     def __init__(self, dataset, operation):
-        self.log = logging.getLogger('openspending.etl')
+        self.log = logging.getLogger('spendb.etl')
         self.dataset = dataset
         self.operation = operation
         self.run = None

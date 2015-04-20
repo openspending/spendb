@@ -1,12 +1,12 @@
 from flask import url_for
 from mock import patch
 
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import make_account, load_fixture
-from openspending.tests.etl.test_import_fixtures import import_fixture
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.helpers import make_account, load_fixture
+from spendb.tests.etl.test_import_fixtures import import_fixture
 
-from openspending.core import db
-from openspending.model.account import Account
+from spendb.core import db
+from spendb.model.account import Account
 
 from unittest import skip
 
@@ -17,7 +17,7 @@ class TestSourceController(ControllerTestCase):
         super(TestSourceController, self).setUp()
         self.user = make_account('test')
         self.dataset = load_fixture('cra', self.user)
-        self.patcher = patch('openspending.tasks.load_from_url.apply_async')
+        self.patcher = patch('spendb.tasks.load_from_url.apply_async')
         self.patcher.start()
         
     def tearDown(self):

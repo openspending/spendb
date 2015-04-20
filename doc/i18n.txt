@@ -2,7 +2,7 @@ Translation workflow:
 
 Update .pot file from source:
 
-$ pybabel extract -F babel.cfg -k lazy_gettext -o openspending/translations/messages.pot openspending
+$ pybabel extract -F babel.cfg -k lazy_gettext -o spendb/translations/messages.pot spendb
 
 Examine the .pot (or at least its diff) for bogus messages, and fix up any
 errors in the source. Pay particular attention to templates.
@@ -11,7 +11,7 @@ Commit the updated .pot
 
 Update .po files from .pot:
 
-$ pybabel update -i messages.pot -d openspending/translations
+$ pybabel update -i messages.pot -d spendb/translations
 
 Ship .po files off for translation
 

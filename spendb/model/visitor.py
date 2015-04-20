@@ -1,5 +1,5 @@
-from openspending.model.dimension import CompoundDimension, AttributeDimension
-from openspending.model.dimension import DateDimension
+from spendb.model.dimension import CompoundDimension, AttributeDimension
+from spendb.model.dimension import DateDimension
 
 
 class ModelVisitor(object):

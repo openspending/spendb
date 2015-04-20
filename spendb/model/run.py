@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, DateTime
 
-from openspending.core import db
-from openspending.model.dataset import Dataset
+from spendb.core import db
+from spendb.model.dataset import Dataset
 
 
 class Run(db.Model):

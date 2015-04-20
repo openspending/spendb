@@ -1,11 +1,11 @@
-''' Interface to common administrative tasks for OpenSpending. '''
+''' Interface to common administrative tasks for SpenDB. '''
 import logging
 from flask.ext.script import Manager
 from flask.ext.assets import ManageAssets
 
-from openspending.core import create_web_app
-from openspending.assets import assets
-from openspending.command import user, db, importer
+from spendb.core import create_web_app
+from spendb.assets import assets
+from spendb.command import user, db, importer
 
 log = logging.getLogger(__name__.split('.')[0])
 

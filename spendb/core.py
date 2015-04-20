@@ -12,10 +12,10 @@ from celery import Celery
 from cubes import Workspace
 from cubes.extensions import extensions
 
-from openspending import default_settings
-from openspending.lib.routing import NamespaceRouteRule
-from openspending.lib.routing import FormatConverter, NoDotConverter
-from openspending.etl.manager import DataManager
+from spendb import default_settings
+from spendb.lib.routing import NamespaceRouteRule
+from spendb.lib.routing import FormatConverter, NoDotConverter
+from spendb.etl.manager import DataManager
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -40,7 +40,7 @@ def create_app(**config):
     app.url_map.converters['nodot'] = NoDotConverter
 
     app.config.from_object(default_settings)
-    app.config.from_envvar('OPENSPENDING_SETTINGS', silent=True)
+    app.config.from_envvar('SPENDB_SETTINGS', silent=True)
     app.config.update(config)
 
     app.jinja_options['extensions'].extend([
@@ -56,10 +56,10 @@ def create_app(**config):
     login_manager.init_app(app)
     data_manager.init_app(app)
 
-    from openspending.model.provider import OpenSpendingStore
-    extensions.store.extensions['openspending'] = OpenSpendingStore
+    from spendb.model.provider import SpenDBStore
+    extensions.store.extensions['spendb'] = SpenDBStore
     app.cubes_workspace = Workspace()
-    app.cubes_workspace.register_default_store('openspending')
+    app.cubes_workspace.register_default_store('spendb')
 
     return app
 
@@ -67,7 +67,7 @@ def create_app(**config):
 def create_web_app(**config):
     app = create_app(**config)
 
-    from openspending.views import register_views
+    from spendb.views import register_views
     register_views(app, babel)
 
     Gravatar(app, size=200, rating='g',

@@ -1,11 +1,9 @@
-from openspending.validation.common import mapping
-from openspending.validation.common import key, sequence, boolean
-from openspending.validation.predicates import chained, \
-        reserved_name, database_name, nonempty_string
-from openspending.reference.currency import CURRENCIES
-from openspending.reference.language import LANGUAGES
-from openspending.reference.country import COUNTRIES
-from openspending.reference.category import CATEGORIES
+from spendb.validation.common import mapping
+from spendb.validation.common import key, sequence, boolean
+from spendb.validation.predicates import chained, \
+    reserved_name, database_name, nonempty_string
+from spendb.reference import CURRENCIES, LANGUAGES
+from spendb.reference import COUNTRIES, CATEGORIES
 
 
 def no_double_underscore(name):

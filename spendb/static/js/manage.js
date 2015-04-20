@@ -1,5 +1,5 @@
 
-openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams',
+spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams',
   function($scope, $http, $window, $routeParams) {
   var datasetApi = '/api/3/datasets/' + $routeParams.name;
   
@@ -12,7 +12,7 @@ openspending.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$ro
 }]);
 
 
-openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'referenceData', 'flash', 'validation',
+spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'referenceData', 'flash', 'validation',
   function($scope, $http, $location, $routeParams, referenceData, flash, validation) {
   var datasetApi = '/api/3/datasets/' + $routeParams.name;
 
@@ -39,7 +39,7 @@ openspending.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$ro
 }]);
 
 
-openspending.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routeParams',
+spendb.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routeParams',
   function($scope, $http, $window, $routeParams) {
   var datasetApi = '/api/3/datasets/' + $routeParams.name,
       fieldsApi = '/api/3/datasets/' + $routeParams.name + '/fields',

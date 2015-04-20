@@ -4,11 +4,11 @@ set -eu
 
 LOCALES=(de ar is_IS)
 
-#pybabel init -i messages.pot -d openspending/translations -l de 
+#pybabel init -i messages.pot -d spendb/translations -l de 
 
-pybabel extract -F babel.cfg -k lazy_gettext -o openspending/translations/messages.pot openspending
-pybabel update -i messages.pot -d openspending/translations
+pybabel extract -F babel.cfg -k lazy_gettext -o spendb/translations/messages.pot spendb
+pybabel update -i spendb/translations/messages.pot -d spendb/translations
 
 for LOCALE in ${LOCALES[*]}; do
-    pybabel compile -f -i messages.pot -D messages -l $LOCALE -d openspending/translations;
+    pybabel compile -f -i spendb/translations/messages.pot -D messages -l $LOCALE -d spendb/translations;
 done;

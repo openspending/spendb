@@ -8,9 +8,9 @@ from sqlalchemy.schema import Table, Column
 from sqlalchemy.types import Unicode, Integer, Date, Float
 from sqlalchemy.sql.expression import select, func, extract
 
-from openspending.core import db
-from openspending.model.visitor import ModelVisitor
-from openspending.model.common import json_default
+from spendb.core import db
+from spendb.model.visitor import ModelVisitor
+from spendb.model.common import json_default
 
 
 TYPES = {

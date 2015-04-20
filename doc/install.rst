@@ -1,50 +1,6 @@
 Installation and Setup
 ======================
 
-
-Simple install
-''''''''''''''
-
-Requirements
-------------
-
-* Vagrant_ >= 1.4
-
-Installation
-------------
-
-You can avoid installing OpenSpending on your development machine by using Vagrant_ to execute the application and all of its dependencies in a virtual machine. To make use of this option, make sure to install Vagrant and the included VirtualBox provider. 
-
-If you haven't already, you'll need to install Vagrant's `cachier` plugin::
-
-    $ vagrant plugin install vagrant-cachier
-
-Then, from the source repository, you can set up a VM with::
-
-    $ vagrant up
-
-This will run for a while (fetch a coffee), until a working VM with Ubuntu 14.04 and OpenSpending has been deployed and Solr has started running.
-
-Once the application has run, you can start OpenSpending within the VM with::
-
-    $ vagrant ssh
-    vagrant@openspending$ cd /vagrant
-    vagrant@openspending$ ./startserver
-
-You will also need to start the backend workers which take care of the analysis and loading of datasets into your instance. You do this by opening another terminal and running within the VM::
-
-    $ vagrant ssh
-    vagrant@openspending$ cd /vagrant
-    vagrant@openspending$ celery -A openspending.tasks worker -l info
-
-The virtual machine includes OpenSpending, Postgres, RabbitMQ and Solr.
-
-.. _Vagrant: http://vagrantup.com/
-
-
-Manual install
-''''''''''''''
-
 Requirements
 ------------
 
@@ -64,8 +20,8 @@ Installation
 First, check out the source code from the repository, e.g. via git on 
 the command line::
 
-    $ git clone http://github.com/openspending/openspending.git
-    $ cd openspending
+    $ git clone http://github.com/mapthemoney/spendb.git
+    $ cd spendb
 
 We also highly recommend you use a virtualenv_ to isolate the installed 
 dependencies from the rest of your system.::
@@ -80,7 +36,7 @@ the environment.::
 Ensure that any in shell you use to complete the installation you have run the 
 preceding command.
 
-Having the virtualenv set up, you can install OpenSpending and its dependencies.
+Having the virtualenv set up, you can install SpenDB and its dependencies.
 This should be pretty painless. Just run::
 
     $ pip install -r requirements.txt -e .
@@ -90,14 +46,6 @@ This should be pretty painless. Just run::
     $pip install -r windows_reqs.txt
 ```
 
-Additionally to the core repository, you will need to check out two auxilliary
-repositories and symlink them into OpenSpending. The repos contain the 
-JavaScript components and the help system content for the site. The following 
-instructions will download and link in the JS files::
-
-    $ git clone http://github.com/openspending/openspendingjs.git
-    $ ln -s <full path to openspendingjs> openspending/static/openspendingjs
-
 You will also need to install python bindings for your database. For example,
 for Postgresql you will want to install the psycopg2 library::
 
@@ -106,26 +54,26 @@ for Postgresql you will want to install the psycopg2 library::
 Create a database if you do not have one already. We recommend using Postgres
 but you can use anything compatible with SQLAlchemy. For postgres you would do::
 
-    $ createdb -E utf-8 --owner {your-database-user} openspending
+    $ createdb -E utf-8 --owner {your-database-user} spendb
 
 Having done that, you can copy configuration templates::
 
     $ cp settings.py_tmpl settings.py
     $ export OPENSPENDING_SETTINGS=`pwd`/settings.py
 
-Ensure that the ``OPENSPENDING_SETTINGS`` environment variable is set whenever
+Ensure that the ``SPENDB_SETTINGS`` environment variable is set whenever
 you work with the application.
 
 Edit the configuration files to make sure you're pointing to a valid database 
 URL is set::
 
     # TCP
-    SQLALCHEMY_DATABASE_URI = 'postgresql://{user}:{pass}@localhost/openspending'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{user}:{pass}@localhost/spendb'
 
     or
 
     # Local socket
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///openspending'
+    SQLALCHEMY_DATABASE_URI = 'postgresql:///spendb'
 
 Initialize the database::
 
@@ -150,7 +98,7 @@ In order to use web-based importing and loading, you will also need to set up
 the celery-based background daemon. When running this, make sure to have an
 instance of RabbitMQ installed and running and then execute::
 
-    $ celery -A openspending.tasks worker -l info
+    $ celery -A spendb.tasks worker -l info
 
 You can validate the functioning of the communication between the backend and
 frontend components using the ping action::
@@ -165,7 +113,7 @@ Test the install
 Create test configuration (which inherits, by default, from `development.ini`): ::
 
     $ cp settings.py_tmpl test.py
-    $ export OPENSPENDING_SETTINGS=`pwd`/test.py
+    $ export SPENDB_SETTINGS=`pwd`/test.py
 
 You will need to either set up a second instance of solr, or comment
 out the solr url in settings file so that the tests use the same instance
@@ -179,10 +127,10 @@ Run the tests.::
 
 Import a sample dataset: ::
 
-    $ ostool csvimport --model https://dl.dropbox.com/u/3250791/sample-openspending-model.json http://mk.ucant.org/info/data/sample-openspending-dataset.csv
-    $ ostool solr load openspending-example
+    $ ostool csvimport --model https://dl.dropbox.com/u/3250791/sample-spendb-model.json http://mk.ucant.org/info/data/sample-spendb-dataset.csv
+    $ ostool solr load spendb-example
 
-Verify that the data is visible at http://127.0.0.1:5000/openspending-example/entries
+Verify that the data is visible at http://127.0.0.1:5000/spendb-example/entries
 
 Create an Admin User
 --------------------

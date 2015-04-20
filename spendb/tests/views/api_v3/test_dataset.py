@@ -1,10 +1,10 @@
 import json
 from flask import url_for
 
-from openspending.core import db
-from openspending.model import Dataset
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import load_fixture, make_account
+from spendb.core import db
+from spendb.model import Dataset
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.helpers import load_fixture, make_account
 
 
 class TestDatasetApiController(ControllerTestCase):

@@ -4,8 +4,8 @@ from flask import url_for as flask_url_for
 from flask import flash, request
 from apikit import obj_or_404
 
-from openspending.auth import require
-from openspending.model import Dataset
+from spendb.auth import require
+from spendb.model import Dataset
 
 
 def url_for(endpoint, **kwargs):

@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 from urlparse import urljoin
 
-INSTANCE = 'https://openspending.org'
+INSTANCE = 'https://spendb.mapthemoney.org'
 
 
 def user_get(url, params={}):

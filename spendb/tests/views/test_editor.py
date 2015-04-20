@@ -2,9 +2,9 @@ import json
 
 from flask import url_for
 
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import make_account, load_fixture
-from openspending.model.dataset import Dataset
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.helpers import make_account, load_fixture
+from spendb.model.dataset import Dataset
 
 from unittest import skip
 

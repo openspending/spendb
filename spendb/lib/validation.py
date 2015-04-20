@@ -1,8 +1,8 @@
 from urlparse import urlparse
 
-from openspending.validation.common import mapping
-from openspending.validation.common import key
-from openspending.validation.predicates import chained, \
+from spendb.validation.common import mapping
+from spendb.validation.common import key
+from spendb.validation.predicates import chained, \
     nonempty_string
 
 

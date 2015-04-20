@@ -8,20 +8,19 @@ from flask.ext.babel import gettext as _
 from werkzeug.exceptions import BadRequest
 from colander import Invalid
 
-from openspending.core import db, data_manager
-from openspending.model import Account, Run
-from openspending.auth import require
-from openspending.lib.helpers import url_for, get_dataset
-from openspending.lib.helpers import flash_success
-from openspending.reference import CURRENCIES
-from openspending.reference import COUNTRIES
-from openspending.reference import CATEGORIES
-from openspending.reference import LANGUAGES
-from openspending.validation.dataset import dataset_schema
-from openspending.validation.mapping import mapping_schema
-from openspending.validation.views import views_schema
-from openspending.validation.common import ValidationState
-from openspending.views.cache import disable_cache
+from spendb.core import db, data_manager
+from spendb.model import Account, Run
+from spendb.auth import require
+from spendb.lib.helpers import url_for, get_dataset
+from spendb.lib.helpers import flash_success
+from spendb.reference import CURRENCIES
+from spendb.reference import COUNTRIES
+from spendb.reference import CATEGORIES
+from spendb.reference import LANGUAGES
+from spendb.validation.dataset import dataset_schema
+from spendb.validation.mapping import mapping_schema
+from spendb.validation.common import ValidationState
+from spendb.views.cache import disable_cache
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('editor', __name__)

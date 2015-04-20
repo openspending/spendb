@@ -3,7 +3,7 @@ import json
 import dataset
 from datetime import datetime
 
-DB_URI = 'postgresql://localhost/openspending'
+DB_URI = 'postgresql://localhost/spendb'
 
 engine = dataset.connect(DB_URI)
 
@@ -28,7 +28,7 @@ def get_queries():
         ds_name = ds['name']
         table_pattern = ds_name + '__'
         entry_table = '"' + table_pattern + 'entry"'
-        fields = [(entry_table + '.id', '_openspending_id')]
+        fields = [(entry_table + '.id', '_spendb_id')]
         joins = []
         for dim, desc in map.items():
             if desc.get('type') == 'compound':

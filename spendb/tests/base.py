@@ -5,8 +5,8 @@ from mock import patch
 from archivekit import open_collection
 from flask.ext.testing import TestCase as FlaskTestCase
 
-from openspending.core import create_web_app, data_manager
-from openspending.tests.helpers import clean_db, init_db, CPI
+from spendb.core import create_web_app, data_manager
+from spendb.tests.helpers import clean_db, init_db, CPI
 
 
 class TestCase(FlaskTestCase):

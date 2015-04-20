@@ -5,11 +5,11 @@ from sqlalchemy.types import Integer, Unicode, Boolean, DateTime
 from sqlalchemy.sql.expression import false, or_
 from sqlalchemy.ext.associationproxy import association_proxy
 
-from openspending.core import db
+from spendb.core import db
 
-from openspending.model.model import Model
-from openspending.model.fact_table import FactTable
-from openspending.model.common import (MutableDict, JSONType,
+from spendb.model.model import Model
+from spendb.model.fact_table import FactTable
+from spendb.model.common import (MutableDict, JSONType,
                                        DatasetFacetMixin)
 
 
@@ -112,7 +112,7 @@ class Dataset(db.Model):
     @classmethod
     def all_by_account(cls, account, order=True):
         """ Query available datasets based on dataset visibility. """
-        from openspending.model.account import Account
+        from spendb.model.account import Account
         criteria = [cls.private == false()]
         if isinstance(account, Account) and account.is_authenticated():
             criteria += ["1=1" if account.admin else "1=2",

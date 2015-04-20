@@ -5,7 +5,7 @@ from sqlalchemy.types import Text, TypeDecorator
 from sqlalchemy.sql.expression import select, func
 from sqlalchemy.ext.mutable import Mutable
 
-from openspending.core import db
+from spendb.core import db
 
 
 def json_default(obj):

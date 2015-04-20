@@ -1,13 +1,12 @@
 Welcome!
 ========
 
-This is the documentation for the OpenSpending platform used to power
-OpenSpending.org.
+This is the documentation for the SpenDB platform used to power MapTheMoney.org.
 
-The OpenSpending platform is open-source software for exploring and
-understanding financial information and especially public finances. It
-supports storing, analysing, searching, presenting and analysing financial
-information in a variety of ways.
+The SpenDB platform is open-source software for exploring and understanding
+financial information and especially public finances. It supports storing,
+analysing, searching, presenting and analysing financial information in a variety
+of ways.
 
 Contents:
 

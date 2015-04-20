@@ -1,8 +1,8 @@
-from openspending.core import db
-from openspending.model.account import Account
-from openspending.command.importer import shell_account
+from spendb.core import db
+from spendb.model.account import Account
+from spendb.command.importer import shell_account
 
-from openspending.tests.base import TestCase
+from spendb.tests.base import TestCase
 from mock import patch
 
 

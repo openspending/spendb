@@ -1,5 +1,5 @@
 ================
-OpenSpending API
+SpenDB API
 ================
 
 Conventions
@@ -8,7 +8,7 @@ Conventions
 Authentication
 --------------
 
-Some actions in OpenSpending require authentication, particularly those that write to the system or aim to access protected data (e.g. pre-publication datasets). For this purpose, each user is provided an API key. The key is displayed in the *settings* (go to the dashboard and click on *Change* next to the Information header). You can use it to perform authentication by adding the following into the HTTP headers (change <your-api-key> to the API key you find in your settings)::
+Some actions in SpenDB require authentication, particularly those that write to the system or aim to access protected data (e.g. pre-publication datasets). For this purpose, each user is provided an API key. The key is displayed in the *settings* (go to the dashboard and click on *Change* next to the Information header). You can use it to perform authentication by adding the following into the HTTP headers (change <your-api-key> to the API key you find in your settings)::
 
     Authorization: ApiKey <your-api-key>
 
@@ -20,7 +20,7 @@ add a ``?callback=foo`` parameter to any query to wrap the output in a
 function call. This is used to include JSON data in other sites that do not
 support CORS::
 
-    $ curl http://openspending.org/cra.json?callback=foo
+    $ curl http://spendb.mapthemoney.org/cra.json?callback=foo
 
     foo({
         "description": "Data published by HM Treasury.", 
@@ -37,7 +37,7 @@ tag::
         alert(data.label); 
       }
     </script>
-    <script src="http://openspending.org/cra.json?callback=foo"></script>
+    <script src="http://spendb.mapthemoney.org/cra.json?callback=foo"></script>
 
 Aggregate API
 =============
@@ -49,7 +49,7 @@ applying filters and grouping criteria.
 This API is heavily based on OLAP concepts, and the documentation assumes 
 you know `how we store data`_.
 
-.. _how we store data: http://community.openspending.org/help/guide/en/
+.. _how we store data: http://community.spendb.mapthemoney.org/help/guide/en/
 
 
 Basic call and parameters
@@ -162,19 +162,19 @@ UK budget, and the original `Where Does My Money Go?`_ page was based on this da
 .. _Where Does My Money Go?: http://wheredoesmymoneygo.org
 
 The first call we'll make will aggregate the complete dataset 
-and give us a total sum (result: http://openspending.org/api/2/aggregate?dataset=ukgov-finances-cra)::
+and give us a total sum (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra
 
 This is not very useful, however, as it includes UK spending 
 over several years. So let's refine our query to include only
-2010 figures (result: http://openspending.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010)::
+2010 figures (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010
 
 Much better! Now we may want to know how these funds are distributed
 geographically, so let's drill down by the [NUTS](http://epp.eurostat.ec.europa.eu/portal/page/portal/nuts_nomenclature/introduction)
-names of each region of the UK (result: http://openspending.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=region)::
+names of each region of the UK (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=region)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=region
 
@@ -190,7 +190,7 @@ three dimensions: cofog1, cofog2 and cofog3.
 
 In order to generate a Bubble Tree
 diagram, we want to break down the full CRA dataset by each of these 
-dimensions (result: http://openspending.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=cofog1|cofog2|cofog3)::
+dimensions (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=cofog1|cofog2|cofog3)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=cofog1|cofog2|cofog3
 
@@ -203,7 +203,7 @@ data to generate views such as visualizations, maps or pivot tables.
 REST Resources
 ==============
 
-OpenSpending pages generally support multiple representations, at least 
+SpenDB pages generally support multiple representations, at least 
 a user-facing HTML version and a JSON object that represents the contained
 data. For various technical and non-technical reasons, most of the data is 
 read-only.
@@ -220,7 +220,7 @@ recognized:
   ``.csv``. CSV is only supported where listings can be exported with some
   application-level meaning.
 
-The key resources in OpenSpending are datasets, entries, dimensions, and 
+The key resources in SpenDB are datasets, entries, dimensions, and 
 dimension members. Each of these has a listing and an entity view that can
 be accessed.
 
@@ -301,7 +301,7 @@ Supported formats are HTML and JSON.
     [
       {
         "name": "from", 
-        "html_url": "http://openspending.org/ukgov-finances-cra/from", 
+        "html_url": "http://spendb.mapthemoney.org/ukgov-finances-cra/from", 
         "label": "Paid from", 
         "key": "from", 
         "attributes": {
@@ -347,7 +347,7 @@ including type, label, description and attribute definitions.
 
     {
       "name": "from", 
-      "html_url": "http://openspending.org/ukgov-finances-cra/from", 
+      "html_url": "http://spendb.mapthemoney.org/ukgov-finances-cra/from", 
       "label": "Paid from", 
       "key": "from", 
       "attributes": {
@@ -424,7 +424,7 @@ A CSV representation is available but will only have one row.
 Full-text Search API
 ====================
 
-OpenSpending supports full-text search as a research tool for 
+SpenDB supports full-text search as a research tool for 
 everyone who wants to investigate the spending information kept
 in our database.
 
@@ -502,7 +502,7 @@ with a list of ``errors`` describing the fault.
 Solr query syntax
 -----------------
 
-OpenSpending uses Apache Solr for full-text indexing. Some search
+SpenDB uses Apache Solr for full-text indexing. Some search
 parameters are passed directly to Solr::
 
     GET /api/2/search?q=money%20measure:[min%20TO%20max]&fq=dimension:value
@@ -524,15 +524,15 @@ and tobacco duty, and fuel duty).
 The Personal Tax API has been replaced by a separate project, taxman, and is
 removed in version 0.17. For more information, see `taxman`_.
 
-.. _taxman: https://github.com/openspending/taxman
+.. _taxman: https://github.com/spendb/taxman
  
 
 Permissions API
 ===============
 
-OpenSpending allows users to check for their permissions on a given dataset via an API call. The response will provide the authenticated user's permission on as true or false values for *CRUD* (create, read, update, and delete). This API call mainly exists to allow software that uses the API (e.g. the loading API) to save bandwidth with big dataset updates.
+SpenDB allows users to check for their permissions on a given dataset via an API call. The response will provide the authenticated user's permission on as true or false values for *CRUD* (create, read, update, and delete). This API call mainly exists to allow software that uses the API (e.g. the loading API) to save bandwidth with big dataset updates.
 
-For example if you as a developer are building a loading script that users of OpenSpending can use to download data from a location and update datasets in OpenSpending you might first run a check for permissions based on their API key before starting to download the updates (so you can skip it if they're not authorized).
+For example if you as a developer are building a loading script that users of SpenDB can use to download data from a location and update datasets in SpenDB you might first run a check for permissions based on their API key before starting to download the updates (so you can skip it if they're not authorized).
 
 The permission API works as follows. Make a *GET* request (wih user authenticated with the API key) to::
 
@@ -550,10 +550,10 @@ The response will be single json object with four properties, *create*, *read*, 
 Loading API
 ===========
 
-Users can load datasets (or add sources to them) by making a *POST* request to ``https://openspending.org/api/2/new`` (notice *https*) with the following url parameters:
+Users can load datasets (or add sources to them) by making a *POST* request to ``https://spendb.mapthemoney.org/api/2/new`` (notice *https*) with the following url parameters:
 
 * *csv_file* - A **url** to the csv file to me imported for the dataset
-* *metadata* - A **url** to the json file with dataset metadata (name, currency, etc.) and the model. Views can also be defined in this file. Take a look at a sample json file - https://dl.dropbox.com/u/3250791/sample-openspending-model.json to see how it should be structured (the value for *mapping* is the model - how the csv file should be cast into dataset dimensions, and the value for *dataset* is the metadata itself). To gain a better understanding of how to do the mapping, take a look at the corresponding csv file - http://mk.ucant.org/info/data/sample-openspending-dataset.csv.
+* *metadata* - A **url** to the json file with dataset metadata (name, currency, etc.) and the model. Views can also be defined in this file. Take a look at a sample json file - https://dl.dropbox.com/u/3250791/sample-spendb-model.json to see how it should be structured (the value for *mapping* is the model - how the csv file should be cast into dataset dimensions, and the value for *dataset* is the metadata itself). To gain a better understanding of how to do the mapping, take a look at the corresponding csv file - http://mk.ucant.org/info/data/sample-spendb-dataset.csv.
 * *private* - A **boolean** ("true"/"false") indicating whether the loaded dataset should be private or not (made public). By default new datasets loaded via the API are made public. If an existing dataset is updated via the loading API the *private* parameter does nothing and the private setting is retained.
 
 Along with these parameters an api key must be provided in the header of the request. For more details see [API Conventions](/help/api/conventions/).
@@ -561,10 +561,10 @@ Along with these parameters an api key must be provided in the header of the req
 Budget Data Packages
 --------------------
 
-Generating the *metadata* file can be complex. If you have prepared a `budget data package`_ for your data, that can also be loaded into OpenSpending via the same API endpoint (i.e. the Loading API endpoint). Instead of providing *csv_file* and *metadata* url parameters, you use a different parameter:
+Generating the *metadata* file can be complex. If you have prepared a `budget data package`_ for your data, that can also be loaded into SpenDB via the same API endpoint (i.e. the Loading API endpoint). Instead of providing *csv_file* and *metadata* url parameters, you use a different parameter:
 
 * *budget_data_package* - A **url** to you budget data package descriptor file, e.g. https://budget.example.com/my-budget-data-package/datapackage.json
 
 The *private* boolean parameter still works in the same way as before.
 
-.. _budget data package: https://github.com/openspending/budget-data-package/blob/master/specification.md
+.. _budget data package: https://github.com/spendb/budget-data-package/blob/master/specification.md

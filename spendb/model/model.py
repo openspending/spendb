@@ -1,6 +1,6 @@
 import logging
 
-from openspending.model.dimension import (CompoundDimension, DateDimension,
+from spendb.model.dimension import (CompoundDimension, DateDimension,
                                           AttributeDimension, Measure)
 
 log = logging.getLogger(__name__)

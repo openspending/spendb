@@ -19,32 +19,32 @@ def files_in_pkgdir(pkg, dirname):
 def package_filter(pkg):
     """
     Filter packages so that we exclude test cases but include regular test
-    objects available in openspending.tests' modules (all test cases are
+    objects available in spendb.tests' modules (all test cases are
     in subdirectories).
     """
 
-    # We want to include openspending.tests but not its subpackages
-    # Hence we only check for things starting with openspending.tests.
+    # We want to include spendb.tests but not its subpackages
+    # Hence we only check for things starting with spendb.tests.
     # (note the trailing period to denote subpackages)
-    return not pkg.startswith('openspending.tests.')
+    return not pkg.startswith('spendb.tests.')
 
 setup(
-    name='openspending',
+    name='spendb',
     version='0.17',
-    description='OpenSpending',
-    author='Open Knowledge Foundation',
-    author_email='openspending-dev at lists okfn org',
-    url='http://github.com/openspending/openspending',
+    description='SpenDB',
+    author='Map The Moeny',
+    author_email='info@mapthemoney.org',
+    url='http://github.com/mapthemoney/spendb',
     install_requires=[
     ],
     setup_requires=[],
 
     packages=filter(package_filter, find_packages()),
-    namespace_packages=['openspending'],
+    namespace_packages=['spendb'],
     package_data={
-        'openspending': (
-            files_in_pkgdir('openspending', 'static') +
-            files_in_pkgdir('openspending', 'templates')
+        'spendb': (
+            files_in_pkgdir('spendb', 'static') +
+            files_in_pkgdir('spendb', 'templates')
         )
     },
     test_suite='nose.collector',
@@ -53,15 +53,14 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'ostool = openspending.command:main',
-            'openspending = openspending.command:main'
+            'spendb = spendb.command:main'
         ]
     },
 
     message_extractors={
-        'openspending': [('**.py', 'python', None),
-                         ('templates/**.html', 'jinja2', None),
-                         ('static/**', 'ignore', None),
-                         ]
-        },
+        'spendb': [('**.py', 'python', None),
+                   ('templates/**.html', 'jinja2', None),
+                   ('static/**', 'ignore', None),
+                   ]
+    },
 )

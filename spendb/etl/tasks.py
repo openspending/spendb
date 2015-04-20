@@ -4,8 +4,8 @@ from archivekit import Source
 from loadkit.types.table import Table
 from loadkit.operators.table import TableExtractOperator
 
-from openspending.core import db
-from openspending.etl.job import job
+from spendb.core import db
+from spendb.etl.job import job
 
 log = logging.getLogger(__name__)
 

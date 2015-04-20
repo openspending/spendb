@@ -1,6 +1,6 @@
-from openspending.tests.base import DatabaseTestCase
+from spendb.tests.base import DatabaseTestCase
 
-from openspending.core import data_manager
+from spendb.core import data_manager
 
 
 class TestDataManager(DatabaseTestCase):

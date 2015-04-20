@@ -1,20 +1,20 @@
 from cubes.server import slicer
 from colander import Invalid
 
-from openspending.lib import filters
+from spendb.lib import filters
 
-from openspending.views.context import home
-from openspending.views.cache import NotModified, handle_not_modified
-from openspending.views.i18n import get_locale
+from spendb.views.context import home
+from spendb.views.cache import NotModified, handle_not_modified
+from spendb.views.i18n import get_locale
 
-from openspending.views.account import blueprint as account
-from openspending.views.dataset import blueprint as dataset
-from openspending.views.editor import blueprint as editor
-from openspending.views.source import blueprint as source
-from openspending.views.run import blueprint as run
-from openspending.views.error import handle_error, handle_invalid
-from openspending.views.api_v3.dataset import blueprint as datasets_v3
-from openspending.views.api_v3.meta import blueprint as meta_v3
+from spendb.views.account import blueprint as account
+from spendb.views.dataset import blueprint as dataset
+from spendb.views.editor import blueprint as editor
+from spendb.views.source import blueprint as source
+from spendb.views.run import blueprint as run
+from spendb.views.error import handle_error, handle_invalid
+from spendb.views.api_v3.dataset import blueprint as datasets_v3
+from spendb.views.api_v3.meta import blueprint as meta_v3
 
 
 def register_views(app, babel):

@@ -1,8 +1,8 @@
 
 from flask import url_for
 
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import make_account, load_fixture
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.helpers import make_account, load_fixture
 
 
 class TestSlicerController(ControllerTestCase):

@@ -2,8 +2,8 @@ from flask import current_app
 from flask.ext.babel import gettext as _
 from flask.ext.mail import Message
 
-from openspending.core import mail
-from openspending.lib.helpers import url_for
+from spendb.core import mail
+from spendb.lib.helpers import url_for
 
 
 def add_msg_niceties(recipient_name, body, sender_name):

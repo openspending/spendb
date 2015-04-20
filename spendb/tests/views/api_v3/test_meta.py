@@ -1,6 +1,6 @@
 from flask import url_for
 
-from openspending.tests.base import ControllerTestCase
+from spendb.tests.base import ControllerTestCase
 
 
 class TestMetaApiController(ControllerTestCase):

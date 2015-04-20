@@ -1,6 +1,6 @@
 from flask.ext.assets import Bundle
 
-from openspending.core import assets
+from spendb.core import assets
 
 
 # Javscript bundles

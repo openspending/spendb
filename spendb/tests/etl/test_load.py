@@ -1,13 +1,13 @@
 from loadkit import logger
 
-from openspending.core import db, data_manager
-from openspending.model import Dataset, Run
-from openspending.etl import tasks
+from spendb.core import db, data_manager
+from spendb.model import Dataset, Run
+from spendb.etl import tasks
 
-from openspending.tests.helpers import model_fixture
-from openspending.tests.helpers import csvimport_fixture_path
-from openspending.tests.helpers import csvimport_fixture_file
-from openspending.tests.base import DatabaseTestCase
+from spendb.tests.helpers import model_fixture
+from spendb.tests.helpers import csvimport_fixture_path
+from spendb.tests.helpers import csvimport_fixture_file
+from spendb.tests.base import DatabaseTestCase
 
 
 class TestLoad(DatabaseTestCase):

@@ -1,6 +1,6 @@
-from openspending.lib.paramparser import ParamParser
+from spendb.lib.paramparser import ParamParser
 
-from openspending.tests.base import TestCase
+from spendb.tests.base import TestCase
 
 
 class TestParamParser(TestCase):

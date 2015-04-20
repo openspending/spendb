@@ -6,17 +6,17 @@ from flask.ext.babel import gettext as _
 from colander import SchemaNode, String, Invalid
 from apikit import jsonify, Pager
 
-from openspending.core import db
-from openspending.model import Dataset
+from spendb.core import db
+from spendb.model import Dataset
 
-from openspending.lib.helpers import get_dataset
-from openspending.lib.indices import clear_index_cache
-from openspending.views.cache import etag_cache_keygen
-from openspending.views.context import api_form_data
-from openspending.views.error import api_json_errors
-from openspending.validation.dataset import dataset_schema
-from openspending.validation.mapping import mapping_schema
-from openspending.validation.common import ValidationState
+from spendb.lib.helpers import get_dataset
+from spendb.lib.indices import clear_index_cache
+from spendb.views.cache import etag_cache_keygen
+from spendb.views.context import api_form_data
+from spendb.views.error import api_json_errors
+from spendb.validation.dataset import dataset_schema
+from spendb.validation.mapping import mapping_schema
+from spendb.validation.common import ValidationState
 
 
 log = logging.getLogger(__name__)

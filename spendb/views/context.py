@@ -4,12 +4,12 @@ from flask import current_app, request
 from flask.ext.babel import get_locale
 from flask.ext.login import current_user
 
-from openspending import auth, _version
-from openspending.views.i18n import get_available_locales
-from openspending.views.cache import setup_caching, cache_response
-from openspending.views.home import blueprint as home
-from openspending.lib.helpers import static_path
-from openspending.lib.helpers import url_for
+from spendb import auth, _version
+from spendb.views.i18n import get_available_locales
+from spendb.views.cache import setup_caching, cache_response
+from spendb.views.home import blueprint as home
+from spendb.lib.helpers import static_path
+from spendb.lib.helpers import url_for
 
 
 @home.before_app_request
@@ -20,7 +20,7 @@ def before_request():
 
 @home.after_app_request
 def after_request(resp):
-    resp.headers['Server'] = 'OpenSpending/%s' % _version.__version__
+    resp.headers['Server'] = 'SpenDB/%s' % _version.__version__
 
     if resp.is_streamed and request.endpoint != 'static':
         # http://wiki.nginx.org/X-accel#X-Accel-Buffering

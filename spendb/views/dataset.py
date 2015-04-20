@@ -11,16 +11,15 @@ from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 from apikit import jsonify
 
-from openspending.core import db
-from openspending.model import Dataset
-from openspending.lib.paramparser import DatasetIndexParamParser
-from openspending import auth
-from openspending.lib.indices import cached_index
-from openspending.lib.helpers import url_for, get_dataset
-from openspending.lib.hypermedia import dataset_apply_links
-from openspending.lib.pagination import Page
-from openspending.views.cache import etag_cache_keygen
-from openspending.views.context import angular_templates
+from spendb.core import db
+from spendb.model import Dataset
+from spendb.lib.paramparser import DatasetIndexParamParser
+from spendb import auth
+from spendb.lib.indices import cached_index
+from spendb.lib.helpers import url_for, get_dataset
+from spendb.lib.pagination import Page
+from spendb.views.cache import etag_cache_keygen
+from spendb.views.context import angular_templates
 
 log = logging.getLogger(__name__)
 
@@ -150,7 +149,7 @@ def feed_rss():
                                       feed_item.managers if
                                       person.fullname]),
         })
-    desc = _('Recently created datasets in the OpenSpending Platform')
+    desc = _('Recently created datasets in the SpenDB Platform')
     feed = Rss201rev2Feed(_('Recently Created Datasets'),
                           url_for('home.index'), desc)
     for item in items:

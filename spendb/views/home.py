@@ -3,9 +3,9 @@ from flask.ext.login import current_user
 from flask.ext.babel import gettext
 from apikit import jsonify
 
-from openspending.views.i18n import set_session_locale
-from openspending.model.dataset import Dataset, DatasetTerritory
-from openspending.views.cache import disable_cache
+from spendb.views.i18n import set_session_locale
+from spendb.model.dataset import Dataset, DatasetTerritory
+from spendb.views.cache import disable_cache
 
 
 blueprint = Blueprint('home', __name__)
@@ -32,7 +32,7 @@ def set_locale():
 
 @blueprint.route('/__version__')
 def version():
-    from openspending._version import __version__
+    from spendb._version import __version__
     return __version__
 
 
@@ -44,7 +44,7 @@ def favicon():
 @blueprint.route('/__ping__')
 def ping():
     disable_cache()
-    from openspending.tasks import ping
+    from spendb.tasks import ping
     ping.delay()
     flash(gettext("Sent ping!"), 'success')
     return redirect('/')

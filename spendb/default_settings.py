@@ -3,10 +3,9 @@ from kombu import Exchange, Queue
 SECRET_KEY = 'foo'
 DEBUG = True
 
-SITE_TITLE = 'OpenSpending'
+SITE_TITLE = 'SpenDB'
 
-SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/openspending'
-SOLR_URL = 'http://localhost:8983/solr'
+SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/spendb'
 
 BABEL_DEFAULT_LOCALE = 'en'
 
@@ -16,13 +15,10 @@ MAIL_SERVER = 'localhost'
 # MAIL_USE_SSL = False
 # MAIL_USERNAME = None
 # MAIL_PASSWORD = None
-MAIL_DEFAULT_SENDER = 'noreply@openspending.org'
+MAIL_DEFAULT_SENDER = 'noreply@spendb.mapthemoney.org'
 
 CACHE = False
 CACHE_TYPE = 'simple'
-
-WIDGETS_BASE = '/static/openspendingjs/widgets/'
-WIDGETS = ['treemap', 'bubbletree', 'aggregate_table']
 
 # Worker queue configuration.
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
@@ -34,17 +30,15 @@ CELERY_ACCEPT_CONTENT = ['json']
 
 CELERY_DEFAULT_QUEUE = 'loading'
 CELERY_QUEUES = (
-    Queue('indexing', Exchange('openspending'), routing_key='openspending'),
-    Queue('loading', Exchange('openspending'), routing_key='openspending'),
+    Queue('indexing', Exchange('spendb'), routing_key='spendb'),
+    Queue('loading', Exchange('spendb'), routing_key='spendb'),
 )
 
 CELERY_ROUTES = {
-    'openspending.tasks.load_from_url': {
+    'spendb.tasks.load_from_url': {
         'queue': 'loading'
     },
-    'openspending.tasks.index_dataset': {
+    'spendb.tasks.index_dataset': {
         'queue': 'indexing'
     },
 }
-
-MAX_CONTENT_LENGTH = 1024 * 1024 * 500  # 500 MB

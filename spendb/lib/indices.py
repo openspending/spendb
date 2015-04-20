@@ -2,15 +2,14 @@ import logging
 
 from sqlalchemy.sql.expression import select, func
 from sqlalchemy.orm import aliased
+from apikit import cache_hash
 
-from openspending.core import db, cache
-from openspending.lib.util import cache_hash
-from openspending.lib.helpers import url_for
-from openspending.model.dataset import (Dataset, DatasetLanguage,
-                                        DatasetTerritory)
-from openspending.reference.country import COUNTRIES
-from openspending.reference.category import CATEGORIES
-from openspending.reference.language import LANGUAGES
+
+from spendb.core import db, cache
+from spendb.lib.helpers import url_for
+from spendb.model.dataset import (Dataset, DatasetLanguage,
+                                  DatasetTerritory)
+from spendb.reference import COUNTRIES, CATEGORIES, LANGUAGES
 
 
 log = logging.getLogger(__name__)

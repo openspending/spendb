@@ -1,8 +1,8 @@
-from openspending.validation.migration import migrate_model
-from openspending.validation.model import validate_model
+from spendb.validation.migration import migrate_model
+from spendb.validation.model import validate_model
 
-from openspending.tests.base import TestCase
-from openspending.tests.helpers import validation_fixture
+from spendb.tests.base import TestCase
+from spendb.tests.helpers import validation_fixture
 
 
 class TestMigration(TestCase):

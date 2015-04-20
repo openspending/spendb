@@ -89,7 +89,7 @@ class Measure(Attribute):
 class CompoundDimension(Dimension):
     """ A compound dimension is an outer table on the star schema, i.e. an
     associated table that is referenced from the fact table. It can have
-    any number of attributes but in the case of OpenSpending it will not
+    any number of attributes but in the case of SpenDB it will not
     have sub-dimensions (i.e. snowflake schema).
     """
 

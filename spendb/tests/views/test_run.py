@@ -1,13 +1,13 @@
 from flask import url_for
 
-from openspending.core import db, data_manager
-from openspending.etl import tasks
-from openspending.model import Run
-from openspending.lib.filters import readable_url
+from spendb.core import db, data_manager
+from spendb.etl import tasks
+from spendb.model import Run
+from spendb.lib.filters import readable_url
 
-from openspending.tests.helpers import make_account
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.etl.test_import_fixtures import import_fixture
+from spendb.tests.helpers import make_account
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.etl.test_import_fixtures import import_fixture
 
 
 from unittest import skip

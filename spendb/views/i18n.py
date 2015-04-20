@@ -1,4 +1,4 @@
-from openspending.core import babel
+from spendb.core import babel
 
 from flask import session, request
 from babel import Locale

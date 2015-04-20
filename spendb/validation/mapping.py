@@ -1,6 +1,6 @@
-from openspending.validation.common import mapping
-from openspending.validation.common import key
-from openspending.validation.predicates import chained, \
+from spendb.validation.common import mapping
+from spendb.validation.common import key
+from spendb.validation.predicates import chained, \
         reserved_name, database_name, nonempty_string
 
 DATATYPES = ['id', 'string', 'float', 'constant', 'date', 'url']

@@ -3,8 +3,8 @@ import logging
 
 from budgetdatapackage import BudgetDataPackage
 
-from openspending.core import db
-from openspending.model import Dataset, Source
+from spendb.core import db
+from spendb.model import Dataset, Source
 
 log = logging.getLogger(__name__)
 
@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 class BudgetDataPackageMap(object):
     """
     Budget Data Package Mapper/Modeller. This class contains properties which
-    all consist of the OpenSpending model equivalent for the budget data
+    all consist of the SpenDB model equivalent for the budget data
     package properties.
     """
 
@@ -77,7 +77,7 @@ class BudgetDataPackageMap(object):
     def row_id(self):
         """
         This is a replacement for the budget data package id row which
-        unfortunately cannot be used in OpenSpending models.
+        unfortunately cannot be used in SpenDB models.
         """
         return {
             'row_id': {
@@ -164,7 +164,7 @@ class BudgetDataPackageMap(object):
         """
         Creates three COFOG fields, one for each of the three levels of COFOG.
         Budget data packages use a single field to represent COFOG but for it
-        to be useful in OpenSpending we need to map them into three separate
+        to be useful in SpenDB we need to map them into three separate
         fields.
         """
         if 'cofog' not in self.fields:

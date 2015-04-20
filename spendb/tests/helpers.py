@@ -7,8 +7,8 @@ import urlparse
 from StringIO import StringIO
 from datetime import datetime
 
-from openspending.model.dataset import Dataset
-from openspending.core import db
+from spendb.model.dataset import Dataset
+from spendb.core import db
 
 
 def fixture_file(name):
@@ -107,7 +107,7 @@ def load_fixture(name, manager=None):
 def make_account(name='test', fullname='Test User',
                  email='test@example.com', twitter='testuser',
                  admin=False):
-    from openspending.model.account import Account
+    from spendb.model.account import Account
 
     # First see if the account already exists and if so, return it
     account = Account.by_name(name)

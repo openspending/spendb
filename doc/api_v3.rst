@@ -1,5 +1,5 @@
 ===========================
-OpenSpending API, Version 3
+SpenDB API, Version 3
 ===========================
 
 

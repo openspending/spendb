@@ -3,10 +3,10 @@ import urllib2
 
 from flask import url_for, current_app
 
-from openspending.core import db, mail
-from openspending.model.account import Account
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import make_account, load_fixture
+from spendb.core import db, mail
+from spendb.model.account import Account
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.helpers import make_account, load_fixture
 
 
 class TestAccountController(ControllerTestCase):

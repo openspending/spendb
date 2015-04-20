@@ -5,10 +5,10 @@ import datetime
 from flask import url_for
 from flask.ext.babel import format_date
 
-from openspending.core import db
-from openspending.model.dataset import Dataset
-from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import (make_account, load_fixture)
+from spendb.core import db
+from spendb.model.dataset import Dataset
+from spendb.tests.base import ControllerTestCase
+from spendb.tests.helpers import (make_account, load_fixture)
 
 
 class TestDatasetController(ControllerTestCase):
@@ -31,8 +31,8 @@ class TestDatasetController(ControllerTestCase):
         assert '403' in response.status
         assert 'Country Regional Analysis v2009' not in response.data, \
             "'Country Regional Analysis v2009' in response!"
-        assert 'openspending_browser' not in response.data, \
-            "'openspending_browser' in response!"
+        assert 'spendb_browser' not in response.data, \
+            "'spendb_browser' in response!"
 
     def test_view_has_format_links(self):
         url_ = url_for('dataset.view', dataset='cra')
@@ -136,5 +136,5 @@ class TestDatasetController(ControllerTestCase):
         response = self.client.get(url_for('dataset.index'))
         norm = re.sub('\s+', ' ', response.data)
         assert ('<link rel="alternate" type="application/rss+xml" title="'
-                'Latest Datasets on OpenSpending"' in
+                'Latest Datasets on SpenDB"' in
                 norm)

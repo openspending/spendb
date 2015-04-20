@@ -1,10 +1,9 @@
 SECRET_KEY = 'foo'
 DEBUG = True
 
-SITE_TITLE = 'OpenSpending'
+SITE_TITLE = 'SpenDB'
 
-SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/openspending'
-SOLR_URL = 'http://localhost:8983/solr/openspending'
+SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/spendb'
 
 MAIL_SERVER = 'localhost'
 # MAIL_PORT = 25
@@ -12,7 +11,7 @@ MAIL_SERVER = 'localhost'
 # MAIL_USE_SSL = False
 # MAIL_USERNAME = None
 # MAIL_PASSWORD = None
-MAIL_DEFAULT_SENDER = 'noreply@openspending.org'
+MAIL_DEFAULT_SENDER = 'noreply@spendb.mapthemoney.org'
 
 CACHE = True
 CACHE_TYPE = 'simple'
@@ -23,4 +22,4 @@ CELERY_ALWAYS_EAGER = False
 
 AWS_KEY_ID = None
 AWS_SECRET = None
-AWS_DATA_BUCKET = 'data.openspending.org'
+AWS_DATA_BUCKET = 'data.spendb.mapthemoney.org'

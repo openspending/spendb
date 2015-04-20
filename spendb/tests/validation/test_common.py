@@ -1,7 +1,7 @@
-from openspending.validation.common import ValidationState
+from spendb.validation.common import ValidationState
 
-from openspending.tests.base import TestCase
-from openspending.tests.helpers import validation_fixture
+from spendb.tests.base import TestCase
+from spendb.tests.helpers import validation_fixture
 
 
 class TestValidationState(TestCase):

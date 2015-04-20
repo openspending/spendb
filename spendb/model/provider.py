@@ -5,10 +5,10 @@ from cubes.errors import NoSuchCubeError, NoSuchDimensionError
 from cubes.common import coalesce_options
 from cubes.logging import get_logger
 
-from openspending.core import db
-from openspending.model import Dataset
-from openspending.model.visitor import ModelVisitor
-from openspending.model.constants import FULL_DATE_CUBES_TEMPLATE, NUM_DATE_CUBES_TEMPLATE
+from spendb.core import db
+from spendb.model import Dataset
+from spendb.model.visitor import ModelVisitor
+from spendb.model.constants import FULL_DATE_CUBES_TEMPLATE, NUM_DATE_CUBES_TEMPLATE
 
 
 class CubesModelVisitor(ModelVisitor):
@@ -103,11 +103,11 @@ class CubesModelVisitor(ModelVisitor):
                     mappings=self.mappings)
 
 
-class OpenSpendingModelProvider(ModelProvider):
-    __extension_name__ = 'openspending'
+class SpenDBModelProvider(ModelProvider):
+    __extension_name__ = 'spendb'
 
     def __init__(self, *args, **kwargs):
-        super(OpenSpendingModelProvider, self).__init__(*args, **kwargs)
+        super(SpenDBModelProvider, self).__init__(*args, **kwargs)
 
     def requires_store(self):
         return True
@@ -134,8 +134,8 @@ class OpenSpendingModelProvider(ModelProvider):
         return cubes
 
 
-class OpenSpendingStore(SQLStore):
-    related_model_provider = "openspending"
+class SpenDBStore(SQLStore):
+    related_model_provider = "spendb"
 
     def model_provider_name(self):
         return self.related_model_provider
