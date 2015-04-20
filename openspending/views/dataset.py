@@ -109,41 +109,12 @@ def new():
 @blueprint.route('/<nodot:dataset>')
 @blueprint.route('/<nodot:dataset>.<fmt:format>')
 def view(dataset, format='html'):
-    """
-    Dataset viewer. Default format is html. This will return either
-    an entry index if there is no default view or the defaul view.
-    If a request parameter embed is given the default view is
-    returned as an embeddable page.
-
-    If json is provided as a format the json representation of the
-    dataset is returned.
-    """
-
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
-
     request_set_views(dataset, dataset)
-    if request._ds_view is None:
-        # If handle request didn't return a view we return the
-        # entry index
-        return entry_index(dataset.name)
-    if 'embed' in request.args:
-        # If embed is requested using the url parameters we return
-        # a redirect to an embed page for the default view
-        return redirect(url_for('view.embed', dataset=dataset.name,
-                        widget=request._ds_view.vis_widget.get('name'),
-                        state=json.dumps(request._ds_view.vis_state)))
-
-    # num_entries = len(dataset)
-
-    timerange = None
-    (earliest_timestamp, latest_timestamp) = dataset.fact_table.timerange()
-    if earliest_timestamp is not None:
-        timerange = {'from': earliest_timestamp,
-                     'to': latest_timestamp}
-
+    managers = list(dataset.managers)
     return render_template('dataset/view.html', dataset=dataset,
-                           timerange=timerange)
+                           managers=managers)
 
 
 @blueprint.route('/<nodot:dataset>/manage', methods=['GET'])
@@ -154,16 +125,6 @@ def manage(dataset):
     auth.require.dataset.update(dataset)
     return render_template('dataset/manage.html', dataset=dataset,
                            templates=angular_templates(current_app))
-
-
-@blueprint.route('/<nodot:dataset>/meta')
-def about(dataset, format='html'):
-    dataset = get_dataset(dataset)
-    etag_cache_keygen(dataset.updated_at)
-    request_set_views(dataset, dataset)
-    managers = list(dataset.managers)
-    return render_template('dataset/about.html', dataset=dataset,
-                           managers=managers)
 
 
 @blueprint.route('/<nodot:dataset>/model')

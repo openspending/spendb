@@ -7,7 +7,7 @@ import urlparse
 from colander import Invalid
 
 from openspending.lib import json
-from openspending.model import Dataset, Account, View
+from openspending.model import Dataset, Account
 from openspending.core import db
 from openspending.tasks import load_from_url
 from openspending.validation.model import validate_model
@@ -47,39 +47,6 @@ def json_of_url(url):
     else:
         # If it isn't we open the url as a file
         return json.load(urllib2.urlopen(url))
-
-
-def create_view(dataset, view_config):
-    """
-    Create view for a provided dataset from a view provided as dict
-    """
-
-    # Check if it exists (if not we create it)
-    existing = View.by_name(dataset, view_config['name'])
-    if existing is None:
-        # Create the view
-        view = View()
-
-        # Set saved configurations
-        view.widget = view_config['widget']
-        view.state = view_config['state']
-        view.name = view_config['name']
-        view.label = view_config['label']
-        view.description = view_config['description']
-        view.public = view_config['public']
-
-        # Set the dataset as the current dataset
-        view.dataset = dataset
-
-        # Try and set the account provided but if it doesn't exist
-        # revert to shell account
-        view.account = Account.by_name(view_config['account'])
-        if view.account is None:
-            view.account = shell_account()
-
-        # Commit view to database
-        db.session.add(view)
-        db.session.commit()
 
 
 def get_model(model):
@@ -125,17 +92,6 @@ def get_or_create_dataset(model):
     return dataset
 
 
-def import_views(dataset, views_url):
-    """
-    Import views into the provided dataset which are defined in a json object
-    located at the views_url
-    """
-
-    # Load the json and loop over its 'visualisations' property
-    for view in json_of_url(views_url)['visualisations']:
-        create_view(dataset, view)
-
-
 def add_import_commands(manager):
 
     @manager.option('-n', '--dry-run', dest='dry_run', action='store_true',
@@ -168,7 +124,3 @@ def add_import_commands(manager):
         # For every url in mapped dataset_urls (arguments) we import it
         for url in args['dataset_urls']:
             load_from_url(dataset, url)
-
-        # Import visualisations if there are any
-        if args['views']:
-            import_views(dataset, args['views'])

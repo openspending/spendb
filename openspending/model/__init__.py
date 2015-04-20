@@ -4,4 +4,3 @@ from openspending.model.account import Account  # NOQA
 from openspending.model.dataset import (Dataset, DatasetLanguage,  # NOQA
                                         DatasetTerritory)
 from openspending.model.run import Run  # NOQA
-from openspending.model.view import View  # NOQA

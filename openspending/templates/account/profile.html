@@ -95,26 +95,6 @@
       </p>
     {% endif %}
   </div>
-  <div class="col-md-4">
-    {% if profile_views|length %}
-      <h3>
-        {% trans %}Views{% endtrans %}
-      </h3>
-      <ul>
-        {% for view in profile_views %}
-          <li>
-            <a href="{{ url_for('view.view', dataset=view.dataset.name, name=view.name) }}">
-              {{view.label}}
-            </a> 
-            on
-	          <a href="{{ url_for('dataset.view', dataset=view.dataset.name) }}">
-              {{ view.dataset.label }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  </div>
 </div>
 
 {% endblock %}

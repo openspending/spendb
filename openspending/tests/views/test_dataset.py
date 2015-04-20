@@ -1,8 +1,6 @@
 import re
-import csv
 import json
 import datetime
-from StringIO import StringIO
 
 from flask import url_for
 from flask.ext.babel import format_date
@@ -25,27 +23,6 @@ class TestDatasetController(ControllerTestCase):
         assert 'The database contains the following datasets' in response.data
         assert 'cra' in response.data
 
-    def test_view(self):
-        """
-        Test view page for a dataset
-        """
-
-        # Get the view page for the dataset
-        response = self.client.get(url_for('dataset.view', dataset='cra'))
-        # The dataset label should be present in the response
-        assert 'Country Regional Analysis v2009' in response.data, \
-            "'Country Regional Analysis v2009' not in response!"
-
-        # Assertions about time range
-        assert 'Time range' in response.data, \
-            'Time range is not present on view page for dataset'
-        # Start date comes from looking at the test fixture for cra
-        assert '1/1/03' in response.data, \
-            'Starting date of time range not on view page for dataset'
-        # End date comes from looking at the test fixture for cra
-        assert '1/1/10' in response.data, \
-            'End date of time range not on view page for dataset'
-
     def test_view_private(self):
         cra = Dataset.by_name('cra')
         cra.private = True
@@ -57,8 +34,8 @@ class TestDatasetController(ControllerTestCase):
         assert 'openspending_browser' not in response.data, \
             "'openspending_browser' in response!"
 
-    def test_about_has_format_links(self):
-        url_ = url_for('dataset.about', dataset='cra')
+    def test_view_has_format_links(self):
+        url_ = url_for('dataset.view', dataset='cra')
         response = self.client.get(url_)
 
         url_ = url_for('dataset.model', dataset='cra', format='json')
@@ -66,23 +43,23 @@ class TestDatasetController(ControllerTestCase):
         assert url_ in response.data, \
             "Link to view page (JSON format) not in response!"
 
-    def test_about_has_profile_links(self):
+    def test_view_has_profile_links(self):
         self.dataset.managers.append(self.user)
         db.session.add(self.dataset)
         db.session.commit()
-        response = self.client.get(url_for('dataset.about', dataset='cra'))
+        response = self.client.get(url_for('dataset.view', dataset='cra'))
         profile_url = url_for('account.profile', name=self.user.name)
         assert profile_url in response.data
         assert self.user.fullname in response.data.decode('utf-8')
 
-    def test_about_has_timestamps(self):
+    def test_view_has_timestamps(self):
         """
         Test whether about page includes timestamps when dataset was created
         and when it was last updated
         """
 
         # Get the about page
-        response = self.client.get(url_for('dataset.about', dataset='cra'))
+        response = self.client.get(url_for('dataset.view', dataset='cra'))
 
         # Check assertions for timestamps
         assert 'Timestamps' in response.data, \
@@ -95,12 +72,6 @@ class TestDatasetController(ControllerTestCase):
         assert da in response.data.decode('utf-8'), \
             'Created (and update) timestamp is not on about page'
 
-    def test_view_json(self):
-        response = self.client.get(url_for('datasets_api3.view', name='cra'))
-        obj = json.loads(response.data)
-        assert obj['name'] == 'cra'
-        assert obj['label'] == 'Country Regional Analysis v2009'
-
     def test_model_json(self):
         response = self.client.get(url_for('dataset.model',
                                            dataset='cra', format='json'))
@@ -108,26 +79,6 @@ class TestDatasetController(ControllerTestCase):
         assert 'dataset' in obj.keys(), obj
         assert obj['dataset']['name'] == 'cra'
         assert obj['dataset']['label'] == 'Country Regional Analysis v2009'
-
-    def _test_entries_json_export(self):
-        response = self.client.get(url_for('entry.index',
-                                    dataset='cra',
-                                    format='json'))
-        assert '/api/2/search' in response.headers['Location'], \
-            response.headers
-        assert 'format=json' in response.headers['Location'], response.headers
-
-    def _test_entries_csv_export(self):
-        response = self.cliemt.get(url_for('entry.index',
-                                    dataset='cra',
-                                    format='csv'))
-        assert '/api/2/search' in response.headers['Location'], \
-            response.headers
-        assert 'format=csv' in response.headers['Location'], response.headers
-        response = response.follow()
-        r = csv.DictReader(StringIO(response.body))
-        obj = [l for l in r]
-        assert len(obj) == 36
 
     def test_new_form(self):
         response = self.client.get(url_for('dataset.new'),

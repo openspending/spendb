@@ -1,71 +1,112 @@
 {% extends "base.html" %}
 
+{% from "_dimension_list.html" import dimensions_list as dimensions_list %}
 {% from "_util.html" import share_scripts as share_scripts %}
-{% from "dimension/_widgets.html" import widget_js with context %}
 {% from "dataset/_nav.html" import dataset_nav as dataset_nav %}
-{% from "_util.html" import share_body, share_scripts %}
+{% from "_util.html" import share_body as share_body %}
+{% from "_util.html" import share_scripts as share_scripts %}
 
-{% block page_title %}{{ dataset.label or  dataset.name }}{% endblock %}
+{% block page_title %}{{ dataset.label or dataset.name }}{% endblock %}
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
 
 {% block scripts %}
-  {% if legacy_views.active %}
-      {{widget_js(dataset, 'vis_widget', legacy_views.active.vis_widget, legacy_views.active.vis_state, handles=True)}}
-      {{widget_js(dataset, 'table_widget', legacy_views.active.table_widget, legacy_views.active.table_state, handles=False)}}
-	{% endif %}
   {{share_scripts()}}
 {% endblock %}
 
 {% block content %}
-  {% if legacy_views.active %}
-    {{ dataset_nav(dataset, can, legacy_views, legacy_views.active.name) }}
-  {% else %}
-    {{ dataset_nav(dataset, can, legacy_views, 'search') }}
-  {% endif %}
-  
-	{% if legacy_views.active %}
-    <div class="row">
-      <div class="col-md-12"><div id="vis_widget" style="width: auto; height: 400px"></div></div>
-    </div>
-	{% endif %}
+  <div>
+    <!-- templates/dataset/about.html -->
+    {{dataset_nav(dataset, can, legacy_views, 'about')}}
 
-	{% if legacy_views.active %}
-    <div class="well widget-context">
-      <div class="pull-right">
-        <a href="#" class="btn btn-default btn-sm" id="widget-embed-link">
-          <i class="fa fa-share"></i>
-          {% trans %}Embed{% endtrans %}
-        </a>
-        <a href="#" class="btn btn-default btn-sm hidden" id="widget-edit-link">
-          <i class="fa fa-cog"></i>
-          {% trans %}Change{% endtrans %}
-        </a>
-        <a href="#" class="btn btn-default btn-sm hidden" id="widget-download-link">
-          <i class="fa fa-download"></i>
-          {% trans %}Data{% endtrans %}
-        </a>
+    <div class="row">
+      <div class="col-md-8">
+        <h3>{% trans %}Description{% endtrans %}</h3>
+        {% if not dataset.description %}
+        <div class="help-block" i18n:msg="label">
+          {% trans dataset=dataset.label %}No description is available for {{dataset}}{% endtrans %}
+        </div>
+        {% endif %}
+        {{ dataset.description | markdown }}
+
+        <div class="row">
+          <div class="col-md-12">
+            <h3>{% trans %}Sources{% endtrans %}</h3>
+            <span class="help-block">
+              {% trans %}This is a listing of all source data that was registered
+              for this dataset.{% endtrans %}
+            </span>
+            <br/>
+            {% if sources %}
+            <ul>
+              {% for source in sources %}
+              <li>
+                <a href="{{source.url}}">{{ source.url | readable_url }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          <div class="col-md-12">
+            <h3>{% trans %}Team{% endtrans %}</h3>
+            <span class="help-block">
+              {% trans %}These people are the managers of the dataset. They can
+              make modifications to its schema and are responsible
+              to make sure the data is accurate.{% endtrans %}
+            </span>
+            <br/>
+            {% if managers %}
+            <ul>
+              {% for account in managers %}
+                <li>
+                  <a href="{{ url_for('account.profile', name=account.name)}}">
+                    {{account.display_name}}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Timestamps</h3>
+      <p class="help-block">
+        This dataset was created on <strong>{{ dataset.created_at | format_date }}</strong>.
+      </p>
+      <p class="help-block">
+        This dataset was last modified on <strong>{{ dataset.updated_at | format_date }}</strong>.
+      </p>
+    </div>
+  </div>
       </div>
-      <h3>{{ legacy_views.active.label }}</h3>
-    </div>
-	{% endif %}
-
-	{% if legacy_views.active %}
-    <div class="row">
-      <div class="col-md-12"><div id="table_widget"/></div>
-    </div>
-	{% endif %}
-
-  {% if timerange %}
-    <div class="row">
       <div class="col-md-4">
-	      <p>
-          <small>
-            Time range for dataset: {{ timerange.from | format_date }} - {{ timerange.to | format_date }}
-          </small>
-        </p>
+        <h3>{% trans %}Measures{% endtrans %}</h3>
+        <span class="help-block">
+          {% trans %}Measures are the numeric properties of each entry in this
+          dataset.{% endtrans %}
+        </span>
+        <ul>
+        {% for measure in dataset.measures %}
+          <li>
+            <strong>{{measure.label or measure.name}}</strong>
+            {% if measure.description %}
+            <div>
+              {{ measure.description | markdown }}
+            </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+        </ul>
+        <h3>{% trans %}Dimensions{% endtrans %}</h3>
+        <span class="help-block">
+          {% trans %}Dimensions are different aspects of the dataset, such as the
+          spender, recipient or classifications that apply.{% endtrans %}
+        </span>
+        {{dimensions_list(dataset)}}
       </div>
     </div>
-  {% endif %}
 
-  {{share_body()}}  
+    {{share_body()}}
+  </div>
 {% endblock %}

@@ -304,7 +304,7 @@ def do_reset():
     login_user(account)
     flash_success(
         _("Thanks! You have now been signed in - please change "
-                + "your password!"))
+          "your password!"))
     return redirect(url_for('account.settings'))
 
 
@@ -326,10 +326,8 @@ def profile(name):
 
     # Collect and sort the account's datasets and views
     profile_datasets = sorted(profile.datasets, key=lambda d: d.label)
-    profile_views = sorted(profile.views, key=lambda d: d.label)
 
     # Render the profile
     return render_template('account/profile.html', profile=profile,
                            show_email=show_email, show_twitter=show_twitter,
-                           profile_datasets=profile_datasets,
-                           profile_views=profile_views)
+                           profile_datasets=profile_datasets)
