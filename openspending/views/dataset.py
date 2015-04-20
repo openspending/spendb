@@ -5,22 +5,20 @@ from urllib import urlencode
 
 from webhelpers.feedgenerator import Rss201rev2Feed
 from werkzeug.exceptions import BadRequest
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request
 from flask import Response, current_app
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
+from apikit import jsonify
 
 from openspending.core import db
 from openspending.model import Dataset
-from openspending.lib.jsonexport import jsonify
 from openspending.lib.paramparser import DatasetIndexParamParser
 from openspending import auth
 from openspending.lib.indices import cached_index
 from openspending.lib.helpers import url_for, get_dataset
-from openspending.lib.views import request_set_views
 from openspending.lib.hypermedia import dataset_apply_links
 from openspending.lib.pagination import Page
-from openspending.views.entry import index as entry_index
 from openspending.views.cache import etag_cache_keygen
 from openspending.views.context import angular_templates
 
@@ -111,7 +109,6 @@ def new():
 def view(dataset, format='html'):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
-    request_set_views(dataset, dataset)
     managers = list(dataset.managers)
     return render_template('dataset/view.html', dataset=dataset,
                            managers=managers)

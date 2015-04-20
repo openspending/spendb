@@ -1,12 +1,12 @@
 import logging
 
 from flask import Blueprint
+from apikit import jsonify
 
 from openspending.reference.currency import CURRENCIES
 from openspending.reference.country import COUNTRIES
 from openspending.reference.category import CATEGORIES
 from openspending.reference.language import LANGUAGES
-from openspending.lib.jsonexport import jsonify
 from openspending.views.cache import etag_cache_keygen
 
 log = logging.getLogger(__name__)

@@ -4,6 +4,7 @@ from flask.ext.login import current_user, login_user, logout_user
 from flask.ext.babel import gettext as _
 from sqlalchemy.sql.expression import desc, func, or_
 from werkzeug.security import check_password_hash, generate_password_hash
+from apikit import obj_or_404, jsonify
 
 from openspending.core import db, login_manager
 from openspending.auth import require
@@ -11,10 +12,8 @@ from openspending.model.dataset import Dataset
 from openspending.model.account import (Account, AccountRegister,
                                         AccountSettings)
 from openspending.lib.paramparser import DistinctParamParser
-from openspending.lib.jsonexport import jsonify
 from openspending.lib.mailer import send_reset_link
-from openspending.lib.helpers import url_for, obj_or_404
-from openspending.lib.helpers import flash_error, flash_success
+from openspending.lib.helpers import url_for, flash_error, flash_success
 from openspending.lib.pagination import Page
 from openspending.views.cache import disable_cache
 

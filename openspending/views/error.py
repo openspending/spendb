@@ -2,8 +2,7 @@ from functools import wraps
 
 from werkzeug.exceptions import HTTPException
 from flask import request, render_template, Response
-
-from openspending.lib.jsonexport import jsonify
+from apikit import jsonify
 
 
 def api_json_errors(f):

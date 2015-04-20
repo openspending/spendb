@@ -1,8 +1,8 @@
 import urllib
+import json
 
 from openspending.core import db, data_manager
 from openspending.model import Dataset, Run
-from openspending.lib import json
 from openspending.etl import tasks
 
 from openspending.tests.base import DatabaseTestCase

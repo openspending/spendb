@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, flash
 from flask.ext.login import current_user
 from flask.ext.babel import gettext
+from apikit import jsonify
 
 from openspending.views.i18n import set_session_locale
 from openspending.model.dataset import Dataset, DatasetTerritory
-from openspending.lib.jsonexport import jsonify
 from openspending.views.cache import disable_cache
 
 

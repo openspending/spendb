@@ -1,15 +1,14 @@
 import logging
 
-from flask import Blueprint, request
+from flask import Blueprint
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 from colander import SchemaNode, String, Invalid
-from restpager import Pager
+from apikit import jsonify, Pager
 
 from openspending.core import db
 from openspending.model import Dataset
-from openspending.auth import require
-from openspending.lib.jsonexport import jsonify
+
 from openspending.lib.helpers import get_dataset
 from openspending.lib.indices import clear_index_cache
 from openspending.views.cache import etag_cache_keygen

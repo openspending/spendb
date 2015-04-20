@@ -3,10 +3,11 @@ import logging
 from flask import Blueprint, render_template
 # from flask.ext.babel import gettext as _
 # from werkzeug.exceptions import BadRequest
+from apikit import obj_or_404
 
 from openspending.model.run import Run
 from openspending.auth import require
-from openspending.lib.helpers import get_dataset, obj_or_404, get_page
+from openspending.lib.helpers import get_dataset, get_page
 # from openspending.lib.pagination import Page
 from openspending.views.cache import disable_cache
 
