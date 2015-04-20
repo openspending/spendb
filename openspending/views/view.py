@@ -51,7 +51,7 @@ class CreateView(colander.MappingSchema):
 
 
 def make_name(dataset, label):
-    from openspending.lib.util import slugify
+    from normality import slugify
     from itertools import count
     name = name_orig = slugify(label)
     view = View.by_name(dataset, name)

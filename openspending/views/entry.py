@@ -7,7 +7,6 @@ from werkzeug.exceptions import BadRequest
 from openspending.lib.hypermedia import entry_apply_links
 from openspending.lib.helpers import url_for, get_dataset, flash_notice
 from openspending.lib.jsonexport import jsonify
-from openspending.inflation import inflate
 from openspending.lib.pagination import Page
 
 log = logging.getLogger(__name__)
@@ -48,36 +47,6 @@ def view(dataset, id, format='html'):
         'entry': entry,
         'amount': entry.get('amount')
     }
-
-    # We adjust for inflation if the user as asked for this to be inflated
-    if 'inflate' in request.args:
-        try:
-            # Inflate the amount. Target date is provided in request.params
-            # as value for inflate and reference date is the date of the
-            # entry. We also provide a list of the territories to extract
-            # a single country for which to do the inflation
-            inflation = inflate(tmpl_context.get('amount'),
-                                request.args['inflate'],
-                                entry.get('time'),
-                                dataset.territories)
-
-            # The amount to show should be the inflated amount
-            # and overwrite the entry's amount as well
-            tmpl_context['amount'] = inflation['inflated']
-            tmpl_context['entry']['amount'] = inflation['inflated']
-
-            # We include the inflation response in the entry's dict
-            # HTML description assumes every dict value for the entry
-            # includes a label so we include a default "Inflation
-            # adjustment" for it to work.
-            inflation['label'] = 'Inflation adjustment'
-            tmpl_context['entry']['inflation_adjustment'] = inflation
-            tmpl_context['inflation'] = inflation
-        except Exception:
-            # If anything goes wrong in the try clause (and there's a lot
-            # that can go wrong). We just say that we can't adjust for
-            # inflation and set the context amount as the original amount
-            flash_notice(_('Unable to adjust for inflation'))
 
     # Add the rest of the dimensions relating to this entry into a
     # extras dictionary. We first need to exclude all dimensions that
