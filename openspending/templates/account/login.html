@@ -110,30 +110,6 @@
             </div>
           </div>
         </div>
-        {% if config.get('SUBSCRIBE_COMMUNITY') %}
-        <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-9">
-            <div class="checkbox">
-              <label>
-                <input name="subscribe_community" type="checkbox">
-                {% trans %}Add me to the OpenSpending community mailing list{% endtrans %}
-              </label>
-            </div>
-          </div>
-        </div>
-        {% endif %}
-        {% if config.get('SUBSCRIBE_DEVELOPER') %}
-        <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-9">
-            <div class="checkbox">
-              <label>
-                <input name="subscribe_developer" type="checkbox">
-                {% trans %}Sign me up for the OpenSpending developer mailing list{% endtrans %}
-              </label>
-            </div>
-          </div>
-        </div>
-        {% endif %}
         <div class="form-group">
           <div class="col-sm-offset-3 col-sm-9">
             <button type="submit" class="btn btn-default">
