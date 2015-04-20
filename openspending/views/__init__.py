@@ -17,7 +17,6 @@ from openspending.views.source import blueprint as source
 from openspending.views.run import blueprint as run
 from openspending.views.dimension import blueprint as dimension
 from openspending.views.error import handle_error, handle_invalid
-from openspending.views import api_v2
 from openspending.views.api_v3.dataset import blueprint as datasets_v3
 from openspending.views.api_v3.meta import blueprint as meta_v3
 
@@ -34,7 +33,6 @@ def register_views(app, babel):
     app.register_blueprint(editor)
     app.register_blueprint(source)
     app.register_blueprint(run)
-    app.register_blueprint(api_v2.blueprint)
     app.register_blueprint(dimension)
 
     app.register_blueprint(datasets_v3, url_prefix='/api/3')
@@ -65,4 +63,3 @@ def register_views(app, babel):
         'entry_description': filters.entry_description,
         'render_value': filters.render_value
     })
-
