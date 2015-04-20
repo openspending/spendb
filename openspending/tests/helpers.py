@@ -75,14 +75,14 @@ def csvimport_fixture_file(name, path):
 
 def csvimport_table(name):
     from messytables import CSVTableSet
-    from loadkit.transform import parse_table
+    from loadkit.operators.table import parse_table
     table_set = CSVTableSet(data_fixture(name))
     row_set = table_set.tables[0]
     rows = []
 
     def save_row(row):
         rows.append(row)
-    
+
     num_rows, fields = parse_table(row_set, save_row)
     return fields, rows
 

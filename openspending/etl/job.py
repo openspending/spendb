@@ -2,15 +2,15 @@ import logging
 from functools import wraps
 from datetime import datetime
 
-from barn import Source
-from loadkit.logfile import capture
+from archivekit import Source
+from loadkit.logger import capture
 
 from openspending.core import data_manager, db
 from openspending.model.run import Run
 
 
 class Job(object):
-    
+
     def __init__(self, dataset, operation):
         self.log = logging.getLogger('openspending.etl')
         self.dataset = dataset

@@ -1,8 +1,8 @@
 import logging
 
-from barn import Source
-from loadkit import transform
-from loadkit import Artifact
+from archivekit import Source
+from loadkit.types.table import Table
+from loadkit.operators.table import TableExtractOperator
 
 from openspending.core import db
 from openspending.etl.job import job
@@ -37,7 +37,9 @@ def transform_source(job, dataset, source_name):
     well-understood file format. """
     source = Source(job.package, source_name)
     job.set_source(source)
-    artifact = transform.to_table(source, ARTIFACT_NAME)
+    op = TableExtractOperator(None, None, {})
+    table = Table(job.package, ARTIFACT_NAME)
+    artifact = op.transform(source, table)
 
     # TODO: log when there was no data.
     return artifact
@@ -48,8 +50,8 @@ def load(job, dataset, source_name=None):
     """ Load the table artifact for this dataset into the fact
     table. """
     job.set_source(source_name)
-    artifact = Artifact(job.package, ARTIFACT_NAME)
-    dataset.fields = artifact.meta.get('fields', {})
+    table = Table(job.package, ARTIFACT_NAME)
+    dataset.fields = table.meta.get('fields', {})
     if not len(dataset.fields):
         raise ValueError('No columns recognized in source data.')
 
@@ -57,4 +59,4 @@ def load(job, dataset, source_name=None):
 
     dataset.fact_table.drop()
     dataset.fact_table.create()
-    dataset.fact_table.load_iter(artifact.records())
+    dataset.fact_table.load_iter(table.records())

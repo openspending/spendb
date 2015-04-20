@@ -1,6 +1,6 @@
 import logging
 
-from barn import open_collection
+from archivekit import open_collection
 
 log = logging.getLogger(__name__)
 

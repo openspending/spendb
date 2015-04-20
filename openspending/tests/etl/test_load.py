@@ -1,4 +1,4 @@
-from loadkit import logfile
+from loadkit import logger
 
 from openspending.core import db, data_manager
 from openspending.model import Dataset, Run
@@ -29,7 +29,7 @@ class TestLoad(DatabaseTestCase):
     def test_extract_url(self):
         source = tasks.extract_url(self.ds, self.cra_url)
         assert 'cra.csv' == source.name, source.name
-        
+
     def test_extract_missing_url(self):
         url = csvimport_fixture_path('../data', 'xcra.csv')
         source = tasks.extract_url(self.ds, url)
@@ -37,9 +37,9 @@ class TestLoad(DatabaseTestCase):
 
         run = db.session.query(Run).first()
         package = data_manager.package(self.ds.name)
-        messages = list(logfile.load(package, run.id))
+        messages = list(logger.load(package, run.id))
         assert len(messages) > 2, messages
-    
+
     def test_extract_file(self):
         fp = csvimport_fixture_file('../data', 'cra.csv')
         source = tasks.extract_fileobj(self.ds, fp,
