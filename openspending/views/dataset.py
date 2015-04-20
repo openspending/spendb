@@ -130,7 +130,6 @@ def model(dataset, format='json'):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
     model = dataset.model_data
-    model['dataset'] = dataset_apply_links(model['dataset'])
     return jsonify(model)
 
 

@@ -2,7 +2,7 @@
 """ Helper functions """
 from flask import url_for as flask_url_for
 from flask import flash, request
-from werkzeug.exceptions import NotFound
+from apikit import obj_or_404
 
 from openspending.auth import require
 from openspending.model import Dataset
@@ -15,12 +15,6 @@ def url_for(endpoint, **kwargs):
 
 def static_path(filename):
     return url_for('static', filename=filename)
-
-
-def obj_or_404(obj):
-    if obj is None:
-        raise NotFound()
-    return obj
 
 
 def get_dataset(name):
