@@ -35,5 +35,5 @@ cssmin==0.2.0
 restpager>=0.1
 #cubes>=1.0 - until pull request comes through
 git+https://github.com/pudo/cubes.git@a18f043424155594321ce83f89218850febd949c
-barn>=0.4
+archivekit>=0.4
 loadkit>=0.2
