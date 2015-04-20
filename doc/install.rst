@@ -51,12 +51,10 @@ Requirements
 * Python_ >= 2.7, with pip_ and virtualenv_   
 * PostgreSQL_ >= 8.4
 * RabbitMQ_ >= 2.6.1
-* `Apache Solr`_ >= 4.0.0
 
 .. _Python: http://www.python.org/
 .. _PostgreSQL: http://www.postgres.org/
 .. _RabbitMQ: http://www.rabbitmq.com//
-.. _Apache Solr: http://lucene.apache.org/solr/
 .. _virtualenv: http://pypi.python.org/pypi/virtualenv
 .. _pip: http://pypi.python.org/pypi/pip
 
@@ -160,22 +158,6 @@ frontend components using the ping action::
     $ curl -q http://localhost:5000/__ping__ >/dev/null
 
 This should result in "Pong." being printed to the background daemon's console.
-
-Setup Solr
-----------
-
-Create a configuration home directory to use with Solr. This is most easily 
-done by copying the Solr example configuration from the `Solr tarball`_, and 
-replacing the default schema with one from OpenSpending.::
-
-    $ cp -R apache-solr-<version>/* ./solr/
-    $ ln -sf <full path to openspending>/solr/schema.xml ./solr/example/solr/collection1/conf/
-
-.. _Solr tarball: http://www.apache.org/dyn/closer.cgi/lucene/solr/
-
-Start Solr with the full path to the folder as a parameter: ::
-
-    $ (cd solr/example && java -Dsolr.velocity.enabled=false -jar start.jar)
 
 Test the install
 ----------------

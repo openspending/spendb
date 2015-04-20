@@ -9,7 +9,6 @@ from restpager import Pager
 from openspending.core import db
 from openspending.model import Dataset
 from openspending.auth import require
-from openspending.lib import solr_util as solr
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.helpers import get_dataset
 from openspending.lib.indices import clear_index_cache
@@ -114,5 +113,4 @@ def delete(name):
     db.session.delete(dataset)
     db.session.commit()
     clear_index_cache()
-    solr.drop_index(dataset.name)
     return jsonify({'status': 'deleted'}, status=410)

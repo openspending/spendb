@@ -9,7 +9,6 @@ from datetime import datetime
 
 from openspending.model.dataset import Dataset
 from openspending.core import db
-from openspending.lib import solr_util as solr
 
 
 def fixture_file(name):
@@ -105,13 +104,6 @@ def load_fixture(name, manager=None):
     return dataset
 
 
-#def load_dataset(dataset):
-#    fields, rows = csvimport_table('simple')
-    #dataset.data['mapping'] = model = model_fixture('simple')
-#    dataset.fields = fields
-#    dataset.fact_table.load_iter(rows)
-
-
 def make_account(name='test', fullname='Test User',
                  email='test@example.com', twitter='testuser',
                  admin=False):
@@ -142,17 +134,3 @@ def clean_db(app):
     db.session.rollback()
     db.drop_all(app=app)
     shutil.rmtree(app.config.get('UPLOADS_DEFAULT_DEST'))
-
-
-def clean_solr():
-    '''Clean all entries from Solr.'''
-    s = solr.get_connection()
-    s.delete_query('*:*')
-    s.commit()
-
-
-def clean_and_reindex_solr():
-    '''Clean Solr and reindex all entries in the database.'''
-    clean_solr()
-    for dataset in db.session.query(Dataset):
-        solr.build_index(dataset.name)

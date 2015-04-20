@@ -3,7 +3,7 @@ import json
 from flask import url_for
 
 from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import load_fixture, clean_and_reindex_solr
+from openspending.tests.helpers import load_fixture
 from openspending.model.dataset import Dataset
 from openspending.model.dimension import CompoundDimension
 
@@ -13,7 +13,6 @@ class TestDimensionController(ControllerTestCase):
     def setUp(self):
         super(TestDimensionController, self).setUp()
         load_fixture('cra')
-        clean_and_reindex_solr()
         self.cra = Dataset.by_name('cra')
 
         for dimension in self.cra.model.dimensions:
@@ -92,30 +91,29 @@ class TestDimensionController(ControllerTestCase):
         assert json_data['name'] in [u'3', 3]
         assert json_data['label'] == self.member['label']
 
-    def test_view_entries_json(self):
-        url_ = url_for('dimension.entries', format='json',
-                       dataset=self.cra.name,
-                       dimension='cofog1',
-                       name=self.member['name'])
-        result = self.client.get(url_, follow_redirects=True)
+    # def test_view_entries_json(self):
+    #     url_ = url_for('dimension.entries', format='json',
+    #                    dataset=self.cra.name,
+    #                    dimension='cofog1',
+    #                    name=self.member['name'])
+    #     result = self.client.get(url_, follow_redirects=True)
 
-        #print dir(result)
-        assert '200' in result.status, result.status
-        assert result.content_type == 'application/json'
+    #     assert '200' in result.status, result.status
+    #     assert result.content_type == 'application/json'
 
-        json_data = json.loads(result.data).get('results')
-        assert len(json_data) == 5
+    #     json_data = json.loads(result.data).get('results')
+    #     assert len(json_data) == 5
 
-    def test_view_entries_csv(self):
-        url_ = url_for('dimension.entries', format='csv',
-                       dataset=self.cra.name,
-                       dimension='cofog1',
-                       name=self.member['name'])
-        result = self.client.get(url_, follow_redirects=True)
-        assert '200' in result.status, result.status
-        assert 'text/csv' in result.content_type, result.content_type
-        assert 'amount,' in result.data  # csv headers
-        assert 'id,' in result.data  # csv headers
+    # def test_view_entries_csv(self):
+    #     url_ = url_for('dimension.entries', format='csv',
+    #                    dataset=self.cra.name,
+    #                    dimension='cofog1',
+    #                    name=self.member['name'])
+    #     result = self.client.get(url_, follow_redirects=True)
+    #     assert '200' in result.status, result.status
+    #     assert 'text/csv' in result.content_type, result.content_type
+    #     assert 'amount,' in result.data  # csv headers
+    #     assert 'id,' in result.data  # csv headers
 
     def test_view_entries_html(self):
         url_ = url_for('dimension.entries', format='html',

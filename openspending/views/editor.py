@@ -11,7 +11,6 @@ from colander import Invalid
 from openspending.core import db, data_manager
 from openspending.model import Account, Run
 from openspending.auth import require
-from openspending.lib import solr_util as solr
 from openspending.lib.helpers import url_for, get_dataset
 from openspending.lib.helpers import flash_success
 from openspending.reference.currency import CURRENCIES
@@ -39,14 +38,9 @@ def index(dataset):
     sources = sorted(package.sources, key=lambda s: s.meta.get('created_at'))
     has_sources = len(sources) > 0
     source = sources[0] if has_sources else None
-    index_count = solr.dataset_entries(dataset.name)
-    index_percentage = 0 if not entries_count else \
-        int((float(index_count) / float(entries_count)) * 1000)
     return render_template('editor/index.html', dataset=dataset,
                            entries_count=entries_count,
-                           has_sources=has_sources, source=source,
-                           index_count=index_count,
-                           index_percentage=index_percentage)
+                           has_sources=has_sources, source=source)
 
 
 @blueprint.route('/<dataset>/editor/team', methods=['GET'])

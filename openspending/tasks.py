@@ -3,7 +3,6 @@ from celery.utils.log import get_task_logger
 from openspending.core import create_app, create_celery
 from openspending.model import Dataset
 from openspending.etl import tasks
-from openspending.lib.solr_util import build_index
 
 
 log = get_task_logger(__name__)
@@ -23,12 +22,6 @@ def load_from_url(dataset_name, url):
         if artifact is None:
             return
         tasks.load(dataset, source_name=source.name)
-
-
-@celery.task(ignore_result=True)
-def index_dataset(dataset_name):
-    with flask_app.app_context():
-        build_index(dataset_name)
 
 
 @celery.task(ignore_result=True)

@@ -37,7 +37,7 @@ class TestImportFixtures(DatabaseTestCase):
     def count_lines_in_stream(self, f):
         from StringIO import StringIO
         return len(list(StringIO(f.read())))
-        
+
     def _test_import(self, name, lines=None):
         dataset, url = import_fixture(name)
         data = urllib.urlopen(url)

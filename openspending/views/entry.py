@@ -4,17 +4,12 @@ from flask import Blueprint, render_template, redirect, request
 from flask.ext.babel import gettext as _
 from werkzeug.exceptions import BadRequest
 
-from openspending.lib.views import request_set_views
 from openspending.lib.hypermedia import entry_apply_links
-from openspending.lib.browser import Browser
 from openspending.lib.helpers import url_for, get_dataset, flash_notice
 from openspending.lib.csvexport import write_csv
 from openspending.lib.jsonexport import jsonify
 from openspending.inflation import inflate
 from openspending.lib.pagination import Page
-from openspending.lib.paramparser import EntryIndexParamParser
-
-from solr import SolrException
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('entry', __name__)
@@ -31,48 +26,7 @@ def index(dataset, format='html'):
         return redirect(url_for('api.search', format=format, dataset=dataset,
                                 **dict(request.args.items())))
 
-    # Get the default view
-    request_set_views(dataset, dataset)
-
-    # Parse the parameters using the SearchParamParser (used by the API)
-    parser = EntryIndexParamParser(request.args)
-    params, errors = parser.parse()
-
-    # We have to remove page from the parameters because that's also
-    # used in the Solr browser (which fetches the queries)
-    params.pop('page')
-
-    # We limit ourselve to only our dataset
-    params['filter']['dataset'] = [dataset.name]
-    facet_dimensions = {field.name: field
-                        for field in dataset.model.dimensions
-                        if field.facet}
-    params['facet_field'] = facet_dimensions.keys()
-
-    # Create a Solr browser and execute it
-    b = Browser(**params)
-    try:
-        b.execute()
-    except SolrException as e:
-        return {'errors': [unicode(e)]}
-
-    # We are only interested in the entry in the tuple since  we know
-    # the dataset
-    entries = [entry[1] for entry in b.get_entries()]
-
-    tmpl_context = {
-        'dataset': dataset,
-        'facets': b.get_expanded_facets(dataset),
-        'entries': Page(entries, **dict(request.args.items())),
-        'search': params.get('q', ''),
-        'filters': params['filter'],
-        'facet_dimensions': facet_dimensions,
-        'dimensions': [dimension.name for dimension in dataset.model.dimensions]
-    }
-
-    if 'dataset' in tmpl_context['filters']:
-        del tmpl_context['filters']['dataset']
-    return render_template('entry/index.html', **tmpl_context)
+    return render_template('entry/index.html')
 
 
 @blueprint.route('/<dataset>/entries/<nodot:id>')

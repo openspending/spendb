@@ -10,8 +10,7 @@ from flask.ext.babel import format_date
 from openspending.core import db
 from openspending.model.dataset import Dataset
 from openspending.tests.base import ControllerTestCase
-from openspending.tests.helpers import (make_account, load_fixture,
-                                        clean_and_reindex_solr)
+from openspending.tests.helpers import (make_account, load_fixture)
 
 
 class TestDatasetController(ControllerTestCase):
@@ -20,7 +19,6 @@ class TestDatasetController(ControllerTestCase):
         super(TestDatasetController, self).setUp()
         self.dataset = load_fixture('cra')
         self.user = make_account('test')
-        clean_and_reindex_solr()
 
     def test_index(self):
         response = self.client.get(url_for('dataset.index'))
@@ -194,7 +192,6 @@ class TestDatasetController(ControllerTestCase):
 
         response = self.client.get(url_for('dataset.index'))
         norm = re.sub('\s+', ' ', response.data)
-        #print norm
         assert ('<link rel="alternate" type="application/rss+xml" title="'
                 'Latest Datasets on OpenSpending"' in
                 norm)

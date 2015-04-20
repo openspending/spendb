@@ -119,7 +119,7 @@ def member(dataset, dimension, name, format="html"):
         return write_csv(member)
 
     request_set_views(dataset, member, dimension=dimension.name)
-    
+
     # If there are no views set up, then go direct to the entries
     # search page
     if request._ds_view is None:
@@ -142,20 +142,12 @@ def member(dataset, dimension, name, format="html"):
 def entries(dataset, dimension, name, format='html'):
     dataset, dimension, member, num_entries = \
         get_member(dataset, dimension, name)
-    
-    if format in ['json', 'csv']:
-        return redirect(
-            url_for('api_v2.search',
-                    format=format, dataset=dataset.name,
-                    filter='%s.name:%s' % (dimension.name, name),
-                    **dict(request.args.items())))
 
     request_set_views(dataset, member, dimension=dimension.name)
-    
+
     col = dataset.fact_table.mapping.columns.get('%s.name' % dimension)
     entries = dataset.fact_table.entries(col == member['name'])
     entries = (entry_apply_links(dataset, e) for e in entries)
     return render_template('dimension/entries.html', dataset=dataset,
                            dimension=dimension, member=member,
                            entries=entries, num_entries=num_entries)
-

@@ -34,8 +34,6 @@ class Job(object):
         db.session.commit()
 
     def end(self, status):
-        if not self.running:
-            return
         self.run.status = status
         self.run.time_end = datetime.utcnow()
         self.dataset.touch()

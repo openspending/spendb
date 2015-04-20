@@ -4,7 +4,6 @@ from flask.ext.babel import gettext
 
 from openspending.views.i18n import set_session_locale
 from openspending.model.dataset import Dataset, DatasetTerritory
-from openspending.lib.solr_util import dataset_entries
 from openspending.lib.jsonexport import jsonify
 from openspending.views.cache import disable_cache
 
@@ -16,7 +15,7 @@ blueprint = Blueprint('home', __name__)
 def index():
     datasets = Dataset.all_by_account(current_user)
     territories = DatasetTerritory.dataset_counts(datasets)
-    num_entries = dataset_entries(None)
+    num_entries = -1
     return render_template('home/index.html', datasets=datasets,
                            territories=territories, num_entries=num_entries)
 

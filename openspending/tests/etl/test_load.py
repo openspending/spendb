@@ -61,7 +61,7 @@ class TestLoad(DatabaseTestCase):
         source = tasks.extract_fileobj(self.ds, fp,
                                        file_name='cra2.csv')
         assert 'cra2-2.csv' == source.name, source.name
-        
+
     def test_transform_source(self):
         fp = csvimport_fixture_file('../data', 'cra.csv')
         source = tasks.extract_fileobj(self.ds, fp,
@@ -95,5 +95,3 @@ class TestLoad(DatabaseTestCase):
 
         entries = list(self.ds.fact_table.entries())
         assert len(entries) == 36, entries
-
-        

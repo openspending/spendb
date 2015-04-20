@@ -60,14 +60,9 @@ def create_app(**config):
     configure_uploads(app, (badge_images,))
     data_manager.init_app(app)
 
-    # HACKY SHIT IS HACKY
-    from openspending.lib.solr_util import configure as configure_solr
-    configure_solr(app.config)
-
     from openspending.model.provider import OpenSpendingStore
     extensions.store.extensions['openspending'] = OpenSpendingStore
     app.cubes_workspace = Workspace()
-    #db_url = app.config.get('SQLALCHEMY_DATABASE_URI')
     app.cubes_workspace.register_default_store('openspending')
 
     return app
@@ -88,14 +83,13 @@ def create_web_app(**config):
 def create_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
-    TaskBase = celery.Task
 
-    class ContextTask(TaskBase):
+    class ContextTask(celery.Task):
         abstract = True
-        
+
         def __call__(self, *args, **kwargs):
             with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
-    
+                return celery.Task.__call__(self, *args, **kwargs)
+
     celery.Task = ContextTask
     return celery

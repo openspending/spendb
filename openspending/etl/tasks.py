@@ -39,10 +39,10 @@ def transform_source(job, dataset, source_name):
     job.set_source(source)
     op = TableExtractOperator(None, None, {})
     table = Table(job.package, ARTIFACT_NAME)
-    artifact = op.transform(source, table)
+    op.transform(source, table)
 
     # TODO: log when there was no data.
-    return artifact
+    return table
 
 
 @job(operation='Load to database')
