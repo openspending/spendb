@@ -2,13 +2,13 @@ import json
 from itertools import count
 from datetime import date
 
+from apikit import cache_hash
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
 from sqlalchemy.types import Unicode, Integer, Date, Float
 from sqlalchemy.sql.expression import select, func, extract
 
 from openspending.core import db
-from openspending.lib.util import cache_hash
 from openspending.model.visitor import ModelVisitor
 from openspending.model.common import json_default
 

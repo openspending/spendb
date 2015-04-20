@@ -1,5 +1,5 @@
 
-{% macro dataset_nav(dataset, can, views, section) -%}
+{% macro dataset_nav(dataset, can, section) -%}
     <!-- templates/dataset/_nav.html -->
     <ul class="breadcrumb">
       <div class="representations">
@@ -18,18 +18,6 @@
     <div class="tabbable">
       <ul class="nav nav-tabs">
 
-    		{% for view in views.available %}
-    		  {% if view.name == section %}
-            <li class="active"><a>{{view.label}}</a></li>
-    		  {% else %}
-            <li>
-              <a href="{{url_for('dataset.view', dataset=dataset.name, _view=view.name)}}">
-                {{view.label}}
-              </a>
-            </li>
-    		  {% endif %}
-    		{% endfor %}
-		    
         {% if can.dataset.update(dataset) %}
           <li class="admin">
             <a href="{{url_for('editor.index', dataset=dataset.name)}}">

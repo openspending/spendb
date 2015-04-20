@@ -15,19 +15,17 @@ from openspending.lib.helpers import url_for
 @home.before_app_request
 def before_request():
     request._return_json = False
-    request._ds_available_views = []
-    request._ds_view = None
     setup_caching()
 
 
 @home.after_app_request
 def after_request(resp):
     resp.headers['Server'] = 'OpenSpending/%s' % _version.__version__
-    
+
     if resp.is_streamed and request.endpoint != 'static':
         # http://wiki.nginx.org/X-accel#X-Accel-Buffering
         resp.headers['X-Accel-Buffering'] = 'no'
-    
+
     return cache_response(resp)
 
 
@@ -86,10 +84,6 @@ def template_context_processor():
         'section_active': get_active_section(),
         'logged_in': auth.account.logged_in(),
         'current_user': current_user,
-        'can': auth,
-        'legacy_views': {
-            'available': request._ds_available_views,
-            'active': request._ds_view,
-        }
+        'can': auth
     }
     return data

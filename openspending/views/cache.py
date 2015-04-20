@@ -1,8 +1,7 @@
 from flask import current_app, request, Response, get_flashed_messages
 from flask.ext.babel import get_locale
 from flask.ext.login import current_user
-
-from openspending.lib.util import cache_hash
+from apikit import cache_hash
 
 
 class NotModified(Exception):
@@ -32,7 +31,7 @@ def cache_response(resp):
         return resp
 
     resp.cache_control.max_age = 3600 * 6
-    
+
     # resp.cache_control.must_revalidate = True
     if current_user.is_authenticated():
         resp.cache_control.private = True
