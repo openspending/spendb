@@ -1,10 +1,8 @@
-from openspending.core import badge_images
 from openspending.lib.helpers import url_for
 
 
 def dataset_apply_links(dataset):
     dataset['html_url'] = url_for('dataset.view', dataset=dataset['name'])
-    dataset['badges'] = [badge_apply_links(b) for b in dataset['badges']]
     return dataset
 
 
@@ -39,15 +37,3 @@ def drilldowns_apply_links(dataset_name, drilldowns):
             drilldown[k] = member_apply_links(dataset_name, k, v)
         linked_data.append(drilldown)
     return linked_data
-
-
-def badge_apply_links(badge):
-    """
-    Add links or to badge dictionary representation or modify a dictionary
-    representation to include a fully qualified domain
-    """
-    # Add an html_url to represent the html representation of the badge
-    badge['html_url'] = url_for('badge.information', id=badge['id'])
-    # Change the image url to be a fully qualified url if it isn't already
-    badge['image'] = badge_images.url(badge['image'])
-    return badge

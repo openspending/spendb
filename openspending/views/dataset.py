@@ -11,7 +11,7 @@ from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 
 from openspending.core import db
-from openspending.model import Dataset, Badge
+from openspending.model import Dataset
 from openspending.lib.jsonexport import jsonify
 from openspending.lib.paramparser import DatasetIndexParamParser
 from openspending import auth
@@ -160,20 +160,10 @@ def manage(dataset):
 def about(dataset, format='html'):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
-    
     request_set_views(dataset, dataset)
-
     managers = list(dataset.managers)
-
-    # Get all badges if user is admin because they can then
-    # give badges to the dataset on its about page.
-    badges = []
-    if auth.account.is_admin():
-        badges = list(Badge.all())
-
     return render_template('dataset/about.html', dataset=dataset,
-                           managers=managers,
-                           badges=badges)
+                           managers=managers)
 
 
 @blueprint.route('/<nodot:dataset>/model')

@@ -75,37 +75,6 @@
         </div>
 
 	<div class="row">
-	{% if dataset.has_badges or current_user.admin %}
-	  <div class="col-md-12">
-	    <h3>{% trans %}Badges{% endtrans %}</h3>
-	    <span class="help-block">
-        <p>{% trans %}This dataset has been awarded{% endtrans %}
-	      <a href="{{ url_for('badge.index') }}" title="{% trans %}List of badges{% endtrans %}">{% trans %}badges{% endtrans %}</a>.
-	      
-        {% trans %}Badges can be given by OpenSpending administrators on behalf of
-	      entities approved by <a href="http://okfn.org/" title="OKF">the Open Knowledge Foundation</a>.{% endtrans %}</p>
-      </span>
-	    {% for badge in dataset.badges %}
-	      <h4> <img src="{{ badge.image }}" title="{{ badge.label }}"> {{ badge.label }}</h4>
-	      {{ badge.description | markdown }}
-	    {% endfor %}
-	    {% if current_user.admin %}
-	      <h4>{% trans %}Give badge{% endtrans %}</h4>
-	      <form class="form-inline" action="{{ url_for('badge.give', dataset=dataset.name) }}" method="post">
-          <div class="form-group">
-  	        <select name="badge" class="form-control col-md-6">
-  		        {% for badge in badges %}
-  		          <option value="{{ badge.id }}">{{ badge.label }}</option>
-  		        {% endfor %}
-  	        </select>
-          </div>
-	        <button class="btn btn-success">
-            {% trans %}Give{% endtrans %}
-          </button>
-	      </form>
-	    {% endif %}
-	  </div>
-	{% endif %}
 	  <div class="col-md-12">
 	    <h3>Timestamps</h3>
       <p class="help-block">

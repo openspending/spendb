@@ -7,7 +7,6 @@ from flaskext.gravatar import Gravatar
 from flask.ext.cache import Cache
 from flask.ext.mail import Mail
 from flask.ext.assets import Environment
-from flaskext.uploads import UploadSet, IMAGES, configure_uploads
 import formencode_jinja2
 from celery import Celery
 from cubes import Workspace
@@ -33,8 +32,6 @@ mail = Mail()
 assets = Environment()
 data_manager = DataManager()
 
-badge_images = UploadSet('badgeimages', IMAGES)
-
 
 def create_app(**config):
     app = Flask(__name__)
@@ -57,7 +54,6 @@ def create_app(**config):
     mail.init_app(app)
     assets.init_app(app)
     login_manager.init_app(app)
-    configure_uploads(app, (badge_images,))
     data_manager.init_app(app)
 
     from openspending.model.provider import OpenSpendingStore

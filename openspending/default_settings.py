@@ -27,10 +27,7 @@ CACHE_TYPE = 'simple'
 WIDGETS_BASE = '/static/openspendingjs/widgets/'
 WIDGETS = ['treemap', 'bubbletree', 'aggregate_table']
 
-## Image uploads directory, needs to be read/writeable by frontend.
-UPLOADS_DEFAULT_DEST = '/tmp/openspending-uploads'
-
-## Worker queue configuration.
+# Worker queue configuration.
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 
 # If you set ``EAGER``, processing will happen inline.

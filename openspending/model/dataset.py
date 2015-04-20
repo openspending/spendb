@@ -77,7 +77,7 @@ class Dataset(db.Model):
     @fields.setter
     def fields(self, value):
         self.data['fields'] = value
-    
+
     @reconstructor
     def _load_model(self):
         self.model = Model(self)
@@ -88,14 +88,6 @@ class Dataset(db.Model):
         invalidation. """
         self.updated_at = datetime.utcnow()
         db.session.add(self)
-
-    @property
-    def has_badges(self):
-        """
-        Property that returns True if the dataset has been given any badges
-        """
-        # Cast the badge count as a boolean and return it
-        return bool(self.badges.count())
 
     def __repr__(self):
         return "<Dataset(%r,%r)>" % (self.id, self.name)
@@ -114,8 +106,7 @@ class Dataset(db.Model):
                 'last_modified': self.updated_at
             },
             'languages': list(self.languages),
-            'territories': list(self.territories),
-            'badges': [b.as_dict(short=True) for b in self.badges]
+            'territories': list(self.territories)
         }
 
     @classmethod

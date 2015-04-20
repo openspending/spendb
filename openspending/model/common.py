@@ -7,8 +7,6 @@ from sqlalchemy.ext.mutable import Mutable
 
 from openspending.core import db
 
-ALIAS_PLACEHOLDER = u'‽'
-
 
 def json_default(obj):
     if isinstance(obj, datetime.datetime):
