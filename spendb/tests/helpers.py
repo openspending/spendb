@@ -1,6 +1,5 @@
 import urllib
 import os
-import shutil
 import json
 import csv
 import urlparse
@@ -44,13 +43,6 @@ def fixture_path(name):
     test_directory = os.path.dirname(__file__)
     # Fixture is a directory in the test directory
     return os.path.join(test_directory, 'fixtures', name)
-
-
-CPI = []
-for row in csv.DictReader(fixture_file('cpi.csv')):
-    row['CPI'] = float(row['CPI'])
-    row['Year'] = datetime(year=int(row['Year']), month=1, day=1).date()
-    CPI.append(row)
 
 
 def csvimport_fixture_path(name, path):
@@ -133,4 +125,3 @@ def init_db(app):
 def clean_db(app):
     db.session.rollback()
     db.drop_all(app=app)
-    shutil.rmtree(app.config.get('UPLOADS_DEFAULT_DEST'))

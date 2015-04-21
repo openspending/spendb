@@ -15,7 +15,6 @@ class TestLoad(DatabaseTestCase):
     def setUp(self):
         super(TestLoad, self).setUp()
         data_manager._index = None
-        self.s3_mock.start()
         model = model_fixture('cra')
         self.ds = Dataset(model)
         db.session.add(self.ds)
@@ -24,7 +23,6 @@ class TestLoad(DatabaseTestCase):
 
     def tearDown(self):
         super(TestLoad, self).tearDown()
-        self.s3_mock.stop()
 
     def test_extract_url(self):
         source = tasks.extract_url(self.ds, self.cra_url)

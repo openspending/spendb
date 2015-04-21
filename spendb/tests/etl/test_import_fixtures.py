@@ -28,11 +28,9 @@ class TestImportFixtures(DatabaseTestCase):
     def setUp(self):
         super(TestImportFixtures, self).setUp()
         data_manager._index = None
-        self.s3_mock.start()
 
     def tearDown(self):
         super(TestImportFixtures, self).tearDown()
-        self.s3_mock.stop()
 
     def count_lines_in_stream(self, f):
         from StringIO import StringIO
