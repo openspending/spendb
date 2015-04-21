@@ -2,8 +2,7 @@ import logging
 import os
 
 from flask import current_app
-import migrate.versioning.api as migrate_api
-from migrate.exceptions import DatabaseNotControlledError
+from flask.ext.migrate import upgrade
 
 from spendb.core import db
 from spendb.model import Dataset
@@ -38,20 +37,13 @@ def drop_dataset(name):
 @manager.command
 def migrate():
     """ Run pending data migrations """
-    url = current_app.config.get('SQLALCHEMY_DATABASE_URI')
-    repo = os.path.join(os.path.dirname(__file__), '..', 'migration')
+    upgrade()
 
-    try:
-        migrate_api.upgrade(url, repo)
-    except DatabaseNotControlledError:
-        # Assume it's a new database, and try the migration again
-        migrate_api.version_control(url, repo)
-        migrate_api.upgrade(url, repo)
 
-    diff = migrate_api.compare_model_to_db(url, repo, db.metadata)
-    if diff:
-        print diff
-        raise CommandException("The database doesn't match the current model")
+@manager.command
+def init():
+    """ Initialize the database """
+    migrate()
 
 
 @manager.command
@@ -72,9 +64,3 @@ def modelmigrate():
         q = dataset.update().where(dataset.c.id == ds['id'])
         q = q.values({'data': model, 'schema_version': version})
         db.engine.execute(q)
-
-
-@manager.command
-def init():
-    """ Initialize the database """
-    migrate()

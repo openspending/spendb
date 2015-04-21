@@ -2,6 +2,7 @@
 import logging
 from flask.ext.script import Manager
 from flask.ext.assets import ManageAssets
+from flask.ext.migrate import MigrateCommand, upgrade
 
 from spendb.core import create_web_app
 from spendb.assets import assets
@@ -20,6 +21,7 @@ manager.add_option('-q', '--quiet',
 
 manager.add_command('user', user.manager)
 manager.add_command('db', db.manager)
+manager.add_command('alembic', MigrateCommand)
 manager.add_command('assets', ManageAssets(assets))
 
 importer.add_import_commands(manager)

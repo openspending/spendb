@@ -1,3 +1,4 @@
+import os
 from kombu import Exchange, Queue
 
 SECRET_KEY = 'foo'
@@ -19,6 +20,9 @@ MAIL_DEFAULT_SENDER = 'noreply@spendb.mapthemoney.org'
 
 CACHE = False
 CACHE_TYPE = 'simple'
+
+ALEMBIC_DIR = os.path.join(os.path.dirname(__file__), 'migrate')
+ALEMBIC_DIR = os.path.abspath(ALEMBIC_DIR)
 
 # Worker queue configuration.
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
