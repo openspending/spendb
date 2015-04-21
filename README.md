@@ -22,4 +22,4 @@ Please report bugs and submit feature requests at https://github.com/mapthemoney
 
 SpenDB's code is licensed under the GNU Affero Licence except where otherwise indicated. A copy of this licence is available in the file ``LICENSE``.
 
-This application is based on the Open Knowledge Foundation's SpenDB platform.
+This application is based on the Open Knowledge Foundation's OpenSpending platform.
