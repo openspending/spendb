@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 blueprint = Blueprint('editor', __name__)
 
 
-@blueprint.route('/<dataset>/editor', methods=['GET'])
+@blueprint.route('/datasets/<dataset>/editor', methods=['GET'])
 def index(dataset):
     disable_cache()
     dataset = get_dataset(dataset)
@@ -42,7 +42,7 @@ def index(dataset):
                            has_sources=has_sources, source=source)
 
 
-@blueprint.route('/<dataset>/editor/team', methods=['GET'])
+@blueprint.route('/datasets/<dataset>/editor/team', methods=['GET'])
 def team_edit(dataset, errors={}, accounts=None):
     disable_cache()
     dataset = get_dataset(dataset)
@@ -55,7 +55,7 @@ def team_edit(dataset, errors={}, accounts=None):
                            accounts=accounts, errors=errors)
 
 
-@blueprint.route('/<dataset>/editor/team', methods=['POST'])
+@blueprint.route('/datasets/<dataset>/editor/team', methods=['POST'])
 def team_update(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)

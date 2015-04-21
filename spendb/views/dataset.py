@@ -103,8 +103,8 @@ def new():
     return render_template('dataset/new.html')
 
 
-@blueprint.route('/<nodot:dataset>')
-@blueprint.route('/<nodot:dataset>.<fmt:format>')
+@blueprint.route('/datasets/<nodot:dataset>')
+@blueprint.route('/datasets/<nodot:dataset>.<fmt:format>')
 def view(dataset, format='html'):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
@@ -113,9 +113,9 @@ def view(dataset, format='html'):
                            managers=managers)
 
 
-@blueprint.route('/<nodot:dataset>/manage', methods=['GET'])
-@blueprint.route('/<nodot:dataset>/manage/meta', methods=['GET'])
-@blueprint.route('/<nodot:dataset>/manage/model', methods=['GET'])
+@blueprint.route('/datasets/<nodot:dataset>/manage', methods=['GET'])
+@blueprint.route('/datasets/<nodot:dataset>/manage/meta', methods=['GET'])
+@blueprint.route('/datasets/<nodot:dataset>/manage/model', methods=['GET'])
 def manage(dataset):
     dataset = get_dataset(dataset)
     auth.require.dataset.update(dataset)
@@ -123,8 +123,8 @@ def manage(dataset):
                            templates=angular_templates(current_app))
 
 
-@blueprint.route('/<nodot:dataset>/model')
-@blueprint.route('/<nodot:dataset>/model.<fmt:format>')
+@blueprint.route('/datasets/<nodot:dataset>/model')
+@blueprint.route('/datasets/<nodot:dataset>/model.<fmt:format>')
 def model(dataset, format='json'):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)

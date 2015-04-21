@@ -22,7 +22,7 @@ def get_run(dataset, id):
     return dataset, run
 
 
-@blueprint.route('/<dataset>/runs/<id>', methods=['GET'])
+@blueprint.route('/datasets/<dataset>/runs/<id>', methods=['GET'])
 def view(dataset, id, format='html'):
     disable_cache()
     dataset, run = get_run(dataset, id)

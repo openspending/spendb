@@ -27,7 +27,7 @@ def get_source(dataset, id):
     return dataset, source
 
 
-@blueprint.route('/<dataset>/sources/new', methods=['GET'])
+@blueprint.route('/datasets/<dataset>/sources/new', methods=['GET'])
 def new(dataset, fill={}, errors={}):
     disable_cache()
     dataset = get_dataset(dataset)
@@ -36,7 +36,7 @@ def new(dataset, fill={}, errors={}):
                            form_errors=errors, form_fill=fill)
 
 
-@blueprint.route('/<dataset>/sources', methods=['POST'])
+@blueprint.route('/datasets/<dataset>/sources', methods=['POST'])
 def create(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
@@ -53,20 +53,20 @@ def create(dataset):
         return new(dataset.name, fill=values, errors=dict(errors))
 
 
-@blueprint.route('/<dataset>/sources', methods=['GET'])
+@blueprint.route('/datasets/<dataset>/sources', methods=['GET'])
 def index(dataset, format='json'):
     disable_cache()
     dataset = get_dataset(dataset)
     return jsonify([src.as_dict() for src in dataset.sources])
 
 
-@blueprint.route('/<dataset>/sources/<id>', methods=['GET'])
+@blueprint.route('/datasets/<dataset>/sources/<id>', methods=['GET'])
 def view(dataset, id):
     dataset, source = get_source(dataset, id)
     return redirect(source.url)
 
 
-@blueprint.route('/<dataset>/sources/<id>/load', methods=['POST'])
+@blueprint.route('/datasets/<dataset>/sources/<id>/load', methods=['POST'])
 def load(dataset, id):
     """
     Load the dataset into the database. If a url parameter 'sample'
@@ -95,7 +95,7 @@ def load(dataset, id):
     return redirect(url_for('editor.index', dataset=dataset.name))
 
 
-@blueprint.route('/<dataset>/sources/<id>/delete', methods=['POST'])
+@blueprint.route('/datasets/<dataset>/sources/<id>/delete', methods=['POST'])
 def delete(dataset, id):
     dataset, source = get_source(dataset, id)
     require.dataset.update(dataset)
