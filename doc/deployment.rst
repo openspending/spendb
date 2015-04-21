@@ -24,7 +24,7 @@ assumed. The key differences in a production install are these:
     # su postgres
     $ createuser -D -P -R -S spendb
     Password:
-    $ createdb -E utf8 -O spendb -T template0 spendb.mapthemoney.org
+    $ createdb -E utf8 -O spendb -T template0 mapthemoney.org
 
 * To install the core software and dependencies, a pip file is created as
   ``pip-site.txt`` with the following contents::
@@ -36,7 +36,7 @@ assumed. The key differences in a production install are these:
   This means that updates can be installed easily and quickly by running
   the same command used for the initial setup::
 
-    (env)~/var/srvc/spendb.mapthemoney.org$ pip install -r pip-site.txt
+    (env)~/var/srvc/mapthemoney.org$ pip install -r pip-site.txt
 
 * Set up related git modules, help, and catalogs in src/spendb, as in :doc:`install`.
 
@@ -66,7 +66,7 @@ assumed. The key differences in a production install are these:
   pre-fork based HTTP server for WSGI applications (remember to set the
   ``SPENDB_SETTINGS`` environment variable)::
 
-    (env)~/var/srvc/spendb.mapthemoney.org$ gunicorn spendb.core:create_web_app
+    (env)~/var/srvc/mapthemoney.org$ gunicorn spendb.core:create_web_app
 
   To determine the number of workers and the port to listen on, a
   configuration file called ``gunicorn-config.py`` is created with
@@ -78,7 +78,7 @@ assumed. The key differences in a production install are these:
 
   This can be passed using the ``-c`` argument::
 
-    (env)~/var/srvc/spendb.mapthemoney.org$ gunicorn -c gunicorn-config.py spendb.core:create_web_app
+    (env)~/var/srvc/mapthemoney.org$ gunicorn -c gunicorn-config.py spendb.core:create_web_app
 
 * In order to make sure gunicorn is automatically started, monitored, and run
   with the right arguments, ``supervisord`` is installed::
@@ -86,17 +86,17 @@ assumed. The key differences in a production install are these:
     # apt-get install supervisor
 
   After installing supervisor, a new configuration file can be dropped into 
-  ``/etc/supervisor/conf.d/spendb.mapthemoney.org.conf`` with the following basic
+  ``/etc/supervisor/conf.d/mapthemoney.org.conf`` with the following basic
   contents::
 
-    [program:spendb.mapthemoney.org]
-    command=/home/okfn/var/srvc/spendb.mapthemoney.org/bin/gunicorn spendb.core:create_web_app -c /home/okfn/var/srvc/spendb.mapthemoney.org/gunicorn-config.py
-    directory=/home/okfn/var/srvc/spendb.mapthemoney.org/
-    environment=OPENSPENDING_SETTINGS='/home/okfn/var/srvc/spendb.mapthemoney.org/settings.py'
+    [program:mapthemoney.org]
+    command=/home/okfn/var/srvc/mapthemoney.org/bin/gunicorn spendb.core:create_web_app -c /home/okfn/var/srvc/mapthemoney.org/gunicorn-config.py
+    directory=/home/okfn/var/srvc/mapthemoney.org/
+    environment=OPENSPENDING_SETTINGS='/home/okfn/var/srvc/mapthemoney.org/settings.py'
     user=www-data
     autostart=true
     autorestart=true
-    stdout_logfile=/home/okfn/var/srvc/spendb.mapthemoney.org/logs/supervisord.log
+    stdout_logfile=/home/okfn/var/srvc/mapthemoney.org/logs/supervisord.log
     redirect_stderr=true
 
   For logging, this required that you create the logs directory in the site 
@@ -123,13 +123,13 @@ assumed. The key differences in a production install are these:
 
       server {
         listen 80;
-        server_name spendb.mapthemoney.org;
+        server_name mapthemoney.org;
 
-        access_log /var/log/nginx/spendb.mapthemoney.org-access.log;
-        error_log /var/log/nginx/spendb.mapthemoney.org-error.log notice;
+        access_log /var/log/nginx/mapthemoney.org-access.log;
+        error_log /var/log/nginx/mapthemoney.org-error.log notice;
         
         location /static {
-          alias /home/okfn/var/srvc/spendb.mapthemoney.org/src/spendb/spendb/static;
+          alias /home/okfn/var/srvc/mapthemoney.org/src/spendb/spendb/static;
         }
 
         location / {

@@ -11,7 +11,7 @@ MAIL_SERVER = 'localhost'
 # MAIL_USE_SSL = False
 # MAIL_USERNAME = None
 # MAIL_PASSWORD = None
-MAIL_DEFAULT_SENDER = 'noreply@spendb.mapthemoney.org'
+MAIL_DEFAULT_SENDER = 'noreply@mapthemoney.org'
 
 CACHE = True
 CACHE_TYPE = 'simple'
@@ -22,4 +22,4 @@ CELERY_ALWAYS_EAGER = False
 
 AWS_KEY_ID = None
 AWS_SECRET = None
-AWS_DATA_BUCKET = 'data.spendb.mapthemoney.org'
+AWS_DATA_BUCKET = 'data.mapthemoney.org'

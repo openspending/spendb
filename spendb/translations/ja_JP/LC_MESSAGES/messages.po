@@ -654,11 +654,11 @@ msgid ""
 "We recommend using <strong>,</strong> as delimiter and wrapping values in"
 " double quotes (especially amounts). The first line will always be "
 "regarded as a header row. <a "
-"href=\"http://community.spendb.mapthemoney.org/help/guide/en/formatting-"
+"href=\"http://community.mapthemoney.org/help/guide/en/formatting-"
 "data/\">Want to know more?</a>"
 msgstr ""
 "区切り文字には<strong>,</strong>を利用し、値はダブルクォート(特に金額)で囲むことをお勧めします。最初の行は常にヘッダ行とみなされます。<a"
-" href=\"http://community.spendb.mapthemoney.org/help/guide/en/formatting-"
+" href=\"http://community.mapthemoney.org/help/guide/en/formatting-"
 "data/\">詳細</a>"
 
 #: spendb/views/account.py:55

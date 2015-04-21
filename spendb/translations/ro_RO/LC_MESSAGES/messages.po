@@ -628,7 +628,7 @@ msgid ""
 "We recommend using <strong>,</strong> as delimiter and wrapping values in"
 " double quotes (especially amounts). The first line will always be "
 "regarded as a header row. <a "
-"href=\"http://community.spendb.mapthemoney.org/help/guide/en/formatting-"
+"href=\"http://community.mapthemoney.org/help/guide/en/formatting-"
 "data/\">Want to know more?</a>"
 msgstr ""
 

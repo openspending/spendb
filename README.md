@@ -7,7 +7,7 @@ SpenDB is a project to make government finances easier to explore
 and understand. It started out as "Where does my money go", a platform
 to visualize the United Kingdom's state finance, but has been renamed
 and restructured to allow arbitrary financial data to be loaded and
-displayed. The main use for the software is the site spendb.mapthemoney.org
+displayed. The main use for the software is the site mapthemoney.org
 which aims to track government finance around the world.
 
 ## Developer installation

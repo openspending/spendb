@@ -20,7 +20,7 @@ add a ``?callback=foo`` parameter to any query to wrap the output in a
 function call. This is used to include JSON data in other sites that do not
 support CORS::
 
-    $ curl http://spendb.mapthemoney.org/cra.json?callback=foo
+    $ curl http://mapthemoney.org/cra.json?callback=foo
 
     foo({
         "description": "Data published by HM Treasury.", 
@@ -37,7 +37,7 @@ tag::
         alert(data.label); 
       }
     </script>
-    <script src="http://spendb.mapthemoney.org/cra.json?callback=foo"></script>
+    <script src="http://mapthemoney.org/cra.json?callback=foo"></script>
 
 Aggregate API
 =============
@@ -49,7 +49,7 @@ applying filters and grouping criteria.
 This API is heavily based on OLAP concepts, and the documentation assumes 
 you know `how we store data`_.
 
-.. _how we store data: http://community.spendb.mapthemoney.org/help/guide/en/
+.. _how we store data: http://community.mapthemoney.org/help/guide/en/
 
 
 Basic call and parameters
@@ -162,19 +162,19 @@ UK budget, and the original `Where Does My Money Go?`_ page was based on this da
 .. _Where Does My Money Go?: http://wheredoesmymoneygo.org
 
 The first call we'll make will aggregate the complete dataset 
-and give us a total sum (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra)::
+and give us a total sum (result: http://mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra
 
 This is not very useful, however, as it includes UK spending 
 over several years. So let's refine our query to include only
-2010 figures (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010)::
+2010 figures (result: http://mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010
 
 Much better! Now we may want to know how these funds are distributed
 geographically, so let's drill down by the [NUTS](http://epp.eurostat.ec.europa.eu/portal/page/portal/nuts_nomenclature/introduction)
-names of each region of the UK (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=region)::
+names of each region of the UK (result: http://mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=region)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=region
 
@@ -190,7 +190,7 @@ three dimensions: cofog1, cofog2 and cofog3.
 
 In order to generate a Bubble Tree
 diagram, we want to break down the full CRA dataset by each of these 
-dimensions (result: http://spendb.mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=cofog1|cofog2|cofog3)::
+dimensions (result: http://mapthemoney.org/api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=cofog1|cofog2|cofog3)::
 
     GET /api/2/aggregate?dataset=ukgov-finances-cra&cut=time.year:2010&drilldown=cofog1|cofog2|cofog3
 
@@ -301,7 +301,7 @@ Supported formats are HTML and JSON.
     [
       {
         "name": "from", 
-        "html_url": "http://spendb.mapthemoney.org/ukgov-finances-cra/from", 
+        "html_url": "http://mapthemoney.org/ukgov-finances-cra/from", 
         "label": "Paid from", 
         "key": "from", 
         "attributes": {
@@ -347,7 +347,7 @@ including type, label, description and attribute definitions.
 
     {
       "name": "from", 
-      "html_url": "http://spendb.mapthemoney.org/ukgov-finances-cra/from", 
+      "html_url": "http://mapthemoney.org/ukgov-finances-cra/from", 
       "label": "Paid from", 
       "key": "from", 
       "attributes": {
@@ -550,7 +550,7 @@ The response will be single json object with four properties, *create*, *read*, 
 Loading API
 ===========
 
-Users can load datasets (or add sources to them) by making a *POST* request to ``https://spendb.mapthemoney.org/api/2/new`` (notice *https*) with the following url parameters:
+Users can load datasets (or add sources to them) by making a *POST* request to ``https://mapthemoney.org/api/2/new`` (notice *https*) with the following url parameters:
 
 * *csv_file* - A **url** to the csv file to me imported for the dataset
 * *metadata* - A **url** to the json file with dataset metadata (name, currency, etc.) and the model. Views can also be defined in this file. Take a look at a sample json file - https://dl.dropbox.com/u/3250791/sample-spendb-model.json to see how it should be structured (the value for *mapping* is the model - how the csv file should be cast into dataset dimensions, and the value for *dataset* is the metadata itself). To gain a better understanding of how to do the mapping, take a look at the corresponding csv file - http://mk.ucant.org/info/data/sample-spendb-dataset.csv.

@@ -16,7 +16,7 @@ MAIL_SERVER = 'localhost'
 # MAIL_USE_SSL = False
 # MAIL_USERNAME = None
 # MAIL_PASSWORD = None
-MAIL_DEFAULT_SENDER = 'noreply@spendb.mapthemoney.org'
+MAIL_DEFAULT_SENDER = 'noreply@mapthemoney.org'
 
 CACHE = False
 CACHE_TYPE = 'simple'
