@@ -62,9 +62,5 @@ class Model(object):
         return filter(lambda d: isinstance(d, CompoundDimension),
                       self.dimensions)
 
-    @property
-    def facet_dimensions(self):
-        return [d for d in self.dimensions if d.facet]
-
     def __repr__(self):
         return "<Model(%r)>" % (self.dataset)

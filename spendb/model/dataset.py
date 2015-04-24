@@ -10,7 +10,7 @@ from spendb.core import db
 from spendb.model.model import Model
 from spendb.model.fact_table import FactTable
 from spendb.model.common import (MutableDict, JSONType,
-                                       DatasetFacetMixin)
+                                 DatasetFacetMixin)
 
 
 class Dataset(db.Model):

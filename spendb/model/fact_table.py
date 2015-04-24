@@ -241,21 +241,19 @@ class FactTable(object):
                 yield self.mapping.unpack_entry(row)
 
     def timerange(self):
-        """
-        Get the timerange of the dataset (based on the time attribute).
+        """ Get the timerange of the dataset (based on the time attribute).
         Returns a tuple of (first timestamp, last timestamp) where timestamp
-        is a datetime object
-        """
+        is a datetime object """
         if not self.exists or not self.dataset.model.exists:
             return (None, None)
-    
+
         # Get the time column
         time = self.dataset.model['time']
         time = self.alias.c[time.column]
         # We use SQL's min and max functions to get the timestamps
         query = db.session.query(func.min(time), func.max(time))
         # We just need one result to get min and max time
-        
+
         def convert(d):
             if isinstance(d, date):
                 return d

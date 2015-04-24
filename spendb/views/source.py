@@ -8,10 +8,10 @@ from apikit import obj_or_404, jsonify
 
 from spendb.core import db
 from spendb.auth import require
+from spendb.tasks import load_from_url
 from spendb.lib.helpers import url_for, get_dataset
 from spendb.lib.helpers import flash_success, flash_error
-from spendb.tasks import load_from_url
-from spendb.lib.validation import source_schema
+from spendb.validation.source import source_schema
 from spendb.views.cache import disable_cache
 
 

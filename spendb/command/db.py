@@ -36,14 +36,8 @@ def drop_dataset(name):
 
 @manager.command
 def migrate():
-    """ Run pending data migrations """
+    """ Initialize or upgrade the database """
     upgrade()
-
-
-@manager.command
-def init():
-    """ Initialize the database """
-    migrate()
 
 
 @manager.command

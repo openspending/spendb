@@ -99,7 +99,7 @@ def must_be_compound_dimension(dimension):
     illegal = ('date', 'measure', 'attribute', 'value')
 
     def check(mapping):
-        if not dimension in mapping:
+        if dimension not in mapping:
             return True
         if mapping.get(dimension, {}).get('type') in illegal:
             return "'%s' must be a compound dimension if " \
@@ -129,7 +129,7 @@ def compound_attribute_label_is_string_type(attributes):
 
 def compound_attributes_include_name(attributes):
     """ Each compound dimension must have a 'name' attribute. """
-    if not 'name' in attributes:
+    if 'name' not in attributes:
         return "Compound dimensions must have a 'name' attribute " \
                "that uniquely identifies them in the data. The " \
                "'name' attribute must be of data type 'id'."
@@ -138,7 +138,7 @@ def compound_attributes_include_name(attributes):
 
 def compound_attributes_include_label(attributes):
     """ Each compound dimension must have a 'label' attribute. """
-    if not 'label' in attributes:
+    if 'label' not in attributes:
         return "Compound dimensions must have a 'label' attribute " \
                "that will be used to describe them in the " \
                "interface. The label must be a 'string'."
@@ -154,53 +154,53 @@ def property_schema(name, state):
         name_wrap(database_name, name),
         name_wrap(no_entry_namespace_overlap, name),
         no_dimension_id_overlap(name, state)
-        ))
+    ))
     schema.add(key('label', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
     schema.add(key('type', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
     schema.add(key('description', validator=chained(
-            nonempty_string,
-        ), missing=None))
+        nonempty_string,
+    ), missing=None))
     return schema
 
 
 def measure_schema(name, state):
     schema = property_schema(name, state)
     schema.add(key('column', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
     schema.add(key('datatype', validator=chained(
-            nonempty_string,
-            specific_datatype('float')
-        )))
+        nonempty_string,
+        specific_datatype('float')
+    )))
     return schema
 
 
 def attribute_dimension_schema(name, state):
     schema = property_schema(name, state)
     schema.add(key('column', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
     schema.add(key('datatype', validator=chained(
-            nonempty_string,
-            valid_datatype,
-        )))
+        nonempty_string,
+        valid_datatype,
+    )))
     return schema
 
 
 def date_schema(name, state):
     schema = property_schema(name, state)
     schema.add(key('column', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
     schema.add(key('format', missing=None))
     schema.add(key('datatype', validator=chained(
-            nonempty_string,
-            specific_datatype('date')
-        )))
+        nonempty_string,
+        specific_datatype('date')
+    )))
     return schema
 
 
@@ -209,27 +209,26 @@ def dimension_attribute_schema(name, state):
         name_wrap(nonempty_string, name),
         name_wrap(reserved_name, name),
         name_wrap(database_name, name),
-        ))
+    ))
     schema.add(key('column', validator=chained(
-            nonempty_string,
-        )))
+        nonempty_string,
+    )))
     schema.add(key('datatype', validator=chained(
-            nonempty_string,
-            valid_datatype
-        )))
+        nonempty_string,
+        valid_datatype
+    )))
     return schema
 
 
 def compound_dimension_schema(name, state):
     schema = property_schema(name, state)
 
-    attributes = mapping('attributes',
-        validator=chained(
-            compound_attributes_include_name,
-            compound_attributes_include_label,
-            compound_attribute_name_is_id_type,
-            compound_attribute_label_is_string_type
-        ))
+    attributes = mapping('attributes', validator=chained(
+        compound_attributes_include_name,
+        compound_attributes_include_label,
+        compound_attribute_name_is_id_type,
+        compound_attribute_label_is_string_type
+    ))
     for attribute in state.dimension_attributes(name):
         attributes.add(dimension_attribute_schema(attribute, state))
     schema.add(attributes)
@@ -244,14 +243,14 @@ def mapping_schema(state):
         require_one_key_column,
         must_be_compound_dimension('to'),
         must_be_compound_dimension('from')
-        ))
+    ))
     for name, meta in state.mapping_items:
         type_schema = {
             'measure': measure_schema,
             'value': attribute_dimension_schema,
             'attribute': attribute_dimension_schema,
             'date': date_schema,
-            }.get(meta.get('type'),
-                  compound_dimension_schema)
+        }.get(meta.get('type'),
+              compound_dimension_schema)
         schema.add(type_schema(name, state))
     return schema

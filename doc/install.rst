@@ -77,7 +77,7 @@ URL is set::
 
 Initialize the database::
 
-    $ ostool db init
+    $ ostool db migrate
 
 Generate the help system documentation (this is used by the front-end
 and must be available, developer documents are separate). The output 

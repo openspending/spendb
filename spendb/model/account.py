@@ -47,14 +47,12 @@ class Account(db.Model):
     name = Column(Unicode(255), unique=True)
     fullname = Column(Unicode(2000))
     email = Column(Unicode(2000))
-    public_email = Column(Boolean, default=False)
     twitter_handle = Column(Unicode(140))
+    public_email = Column(Boolean, default=False)
     public_twitter = Column(Boolean, default=False)
     password = Column(Unicode(2000))
     api_key = Column(Unicode(2000), default=make_uuid)
     admin = Column(Boolean, default=False)
-    script_root = Column(Unicode(2000))
-    terms = Column(Boolean, default=False)
 
     datasets = relationship(Dataset,
                             secondary=account_dataset_table,
@@ -127,7 +125,6 @@ class Account(db.Model):
 class AccountRegister(colander.MappingSchema):
     name = colander.SchemaNode(colander.String(),
                                validator=colander.Regex(REGISTER_NAME_RE))
-
     fullname = colander.SchemaNode(colander.String())
     email = colander.SchemaNode(colander.String(),
                                 validator=colander.Email())
@@ -137,10 +134,6 @@ class AccountRegister(colander.MappingSchema):
     password2 = colander.SchemaNode(colander.String(),
                                     validator=colander.Length(min=4))
     terms = colander.SchemaNode(colander.Bool())
-    subscribe_community = colander.SchemaNode(colander.Boolean(),
-                                              missing=False)
-    subscribe_developer = colander.SchemaNode(colander.Boolean(),
-                                              missing=False)
 
 
 class AccountSettings(colander.MappingSchema):
@@ -155,5 +148,3 @@ class AccountSettings(colander.MappingSchema):
                                     missing=None, default=None)
     password2 = colander.SchemaNode(colander.String(),
                                     missing=None, default=None)
-    script_root = colander.SchemaNode(colander.String(),
-                                      missing=None, default=None)

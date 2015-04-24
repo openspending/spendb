@@ -51,9 +51,6 @@ class TestDataset(DatabaseTestCase):
         assert isinstance(cols['func_label'].type, Unicode)
         assert_raises(KeyError, cols.__getitem__, 'foo')
 
-    def test_facet_dimensions(self):
-        assert [d.name for d in self.ds.model.facet_dimensions] == ['to']
-
 
 class TestDatasetLoad(DatabaseTestCase):
 
