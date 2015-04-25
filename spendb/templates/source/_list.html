@@ -38,7 +38,7 @@
         </a>
       {% elif source.successfully_sampled %}
       <form method="POST" action="{{url_for('source.load', dataset=dataset.name, id=source.id) }}">
-      	<button class="btn btn-success btn-sm" title="{% trans %}Load source into SpenDB{% endtrans %}">
+      	<button class="btn btn-success btn-sm" title="{% trans %}Load source into the database{% endtrans %}">
           <i class="icon-upload icon-white"></i>
           {% trans %}Load{% endtrans %}
         </button>

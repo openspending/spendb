@@ -1,40 +1,11 @@
 <footer>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <p>
-          {% trans %}This is an <a href="http://okfn.org">Open Knowledge Foundation</a>
-          project{% endtrans %}.
-        </p>
-      </div>
-    </div>
     <div class="row">    
       <div class="col-md-4">
         <ul class="footer-links">
           <li>
-            <a href="http://wheredoesmymoneygo.org">
-              Where Does My Money Go (UK)
-            </a>
-          </li>
-          <li>
             <a href="http://offenerhaushalt.de">
               OffenerHaushalt (DE)
-            </a>
-          </li>
-          <li>
-            <a href="http://opencorporates.com"
-              title="The Open Database Of The Corporate World">
-              OpenCorporates.com
-            </a>
-          </li>
-          <li>
-            <a href="http://okfnlabs.org">
-              OKFN Labs
-            </a>
-          </li>
-          <li>
-            <a href="http://spendingstories.org">
-              Spending Stories
             </a>
           </li>
         </ul>
@@ -42,27 +13,17 @@
       <div class="col-md-4">
         <ul class="footer-links">
           <li>
-            <a href="http://twitter.com/spendb">
-              Twitter
-            </a>
-          </li>
-          <li>
-            <a href="http://community.mapthemoney.org/help/">
-              {% trans %}Help{% endtrans %}
-            </a>
-          </li>
-          <li>
-            <a href="http://community.mapthemoney.org/contact/">
+            <a href="{{url_for('home.page', path='contact.html')}}">
               {% trans %}Contact{% endtrans %}
             </a>
           </li>
           <li>
-            <a href="http://community.mapthemoney.org/help/api/">
+            <a href="{{url_for('home.page', path='api.html')}}">
               {% trans %}API{% endtrans %}
             </a>
           </li>
           <li>
-            <a href="http://okfn.org/privacy-policy/">
+            <a href="{{url_for('home.page', path='tos.html')}}">
               {% trans %}Privacy{% endtrans %}
             </a>
           </li>

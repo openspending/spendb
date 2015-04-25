@@ -24,6 +24,9 @@ CACHE_TYPE = 'simple'
 ALEMBIC_DIR = os.path.join(os.path.dirname(__file__), 'migrate')
 ALEMBIC_DIR = os.path.abspath(ALEMBIC_DIR)
 
+FLATPAGES_ROOT = os.path.join(os.path.dirname(__file__), '..', 'pages')
+FLATPAGES_ROOT = os.path.abspath(FLATPAGES_ROOT)
+
 # Worker queue configuration.
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 

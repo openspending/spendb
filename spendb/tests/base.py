@@ -13,6 +13,7 @@ class TestCase(FlaskTestCase):
         app = create_web_app(**{
             'DEBUG': True,
             'TESTING': True,
+            'SITE_TITLE': 'SpenDB',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
             'CELERY_ALWAYS_EAGER': True
         })

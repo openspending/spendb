@@ -12,7 +12,7 @@
         </button>
         
         <a class="navbar-brand" href="{{ url_for('home.index') }}">
-          <span class="green">Open</span>Spending
+           {{ site_title }}
         </a>
 
       </div>
@@ -25,28 +25,13 @@
             </a>
           </li>
           <li>
-            <a href="http://community.mapthemoney.org/">
-              {% trans %}Community{% endtrans %}
-            </a>
-          </li>
-          <li>
-            <a href="http://community.mapthemoney.org/help/">
-              {% trans %}Help{% endtrans %}
-            </a>
-          </li>
-          <li>
-            <a href="http://community.mapthemoney.org/about/">
+            <a href="{{url_for('home.page', path='about.html')}}">
               {% trans %}About{% endtrans %}
             </a>
           </li>
           <li>
-            <a href="http://community.mapthemoney.org/contact/">
+            <a href="{{url_for('home.page', path='contact.html')}}">
               {% trans %}Contact{% endtrans %}
-            </a>
-          </li>
-          <li>
-            <a class="{{ section_active.blog }}" href="http://community.mapthemoney.org/blog/">
-              {% trans %}Blog{% endtrans %}
             </a>
           </li>
         </ul>

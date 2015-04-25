@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="{{ static_path('img/favicon.ico') }}"
       type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml"
-      title="{% trans %}Latest Datasets on SpenDB{% endtrans %}"
+      title="{% trans %}Latest Datasets on {{ site_title }}{% endtrans %}"
       href="{{ url_for('dataset.feed_rss') }}" />
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600'
@@ -35,7 +35,7 @@
     <div id="page">
       {% include '_nav.html' %}
 
-      <div class="banner">
+      <div class="banner" ng-cloak>
         <div class="container">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -70,7 +70,7 @@
         {% trans %}Okay, thanks{% endtrans %}
       </button>
 
-      <a href="http://okfn.org/cookie-policy">
+      <a href="{{url_for('home.page', path='tos.html')}}">
         {% trans %}Find out more{% endtrans %}
       </a>
     </div>

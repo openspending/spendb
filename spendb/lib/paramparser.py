@@ -94,11 +94,8 @@ class ParamParser(object):
 
 
 class DatasetIndexParamParser(ParamParser):
-
-    """
-    Parameter parser for the dataset index page (which is served
-    differently based on languages, territories and category chosen.
-    """
+    """ Parameter parser for the dataset index page (which is served
+    differently based on languages, territories and category chosen. """
 
     # We cannot use the defaults from ParamParser since that includes
     # order.
@@ -147,7 +144,6 @@ class DatasetIndexParamParser(ParamParser):
         territories = [t.upper().strip()
                        for t in self.request_params.getlist('territories')]
 
-        # Check if this territory is supported by SpenDB
         # If not we add an error
         for country in territories:
             if country not in COUNTRIES:
@@ -156,10 +152,8 @@ class DatasetIndexParamParser(ParamParser):
         return territories
 
     def parse_category(self, category):
-        """
-        Get the category and check if it exists in
-        supported categories. If so we return it.
-        """
+        """ Get the category and check if it exists in supported categories. If
+        so we return it. """
         if category:
             # We want the category to be lowercase and stripped of whitespace
             category = category.lower().strip()

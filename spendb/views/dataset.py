@@ -149,7 +149,8 @@ def feed_rss():
                                       feed_item.managers if
                                       person.fullname]),
         })
-    desc = _('Recently created datasets in the SpenDB Platform')
+    desc = _('Recently created datasets on %(site_title)s',
+             site_title=current_app.config.get('SITE_TITLE'))
     feed = Rss201rev2Feed(_('Recently Created Datasets'),
                           url_for('home.index'), desc)
     for item in items:

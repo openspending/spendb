@@ -1,6 +1,5 @@
 
 class Attribute(object):
-
     """ An attribute describes some concrete value stored in the data model.
     This value can either be stored directly on the facts table or on a
     separate dimension table, which is associated to the facts table through
@@ -88,9 +87,8 @@ class Measure(Attribute):
 class CompoundDimension(Dimension):
     """ A compound dimension is an outer table on the star schema, i.e. an
     associated table that is referenced from the fact table. It can have
-    any number of attributes but in the case of SpenDB it will not
-    have sub-dimensions (i.e. snowflake schema).
-    """
+    any number of attributes but will not have sub-dimensions (i.e. snowflake
+    schema). """
 
     def __init__(self, model, name, data):
         Dimension.__init__(self, model, name, data)

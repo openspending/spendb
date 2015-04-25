@@ -3,7 +3,31 @@
 @import "../vendor/bootstrap/less/mixins.less";
 
 // Local variables
-@theme-color: #99c862;
+@col-1: #CF3D1E;
+@col-2: #F15623;
+@col-3: #F68B1F;
+@col-4: #FFC60B;
+@col-5: #DFCE21;
+@col-6: #BCD631;
+@col-7: #95C93D;
+@col-8: #48B85C;
+@col-9: #00833D;
+@col-10: #00B48D;
+@col-11: #60C4B1;
+@col-12: #27C4F4;
+@col-13: #478DCB;
+@col-14: #3E67B1;
+@col-15: #4251A3;
+@col-16: #59449B;
+@col-17: #6E3F7C;
+@col-18: #6A246D;
+@col-19: #8A4873;
+@col-20: #EB0080;
+@col-21: #EF58A0;
+@col-22: #C05A89;
+
+@theme-color: @col-12;
+
 @theme-darker: darken(@theme-color, 20%);
 
 @brand-primary: @theme-color;
@@ -13,7 +37,6 @@
 @btn-success-border: darken(@btn-success-bg, 5%);
 @label-success-bg: @brand-success;
 @progress-bar-success-bg: @brand-success;
-
 
 // Style tiles, Colours
 // @white: #ffffff;
@@ -78,7 +101,7 @@
 
 // Base style
 body {
-    background: #222222;
+    background: #eee;
 }
 
 #page {
@@ -86,12 +109,15 @@ body {
     padding-bottom: 2em;
 }
 
+// Angular ugliness fix 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 
-// Footer styles based on OKFN brand design.
+
 footer {
-    background: #222222 url('../img/okfn-watermark.png') top right no-repeat;
     margin-top: 0em;
-    color: #fff;
+    //color: #fff;
     padding: 2em 0 3em;
 
     ul {
@@ -101,11 +127,6 @@ footer {
 
     a, a:hover {
         color: @theme-color;
-    }
-
-    a.twitter {
-        background: url(../img/icons/twitter.png) no-repeat;
-        padding-left: 20px;
     }
 }
 
@@ -142,6 +163,5 @@ footer {
     }
 }
 
-@import "old.less";
+//@import "old.less";
 @import "home.less";
-@import "search.less";

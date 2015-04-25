@@ -8,6 +8,7 @@ from flask.ext.cache import Cache
 from flask.ext.mail import Mail
 from flask.ext.assets import Environment
 from flask.ext.migrate import Migrate
+from flask_flatpages import FlatPages
 import formencode_jinja2
 from celery import Celery
 from cubes import Workspace
@@ -32,6 +33,7 @@ cache = Cache()
 mail = Mail()
 assets = Environment()
 migrate = Migrate()
+pages = FlatPages()
 data_manager = DataManager()
 
 
@@ -57,13 +59,13 @@ def create_app(**config):
     assets.init_app(app)
     login_manager.init_app(app)
     data_manager.init_app(app)
+    pages.init_app(app)
     migrate.init_app(app, db, directory=app.config.get('ALEMBIC_DIR'))
 
-    from spendb.model.provider import SpenDBStore
-    extensions.store.extensions['spendb'] = SpenDBStore
+    from spendb.model.provider import SpendingStore
+    extensions.store.extensions['spending'] = SpendingStore
     app.cubes_workspace = Workspace()
-    app.cubes_workspace.register_default_store('spendb')
-
+    app.cubes_workspace.register_default_store('spending')
     return app
 
 

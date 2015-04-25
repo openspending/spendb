@@ -103,11 +103,11 @@ class CubesModelVisitor(ModelVisitor):
                     mappings=self.mappings)
 
 
-class SpenDBModelProvider(ModelProvider):
-    __extension_name__ = 'spendb'
+class SpendingModelProvider(ModelProvider):
+    __extension_name__ = 'spending'
 
     def __init__(self, *args, **kwargs):
-        super(SpenDBModelProvider, self).__init__(*args, **kwargs)
+        super(SpendingModelProvider, self).__init__(*args, **kwargs)
 
     def requires_store(self):
         return True
@@ -134,8 +134,8 @@ class SpenDBModelProvider(ModelProvider):
         return cubes
 
 
-class SpenDBStore(SQLStore):
-    related_model_provider = "spendb"
+class SpendingStore(SQLStore):
+    related_model_provider = "spending"
 
     def model_provider_name(self):
         return self.related_model_provider
@@ -151,7 +151,7 @@ class SpenDBStore(SQLStore):
     @property
     def connectable(self):
         return db.engine
-        
+
     @property
     def metadata(self):
         if self._metadata is None:

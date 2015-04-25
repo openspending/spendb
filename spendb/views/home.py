@@ -3,6 +3,7 @@ from flask.ext.login import current_user
 from flask.ext.babel import gettext
 from apikit import jsonify
 
+from spendb.core import pages
 from spendb.views.i18n import set_session_locale
 from spendb.model.dataset import Dataset, DatasetTerritory
 from spendb.views.cache import disable_cache
@@ -48,3 +49,10 @@ def ping():
     ping.delay()
     flash(gettext("Sent ping!"), 'success')
     return redirect('/')
+
+
+@blueprint.route('/<path:path>')
+def page(path):
+    page = pages.get_or_404(path)
+    template = page.meta.get('template', 'page.html')
+    return render_template(template, page=page)
