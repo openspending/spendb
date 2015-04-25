@@ -9,7 +9,6 @@ from flask import Blueprint, render_template, request
 from flask import Response, current_app
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
-from apikit import jsonify
 
 from spendb.core import db
 from spendb.model import Dataset
@@ -103,33 +102,14 @@ def new():
     return render_template('dataset/new.html')
 
 
-@blueprint.route('/datasets/<nodot:dataset>')
-@blueprint.route('/datasets/<nodot:dataset>.<fmt:format>')
-def view(dataset, format='html'):
+@blueprint.route('/datasets/<dataset>')
+def view(dataset):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
     managers = list(dataset.managers)
     return render_template('dataset/view.html', dataset=dataset,
-                           managers=managers)
-
-
-@blueprint.route('/datasets/<nodot:dataset>/manage', methods=['GET'])
-@blueprint.route('/datasets/<nodot:dataset>/manage/meta', methods=['GET'])
-@blueprint.route('/datasets/<nodot:dataset>/manage/model', methods=['GET'])
-def manage(dataset):
-    dataset = get_dataset(dataset)
-    auth.require.dataset.update(dataset)
-    return render_template('dataset/manage.html', dataset=dataset,
+                           managers=managers,
                            templates=angular_templates(current_app))
-
-
-@blueprint.route('/datasets/<nodot:dataset>/model')
-@blueprint.route('/datasets/<nodot:dataset>/model.<fmt:format>')
-def model(dataset, format='json'):
-    dataset = get_dataset(dataset)
-    etag_cache_keygen(dataset.updated_at)
-    model = dataset.model_data
-    return jsonify(model)
 
 
 @blueprint.route('/datasets.rss')

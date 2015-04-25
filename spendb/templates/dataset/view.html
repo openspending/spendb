@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% from "_dimension_list.html" import dimensions_list as dimensions_list %}
-{% from "_util.html" import share_scripts as share_scripts %}
-{% from "dataset/_nav.html" import dataset_nav as dataset_nav %}
 {% from "_util.html" import share_body as share_body %}
 {% from "_util.html" import share_scripts as share_scripts %}
 
@@ -10,14 +8,13 @@
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
 
 {% block scripts %}
-  {{share_scripts()}}
+  {% for path, tmpl in templates %}
+    <script id="/static/templates/{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
+  {% endfor %}
 {% endblock %}
 
 {% block content %}
-  <div>
-    <!-- templates/dataset/about.html -->
-    {{dataset_nav(dataset, can, 'about')}}
-
+  <div ng-view>
     <div class="row">
       <div class="col-md-8">
         <h3>{% trans %}Description{% endtrans %}</h3>

@@ -34,14 +34,6 @@ class TestDatasetController(ControllerTestCase):
         assert 'spendb_browser' not in response.data, \
             "'spendb_browser' in response!"
 
-    def test_view_has_format_links(self):
-        url_ = url_for('dataset.view', dataset='cra')
-        response = self.client.get(url_)
-
-        url_ = url_for('dataset.model', dataset='cra')
-        assert url_ in response.data, \
-            "Link to view page (JSON format) not in response!"
-
     def test_view_has_profile_links(self):
         self.dataset.managers.append(self.user)
         db.session.add(self.dataset)
@@ -70,13 +62,6 @@ class TestDatasetController(ControllerTestCase):
         da = format_date(datetime.datetime.utcnow(), format='short')
         assert da in response.data.decode('utf-8'), \
             'Created (and update) timestamp is not on about page'
-
-    def test_model_json(self):
-        response = self.client.get(url_for('dataset.model', dataset='cra'))
-        obj = json.loads(response.data)
-        assert 'dataset' in obj.keys(), obj
-        assert obj['dataset']['name'] == 'cra'
-        assert obj['dataset']['label'] == 'Country Regional Analysis v2009'
 
     def test_new_form(self):
         response = self.client.get(url_for('dataset.new'),
