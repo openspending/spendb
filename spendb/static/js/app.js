@@ -129,7 +129,7 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'data', 'vali
   $scope.save = function(form) {
     var dfd = $http.post('/api/3/datasets', $scope.dataset);
     dfd.then(function(res) {
-      $window.location.href = '/' + res.data.name + '/meta';
+      $window.location.href = '/datasets/' + res.data.name;
     }, validation.handle(form));
   };
 

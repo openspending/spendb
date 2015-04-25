@@ -38,8 +38,7 @@ class TestDatasetController(ControllerTestCase):
         url_ = url_for('dataset.view', dataset='cra')
         response = self.client.get(url_)
 
-        url_ = url_for('dataset.model', dataset='cra', format='json')
-
+        url_ = url_for('dataset.model', dataset='cra')
         assert url_ in response.data, \
             "Link to view page (JSON format) not in response!"
 
@@ -73,8 +72,7 @@ class TestDatasetController(ControllerTestCase):
             'Created (and update) timestamp is not on about page'
 
     def test_model_json(self):
-        response = self.client.get(url_for('dataset.model',
-                                           dataset='cra', format='json'))
+        response = self.client.get(url_for('dataset.model', dataset='cra'))
         obj = json.loads(response.data)
         assert 'dataset' in obj.keys(), obj
         assert obj['dataset']['name'] == 'cra'

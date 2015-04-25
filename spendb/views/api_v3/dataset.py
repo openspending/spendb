@@ -8,7 +8,7 @@ from apikit import jsonify, Pager
 
 from spendb.core import db
 from spendb.model import Dataset
-
+from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.lib.indices import clear_index_cache
 from spendb.views.cache import etag_cache_keygen
@@ -41,22 +41,6 @@ def view(name):
     return jsonify(dataset)
 
 
-@blueprint.route('/datasets/<name>/model')
-@api_json_errors
-def model(name):
-    dataset = get_dataset(name)
-    etag_cache_keygen(dataset)
-    return jsonify(dataset.mapping)
-
-
-@blueprint.route('/datasets/<name>/fields')
-@api_json_errors
-def fields(name):
-    dataset = get_dataset(name)
-    etag_cache_keygen(dataset)
-    return jsonify(dataset.fields)
-
-
 @blueprint.route('/datasets', methods=['POST', 'PUT'])
 @api_json_errors
 def create():
@@ -86,6 +70,22 @@ def update(name):
     db.session.commit()
     clear_index_cache()
     return view(name)
+
+
+@blueprint.route('/datasets/<name>/fields')
+@api_json_errors
+def fields(name):
+    dataset = get_dataset(name)
+    etag_cache_keygen(dataset)
+    return jsonify(dataset.fields)
+
+
+@blueprint.route('/datasets/<name>/model')
+@api_json_errors
+def model(name):
+    dataset = get_dataset(name)
+    etag_cache_keygen(dataset)
+    return jsonify(dataset.mapping)
 
 
 @blueprint.route('/datasets/<name>/model', methods=['POST', 'PUT'])
