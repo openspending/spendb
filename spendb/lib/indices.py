@@ -5,8 +5,7 @@ from sqlalchemy.orm import aliased
 from apikit import cache_hash
 
 
-from spendb.core import db, cache
-from spendb.lib.helpers import url_for
+from spendb.core import db, cache, url_for
 from spendb.model.dataset import (Dataset, DatasetLanguage,
                                   DatasetTerritory)
 from spendb.reference import COUNTRIES, CATEGORIES, LANGUAGES

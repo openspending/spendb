@@ -7,14 +7,8 @@
 {% block page_title %}{{ dataset.label or dataset.name }}{% endblock %}
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
 
-{% block scripts %}
-  {% for path, tmpl in templates %}
-    <script id="/static/templates/{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
-  {% endfor %}
-{% endblock %}
-
 {% block content %}
-  <div ng-view>
+  <div>
     <div class="row">
       <div class="col-md-8">
         <h3>{% trans %}Description{% endtrans %}</h3>

@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 """ Helper functions """
-from flask import url_for as flask_url_for
 from flask import flash, request
 from apikit import obj_or_404
 
+from spendb.core import url_for
 from spendb.auth import require
 from spendb.model import Dataset
-
-
-def url_for(endpoint, **kwargs):
-    kwargs['_external'] = True
-    return flask_url_for(endpoint, **kwargs)
 
 
 def static_path(filename):

@@ -1,6 +1,8 @@
 # coding=utf-8
 import datetime
 from json import dumps, loads
+
+import colander
 from sqlalchemy.types import Text, TypeDecorator
 from sqlalchemy.sql.expression import select, func
 from sqlalchemy.ext.mutable import Mutable
@@ -14,6 +16,20 @@ def json_default(obj):
     if isinstance(obj, datetime.date):
         obj = obj.isoformat()
     return obj
+
+
+class Ref(object):
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        value = self.decode(cstruct)
+        if value is None:
+            raise colander.Invalid(node, 'Missing')
+        return value
+
+    def cstruct_children(self, node, cstruct):
+        return []
 
 
 class MutableDict(Mutable, dict):

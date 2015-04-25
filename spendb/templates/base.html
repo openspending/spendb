@@ -21,10 +21,6 @@
     {% assets "css_main" %}
       <link href="{{ ASSET_URL }}" rel="stylesheet" />
     {% endassets %}
-
-    {% assets "js_base" %}
-      <script src="{{ ASSET_URL }}"></script>
-    {% endassets %}
     
   	<!-- TODO: remove the need for this -->
   	{% block optional_head %}{% endblock %}
@@ -83,6 +79,10 @@
 	    SpenDB.localeGroupSeparator = "{{ number_symbols_group }}";
 	    SpenDB.localeDecimalSeparator = "{{ number_symbols_decimal }}";
     </script>
+
+    {% assets "js_base" %}
+      <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <!-- end script boot section -->
 
   	{% block scripts %}{% endblock %}

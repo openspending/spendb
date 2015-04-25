@@ -10,12 +10,12 @@ from flask import Response, current_app
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 
-from spendb.core import db
+from spendb.core import db, url_for
 from spendb.model import Dataset
 from spendb.lib.paramparser import DatasetIndexParamParser
 from spendb import auth
 from spendb.lib.indices import cached_index
-from spendb.lib.helpers import url_for, get_dataset
+from spendb.lib.helpers import get_dataset
 from spendb.lib.pagination import Page
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.context import angular_templates
@@ -108,7 +108,16 @@ def view(dataset):
     etag_cache_keygen(dataset.updated_at)
     managers = list(dataset.managers)
     return render_template('dataset/view.html', dataset=dataset,
-                           managers=managers,
+                           managers=managers)
+
+
+@blueprint.route('/datasets/<dataset>/manage')
+@blueprint.route('/datasets/<dataset>/manage/meta')
+@blueprint.route('/datasets/<dataset>/manage/model')
+def app(dataset):
+    dataset = get_dataset(dataset)
+    etag_cache_keygen(dataset.updated_at)
+    return render_template('dataset/app.html', dataset=dataset,
                            templates=angular_templates(current_app))
 
 

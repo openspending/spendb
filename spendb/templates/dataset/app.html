@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% from "_util.html" import share_body as share_body %}
+{% from "_util.html" import share_scripts as share_scripts %}
+
+{% block page_title %}{{ dataset.label or dataset.name }}{% endblock %}
+{% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
+
+{% block scripts %}
+  {% for path, tmpl in templates %}
+    <script id="/static/templates/{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
+  {% endfor %}
+{% endblock %}
+
+{% block content %}
+  <div ng-view></div>
+{% endblock %}

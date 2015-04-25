@@ -1,5 +1,6 @@
 import logging
 from flask import Flask
+from flask import url_for as _url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.babel import Babel
@@ -94,3 +95,10 @@ def create_celery(app):
 
     celery.Task = ContextTask
     return celery
+
+
+def url_for(endpoint, **kwargs):
+    try:
+        return _url_for(endpoint, _external=True, **kwargs)
+    except:
+        return None

@@ -6,14 +6,13 @@ from sqlalchemy.sql.expression import desc, func, or_
 from werkzeug.security import check_password_hash, generate_password_hash
 from apikit import obj_or_404, jsonify
 
-from spendb.core import db, login_manager
+from spendb.core import db, login_manager, url_for
 from spendb.auth import require
 from spendb.model.dataset import Dataset
-from spendb.model.account import (Account, AccountRegister,
-                                        AccountSettings)
+from spendb.model.account import Account, AccountRegister, AccountSettings
 from spendb.lib.paramparser import DistinctParamParser
 from spendb.lib.mailer import send_reset_link
-from spendb.lib.helpers import url_for, flash_error, flash_success
+from spendb.lib.helpers import flash_error, flash_success
 from spendb.lib.pagination import Page
 from spendb.views.cache import disable_cache
 

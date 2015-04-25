@@ -2,8 +2,7 @@ from flask import current_app
 from flask.ext.babel import lazy_gettext as _
 from flask.ext.mail import Message
 
-from spendb.core import mail
-from spendb.lib.helpers import url_for
+from spendb.core import mail, url_for
 
 
 RESET_MESSAGE = '''You have requested your password on %(site_title)s to be reset.

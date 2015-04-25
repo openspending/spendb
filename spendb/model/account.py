@@ -7,8 +7,9 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, Boolean
 
-from spendb.core import db, login_manager
+from spendb.core import db, login_manager, url_for
 from spendb.model.dataset import Dataset
+from spendb.model.common import Ref
 
 REGISTER_NAME_RE = r"^[a-zA-Z0-9_\-]{3,255}$"
 
@@ -99,27 +100,37 @@ class Account(db.Model):
         return db.session.query(cls).filter_by(api_key=api_key).first()
 
     def to_dict(self):
-        """
-        Return the dictionary representation of the account
-        """
-
-        # Dictionary will include name, fullname, email and the admin bit
+        """ Return the dictionary representation of the account. """
         account_dict = {
             'name': self.name,
             'fullname': self.fullname,
             'email': self.email,
-            'admin': self.admin
+            'admin': self.admin,
+            'twitter_handle': self.twitter_handle,
+            'api_url': url_for('datasets_v3.view', name=self.name)
         }
-
-        # If the user has a twitter handle we add it
-        if self.twitter_handle is not None:
-            account_dict['twitter'] = self.twitter_handle
-
-        # Return the dictionary representation
+        if not self.public_email:
+            account_dict.pop('email')
+        if not self.public_twitter:
+            account_dict.pop('twitter_handle')
         return account_dict
 
     def __repr__(self):
         return '<Account(%r,%r)>' % (self.id, self.name)
+
+
+class AccountRef(Ref):
+
+    def decode(self, cstruct):
+        if isinstance(cstruct, basestring):
+            return Account.by_name(cstruct)
+        if isinstance(cstruct, dict):
+            return self.decode(cstruct.get('name'))
+        return None
+
+
+class DatasetAccounts(colander.SequenceSchema):
+    account = colander.SchemaNode(AccountRef())
 
 
 class AccountRegister(colander.MappingSchema):

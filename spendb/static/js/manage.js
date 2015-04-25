@@ -1,31 +1,31 @@
 
-spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams',
-  function($scope, $http, $window, $routeParams) {
-  var datasetApi = '/api/3/datasets/' + $routeParams.name;
-  
-  $scope.dataset = {};
 
-  $http.get(datasetApi).then(function(res) {
-      $scope.dataset = res.data;
+var loadDataset = ['$route', '$http', '$q', function($route, $http, $q) {
+  var dfd = $q.defer(),
+      url = '/api/3/datasets/' + $route.current.params.dataset;
+  $http.get(url).then(function(res) {
+    dfd.resolve(res.data);
   });
+  return dfd.promise;
+}];
+
+
+spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
+  function($scope, $http, $window, $routeParams, dataset) {
+
+  $scope.dataset = dataset;
 
 }]);
 
 
-spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'referenceData', 'flash', 'validation',
-  function($scope, $http, $location, $routeParams, referenceData, flash, validation) {
-  var datasetApi = '/api/3/datasets/' + $routeParams.name;
+spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'data', 'dataset', 'flash', 'validation',
+  function($scope, $http, $location, $routeParams, data, dataset, flash, validation) {
 
   $scope.reference = {};
-  $scope.dataset = {};
+  $scope.dataset = dataset;
 
-  referenceData.get(function(reference) {
+  data.get(function(reference) {
     $scope.reference = reference;
-    // delay loading the dataset so that the selects are populated.
-    $http.get(datasetApi).then(function(res) {
-      $scope.dataset = res.data;
-
-    });
   });
 
   $scope.save = function(form) {
@@ -39,13 +39,12 @@ spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routePar
 }]);
 
 
-spendb.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routeParams',
-  function($scope, $http, $window, $routeParams) {
-  var datasetApi = '/api/3/datasets/' + $routeParams.name,
-      fieldsApi = '/api/3/datasets/' + $routeParams.name + '/fields',
-      modelApi = '/api/3/datasets/' + $routeParams.name + '/model';
+spendb.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
+  function($scope, $http, $window, $routeParams, dataset) {
+  var fieldsApi = '/api/3/datasets/' + $routeParams.dataset + '/fields',
+      modelApi = '/api/3/datasets/' + $routeParams.dataset + '/model';
   
-  $scope.dataset = {};
+  $scope.dataset = dataset;
   $scope.fields = {};
   $scope.model = {};
 
@@ -56,10 +55,6 @@ spendb.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routePara
       flash.setMessage("Your changes have been saved!", "success");
     }, validation.handle(form));
   };
-
-  $http.get(datasetApi).then(function(res) {
-      $scope.dataset = res.data;
-  });
 
   $http.get(fieldsApi).then(function(res) {
       $scope.fields = res.data;

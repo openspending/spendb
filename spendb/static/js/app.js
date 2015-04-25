@@ -139,23 +139,32 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'data', 'vali
 spendb.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
-  $routeProvider.when('/manage', {
+  $routeProvider.when('/datasets/:dataset/manage', {
     templateUrl: '/static/templates/dataset/manage.html',
-    controller: 'DatasetManageCtrl'
+    controller: 'DatasetManageCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
   });
 
-  $routeProvider.when('/manage/meta', {
+  $routeProvider.when('/datasets/:dataset/manage/meta', {
     templateUrl: '/static/templates/dataset/meta.html',
-    controller: 'DatasetMetaCtrl'
+    controller: 'DatasetMetaCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
   });
 
-  $routeProvider.when('/manage/model', {
+  $routeProvider.when('/datasets/:dataset/manage/model', {
     templateUrl: '/static/templates/dataset/model.html',
-    controller: 'DatasetModelCtrl'
+    controller: 'DatasetModelCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
   });
 
   // Router hack to enable plain old links. 
-  // angular.element("a").prop("target", "_self");
-  $locationProvider.html5Mode(false);
+  angular.element("a").prop("target", "_self");
+  $locationProvider.html5Mode(true);
 
 }]);

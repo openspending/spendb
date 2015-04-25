@@ -5,11 +5,11 @@ from flask.ext.babel import get_locale
 from flask.ext.login import current_user
 
 from spendb import auth, _version
+from spendb.core import url_for
 from spendb.views.i18n import get_available_locales
 from spendb.views.cache import setup_caching, cache_response
 from spendb.views.home import blueprint as home
 from spendb.lib.helpers import static_path
-from spendb.lib.helpers import url_for
 
 
 @home.before_app_request
