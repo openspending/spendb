@@ -5,8 +5,7 @@ from sqlalchemy.types import Integer, Unicode, Boolean, DateTime
 from sqlalchemy.sql.expression import false, or_
 from sqlalchemy.ext.associationproxy import association_proxy
 
-from spendb.core import db
-
+from spendb.core import db, url_for
 from spendb.model.model import Model
 from spendb.model.fact_table import FactTable
 from spendb.model.common import (MutableDict, JSONType,
@@ -106,7 +105,8 @@ class Dataset(db.Model):
                 'last_modified': self.updated_at
             },
             'languages': list(self.languages),
-            'territories': list(self.territories)
+            'territories': list(self.territories),
+            'api_url': url_for('datasets_api3.view', name=self.name)
         }
 
     @classmethod

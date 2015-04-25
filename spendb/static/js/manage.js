@@ -10,6 +10,15 @@ var loadDataset = ['$route', '$http', '$q', function($route, $http, $q) {
 }];
 
 
+var loadReferenceData = ['$q', 'data', function($q, wdata) {
+  var dfd = $q.defer();
+  data.get(function(rd) {
+    dfd.resolve(rd);
+  });
+  return dfd.promise;
+}];
+
+
 spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
   function($scope, $http, $window, $routeParams, dataset) {
 
@@ -18,18 +27,14 @@ spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routePar
 }]);
 
 
-spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'data', 'dataset', 'flash', 'validation',
-  function($scope, $http, $location, $routeParams, data, dataset, flash, validation) {
+spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routeParams', 'reference', 'dataset', 'flash', 'validation',
+  function($scope, $http, $location, $routeParams, reference, dataset, flash, validation) {
 
-  $scope.reference = {};
+  $scope.reference = reference;
   $scope.dataset = dataset;
 
-  data.get(function(reference) {
-    $scope.reference = reference;
-  });
-
   $scope.save = function(form) {
-    var dfd = $http.post(datasetApi, $scope.dataset);
+    var dfd = $http.post(dataset.api_url, $scope.dataset);
     dfd.then(function(res) {
       $scope.dataset = res.data;
       flash.setMessage("Your changes have been saved!", "success");
@@ -41,8 +46,8 @@ spendb.controller('DatasetMetaCtrl', ['$scope', '$http', '$location', '$routePar
 
 spendb.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
   function($scope, $http, $window, $routeParams, dataset) {
-  var fieldsApi = '/api/3/datasets/' + $routeParams.dataset + '/fields',
-      modelApi = '/api/3/datasets/' + $routeParams.dataset + '/model';
+  var fieldsApi = dataset.api_url + '/fields',
+      modelApi = dataset.api_url + '/model';
   
   $scope.dataset = dataset;
   $scope.fields = {};

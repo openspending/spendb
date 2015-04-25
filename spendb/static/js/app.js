@@ -151,7 +151,8 @@ spendb.config(['$routeProvider', '$locationProvider',
     templateUrl: '/static/templates/dataset/meta.html',
     controller: 'DatasetMetaCtrl',
     resolve: {
-      dataset: loadDataset
+      dataset: loadDataset,
+      reference: loadReferenceData
     }
   });
 

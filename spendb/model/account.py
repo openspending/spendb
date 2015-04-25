@@ -106,8 +106,7 @@ class Account(db.Model):
             'fullname': self.fullname,
             'email': self.email,
             'admin': self.admin,
-            'twitter_handle': self.twitter_handle,
-            'api_url': url_for('datasets_v3.view', name=self.name)
+            'twitter_handle': self.twitter_handle
         }
         if not self.public_email:
             account_dict.pop('email')
