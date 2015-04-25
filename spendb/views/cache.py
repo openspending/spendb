@@ -15,6 +15,7 @@ def handle_not_modified(exc):
 def setup_caching():
     request._http_cache = current_app.config.get('CACHE')
     request._http_etag = None
+    request._dataset_authz = None
 
 
 def disable_cache():

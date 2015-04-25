@@ -57,7 +57,7 @@ def create(dataset):
 def index(dataset, format='json'):
     disable_cache()
     dataset = get_dataset(dataset)
-    return jsonify([src.as_dict() for src in dataset.sources])
+    return jsonify([src.to_dict() for src in dataset.sources])
 
 
 @blueprint.route('/datasets/<dataset>/sources/<id>', methods=['GET'])

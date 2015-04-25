@@ -98,7 +98,7 @@ class Account(db.Model):
     def by_api_key(cls, api_key):
         return db.session.query(cls).filter_by(api_key=api_key).first()
 
-    def as_dict(self):
+    def to_dict(self):
         """
         Return the dictionary representation of the account
         """

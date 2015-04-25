@@ -63,7 +63,7 @@ class Dataset(db.Model):
     @property
     def model_data(self):
         model = self.data.copy()
-        model['dataset'] = self.as_dict()
+        model['dataset'] = self.to_dict()
         return model
 
     @property
@@ -92,7 +92,7 @@ class Dataset(db.Model):
     def __repr__(self):
         return "<Dataset(%r,%r)>" % (self.id, self.name)
 
-    def as_dict(self):
+    def to_dict(self):
         return {
             'label': self.label,
             'name': self.name,

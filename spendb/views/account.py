@@ -108,7 +108,7 @@ def settings():
     """ Change settings for the logged in user """
     disable_cache()
     require.account.update(current_user)
-    values = current_user.as_dict()
+    values = current_user.to_dict()
     if current_user.public_email:
         values['public_email'] = current_user.public_email
     if current_user.public_twitter:

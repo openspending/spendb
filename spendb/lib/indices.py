@@ -90,7 +90,7 @@ def cached_index(account, languages=[], territories=[], category=None):
     index (dataset index page and dataset.json). """
     datasets = dataset_index(account, languages, territories, category)
     return {
-        'datasets': map(lambda d: d.as_dict(), datasets),
+        'datasets': map(lambda d: d.to_dict(), datasets),
         'languages': language_index(datasets),
         'territories': territory_index(datasets),
         'categories': category_index(datasets)

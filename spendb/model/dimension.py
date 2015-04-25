@@ -21,7 +21,7 @@ class Attribute(object):
     def __repr__(self):
         return "<Attribute(%s)>" % self.name
 
-    def as_dict(self):
+    def to_dict(self):
         return self._data
 
 
@@ -43,7 +43,7 @@ class Dimension(object):
     def __repr__(self):
         return "<Dimension(%s)>" % self.name
 
-    def as_dict(self):
+    def to_dict(self):
         # FIXME: legacy support
         d = self._data.copy()
         d['key'] = self.name
