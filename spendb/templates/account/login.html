@@ -104,8 +104,8 @@
             <div class="checkbox">
               <label>
                 <input name="terms" type="checkbox">
-                {% trans %}I agree to the <a href="http://okfn.org/terms-of-use/">Terms of Use</a>
-                and <a href="http://okfn.org/privacy-policy/">Privacy Policy</a>.{% endtrans %}
+                {% trans %}I agree to the Terms of Use and Privacy Policy{% endtrans %}
+                (<a href="{{url_for('home.page', path='tos')}}">{% trans %}read more{% endtrans %}</a>).
               </label>
             </div>
           </div>
