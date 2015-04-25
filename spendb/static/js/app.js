@@ -2,10 +2,11 @@
 var spendb = angular.module('spendb', ['ngCookies', 'ngRoute', 'ui.bootstrap', 'localytics.directives']);
 
 
-spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash',
-  function($scope, $location, $http, $cookies, $window, $sce, flash) {
+spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash', 'session',
+  function($scope, $location, $http, $cookies, $window, $sce, flash, session) {
   
   $scope.flash = flash;
+  $scope.session = {};
 
   // EU cookie warning
   $scope.showCookieWarning = !$cookies.neelieCookie;
@@ -27,6 +28,10 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
   $scope.trustAsHtml = function(text) {
     return $sce.trustAsHtml('' + text);
   };
+
+  session.get(function(s) {
+    $scope.session = s;
+  });
 
 }]);
 
@@ -81,7 +86,7 @@ spendb.factory('validation', ['flash', function(flash) {
 }]);
 
 
-spendb.factory('referenceData', ['$http', function($http) {
+spendb.factory('data', ['$http', function($http) {
   /* This is used to cache reference data once it has been retrieved from the 
   server. Reference data includes the canonical lists of country names,
   currencies, etc. */
@@ -97,16 +102,27 @@ spendb.factory('referenceData', ['$http', function($http) {
 }]);
 
 
-spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceData', 'validation',
-  function($scope, $http, $window, referenceData, validation) {
+spendb.factory('session', ['$http', function($http) {
+  var sessionDfd = $http.get('/api/3/sessions');
+  return {
+    'get': function(cb) {
+      sessionDfd.then(function(res) {
+        cb(res.data);
+      });  
+    }
+  }
+}]);
+
+
+spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'data', 'validation',
+  function($scope, $http, $window, data, validation) {
   /* This controller is not activated via routing, but explicitly through the 
   dataset.new flask route. */
   
   $scope.reference = {};
-  $scope.canCreate = false;
   $scope.dataset = {'category': 'budget', 'territories': []};
 
-  referenceData.get(function(reference) {
+  data.get(function(reference) {
     $scope.reference = reference;
   });
 
@@ -116,10 +132,6 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'referenceDat
       $window.location.href = '/' + res.data.name + '/meta';
     }, validation.handle(form));
   };
-
-  $http.get('/api/2/permissions?dataset=new').then(function(res) {
-    $scope.canCreate = res.data.create;
-  });
 
 }]);
 
@@ -144,7 +156,6 @@ spendb.config(['$routeProvider', '$locationProvider',
 
   // Router hack to enable plain old links. 
   angular.element("a").prop("target", "_self");
-
   $locationProvider.html5Mode(true);
 
 }]);

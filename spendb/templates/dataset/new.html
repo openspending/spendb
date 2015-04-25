@@ -9,7 +9,7 @@
 
   <div ng-controller="DatasetNewCtrl">
     <!-- templates/dataset/new_cta.html content -->
-    <div class="row" ng-hide="canCreate">
+    <div class="row" ng-hide="session.logged_in">
       <div class="col-md-6">
         {% trans %}We're trying to gather <strong>the world's spending
         information</strong> in a common database so that we can provide
@@ -43,7 +43,7 @@
     </div>
     
     <!-- templates/dataset/new.html content -->
-    <div class="row" ng-show="canCreate">
+    <div class="row" ng-show="session.logged_in">
       <div class="col-md-4">
         <div class="alert alert-info">
           <p>
