@@ -247,18 +247,6 @@ class TestAccountController(ControllerTestCase):
         assert 'name="terms"' in response.data, \
             'Terms of use input field not present'
 
-        # Check whether the terms of use url is in the response
-        # For now we rely on an external terms of use page and we therefore
-        # check whether that page also exists.
-        assert 'http://okfn.org/terms-of-use' in response.data, \
-            'Terms of use url not in response'
-
-        # Check whether the privay policy url is in the response
-        # For now we rely on an external privacy policy and we therefore
-        # check whether that page also exists.
-        assert 'http://okfn.org/privacy-policy' in response.data, \
-            'Privacy policy url not in response'
-
         # Check that not filling up the field throws a 'required' response
         # if the terms box is not in the post request (not checked)
         response = self.client.post(url_for('account.register'),

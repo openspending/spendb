@@ -29,13 +29,6 @@ def after_request(resp):
     return cache_response(resp)
 
 
-def api_form_data():
-    data = request.get_json(silent=True)
-    if data is None:
-        data = dict(request.form.items())
-    return data
-
-
 def angular_templates(app):
     """ Find all angular templates and make them available in a variable
     which can be included in a Jinja template so that angular can load

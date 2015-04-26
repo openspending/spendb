@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block page_title %}Welcome{% endblock %}
+{% block page_title %}{{page.title}}{% endblock %}
 
 {% block scripts %}
 {% endblock %}
@@ -8,10 +8,16 @@
 {% block banner %}
   <div class="row">
     <div class="col-md-7">
-      
+      <ul class="list-group">
+        {% for dataset in datasets %}
+          <li class="list-group-item">
+            {{dataset.title}}
+          </li>
+        {% endfor %}
+      </ul>
     </div>
     <div class="col-md-5">
-
+      {{page.html | safe}}
     </div>
   </div>
 {% endblock %}

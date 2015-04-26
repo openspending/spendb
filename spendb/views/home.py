@@ -14,11 +14,11 @@ blueprint = Blueprint('home', __name__)
 
 @blueprint.route('/')
 def index():
+    page = pages.get_or_404('index')
     datasets = Dataset.all_by_account(current_user)
     territories = DatasetTerritory.dataset_counts(datasets)
-    num_entries = -1
     return render_template('home/index.html', datasets=datasets,
-                           territories=territories, num_entries=num_entries)
+                           territories=territories, page=page)
 
 
 @blueprint.route('/set-locale', methods=['POST'])

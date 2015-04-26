@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 from colander import SchemaNode, String, Invalid
-from apikit import jsonify, Pager
+from apikit import jsonify, Pager, request_data
 
 from spendb.core import db
 from spendb.model import Dataset
@@ -12,7 +12,6 @@ from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.lib.indices import clear_index_cache
 from spendb.views.cache import etag_cache_keygen
-from spendb.views.context import api_form_data
 from spendb.views.error import api_json_errors
 from spendb.validation.dataset import dataset_schema
 from spendb.validation.mapping import mapping_schema
@@ -45,7 +44,7 @@ def view(name):
 @api_json_errors
 def create():
     require.dataset.create()
-    dataset = api_form_data()
+    dataset = request_data()
     schema = dataset_schema(ValidationState({'dataset': dataset}))
     data = schema.deserialize(dataset)
     if Dataset.by_name(data['name']) is not None:
@@ -65,7 +64,7 @@ def update(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
     schema = dataset_schema(ValidationState(dataset.model_data))
-    data = schema.deserialize(api_form_data())
+    data = schema.deserialize(request_data())
     dataset.update(data)
     db.session.commit()
     clear_index_cache()
@@ -94,7 +93,7 @@ def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
     model_data = dataset.model_data
-    model_data['mapping'] = api_form_data()
+    model_data['mapping'] = request_data()
     schema = mapping_schema(ValidationState(model_data))
     new_mapping = schema.deserialize(model_data['mapping'])
     dataset.data['mapping'] = new_mapping
