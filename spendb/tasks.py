@@ -16,12 +16,19 @@ def load_from_url(dataset_name, url):
     with flask_app.app_context():
         dataset = Dataset.by_name(dataset_name)
         source = tasks.extract_url(dataset, url)
-        if source is None:
+        load_from_source.delay(dataset_name, source.name)
+
+
+@celery.task(ignore_result=True)
+def load_from_source(dataset_name, source_name):
+    with flask_app.app_context():
+        dataset = Dataset.by_name(dataset_name)
+        if source_name is None:
             return
-        artifact = tasks.transform_source(dataset, source.name)
+        artifact = tasks.transform_source(dataset, source_name)
         if artifact is None:
             return
-        tasks.load(dataset, source_name=source.name)
+        tasks.load(dataset, source_name=source_name)
 
 
 @celery.task(ignore_result=True)

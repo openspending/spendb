@@ -15,6 +15,7 @@ class TestCase(FlaskTestCase):
             'TESTING': True,
             'SITE_TITLE': 'SpenDB',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+            'PRESERVE_CONTEXT_ON_EXCEPTION': False,
             'CELERY_ALWAYS_EAGER': True
         })
         data_manager._coll = open_collection('test', 'file',

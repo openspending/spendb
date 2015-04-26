@@ -5,6 +5,7 @@ from spendb.core import db
 from spendb.model import Dataset
 from spendb.tests.base import ControllerTestCase
 from spendb.tests.helpers import load_fixture, make_account
+from spendb.tests.helpers import data_fixture
 
 
 class TestDatasetApiController(ControllerTestCase):
@@ -18,6 +19,22 @@ class TestDatasetApiController(ControllerTestCase):
         db.session.commit()
 
     def test_source_index(self):
-        url = url_for('sources_api3.index')
+        url = url_for('sources_api3.index', dataset=self.cra.name)
         res = self.client.get(url)
-        assert not res, res.json()
+        assert res.json['total'] == 0, res.json
+
+    def test_source_upload_anon(self):
+        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        fh = data_fixture('cra')
+        res = self.client.post(url, data={
+            'file': (fh, 'cra.csv')
+        })
+        assert '403' in res.status, res.status
+
+    def test_source_upload(self):
+        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        fh = data_fixture('cra')
+        res = self.client.post(url, data={
+            'file': (fh, 'cra.csv')
+        }, query_string=self.auth_qs)
+        assert '403' not in res.status, res.status

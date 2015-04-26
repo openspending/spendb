@@ -21,8 +21,9 @@ var loadReferenceData = ['$q', 'data', function($q, wdata) {
 
 spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
   function($scope, $http, $window, $routeParams, dataset) {
-
   $scope.dataset = dataset;
+
+  
 
 }]);
 
