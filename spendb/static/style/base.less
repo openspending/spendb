@@ -28,12 +28,17 @@
 
 @theme-color: @col-8;
 @theme-darker: darken(@theme-color, 20%);
-@theme-gray: #ddd;
-@theme-darkgray: darken(@theme-gray, 10%);
-@theme-lightgray: lighten(@theme-gray, 10%);
 @theme-text: #333;
 @theme-body-bg: #fff;
 @theme-footer-bg: @theme-body-bg;
+@theme-header-bg: @theme-body-bg;
+
+// @gray-base:              #000;
+// @gray-darker:            lighten(@gray-base, 13.5%); // #222
+// @gray-dark:              lighten(@gray-base, 20%);   // #333
+// @gray:                   lighten(@gray-base, 33.5%); // #555
+// @gray-light:             lighten(@gray-base, 46.7%); // #777
+// @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
 @brand-primary: @theme-color;
 
@@ -47,8 +52,8 @@
 
 // Style tiles, Colours
 // @white: #ffffff;
-@border-color: @theme-lightgray;
-@boxed-color: @theme-lightgray;
+@border-color: @gray-light;
+@boxed-color: @gray-light;
 
 // Style tiles, Fonts
 @font-default: 'Open Sans', sans-serif;
@@ -108,6 +113,7 @@
 
 // Base style
 body {
+    font-family: @font-default;
     background: @theme-footer-bg;
 }
 
@@ -122,13 +128,41 @@ body {
   display: none !important;
 }
 
+h1, h2, h3, h4 {
+    font-weight: 700;
+}
+
+.navbar.navbar-default {
+    background-color: @theme-header-bg;
+    border-bottom: 1px solid @gray-lighter;
+
+    .navbar-brand {
+        font-weight: 900;
+        color: @theme-color;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    img {
+        margin-top: -3px;
+        margin-left: 10px;
+        border-radius: 50%;
+        border: 1px solid @gray-lighter;
+    }
+}
+
+h1.page-header {
+    margin-top: 0;
+}
 
 footer {
     margin-top: 0em;
     padding: 2em 0 1em;
 
     .container {
-        border-top: 1px solid @theme-gray;
+        border-top: 1px solid @gray-lighter;
         padding: 1em;
     }
 

@@ -54,5 +54,6 @@ def ping():
 @blueprint.route('/docs/<path:path>.html')
 def page(path):
     page = pages.get_or_404(path)
-    template = page.meta.get('template', 'page.html')
-    return render_template(template, page=page)
+    menu = [p for p in pages if not p['hidden']]
+    template = page.meta.get('template', 'home/page.html')
+    return render_template(template, page=page, pages=menu)

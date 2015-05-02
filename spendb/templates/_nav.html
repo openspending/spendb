@@ -37,12 +37,27 @@
         </ul>
         
         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown" dropdown>
+            <a class="dropdown-toggle" dropdown-toggle>
+              {% trans %}Language{% endtrans %}
+            </a>
+            <ul class="dropdown-menu locale-dropdown" role="menu">
+              {% for l in languages %}
+                {% set current = l.lang_code == current_locale %}
+                <li class="locale {{ 'current_locale' if current else '' }}">
+                  <a href='#' ng-click="setLocale('{{ l.lang_code }}')">
+                    {{ l.lang_name }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
           {% if logged_in %}
             <li class="dropdown" dropdown>
               <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">
-                <img src="{{ current_user.email | gravatar(size=20) }}"
-                  alt="{{ current_user.fullname }}">
                 <strong>{{ current_user.name }}</strong>
+                <img src="{{ current_user.email | gravatar(size=24) }}"
+                  alt="{{ current_user.fullname }}">
               </a>
 
               <ul class="dropdown-menu account-dropdown" role="menu">
@@ -71,22 +86,6 @@
               </a>
             </li>
           {% endif %}
-          
-          <li class="dropdown" dropdown>
-            <a class="dropdown-toggle" dropdown-toggle>
-              {% trans %}Language{% endtrans %}
-            </a>
-            <ul class="dropdown-menu locale-dropdown" role="menu">
-              {% for l in languages %}
-                {% set current = l.lang_code == current_locale %}
-                <li class="locale {{ 'current_locale' if current else '' }}">
-                  <a href='#' ng-click="setLocale('{{ l.lang_code }}')">
-                    {{ l.lang_name }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
         </ul>
       </div>
     </div>
