@@ -66,7 +66,6 @@ class TestDatasetController(ControllerTestCase):
     def test_new_form(self):
         response = self.client.get(url_for('dataset.new'),
                                    query_string={'api_key': self.user.api_key})
-        assert "Import a dataset" in response.data
 
     def test_feeds(self):
         # Anonymous user with one public dataset
