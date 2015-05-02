@@ -48,7 +48,7 @@ def create():
     schema = dataset_schema(ValidationState({'dataset': dataset}))
     data = schema.deserialize(dataset)
     if Dataset.by_name(data['name']) is not None:
-        raise Invalid(SchemaNode(String(), name='dataset.name'),
+        raise Invalid(SchemaNode(String(), name='name'),
                       _("A dataset with this identifer already exists!"))
     dataset = Dataset({'dataset': data})
     dataset.managers.append(current_user)

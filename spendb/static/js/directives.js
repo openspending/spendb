@@ -20,7 +20,7 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
           url: scope.dataset.api_url + '/sources/upload',
           file: scope.uploads[0]
         }).progress(function (evt) {
-          scope.uploadPercent = Math.max(1, parseInt(70.0 * evt.loaded / evt.total));
+          scope.uploadPercent = Math.max(1, parseInt(95.0 * evt.loaded / evt.total));
         }).success(function (data, status, headers, config) {
           scope.uploads = [];
           scope.uploadPercent = null;

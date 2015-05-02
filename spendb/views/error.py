@@ -2,6 +2,7 @@ from functools import wraps
 
 from werkzeug.exceptions import HTTPException
 from flask import request, render_template, Response
+from colander import Mapping
 from apikit import jsonify
 
 
@@ -37,10 +38,10 @@ def handle_error(exc):
 
 
 def handle_invalid(exc):
-    exc.node.name = ''
+    if isinstance(exc.node.typ, Mapping):
+        exc.node.name = ''
     data = {
         'status': 400,
         'errors': exc.asdict()
     }
     return jsonify(data, status=400)
-
