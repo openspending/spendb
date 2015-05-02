@@ -1,10 +1,8 @@
 
 
-spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'data', 'validation', 'session',
-  function($scope, $http, $window, data, validation, session) {
-  /* This controller is not activated via routing, but explicitly through the 
-  dataset.new flask route. */
-  
+spendb.controller('WizardNewCtrl', ['$scope', '$http', '$location', 'data', 'validation', 'session',
+  function($scope, $http, $location, data, validation, session) {
+
   $scope.reference = {};
   $scope.dataset = {'category': 'budget', 'territories': []};
 
@@ -15,8 +13,20 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'data', 'vali
   $scope.save = function(form) {
     var dfd = $http.post('/api/3/datasets', $scope.dataset);
     dfd.then(function(res) {
-      $window.location.href = '/datasets/' + res.data.name;
+      $location.path('/datasets/' + res.data.name + '/wizard/upload');
     }, validation.handle(form));
+  };
+
+}]);
+
+
+spendb.controller('WizardUploadCtrl', ['$scope', 'dataset', 'session',
+  function($scope, dataset, session) {
+
+  $scope.dataset = dataset;
+
+  $scope.continue = function() {
+    console.log('done!')
   };
 
 }]);

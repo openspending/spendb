@@ -1,4 +1,24 @@
 
+spendb.directive('wizardFrame', ['$http', '$timeout', 'session',
+  function ($http, $timeout, session) {
+  return {
+    restrict: 'AE',
+    scope: {
+      "dataset": "="
+    },
+    transclude: true,
+    templateUrl: 'wizard/frame.html',
+    link: function (scope, element, attrs, model) {
+      scope.session = {};
+
+      session.get(function(s) {
+        scope.session = s;
+      });
+    }
+  };
+}]);
+
+
 spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
   function ($http, $location, $route, Upload) {
   return {
@@ -6,7 +26,7 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
     scope: {
       "dataset": "="
     },
-    templateUrl: 'upload.html',
+    templateUrl: 'directives/upload.html',
     link: function (scope, element, attrs, model) {
       scope.submitForm = {};
       scope.uploadPercent = null;
@@ -60,7 +80,7 @@ spendb.directive('sourcesTable', ['$http', '$timeout',
     scope: {
       "dataset": "="
     },
-    templateUrl: 'sources.html',
+    templateUrl: 'directives/sources.html',
     link: function (scope, element, attrs, model) {
       var sourcesUrl = scope.dataset.api_url + '/sources',
           loadTimeout = null;

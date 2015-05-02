@@ -112,6 +112,7 @@ def view(dataset):
                            managers=managers)
 
 
+@blueprint.route('/datasets/<dataset>/wizard/upload')
 @blueprint.route('/datasets/<dataset>/manage')
 @blueprint.route('/datasets/<dataset>/manage/meta')
 @blueprint.route('/datasets/<dataset>/manage/model')

@@ -6,9 +6,18 @@ spendb.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
   $routeProvider.when('/datasets/new', {
-    templateUrl: 'new.html',
-    controller: 'DatasetNewCtrl',
+    templateUrl: 'wizard/new.html',
+    controller: 'WizardNewCtrl',
     resolve: {
+      session: loadSession
+    }
+  });
+
+  $routeProvider.when('/datasets/:dataset/wizard/upload', {
+    templateUrl: 'wizard/upload.html',
+    controller: 'WizardUploadCtrl',
+    resolve: {
+      dataset: loadDataset,
       session: loadSession
     }
   });

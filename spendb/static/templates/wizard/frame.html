@@ -1,0 +1,62 @@
+<h2 class="page-header">
+  Create a dataset
+</h2>
+
+<div class="row" ng-hide="session.logged_in">
+  <div class="col-md-6">
+    We're trying to gather <strong>the world's spending
+    information</strong> in a common database so that we can provide
+    common tools for <strong>analysis, visualization and
+    comparison</strong>. This is an open platform that
+    aims to facilitate the presentation of financial information so 
+    anyone - whether data geek or concerned citizen - can contribute 
+    their local city budget or spending reports.
+  </div>
+  <div class="col-md-6">
+    <p>
+      There are many projects that aim to track financial information. All
+      require these basic services, which we aim to provide:
+    </p>
+    <ul>
+      <li>Data loading and validation facilities.</li>
+      <li>Common visualization types (treemaps, charts, and the bubble
+      tree).</li>
+      <li>Full-text search for all entries.</li>
+      <li>Means to track provenance and provide access to the raw
+      data.</li>
+    </ul>
+    
+  </div>
+  <div class="col-md-12">
+    <a href="/login" class="btn btn-lg btn-success">Sign up to contribute</a>
+    <a href="/docs/about.html" class="btn btn-lg btn-default">Learn more</a>
+  </div>
+</div>
+
+<div class="row" ng-show="session.logged_in">
+  <div class="col-md-4">
+    <div class="alert alert-info">
+      <p>
+        If you have a spending or budget dataset that 
+        you can contribute, please give some basic information 
+        here.
+      </p>
+      <p>
+        In the next steps, you'll
+      </p>
+      
+      <ul>
+        <li>add references to <strong>data sources</strong>,</li>
+        <li>create a <strong>data model</strong> to describe the format,</li>
+        <li><strong>test</strong> the correctness of your model,</li>
+        <li><strong>import</strong> the data,</li>
+        <li>and generate <strong>visualized views</strong>.</li>
+      </ul>
+      
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div ng-transclude></div>
+  </div>
+</div>
+
