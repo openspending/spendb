@@ -30,15 +30,7 @@ assets.register('js_base', js_base)
 # CSS / Stylesheet bundles
 
 css_main = Bundle('style/base.less',
-                  'style/views.less',
                   filters='less,cssmin',
                   output='prod/main.css')
 
 assets.register('css_main', css_main)
-
-css_embed = Bundle(css_main,
-                   'style/embed.less',
-                   filters='less,cssmin',
-                   output='prod/embed.css')
-
-assets.register('css_embed', css_embed)

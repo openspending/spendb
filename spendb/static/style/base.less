@@ -26,11 +26,17 @@
 @col-21: #EF58A0;
 @col-22: #C05A89;
 
-@theme-color: @col-12;
-
+@theme-color: @col-8;
 @theme-darker: darken(@theme-color, 20%);
+@theme-gray: #ddd;
+@theme-darkgray: darken(@theme-gray, 10%);
+@theme-lightgray: lighten(@theme-gray, 10%);
+@theme-text: #333;
+@theme-body-bg: #fff;
+@theme-footer-bg: @theme-body-bg;
 
 @brand-primary: @theme-color;
+
 
 // For green brand-primary:
 //@brand-success: @theme-color;
@@ -41,8 +47,8 @@
 
 // Style tiles, Colours
 // @white: #ffffff;
-// @border-color: #d7d7d7;
-// @boxed-color: #fafafa;
+@border-color: @theme-lightgray;
+@boxed-color: @theme-lightgray;
 
 // Style tiles, Fonts
 @font-default: 'Open Sans', sans-serif;
@@ -102,12 +108,13 @@
 
 // Base style
 body {
-    background: #eee;
+    background: @theme-footer-bg;
 }
 
 #page {
-    background-color: #fff;
+    background-color: @theme-body-bg;
     padding-bottom: 2em;
+    min-height: 40em;
 }
 
 // Angular ugliness fix 
@@ -118,17 +125,29 @@ body {
 
 footer {
     margin-top: 0em;
-    //color: #fff;
-    padding: 2em 0 3em;
+    padding: 2em 0 1em;
+
+    .container {
+        border-top: 1px solid @theme-gray;
+        padding: 1em;
+    }
 
     ul {
         list-style-type: none;
         padding-left: 0;
+        li {
+            display: inline-block;
+            margin-right: 2em;
+        }
     }
 
-    a, a:hover {
-        color: @theme-color;
+    p {
+        text-align: right;
     }
+
+    // a, a:hover {
+    //     color: @theme-color;
+    // }
 }
 
 .spinner {
@@ -139,38 +158,5 @@ footer {
     text-align: center;
 }
 
-
-// Weird-ass cookie notification bar
-#catapult-cookie-bar {
-    direction: ltr;
-    color: #dddddd;
-    min-height: 30px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    z-index: 99999;
-    padding:6px 20px 4px;
-    background-color: #464646;
-    text-align: left;
-
-    a {
-        color: #fff;;
-    }
-
-    button#catapultCookie {
-        margin: 0 20px;
-        line-height: 20px;
-        background: @theme-color;
-        border: none;
-        color: #464646;
-        padding: 4px 12px;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 13px;
-        font-weight: bold;
-    }
-}
-
-//@import "old.less";
+@import "cookies.less";
 @import "home.less";
