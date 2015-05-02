@@ -28,9 +28,7 @@ class Job(object):
         self.log.info("Starting: %s", self.operation)
 
     def set_source(self, source):
-        if isinstance(source, Source):
-            source = source.name
-        self.run.source = source
+        self.run.source = source.name
         db.session.commit()
 
     def end(self, status):

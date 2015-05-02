@@ -143,8 +143,7 @@ spendb.config(['$routeProvider', '$locationProvider',
     templateUrl: '/static/templates/dataset/manage.html',
     controller: 'DatasetManageCtrl',
     resolve: {
-      dataset: loadDataset,
-      sources: loadSources
+      dataset: loadDataset
     }
   });
 

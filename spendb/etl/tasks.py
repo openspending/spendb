@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 ARTIFACT_NAME = 'table.json'
 
 
-@job(operation='Load from file')
+@job(operation='Import from file')
 def extract_fileobj(job, dataset, fh, file_name=None):
     """ Upload contents of an opened fh to the data repository. """
     meta = {'source_file': file_name}
@@ -22,7 +22,7 @@ def extract_fileobj(job, dataset, fh, file_name=None):
     return source
 
 
-@job(operation='Load from URL')
+@job(operation='Import from URL')
 def extract_url(job, dataset, url):
     """ Upload contents of a URL to the data repository. """
     source = job.package.ingest(url, overwrite=False)
@@ -49,7 +49,8 @@ def transform_source(job, dataset, source_name):
 def load(job, dataset, source_name=None):
     """ Load the table artifact for this dataset into the fact
     table. """
-    job.set_source(source_name)
+    source = Source(job.package, source_name)
+    job.set_source(source)
     table = Table(job.package, ARTIFACT_NAME)
     dataset.fields = table.meta.get('fields', {})
     if not len(dataset.fields):

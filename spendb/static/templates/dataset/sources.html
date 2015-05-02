@@ -1,0 +1,37 @@
+<div class="spinner" ng-hide="hasSources()">
+  <i class="fa fa-spinner fa-spin"></i>
+</div>
+
+<table class="table table-condensed" ng-show="hasSources()">
+  <tr>
+    <th colspan="3">Source data file</th>
+    <th>Download</th>
+  </tr>
+  <tbody ng-repeat="source in sources.results">
+    <tr>
+      <td colspan="3">
+        {{source.name}}
+        ({{source.created_at}})
+      </td>
+      <td>
+        <a href="{{source.data_url}}" class="btn btn-default btn-xs">
+          <i class="fa fa-download"></i>
+          {{source.extension || source.mime_type}}
+        </a>
+      </td>
+    </tr>
+    <tr ng-repeat="run in source.runs">
+      <th width="20%" rowspan="{{source.runs.length}}" ng-show="$first">
+      </th>
+      <th width="20%" rowspan="{{source.runs.length}}" ng-show="$first">
+        Tasks
+      </th>
+      <td>{{run.operation}}</td>
+      <td>
+        <div class="label label-success" ng-show="run.status == 'complete'">OK</div>
+        <div class="label label-warning" ng-show="run.status == 'running'"><i class="fa fa-spinner fa-spin"></i> Running</div>
+        <div class="label label-danger" ng-show="run.status == 'failed'">Failed</div>
+      </td>
+    </tr>
+  </tbody>
+</table>

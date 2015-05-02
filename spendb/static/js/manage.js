@@ -19,12 +19,6 @@ var loadReferenceData = ['$q', 'data', function($q, wdata) {
 }];
 
 
-var loadSources = ['$route', '$http', function($route, $http) {
-  var url = '/api/3/datasets/' + $route.current.params.dataset + '/sources';
-  return $http.get(url);
-}];
-
-
 spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
   function ($http, $location, $route, Upload) {
   return {
@@ -46,17 +40,17 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
           url: scope.dataset.api_url + '/sources/upload',
           file: scope.uploads[0]
         }).progress(function (evt) {
-          scope.uploadPercent = Math.max(1, parseInt(100.0 * evt.loaded / evt.total));
+          scope.uploadPercent = Math.max(1, parseInt(70.0 * evt.loaded / evt.total));
         }).success(function (data, status, headers, config) {
           scope.uploads = [];
           scope.uploadPercent = null;
-          $location.path('/datasets/' + scope.dataset.name + '/manage');
-          $route.reload();
+          //$location.path('/datasets/' + scope.dataset.name + '/manage');
+          //$route.reload();
         });
       };
 
       scope.hasFile = function() {
-        return scope.uploads && scope.uploads.length;
+        return !scope.uploadPercent && scope.uploads && scope.uploads.length;
       };
 
       scope.submitUrl = function() {
@@ -65,8 +59,8 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
         scope.submitForm = {};
 
         $http.post(scope.dataset.api_url + '/sources/submit', form).then(function(res) {
-          $location.path('/datasets/' + scope.dataset.name + '/manage');
-          $route.reload();
+          //$location.path('/datasets/' + scope.dataset.name + '/manage');
+          //$route.reload();
         });
       };
 
@@ -79,12 +73,55 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
 }]);
 
 
-spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset', 'sources',
+spendb.directive('sourcesTable', ['$http', '$timeout',
+  function ($http, $timeout) {
+  return {
+    restrict: 'AE',
+    scope: {
+      "dataset": "="
+    },
+    templateUrl: '/static/templates/dataset/sources.html',
+    link: function (scope, element, attrs, model) {
+      var sourcesUrl = scope.dataset.api_url + '/sources',
+          runsUrl = scope.dataset.api_url + '/runs',
+          loadTimeout = null;
+      scope.sources = {};
+
+      scope.hasSources = function() {
+        return angular.isDefined(scope.sources.total);
+      };
+
+      var recheck = function() {
+        $http.get(sourcesUrl).then(function(res) {
+          var sources = res.data;
+          if (sources.results.length) {
+            var params = {source: sources.results[0].path};
+            $http.get(runsUrl, {params: params}).then(function(res) {
+              sources.results[0].runs = res.data.results;
+              scope.sources = sources;
+              loadTimeout = $timeout(recheck, 2000);
+            });
+          } else {
+            scope.sources = sources;
+            loadTimeout = $timeout(recheck, 2000);
+          }
+        });
+      };
+
+      recheck();
+
+      scope.$on('$destroy', function() {
+        $timeout.cancel(loadTimeout);
+      });
+
+    }
+  };
+}]);
+
+
+spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
   function($scope, $http, $window, $routeParams, dataset, sources) {
   $scope.dataset = dataset;
-  $scope.sources = sources.data.results;
-
-  console.log($scope.sources);
 
 }]);
 

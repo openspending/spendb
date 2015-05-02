@@ -1,22 +1,6 @@
 <div class="row">
   <div class="col-md-12">
-    <table class="table table-condensed">
-      <tr>
-        <th>Name</th>
-        <th>Download</th>
-        <th>Status</th>
-      </tr>
-      <tr ng-repeat="source in sources">
-        <td>{{source.name}}</td>
-        <td>
-          <a href="{{source.data_url}}" class="btn btn-default btn-xs">
-            <i class="fa fa-download"></i>
-            {{source.extension || source.mime_type}}
-          </a>
-        </td>
-        <td>[todo]</td>
-      </tr>
-    </table>
+    <sources-table dataset="dataset"></sources-table>
   </div>
 </div>
 

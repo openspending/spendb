@@ -59,7 +59,8 @@ class Run(db.Model):
 
     @classmethod
     def all(cls, dataset):
-        return db.session.query(cls).filter_by(dataset=dataset)
+        q = db.session.query(cls).filter_by(dataset=dataset)
+        return q.order_by(cls.time_start.asc())
 
     @classmethod
     def by_id(cls, dataset, id):
