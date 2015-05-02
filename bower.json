@@ -20,7 +20,8 @@
     "angular-chosen-localytics": "~1.0.7",
     "angular-route": "~1.2.28",
     "ng-file-upload": "~4.1.0",
-    "moment": "~2.10.2"
+    "moment": "~2.10.2",
+    "angular-moment": "~0.10.1"
   },
   "resolutions": {
     "angular": "1.2.28"

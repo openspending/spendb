@@ -114,7 +114,8 @@ def view(dataset):
 @blueprint.route('/datasets/<dataset>/manage')
 @blueprint.route('/datasets/<dataset>/manage/meta')
 @blueprint.route('/datasets/<dataset>/manage/model')
-def app(dataset):
+@blueprint.route('/datasets/<dataset>/runs/<run>')
+def app(dataset, *a, **kw):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
     return render_template('dataset/app.html', dataset=dataset,

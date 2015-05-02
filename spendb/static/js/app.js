@@ -1,5 +1,5 @@
 
-var spendb = angular.module('spendb', ['ngCookies', 'ngRoute', 'ngFileUpload', 'ui.bootstrap', 'localytics.directives']);
+var spendb = angular.module('spendb', ['ngCookies', 'ngRoute', 'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'localytics.directives']);
 
 
 spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash', 'session',
@@ -144,6 +144,15 @@ spendb.config(['$routeProvider', '$locationProvider',
     controller: 'DatasetManageCtrl',
     resolve: {
       dataset: loadDataset
+    }
+  });
+
+  $routeProvider.when('/datasets/:dataset/runs/:run', {
+    templateUrl: '/static/templates/dataset/run.html',
+    controller: 'RunViewCtrl',
+    resolve: {
+      dataset: loadDataset,
+      run: loadRun
     }
   });
 

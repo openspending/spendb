@@ -35,17 +35,17 @@ CELERY_ALWAYS_EAGER = False
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
 
-CELERY_DEFAULT_QUEUE = 'loading'
-CELERY_QUEUES = (
-    Queue('indexing', Exchange('spendb'), routing_key='spendb'),
-    Queue('loading', Exchange('spendb'), routing_key='spendb'),
-)
+# CELERY_DEFAULT_QUEUE = 'loading'
+# CELERY_QUEUES = (
+#     Queue('indexing', Exchange('spendb'), routing_key='spendb'),
+#     Queue('loading', Exchange('spendb'), routing_key='spendb'),
+# )
 
-CELERY_ROUTES = {
-    'spendb.tasks.load_from_url': {
-        'queue': 'loading'
-    },
-    'spendb.tasks.index_dataset': {
-        'queue': 'indexing'
-    },
-}
+# CELERY_ROUTES = {
+#     'spendb.tasks.load_from_url': {
+#         'queue': 'loading'
+#     },
+#     'spendb.tasks.index_dataset': {
+#         'queue': 'indexing'
+#     },
+# }

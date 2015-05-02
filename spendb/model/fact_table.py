@@ -5,7 +5,7 @@ from datetime import date
 # from apikit import cache_hash
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
-from sqlalchemy.types import Unicode, Integer, Date, Float
+from sqlalchemy.types import Unicode, BigInteger, Date, Float
 from sqlalchemy.sql.expression import select, func, extract
 
 from spendb.core import db
@@ -15,7 +15,7 @@ from spendb.model.common import json_default
 
 TYPES = {
     'string': Unicode,
-    'integer': Integer,
+    'integer': BigInteger,
     'float': Float,
     'date': Date
 }

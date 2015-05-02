@@ -6,8 +6,10 @@ from spendb.core import assets
 # Javscript bundles
 
 js_vendor = Bundle('vendor/jquery/dist/jquery.js',
+                   'vendor/moment/moment.js',
                    'vendor/angular/angular.js',
                    'vendor/angular-route/angular-route.js',
+                   'vendor/angular-moment/angular-moment.js',
                    'vendor/chosen/chosen.jquery.js',
                    'vendor/ng-file-upload/ng-file-upload-all.js',
                    'vendor/angular-chosen-localytics/chosen.js',
@@ -17,6 +19,7 @@ js_vendor = Bundle('vendor/jquery/dist/jquery.js',
 js_base = Bundle(js_vendor,
                  'js/app.js',
                  'js/manage.js',
+                 'js/sources.js',
                  filters='uglifyjs', output='prod/base.js')
 assets.register('js_base', js_base)
 

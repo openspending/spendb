@@ -1,0 +1,8 @@
+
+<table class="table table-condensed">
+  <tr ng-repeat="msg in run.messages">
+    <td>{{msg.level}}</td>
+    <td>{{msg.time.replace(' ', 'T').split(',')[0] | amCalendar}}</td>
+    <td>{{msg.message}}</td>
+  </tr>
+</table>
