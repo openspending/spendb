@@ -19,11 +19,72 @@ var loadReferenceData = ['$q', 'data', function($q, wdata) {
 }];
 
 
-spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
-  function($scope, $http, $window, $routeParams, dataset) {
-  $scope.dataset = dataset;
+var loadSources = ['$route', '$http', function($route, $http) {
+  var url = '/api/3/datasets/' + $route.current.params.dataset + '/sources';
+  return $http.get(url);
+}];
 
-  
+
+spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
+  function ($http, $location, $route, Upload) {
+  return {
+    restrict: 'AE',
+    scope: {
+      "dataset": "="
+    },
+    templateUrl: '/static/templates/dataset/upload.html',
+    link: function (scope, element, attrs, model) {
+      scope.submitForm = {};
+      scope.uploadPercent = null;
+      scope.uploads = [];
+
+      scope.uploadFile = function() {
+        if (!scope.hasFile()) return;
+        scope.uploadPercent = 1;
+
+        Upload.upload({
+          url: scope.dataset.api_url + '/sources/upload',
+          file: scope.uploads[0]
+        }).progress(function (evt) {
+          scope.uploadPercent = Math.max(1, parseInt(100.0 * evt.loaded / evt.total));
+        }).success(function (data, status, headers, config) {
+          scope.uploads = [];
+          scope.uploadPercent = null;
+          $location.path('/datasets/' + scope.dataset.name + '/manage');
+          $route.reload();
+        });
+      };
+
+      scope.hasFile = function() {
+        return scope.uploads && scope.uploads.length;
+      };
+
+      scope.submitUrl = function() {
+        if (!scope.hasUrl()) return;
+        var form = angular.copy(scope.submitForm);
+        scope.submitForm = {};
+
+        $http.post(scope.dataset.api_url + '/sources/submit', form).then(function(res) {
+          $location.path('/datasets/' + scope.dataset.name + '/manage');
+          $route.reload();
+        });
+      };
+
+      scope.hasUrl = function() {
+        return scope.submitForm.url && scope.submitForm.url.length > 3;
+      };
+
+    }
+  };
+}]);
+
+
+spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset', 'sources',
+  function($scope, $http, $window, $routeParams, dataset, sources) {
+  $scope.dataset = dataset;
+  $scope.sources = sources.data.results;
+
+  console.log($scope.sources);
 
 }]);
 

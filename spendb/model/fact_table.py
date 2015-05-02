@@ -2,7 +2,7 @@ import json
 from itertools import count
 from datetime import date
 
-from apikit import cache_hash
+# from apikit import cache_hash
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
 from sqlalchemy.types import Unicode, Integer, Date, Float
@@ -87,15 +87,15 @@ class FactTable(object):
     """ The ``FactTable`` serves as a controller object for
     a given ``Model``, handling the creation, filling and migration
     of the table schema associated with the dataset. """
-    
+
     def __init__(self, dataset):
         self.dataset = dataset
-        
+
         self.bind = db.engine
         self.meta = MetaData()
         self.meta.bind = self.bind
         self._table = None
-        
+
     @property
     def table(self):
         """ Generate an appropriate table representation to mirror the
@@ -124,7 +124,7 @@ class FactTable(object):
                                              self.dataset.model)
             self._mapping.apply()
         return self._mapping
-        
+
     @property
     def exists(self):
         return db.engine.has_table(self.table.name)
@@ -138,15 +138,15 @@ class FactTable(object):
             col = Column(name, data_type, nullable=True)
             table.append_column(col)
 
-    def load_iter(self, iterable, chunk_size=1000):
+    def load_iter(self, iterable, chunk_size=5):
         """ Bulk load all the data in an artifact to a matching database
         table. """
         chunk = []
         conn = self.bind.connect()
         tx = conn.begin()
         try:
-            for record in iterable:
-                chunk.append(self._expand_record(record))
+            for i, record in enumerate(iterable):
+                chunk.append(self._expand_record(i, record))
                 if len(chunk) >= chunk_size:
                     stmt = self.table.insert(chunk)
                     conn.execute(stmt)
@@ -160,10 +160,10 @@ class FactTable(object):
             tx.rollback()
             raise
 
-    def _expand_record(self, record):
+    def _expand_record(self, i, record):
         """ Transform an incoming record into a form that matches the
         fields schema. """
-        record['_id'] = cache_hash(record)
+        record['_id'] = i
         record['_json'] = json.dumps(record, default=json_default)
         return record
 

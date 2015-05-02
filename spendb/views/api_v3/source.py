@@ -5,7 +5,7 @@ from archivekit import Source
 from werkzeug.exceptions import BadRequest
 from apikit import jsonify, request_data
 
-from spendb.core import data_manager
+from spendb.core import data_manager, url_for
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.views.error import api_json_errors
@@ -17,12 +17,21 @@ log = logging.getLogger(__name__)
 blueprint = Blueprint('sources_api3', __name__)
 
 
+def source_to_dict(dataset, source):
+    data = dict(source.meta.items())
+    data['data_url'] = source.url
+    data['api_url'] = url_for('sources_api3.view', dataset=dataset.name,
+                              name=data.get('name'))
+    return data
+
+
 @blueprint.route('/datasets/<dataset>/sources')
 @api_json_errors
 def index(dataset):
     dataset = get_dataset(dataset)
     package = data_manager.package(dataset.name)
-    sources = [dict(s.meta.items()) for s in package.all(Source)]
+    sources = [source_to_dict(dataset, s) for s in package.all(Source)]
+    sources = sorted(sources, key=lambda s: s['updated_at'], reverse=True)
     return jsonify({
         'results': sources,
         'total': len(sources)
@@ -39,7 +48,7 @@ def upload(dataset):
         raise BadRequest("You need to upload a file")
     source = extract_fileobj(dataset, fh=file_, file_name=file_.filename)
     load_from_source.delay(dataset.name, source.name)
-    return jsonify(dict(source.meta.items()))
+    return jsonify(source_to_dict(dataset, source))
 
 
 @blueprint.route('/datasets/<dataset>/sources/submit', methods=['POST', 'PUT'])
@@ -50,5 +59,14 @@ def submit(dataset):
     data = request_data()
     if not data.get('url'):
         raise BadRequest("You need to submit a URL")
-    source = load_from_url.delay(dataset.name, data.get('url'))
-    return jsonify(dict(source.meta.items()))
+    load_from_url.delay(dataset.name, data.get('url'))
+    return jsonify({'status': 'ok'})
+
+
+@blueprint.route('/datasets/<dataset>/sources/<name>')
+@api_json_errors
+def view(dataset, name):
+    dataset = get_dataset(dataset)
+    package = data_manager.package(dataset.name)
+    source = Source(package, name)
+    return jsonify(source_to_dict(dataset, source))

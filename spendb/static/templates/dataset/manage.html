@@ -1,2 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-condensed">
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Download</th>
+        <th>Status</th>
+      </tr>
+      <tr ng-repeat="source in sources">
+        <td>{{source.name}}</td>
+        <td>{{source.extension || source.mime_type}}</td>
+        <td>
+          <a href="{{source.data_url}}">
+            <i class="fa fa-download"></i>
+          </a>
+        </td>
+        <td>[todo]</td>
+      </tr>
+    </table>
+  </div>
+</div>
 
-Je suis banana.
+<upload-panel dataset="dataset"></upload-panel>

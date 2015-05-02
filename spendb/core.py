@@ -25,6 +25,7 @@ logging.basicConfig(level=logging.DEBUG)
 # specific loggers
 logging.getLogger('cubes').setLevel(logging.WARNING)
 logging.getLogger('markdown').setLevel(logging.WARNING)
+logging.getLogger('boto').setLevel(logging.WARNING)
 
 
 db = SQLAlchemy()
