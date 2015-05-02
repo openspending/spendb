@@ -1,11 +1,4 @@
 
-var loadRun = ['$route', '$q', '$http', function($route, $q, $http) {
-  var p = $route.current.params,
-      url = '/api/3/datasets/' + p.dataset + '/runs/' + p.run;
-  return $http.get(url);
-}];
-
-
 spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
   function ($http, $location, $route, Upload) {
   return {
@@ -13,7 +6,7 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
     scope: {
       "dataset": "="
     },
-    templateUrl: '/static/templates/dataset/upload.html',
+    templateUrl: 'upload.html',
     link: function (scope, element, attrs, model) {
       scope.submitForm = {};
       scope.uploadPercent = null;
@@ -67,7 +60,7 @@ spendb.directive('sourcesTable', ['$http', '$timeout',
     scope: {
       "dataset": "="
     },
-    templateUrl: '/static/templates/dataset/sources.html',
+    templateUrl: 'sources.html',
     link: function (scope, element, attrs, model) {
       var sourcesUrl = scope.dataset.api_url + '/sources',
           loadTimeout = null;
@@ -102,13 +95,4 @@ spendb.directive('sourcesTable', ['$http', '$timeout',
 
     }
   };
-}]);
-
-
-spendb.controller('RunViewCtrl', ['$scope', '$http', '$location', '$routeParams', 'dataset', 'run',
-  function($scope, $http, $location, $routeParams, dataset, run) {
-
-  $scope.dataset = dataset;
-  $scope.run = run.data;
-
 }]);

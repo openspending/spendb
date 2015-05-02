@@ -1,22 +1,25 @@
 
 
-var loadDataset = ['$route', '$http', '$q', function($route, $http, $q) {
-  var dfd = $q.defer(),
-      url = '/api/3/datasets/' + $route.current.params.dataset;
-  $http.get(url).then(function(res) {
-    dfd.resolve(res.data);
-  });
-  return dfd.promise;
-}];
+spendb.controller('DatasetNewCtrl', ['$scope', '$http', '$window', 'data', 'validation', 'session',
+  function($scope, $http, $window, data, validation, session) {
+  /* This controller is not activated via routing, but explicitly through the 
+  dataset.new flask route. */
+  
+  $scope.reference = {};
+  $scope.dataset = {'category': 'budget', 'territories': []};
 
-
-var loadReferenceData = ['$q', 'data', function($q, wdata) {
-  var dfd = $q.defer();
-  data.get(function(rd) {
-    dfd.resolve(rd);
+  data.get(function(reference) {
+    $scope.reference = reference;
   });
-  return dfd.promise;
-}];
+
+  $scope.save = function(form) {
+    var dfd = $http.post('/api/3/datasets', $scope.dataset);
+    dfd.then(function(res) {
+      $window.location.href = '/datasets/' + res.data.name;
+    }, validation.handle(form));
+  };
+
+}]);
 
 
 spendb.controller('DatasetManageCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
@@ -70,3 +73,11 @@ spendb.controller('DatasetModelCtrl', ['$scope', '$http', '$window', '$routePara
 
 }]);
 
+
+spendb.controller('RunViewCtrl', ['$scope', '$http', '$location', '$routeParams', 'dataset', 'run',
+  function($scope, $http, $location, $routeParams, dataset, run) {
+
+  $scope.dataset = dataset;
+  $scope.run = run.data;
+
+}]);

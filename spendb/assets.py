@@ -18,8 +18,10 @@ js_vendor = Bundle('vendor/jquery/dist/jquery.js',
 
 js_base = Bundle(js_vendor,
                  'js/app.js',
-                 'js/manage.js',
-                 'js/sources.js',
+                 'js/loaders.js',
+                 'js/services.js',
+                 'js/directives.js',
+                 'js/controllers.js',
                  filters='uglifyjs', output='prod/base.js')
 assets.register('js_base', js_base)
 
