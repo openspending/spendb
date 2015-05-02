@@ -2,7 +2,7 @@
 import logging
 from flask.ext.script import Manager
 from flask.ext.assets import ManageAssets
-from flask.ext.migrate import MigrateCommand, upgrade
+from flask.ext.migrate import MigrateCommand
 
 from spendb.core import create_web_app
 from spendb.assets import assets

@@ -17,7 +17,7 @@ spendb/templates/help/*
 doc/_build/*
 spendb/static/spendbjs
 spendb/static/.webassets-cache/*
-spendb/static/prod/*
+# spendb/static/prod/*
 spendb/static/vendor/*
 *~
 .tx/config
