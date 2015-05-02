@@ -57,7 +57,7 @@ class FactTableMapping(ModelVisitor):
         col = self.alias.c[dimension.column]
         name_attr = dimension['name']
         self.columns[name_attr.path] = col.label(name_attr.column)
-        
+
         field_type = self.fields.get(dimension.column).get('type')
         if field_type == 'date':
             for a in ['year', 'quarter', 'month', 'week', 'day']:
@@ -138,16 +138,21 @@ class FactTable(object):
             col = Column(name, data_type, nullable=True)
             table.append_column(col)
 
-    def load_iter(self, iterable, chunk_size=5):
+    def load_iter(self, iterable, chunk_size=1000):
         """ Bulk load all the data in an artifact to a matching database
         table. """
         chunk = []
+
+        # Workaround for an old version of sqlite on the travis CI servers
+        if self.bind.dialect.name == 'sqlite':
+            chunk_size = None
+
         conn = self.bind.connect()
         tx = conn.begin()
         try:
             for i, record in enumerate(iterable):
                 chunk.append(self._expand_record(i, record))
-                if len(chunk) >= chunk_size:
+                if chunk_size is None or len(chunk) >= chunk_size:
                     stmt = self.table.insert(chunk)
                     conn.execute(stmt)
                     chunk = []
@@ -216,7 +221,7 @@ class FactTable(object):
             # enforce stable sorting:
             if order_by is None:
                 order_by = [self.alias.c._id.asc()]
-        
+
         assert order_by is not None
 
         for i in count():

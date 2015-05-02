@@ -16,7 +16,6 @@ from spendb.lib.helpers import static_path
 def before_request():
     request._return_json = False
     setup_caching()
-    print request.endpoint
 
 
 @home.after_app_request
