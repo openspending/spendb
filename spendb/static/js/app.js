@@ -1,5 +1,5 @@
 
-var spendb = angular.module('spendb', ['ngCookies', 'ngRoute', 'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'localytics.directives']);
+var spendb = angular.module('spendb', ['ngCookies', 'ngRoute', 'duScroll', 'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'localytics.directives']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',
