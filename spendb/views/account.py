@@ -168,49 +168,6 @@ def dashboard(format='html'):
     return profile(current_user.name)
 
 
-@blueprint.route('/scoreboard')
-def scoreboard(format='html'):
-    """
-    A list of users ordered by their score. The score is computed by
-    by assigning every dataset a score (10 divided by no. of maintainers)
-    and then adding that score up for all maintainers.
-
-    This does give users who maintain a single dataset a higher score than
-    those who are a part of a maintenance team, which is not really what
-    we want (since that rewards single points of failure in the system).
-
-    But this is an adequate initial score and this will only be accessible
-    to administrators (who may be interested in findin these single points
-    of failures).
-    """
-    require.account.is_admin()
-
-    # Assign scores to each dataset based on number of maintainers
-    score = db.session.query(Dataset.id,
-                             (10 / func.count(Account.id)).label('sum'))
-    score = score.join('managers').group_by(Dataset.id).subquery()
-
-    # Order users based on their score which is the sum of the dataset
-    # scores they maintain
-    user_score = db.session.query(
-        Account.name, Account.email,
-        func.coalesce(func.sum(score.c.sum), 0).label('score'))
-    user_score = user_score.outerjoin(Account.datasets).outerjoin(score)
-    user_score = user_score.group_by(Account.name, Account.email)
-    # We exclude the system user
-    user_score = user_score.filter(Account.name != 'system')
-    user_score = user_score.order_by(desc('score'))
-
-    # Fetch all and assign to a context variable score and paginate them
-    # We paginate 42 users per page, just because that's an awesome number
-    scores = user_score.all()
-    page = Page(scores, items_per_page=42,
-                item_count=len(scores),
-                **dict(request.args.items()))
-
-    return render_template('account/scoreboard.html', page=page)
-
-
 @blueprint.route('/accounts/_complete')
 def complete(format='json'):
     disable_cache()

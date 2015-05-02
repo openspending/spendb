@@ -3,16 +3,15 @@
     <table class="table table-condensed">
       <tr>
         <th>Name</th>
-        <th>Type</th>
         <th>Download</th>
         <th>Status</th>
       </tr>
       <tr ng-repeat="source in sources">
         <td>{{source.name}}</td>
-        <td>{{source.extension || source.mime_type}}</td>
         <td>
-          <a href="{{source.data_url}}">
+          <a href="{{source.data_url}}" class="btn btn-default btn-xs">
             <i class="fa fa-download"></i>
+            {{source.extension || source.mime_type}}
           </a>
         </td>
         <td>[todo]</td>

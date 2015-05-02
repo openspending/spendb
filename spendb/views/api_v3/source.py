@@ -19,6 +19,7 @@ blueprint = Blueprint('sources_api3', __name__)
 
 def source_to_dict(dataset, source):
     data = dict(source.meta.items())
+    data.pop('http_headers', None)
     data['data_url'] = source.url
     data['api_url'] = url_for('sources_api3.view', dataset=dataset.name,
                               name=data.get('name'))
@@ -33,7 +34,7 @@ def index(dataset):
     sources = [source_to_dict(dataset, s) for s in package.all(Source)]
     sources = sorted(sources, key=lambda s: s['updated_at'], reverse=True)
     return jsonify({
-        'results': sources,
+        'results': sources[:10],
         'total': len(sources)
     })
 

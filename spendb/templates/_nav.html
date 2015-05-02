@@ -56,14 +56,6 @@
                     {% trans %}Settings{% endtrans %}
                   </a>
                 </li>
-                {% if current_user.admin %}
-                  <li class="divider"></li>
-                  <li>
-                    <a href="{{ url_for('account.scoreboard') }}">
-                      {% trans %}User scoreboard{% endtrans %}
-                    </a>
-                  </li>
-                {% endif %}
                 <li class="divider"></li>
                 <li>
                   <a href="{{url_for('account.logout')}}">

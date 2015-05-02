@@ -38,3 +38,19 @@ class TestDatasetApiController(ControllerTestCase):
             'file': (fh, 'cra.csv')
         }, query_string=self.auth_qs)
         assert '403' not in res.status, res.status
+
+    def test_source_view(self):
+        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        fh = data_fixture('cra')
+        res = self.client.post(url, data={
+            'file': (fh, 'cra.csv')
+        }, query_string=self.auth_qs)
+        assert res.json['extension'] == 'csv', res.json
+        assert res.json['mime_type'] == 'text/csv', res.json
+        url = url_for('sources_api3.index', dataset=self.cra.name)
+        res = self.client.get(url)
+        assert res.json['total'] == 1, res.json
+        frst = res.json['results'][0]
+        assert frst['extension'] == 'csv', res.json
+        assert frst['mime_type'] == 'text/csv', res.json
+        assert frst['api_url'], res.json
