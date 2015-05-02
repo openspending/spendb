@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, DateTime
 
-from spendb.core import db
+from spendb.core import db, url_for
 from spendb.model.dataset import Dataset
 
 
@@ -39,33 +39,31 @@ class Run(db.Model):
         self.dataset = dataset
 
     @property
-    def successful_sample(self):
-        """
-        Returns True if the run was a sample operation (not full import)
-        and ran without failures.
-        """
-        return self.operation == self.OPERATION_SAMPLE and \
-            self.status == self.STATUS_COMPLETE
-
-    @property
-    def successful_load(self):
-        """
-        Returns True if the run was an import operation (not a sample)
-        and ran without failures.
-        """
-        return self.operation == self.OPERATION_IMPORT and \
-            self.status == self.STATUS_COMPLETE
-
-    @property
     def is_running(self):
         """
         Returns True if the run is currently running
         """
         return self.status == self.STATUS_RUNNING
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'api_url': url_for('runs_api3.view', dataset=self.dataset.name,
+                               id=self.id),
+            'operation': self.operation,
+            'status': self.status,
+            'source': self.source,
+            'time_start': self.time_start,
+            'time_end': self.time_end
+        }
+
     @classmethod
-    def by_id(cls, id):
-        return db.session.query(cls).filter_by(id=id).first()
+    def all(cls, dataset):
+        return db.session.query(cls).filter_by(dataset=dataset)
+
+    @classmethod
+    def by_id(cls, dataset, id):
+        return cls.all(dataset).filter_by(id=id).first()
 
     def __repr__(self):
         return "<Run(%r, %r, %r)>" % (self.source, self.id, self.status)

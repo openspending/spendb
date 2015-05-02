@@ -8,10 +8,10 @@ from spendb.tests.helpers import load_fixture, make_account
 from spendb.tests.helpers import data_fixture
 
 
-class TestDatasetApiController(ControllerTestCase):
+class TestSourceApiController(ControllerTestCase):
 
     def setUp(self):
-        super(TestDatasetApiController, self).setUp()
+        super(TestSourceApiController, self).setUp()
         self.cra = load_fixture('cra')
         self.user = make_account('test')
         self.auth_qs = {'api_key': self.user.api_key}

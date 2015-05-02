@@ -51,7 +51,7 @@ def ping():
     return redirect('/')
 
 
-@blueprint.route('/<path:path>')
+@blueprint.route('/docs/<path:path>.html')
 def page(path):
     page = pages.get_or_404(path)
     template = page.meta.get('template', 'page.html')
