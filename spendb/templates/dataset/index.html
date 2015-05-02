@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_util.html" import dataset_listing %}
 
 {% block page_title %}{% trans %}All datasets{% endtrans %}{% endblock %}
 
@@ -9,30 +10,7 @@
   <div class="col-md-8">
     <p>{% trans %}The database contains the following datasets{% endtrans %}:</p>
     
-    {% for dataset in page %}
-    <div>
-      <h3>
-        <a class="dataset-name" href="{{url_for('dataset.view', dataset=dataset.name)}}">
-          {{dataset.label}}
-        </a>
-      </h3>
-      {% if dataset.badges %}
-      <p>
-      	{% for badge in dataset.badges %}
-      	  <a href="{{ url_for('badge.information', id=badge.id)}}" title="{{badge.label}}">
-            <img src="{{badge.image}}" alt="{{badge.label}}">
-          </a> 
-      	{% endfor %}
-      </p>
-      {% endif %}
-      {% if dataset.description %}
-      <div>
-        {{dataset.description | markdown_preview}}
-      </div>
-      {% endif %}
-      <br/>
-    </div>
-    {% endfor %}
+    {{ dataset_listing(page) }}
     {{ page.pager() }}
   </div>
   <div class="col-md-4">

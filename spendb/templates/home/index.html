@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_util.html" import dataset_listing %}
 
 {% block page_title %}{{page.title}}{% endblock %}
 
@@ -8,15 +9,7 @@
 {% block banner %}
   <div class="row">
     <div class="col-md-7">
-      <ul class="list-group">
-        {% for dataset in datasets %}
-          <li class="list-group-item">
-            <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
-              {{dataset.label}}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+      {{dataset_listing(datasets)}}
     </div>
     <div class="col-md-5">
       {{page.html | safe}}
