@@ -8,7 +8,7 @@ RESERVED_TERMS = ['entry', 'entries', 'dataset', 'datasets', 'dimension',
                   'settings', 'browser', 'explorer', 'member', 'register',
                   'after_login', 'after_logout', 'locale', 'reporterror',
                   'getinvolved', 'api', '500', 'error', 'url', 'model',
-                  'distinct', 'views']
+                  'distinct', 'views', 'new']
 
 
 def chained(*validators):
@@ -46,6 +46,8 @@ def database_name(name):
 
 def nonempty_string(text):
     if not isinstance(text, basestring):
+        if text is None:
+            return "Please enter a text"
         return "Must be text, not %s" % type(text)
     if not len(text.strip()):
         return "Must have at least one non-whitespace character."

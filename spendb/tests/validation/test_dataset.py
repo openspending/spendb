@@ -23,28 +23,28 @@ class TestDataset(TestCase):
             assert sorted(out.keys())==sorted(ds.keys()), [out, ds]
         except Invalid, i:
             assert False, i.asdict()
-    
+
     @raises(Invalid)
     def test_underscore_validate(self):
         ds = self.model['dataset'].copy()
         ds['name'] = 'test__'
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    
+
     @raises(Invalid)
     def test_reserved_name_validate(self):
         ds = self.model['dataset'].copy()
         ds['name'] = 'entRY'
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    
+
     @raises(Invalid)
     def test_invalid_currency(self):
         ds = self.model['dataset'].copy()
         ds['currency'] = 'glass pearls'
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    
+
     @raises(Invalid)
     def test_invalid_category(self):
         ds = self.model['dataset'].copy()
@@ -58,14 +58,14 @@ class TestDataset(TestCase):
         ds['languages'].append('esperanto')
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    
+
     @raises(Invalid)
     def test_invalid_country(self):
         ds = self.model['dataset'].copy()
         ds['territories'].append('SU')
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    
+
     @raises(Invalid)
     def test_no_label(self):
         ds = self.model['dataset'].copy()
@@ -79,11 +79,9 @@ class TestDataset(TestCase):
         ds['label'] = '  '
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    
-    @raises(Invalid)
+
     def test_no_description(self):
         ds = self.model['dataset'].copy()
         del ds['description']
         schema = dataset_schema(self.state)
         schema.deserialize(ds)
-    

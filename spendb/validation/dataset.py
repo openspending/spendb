@@ -49,14 +49,14 @@ def dataset_schema(state):
     schema.add(boolean('private', missing=True))
     schema.add(key('currency', validator=chained(
         valid_currency
-    )))
+    ), missing=None))
     schema.add(key('category', validator=chained(
         valid_category
     )))
     schema.add(key('label', validator=chained(
         nonempty_string,
     )))
-    schema.add(key('description'))
+    schema.add(key('description', missing=''))
     schema.add(sequence('languages',
                         key('language',
                             validator=valid_language),
