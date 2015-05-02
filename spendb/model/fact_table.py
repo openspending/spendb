@@ -143,23 +143,19 @@ class FactTable(object):
         table. """
         chunk = []
 
-        # Workaround for an old version of sqlite on the travis CI servers
-        if self.bind.dialect.name == 'sqlite':
-            chunk_size = None
-
         conn = self.bind.connect()
         tx = conn.begin()
         try:
             for i, record in enumerate(iterable):
                 chunk.append(self._expand_record(i, record))
-                if chunk_size is None or len(chunk) >= chunk_size:
-                    stmt = self.table.insert(chunk)
-                    conn.execute(stmt)
+                if len(chunk) >= chunk_size:
+                    stmt = self.table.insert()
+                    conn.execute(stmt, chunk)
                     chunk = []
 
             if len(chunk):
-                stmt = self.table.insert(chunk)
-                conn.execute(stmt)
+                stmt = self.table.insert()
+                conn.execute(stmt, chunk)
             tx.commit()
         except:
             tx.rollback()

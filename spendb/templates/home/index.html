@@ -11,7 +11,9 @@
       <ul class="list-group">
         {% for dataset in datasets %}
           <li class="list-group-item">
-            {{dataset.title}}
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
+              {{dataset.label}}
+            </a>
           </li>
         {% endfor %}
       </ul>
