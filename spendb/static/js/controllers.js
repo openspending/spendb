@@ -1,32 +1,40 @@
 
 
-spendb.controller('WizardNewCtrl', ['$scope', '$http', '$location', 'data', 'validation', 'session',
-  function($scope, $http, $location, data, validation, session) {
+spendb.controller('NewCtrl', ['$scope', '$http', '$location', 'reference', 'validation', 'session',
+  function($scope, $http, $location, reference, validation, session) {
 
-  $scope.reference = {};
   $scope.dataset = {'category': 'budget', 'territories': []};
+  $scope.reference = reference;
+  $scope.session = session;
+  $scope.afterUpload = [];
 
-  data.get(function(reference) {
-    $scope.reference = reference;
-  });
+  $scope.hasDataset = function() {
+    return session.logged_in && angular.isDefined($scope.dataset.api_url);
+  };
 
-  $scope.save = function(form) {
-    var dfd = $http.post('/api/3/datasets', $scope.dataset);
-    dfd.then(function(res) {
-      $location.path('/datasets/' + res.data.name + '/wizard/upload');
+  $scope.hasUpload = function() {
+    return $scope.hasDataset() && $scope.afterUpload.length > 0;
+  };
+
+  $scope.createDataset = function(form) {
+    validation.clear(form);
+    $http.post('/api/3/datasets', $scope.dataset).then(function(res) {
+      $scope.dataset = res.data;
     }, validation.handle(form));
   };
 
-}]);
+  $scope.createUpload = function() {
+    if (!$scope.hasDataset()) return;
+    if ($scope.hasUpload()) return;
+    $scope.afterUpload.push($scope.dataset);
+  };
 
-
-spendb.controller('WizardUploadCtrl', ['$scope', 'dataset', 'session',
-  function($scope, dataset, session) {
-
-  $scope.dataset = dataset;
-
-  $scope.continue = function() {
-    console.log('done!')
+  $scope.saveDataset = function(form) {
+    if (!$scope.hasDataset()) return;
+    validation.clear(form);
+    $http.post($scope.dataset.api_url, $scope.dataset).then(function(res) {
+      $location.path('/datasets/' + $scope.dataset.name + '/manage')
+    }, validation.handle(form));
   };
 
 }]);

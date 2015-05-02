@@ -17,7 +17,7 @@ var loadDataset = ['$route', '$http', '$q', function($route, $http, $q) {
 }];
 
 
-var loadReferenceData = ['$q', 'data', function($q, wdata) {
+var loadReferenceData = ['$q', 'data', function($q, data) {
   var dfd = $q.defer();
   data.get(function(rd) {
     dfd.resolve(rd);

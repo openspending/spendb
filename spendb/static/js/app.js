@@ -6,10 +6,11 @@ spendb.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
   $routeProvider.when('/datasets/new', {
-    templateUrl: 'wizard/new.html',
-    controller: 'WizardNewCtrl',
+    templateUrl: 'new.html',
+    controller: 'NewCtrl',
     resolve: {
-      session: loadSession
+      session: loadSession,
+      reference: loadReferenceData
     }
   });
 

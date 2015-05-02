@@ -1,19 +1,17 @@
 
-spendb.directive('wizardFrame', ['$http', '$timeout', 'session',
-  function ($http, $timeout, session) {
+
+spendb.directive('metadataEditor', ['$http',
+  function ($http, data) {
   return {
     restrict: 'AE',
     scope: {
-      "dataset": "="
+      "dataset": "=",
+      "reference": "=",
+      "form": "="
     },
     transclude: true,
-    templateUrl: 'wizard/frame.html',
+    templateUrl: 'directives/metadata.html',
     link: function (scope, element, attrs, model) {
-      scope.session = {};
-
-      session.get(function(s) {
-        scope.session = s;
-      });
     }
   };
 }]);
@@ -24,7 +22,8 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
   return {
     restrict: 'AE',
     scope: {
-      "dataset": "="
+      "dataset": "=",
+      "notify": "&"
     },
     templateUrl: 'directives/upload.html',
     link: function (scope, element, attrs, model) {
@@ -44,8 +43,7 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
         }).success(function (data, status, headers, config) {
           scope.uploads = [];
           scope.uploadPercent = null;
-          //$location.path('/datasets/' + scope.dataset.name + '/manage');
-          //$route.reload();
+          if (scope.notify) scope.notify();
         });
       };
 
@@ -59,8 +57,7 @@ spendb.directive('uploadPanel', ['$http', '$location', '$route', 'Upload',
         scope.submitForm = {};
 
         $http.post(scope.dataset.api_url + '/sources/submit', form).then(function(res) {
-          //$location.path('/datasets/' + scope.dataset.name + '/manage');
-          //$route.reload();
+          if (scope.notify) scope.notify();
         });
       };
 

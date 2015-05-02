@@ -22,7 +22,7 @@ spendb.factory('flash', ['$rootScope', function($rootScope) {
 spendb.factory('validation', ['flash', function(flash) {
   // handle server-side form validation errors.
   return {
-    handle: handle = function(form) {
+    handle: function(form) {
       return function(res) {
         if (res.status == 400 || !form) {
             var errors = [];
@@ -43,6 +43,19 @@ spendb.factory('validation', ['flash', function(flash) {
           flash.setMessage(res.data.message || res.data.title || 'Server error', 'danger');
         }
       }
+    },
+    clear: function(form) {
+      if (angular.isDefined(form._errors)) {
+        for (var i in form._errors) {
+          var field = form._errors[i];
+          console.log(field);
+          form[field].$setValidity('value', true);
+          form[field].$message = undefined;
+        }
+      };
+      form._errors = undefined;
+      form.$setPristine();
+      form.$setValidity();
     }
   };
 }]);
