@@ -6,7 +6,14 @@
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
 
 {% block content %}
-  <h1 class="page-header">{{ dataset.label }}</h1>
+  <h1 class="page-header">
+    {{ dataset.label }}
+    <div class="pull-right">
+      <a class="btn btn-default" href="{{url_for('dataset.view', dataset=dataset.name)}}/manage">
+        {% trans %}Manage{% endtrans %}
+      </a>
+    </div>
+  </h1>
   <div>
     <div class="row">
       <div class="col-md-8">
