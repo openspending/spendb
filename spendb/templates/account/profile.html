@@ -1,10 +1,20 @@
 {% extends "base.html" %}
-{% from "_util.html" import dataset_listing %}
+{% from "_util.html" import dataset_listing, show_pager %}
 
 {% block page_title %}{{ profile.fullname }}{% endblock %}
 
 {% block content %}
-  <h1 class="page-header">{{ profile.fullname }}</h1>
+  <h1 class="page-header">
+    {{ profile.fullname }}
+
+    {% if current_user == profile %}
+      <div class="pull-right">
+        <a class="btn btn-success" href="{{ url_for('account.settings') }}">
+          {% trans %}Settings{% endtrans %}
+        </a>
+      </div>
+    {% endif %}
+  </h1>
 
   <div class="row">
     <div class="col-md-3">
@@ -13,13 +23,6 @@
     <div class="col-md-9">
       <h3>
         {% trans %}Information{% endtrans %}
-        {% if current_user == profile %}
-          <small>
-            <a href="{{ url_for('account.settings') }}">
-              {% trans %}(change){% endtrans %}
-            </a>
-          </small>
-        {% endif %}
       </h3>
 
       <table class="table table-condensed">
@@ -71,17 +74,19 @@
     <div class="col-md-offset-3 col-md-9">
       <h3>
         {% trans %}Datasets{% endtrans %}
-        <small>
-          {% if current_user == profile %}
-            <a href="{{url_for('dataset.new') }}">
+
+        {% if current_user == profile %}
+          <div class="pull-right">
+            <a class="btn btn-sm btn-success" href="{{url_for('dataset.new') }}">
               {% trans %}Import a dataset{% endtrans %}
             </a>
-          {% endif %}
-        </small>
+          </div>
+        {% endif %}
       </h3>
       
       {% if profile_datasets|length %}
         {{dataset_listing(profile_datasets)}}
+        {{show_pager(profile_datasets)}}
       {% else %}
         <p>
           {% trans %}It looks like you haven't uploaded any datasets.{% endtrans %}

@@ -28,3 +28,30 @@
   </ul>
 {%- endmacro %}
 
+{% macro show_pager(pager) -%}
+  {% if pager.pages > 1 %}
+    <nav>
+      <ul class="pagination">
+        {% if pager.has_prev %}
+        <li>
+          <a href="{{pager.prev_url}}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        {% endif %}
+        {% for i in pager.range %}
+          <li class="{% if i == pager.page %}active{% endif %}">
+            <a href="{{pager.page_url(i)}}">{{i}}</a>
+          </li>
+        {% endfor %}
+        {% if pager.has_next %}
+        <li>
+          <a href="{{pager.next_url}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{%- endmacro %}

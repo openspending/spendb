@@ -250,8 +250,6 @@ def do_reset():
 @blueprint.route('/account/<name>')
 def profile(name):
     """ Generate a profile page for a user (from the provided name) """
-
-    # Get the account, if it's none we return a 404
     profile = obj_or_404(Account.by_name(name))
 
     # Set a context boo if email/twitter should be shown, it is only shown
@@ -262,11 +260,7 @@ def profile(name):
     # ..or if the user has chosen to make it public
     show_email = show_info or profile.public_email
     show_twitter = show_info or profile.public_twitter
-
-    # Collect and sort the account's datasets and views
-    profile_datasets = sorted(profile.datasets, key=lambda d: d.label)
-
-    # Render the profile
+    profile_datasets = Pager(profile.datasets, name=name, limit=15)
     return render_template('account/profile.html', profile=profile,
                            show_email=show_email, show_twitter=show_twitter,
                            profile_datasets=profile_datasets)

@@ -46,7 +46,7 @@ def query_index():
     territories = [{'code': code, 'count': count, 'label': COUNTRIES.get(code)}
                    for (code, count) in DatasetTerritory.dataset_counts(q)]
 
-    pager = Pager(q)
+    pager = Pager(q, limit=15)
     return pager, languages, territories
 
 
