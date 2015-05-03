@@ -112,11 +112,10 @@ def view(dataset):
                            managers=managers)
 
 
-@blueprint.route('/datasets/<dataset>/wizard/upload')
-@blueprint.route('/datasets/<dataset>/manage')
-@blueprint.route('/datasets/<dataset>/manage/meta')
-@blueprint.route('/datasets/<dataset>/manage/model')
-@blueprint.route('/datasets/<dataset>/runs/<run>')
+@blueprint.route('/datasets/<dataset>/admin')
+@blueprint.route('/datasets/<dataset>/admin/metadata')
+@blueprint.route('/datasets/<dataset>/admin/model')
+@blueprint.route('/datasets/<dataset>/admin/runs/<run>')
 def app(dataset, *a, **kw):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)

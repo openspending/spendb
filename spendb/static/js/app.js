@@ -14,44 +14,35 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/wizard/upload', {
-    templateUrl: 'wizard/upload.html',
-    controller: 'WizardUploadCtrl',
-    resolve: {
-      dataset: loadDataset,
-      session: loadSession
-    }
-  });
-
-  $routeProvider.when('/datasets/:dataset/manage', {
-    templateUrl: 'manage.html',
-    controller: 'DatasetManageCtrl',
+  $routeProvider.when('/datasets/:dataset/admin', {
+    templateUrl: 'admin/index.html',
+    controller: 'AdminIndexCtrl',
     resolve: {
       dataset: loadDataset
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/runs/:run', {
-    templateUrl: 'run.html',
-    controller: 'RunViewCtrl',
+  $routeProvider.when('/datasets/:dataset/admin/runs/:run', {
+    templateUrl: 'admin/run.html',
+    controller: 'AdminRunCtrl',
     resolve: {
       dataset: loadDataset,
       run: loadRun
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/manage/meta', {
-    templateUrl: 'meta.html',
-    controller: 'DatasetMetaCtrl',
+  $routeProvider.when('/datasets/:dataset/admin/metadata', {
+    templateUrl: 'admin/metadata.html',
+    controller: 'AdminMetadataCtrl',
     resolve: {
       dataset: loadDataset,
       reference: loadReferenceData
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/manage/model', {
-    templateUrl: 'model.html',
-    controller: 'DatasetModelCtrl',
+  $routeProvider.when('/datasets/:dataset/admin/model', {
+    templateUrl: 'admin/model.html',
+    controller: 'AdminModelCtrl',
     resolve: {
       dataset: loadDataset
     }
