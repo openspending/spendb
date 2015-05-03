@@ -1,24 +1,17 @@
-import json
 import logging
 from StringIO import StringIO
-from urllib import urlencode
 
 from webhelpers.feedgenerator import Rss201rev2Feed
-from werkzeug.exceptions import BadRequest
-from sqlalchemy.orm import aliased
-from flask import Blueprint, render_template, request
-from flask import Response, current_app
-from flask.ext.login import current_user
+from flask import Blueprint, render_template, Response, current_app
 from flask.ext.babel import gettext as _
-from apikit import Pager
 
 from spendb.core import db, url_for
-from spendb.reference import COUNTRIES, LANGUAGES
-from spendb.model import Dataset, DatasetLanguage, DatasetTerritory
+from spendb.model import Dataset
 from spendb import auth
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.context import angular_templates
+from spendb.views.api_v3.dataset import query_index
 
 log = logging.getLogger(__name__)
 
@@ -30,29 +23,7 @@ blueprint = Blueprint('dataset', __name__)
 def index():
     """ Get a list of all datasets along with territory, language, and
     category counts (amount of datasets for each). """
-    q = Dataset.all_by_account(current_user, order=False)
-    q = q.order_by(Dataset.updated_at.desc())
-
-    # Filter by languages if they have been provided
-    for language in request.args.getlist('languages'):
-        l = aliased(DatasetLanguage)
-        q = q.join(l, Dataset._languages)
-        q = q.filter(l.code == language)
-
-    # Filter by territories if they have been provided
-    for territory in request.args.getlist('territories'):
-        t = aliased(DatasetTerritory)
-        q = q.join(t, Dataset._territories)
-        q = q.filter(t.code == territory)
-
-    # Return a list of languages as dicts with code, count, url and label
-    languages = [{'code': code, 'count': count, 'label': LANGUAGES.get(code)}
-                 for (code, count) in DatasetLanguage.dataset_counts(q)]
-
-    territories = [{'code': code, 'count': count, 'label': COUNTRIES.get(code)}
-                   for (code, count) in DatasetTerritory.dataset_counts(q)]
-
-    pager = Pager(q)
+    pager, languages, territories = query_index()
     return render_template('dataset/index.html', pager=pager,
                            languages=languages, territories=territories)
 

@@ -1,13 +1,14 @@
 import logging
 
-from flask import Blueprint
+from flask import Blueprint, request
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
 from colander import SchemaNode, String, Invalid
+from sqlalchemy.orm import aliased
 from apikit import jsonify, Pager, request_data
 
 from spendb.core import db
-from spendb.model import Dataset
+from spendb.model import Dataset, DatasetLanguage, DatasetTerritory
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
@@ -15,22 +16,48 @@ from spendb.views.error import api_json_errors
 from spendb.validation.dataset import dataset_schema
 from spendb.validation.mapping import mapping_schema
 from spendb.validation.common import ValidationState
+from spendb.reference import COUNTRIES, LANGUAGES
 
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('datasets_api3', __name__)
 
 
+def query_index():
+    q = Dataset.all_by_account(current_user, order=False)
+    q = q.order_by(Dataset.updated_at.desc())
+
+    # Filter by languages if they have been provided
+    for language in request.args.getlist('languages'):
+        l = aliased(DatasetLanguage)
+        q = q.join(l, Dataset._languages)
+        q = q.filter(l.code == language)
+
+    # Filter by territories if they have been provided
+    for territory in request.args.getlist('territories'):
+        t = aliased(DatasetTerritory)
+        q = q.join(t, Dataset._territories)
+        q = q.filter(t.code == territory)
+
+    # Return a list of languages as dicts with code, count, url and label
+    languages = [{'code': code, 'count': count, 'label': LANGUAGES.get(code)}
+                 for (code, count) in DatasetLanguage.dataset_counts(q)]
+
+    territories = [{'code': code, 'count': count, 'label': COUNTRIES.get(code)}
+                   for (code, count) in DatasetTerritory.dataset_counts(q)]
+
+    pager = Pager(q)
+    return pager, languages, territories
 
 
 @blueprint.route('/datasets')
 @api_json_errors
 def index():
-    q = Dataset.all_by_account(current_user)
-    # TODO: Facets for territories and languages
-    # TODO: filters on facet dimensions
-    pager = Pager(q)
-    return jsonify(pager)
+    pager, languages, territories = query_index()
+    data = pager.to_dict()
+    data['languages'] = languages
+    data['territories'] = territories
+    return jsonify(data)
 
 
 @blueprint.route('/datasets/<name>')
