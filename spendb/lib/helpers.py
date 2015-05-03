@@ -8,10 +8,6 @@ from spendb.auth import require
 from spendb.model import Dataset
 
 
-def static_path(filename):
-    return url_for('static', filename=filename)
-
-
 def get_dataset(name):
     dataset = obj_or_404(Dataset.by_name(name))
     require.dataset.read(dataset)

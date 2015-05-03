@@ -36,4 +36,3 @@ class ModelVisitor(object):
             self.visit_date_dimension(dimension)
         elif isinstance(dimension, CompoundDimension):
             self.visit_compound_dimension(dimension)
-        

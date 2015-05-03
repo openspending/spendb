@@ -71,25 +71,28 @@ class TestAccountController(ControllerTestCase):
     def test_completion_access_check(self):
         response = self.client.get(url_for('account.complete'))
         obj = json.loads(response.data)
-        assert u'You are not authorized to see that page' == obj.get('errors'), response.data
+        assert u'You are not authorized to see that page' == \
+            obj.get('errors'), response.data
 
     def test_distinct_json(self):
         test = make_account()
         response = self.client.get(url_for('account.complete'),
                                    query_string={'api_key': test.api_key})
-        obj = json.loads(response.data)['results']
-        assert obj[0].keys() == [u'fullname', u'name']
+        obj = response.json['results']
+        assert 'fullname' in obj[0].keys(), obj
         assert len(obj) == 1, obj
         assert obj[0]['name'] == 'test', obj[0]
 
         response = self.client.get(url_for('account.complete'),
-                                   query_string={'q': 'tes', 'api_key': test.api_key})
-        obj = json.loads(response.data)['results']
+                                   query_string={'q': 'tes',
+                                                 'api_key': test.api_key})
+        obj = response.json['results']
         assert len(obj) == 1, obj
 
         response = self.client.get(url_for('account.complete'),
-                                   query_string={'q': 'foo', 'api_key': test.api_key})
-        obj = json.loads(response.data)['results']
+                                   query_string={'q': 'foo',
+                                                 'api_key': test.api_key})
+        obj = response.json['results']
         assert len(obj) == 0, obj
 
     def test_dashboard_not_logged_in(self):

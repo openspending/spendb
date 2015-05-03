@@ -165,13 +165,3 @@ class DatasetIndexParamParser(ParamParser):
 
         # We return None if there's an error of no category
         return None
-
-
-class DistinctParamParser(ParamParser):
-    defaults = ParamParser.defaults.copy()
-    defaults['q'] = ''
-    defaults['page'] = 1
-    defaults['pagesize'] = 100
-
-    def parse_pagesize(self, pagesize):
-        return min(100, self._to_int('pagesize', pagesize))

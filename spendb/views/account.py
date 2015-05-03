@@ -2,18 +2,15 @@ import colander
 from flask import Blueprint, render_template, request, redirect
 from flask.ext.login import current_user, login_user, logout_user
 from flask.ext.babel import gettext as _
-from sqlalchemy.sql.expression import desc, func, or_
+from sqlalchemy.sql.expression import or_
 from werkzeug.security import check_password_hash, generate_password_hash
-from apikit import obj_or_404, jsonify
+from apikit import obj_or_404, Pager, jsonify
 
 from spendb.core import db, login_manager, url_for
 from spendb.auth import require
-from spendb.model.dataset import Dataset
 from spendb.model.account import Account, AccountRegister, AccountSettings
-from spendb.lib.paramparser import DistinctParamParser
 from spendb.lib.mailer import send_reset_link
 from spendb.lib.helpers import flash_error, flash_success
-from spendb.lib.pagination import Page
 from spendb.views.cache import disable_cache
 
 
@@ -171,28 +168,15 @@ def dashboard(format='html'):
 @blueprint.route('/accounts/_complete')
 def complete(format='json'):
     disable_cache()
-    parser = DistinctParamParser(request.args)
-    params, errors = parser.parse()
-    if errors:
-        return jsonify({'errors': errors}, status=400)
     if not current_user.is_authenticated():
         msg = _("You are not authorized to see that page")
         return jsonify({'errors': msg}, status=403)
 
     query = db.session.query(Account)
-    filter_string = params.get('q') + '%'
+    filter_string = request.args.get('q', '') + '%'
     query = query.filter(or_(Account.name.ilike(filter_string),
                              Account.fullname.ilike(filter_string)))
-    count = query.count()
-    query = query.limit(params.get('pagesize'))
-    query = query.offset(int((params.get('page') - 1) *
-                             params.get('pagesize')))
-    results = [dict(fullname=x.fullname, name=x.name) for x in list(query)]
-
-    return jsonify({
-        'results': results,
-        'count': count
-    })
+    return jsonify(Pager(query))
 
 
 @blueprint.route('/logout')

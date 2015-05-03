@@ -20,7 +20,7 @@
       <div class="collapse navbar-collapse" id="main-collapse">
         <ul class="nav navbar-nav">
           <li>
-            <a class="{{ section_active.dataset }}" href="/datasets">
+            <a href="{{url_for('dataset.index')}}">
               {% trans %}Datasets{% endtrans %}
             </a>
           </li>
