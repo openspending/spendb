@@ -20,7 +20,7 @@ from spendb.reference import COUNTRIES, LANGUAGES
 
 
 log = logging.getLogger(__name__)
-blueprint = Blueprint('datasets_api3', __name__)
+blueprint = Blueprint('datasets_api', __name__)
 
 
 def query_index():

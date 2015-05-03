@@ -102,7 +102,7 @@ class Dataset(db.Model):
             'updated_at': self.updated_at,
             'languages': list(self.languages),
             'territories': list(self.territories),
-            'api_url': url_for('datasets_api3.view', name=self.name)
+            'api_url': url_for('datasets_api.view', name=self.name)
         }
 
     @classmethod

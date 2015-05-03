@@ -8,7 +8,7 @@ from spendb.reference import CATEGORIES, LANGUAGES
 from spendb.views.cache import etag_cache_keygen
 
 log = logging.getLogger(__name__)
-blueprint = Blueprint('meta_api3', __name__)
+blueprint = Blueprint('meta_api', __name__)
 
 
 def dicts(d):

@@ -10,21 +10,21 @@ from spendb.views.i18n import get_locale
 from spendb.views.account import blueprint as account
 from spendb.views.dataset import blueprint as dataset
 from spendb.views.error import handle_error, handle_invalid
-from spendb.views.api_v3.dataset import blueprint as datasets_v3
-from spendb.views.api_v3.meta import blueprint as meta_v3
-from spendb.views.api_v3.session import blueprint as session_v3
-from spendb.views.api_v3.source import blueprint as source_v3
-from spendb.views.api_v3.run import blueprint as run_v3
+from spendb.views.api.dataset import blueprint as datasets_api
+from spendb.views.api.meta import blueprint as meta_api
+from spendb.views.api.session import blueprint as session_api
+from spendb.views.api.source import blueprint as source_api
+from spendb.views.api.run import blueprint as run_api
 
 
 def register_views(app, babel):
     babel.locale_selector_func = get_locale
 
-    app.register_blueprint(meta_v3, url_prefix='/api/3')
-    app.register_blueprint(session_v3, url_prefix='/api/3')
-    app.register_blueprint(run_v3, url_prefix='/api/3')
-    app.register_blueprint(source_v3, url_prefix='/api/3')
-    app.register_blueprint(datasets_v3, url_prefix='/api/3')
+    app.register_blueprint(meta_api, url_prefix='/api/3')
+    app.register_blueprint(session_api, url_prefix='/api/3')
+    app.register_blueprint(run_api, url_prefix='/api/3')
+    app.register_blueprint(source_api, url_prefix='/api/3')
+    app.register_blueprint(datasets_api, url_prefix='/api/3')
 
     # expose ``cubes``:
     app.register_blueprint(slicer, url_prefix='/api/slicer', config={})

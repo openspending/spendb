@@ -15,17 +15,17 @@ from spendb.etl.tasks import extract_fileobj
 
 
 log = logging.getLogger(__name__)
-blueprint = Blueprint('sources_api3', __name__)
+blueprint = Blueprint('sources_api', __name__)
 
 
 def source_to_dict(dataset, source):
     data = dict(source.meta.items())
     data.pop('http_headers', None)
-    data['data_url'] = url_for('sources_api3.serve', dataset=dataset.name,
+    data['data_url'] = url_for('sources_api.serve', dataset=dataset.name,
                                name=source.name)
-    data['runs_url'] = url_for('runs_api3.index', dataset=dataset.name,
+    data['runs_url'] = url_for('runs_api.index', dataset=dataset.name,
                                source=source.name)
-    data['api_url'] = url_for('sources_api3.view', dataset=dataset.name,
+    data['api_url'] = url_for('sources_api.view', dataset=dataset.name,
                               name=source.name)
     return data
 

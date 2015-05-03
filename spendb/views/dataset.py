@@ -11,7 +11,7 @@ from spendb import auth
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.context import angular_templates
-from spendb.views.api_v3.dataset import query_index
+from spendb.views.api.dataset import query_index
 
 log = logging.getLogger(__name__)
 

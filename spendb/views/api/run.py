@@ -12,7 +12,7 @@ from spendb.views.cache import disable_cache
 
 
 log = logging.getLogger(__name__)
-blueprint = Blueprint('runs_api3', __name__)
+blueprint = Blueprint('runs_api', __name__)
 
 
 @blueprint.route('/datasets/<dataset>/runs')

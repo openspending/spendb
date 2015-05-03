@@ -16,14 +16,14 @@ class TestRunApiController(ControllerTestCase):
         self.auth_qs = {'api_key': self.user.api_key}
         self.cra.managers.append(self.user)
         db.session.commit()
-        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        url = url_for('sources_api.upload', dataset=self.cra.name)
         fh = data_fixture('cra')
         self.source = self.client.post(url, data={
             'file': (fh, 'cra.csv')
         }, query_string=self.auth_qs).json
 
     def test_runs_index(self):
-        url = url_for('runs_api3.index', dataset=self.cra.name)
+        url = url_for('runs_api.index', dataset=self.cra.name)
         res = self.client.get(url)
         assert res.json['total'] == 1, res.json
         frst = res.json['results'][0]
@@ -31,12 +31,12 @@ class TestRunApiController(ControllerTestCase):
         assert 'messages' not in frst, frst
 
     def test_runs_index_filter(self):
-        url = url_for('runs_api3.index', dataset=self.cra.name, source='foo')
+        url = url_for('runs_api.index', dataset=self.cra.name, source='foo')
         res = self.client.get(url)
         assert res.json['total'] == 0, res.json
 
     def test_runs_view(self):
-        url = url_for('runs_api3.view', dataset=self.cra.name, id=1)
+        url = url_for('runs_api.view', dataset=self.cra.name, id=1)
         res = self.client.get(url)
         assert res.json['status'] == 'complete', res.json
         assert len(res.json['messages']), res.json

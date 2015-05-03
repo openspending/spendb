@@ -39,7 +39,7 @@ class Run(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'api_url': url_for('runs_api3.view', dataset=self.dataset.name,
+            'api_url': url_for('runs_api.view', dataset=self.dataset.name,
                                id=self.id),
             'operation': self.operation,
             'status': self.status,

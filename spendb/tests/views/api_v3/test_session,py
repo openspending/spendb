@@ -18,13 +18,13 @@ class TestSessionApiController(ControllerTestCase):
         db.session.commit()
 
     def test_not_logged_in(self):
-        url = url_for('sessions_api3.session')
+        url = url_for('sessions_api.session')
         res = self.client.get(url)
         assert res.json.get('logged_in') is False, res.json
         assert res.json.get('user') is None, res.json
 
     def test_logged_in(self):
-        url = url_for('sessions_api3.session')
+        url = url_for('sessions_api.session')
         res = self.client.get(url, query_string=self.auth_qs)
         assert res.json.get('logged_in') is True, res.json
         assert res.json.get('user') is not None, res.json

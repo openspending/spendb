@@ -6,7 +6,7 @@ from apikit import jsonify
 
 
 log = logging.getLogger(__name__)
-blueprint = Blueprint('sessions_api3', __name__)
+blueprint = Blueprint('sessions_api', __name__)
 
 
 @blueprint.route('/sessions')

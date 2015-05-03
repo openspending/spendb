@@ -19,12 +19,12 @@ class TestSourceApiController(ControllerTestCase):
         db.session.commit()
 
     def test_source_index(self):
-        url = url_for('sources_api3.index', dataset=self.cra.name)
+        url = url_for('sources_api.index', dataset=self.cra.name)
         res = self.client.get(url)
         assert res.json['total'] == 0, res.json
 
     def test_source_upload_anon(self):
-        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        url = url_for('sources_api.upload', dataset=self.cra.name)
         fh = data_fixture('cra')
         res = self.client.post(url, data={
             'file': (fh, 'cra.csv')
@@ -32,7 +32,7 @@ class TestSourceApiController(ControllerTestCase):
         assert '403' in res.status, res.status
 
     def test_source_upload(self):
-        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        url = url_for('sources_api.upload', dataset=self.cra.name)
         fh = data_fixture('cra')
         res = self.client.post(url, data={
             'file': (fh, 'cra.csv')
@@ -40,14 +40,14 @@ class TestSourceApiController(ControllerTestCase):
         assert '403' not in res.status, res.status
 
     def test_source_view(self):
-        url = url_for('sources_api3.upload', dataset=self.cra.name)
+        url = url_for('sources_api.upload', dataset=self.cra.name)
         fh = data_fixture('cra')
         res = self.client.post(url, data={
             'file': (fh, 'cra.csv')
         }, query_string=self.auth_qs)
         assert res.json['extension'] == 'csv', res.json
         assert res.json['mime_type'] == 'text/csv', res.json
-        url = url_for('sources_api3.index', dataset=self.cra.name)
+        url = url_for('sources_api.index', dataset=self.cra.name)
         res = self.client.get(url)
         assert res.json['total'] == 1, res.json
         frst = res.json['results'][0]

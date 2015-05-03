@@ -18,7 +18,7 @@ class TestDatasetApiController(ControllerTestCase):
         db.session.commit()
 
     def test_list_datasets(self):
-        url = url_for('datasets_api3.index')
+        url = url_for('datasets_api.index')
         res = self.client.get(url)
         assert res.json.get('total') == 1, res.json
         res0 = res.json.get('results')[0]
@@ -27,31 +27,31 @@ class TestDatasetApiController(ControllerTestCase):
     def test_list_private_datasets(self):
         self.cra.private = True
         db.session.commit()
-        url = url_for('datasets_api3.index')
+        url = url_for('datasets_api.index')
         res = self.client.get(url)
         assert res.json.get('total') == 0, res.json
         assert len(res.json.get('results')) == 0, res.json
 
     def test_view_dataset(self):
-        url = url_for('datasets_api3.view', name=self.cra.name)
+        url = url_for('datasets_api.view', name=self.cra.name)
         res = self.client.get(url)
         assert res.json.get('name') == self.cra.name, res.json
         assert res.json.get('label') == self.cra.label, res.json
 
     def test_view_nonexisting_dataset(self):
-        url = url_for('datasets_api3.view', name='foo')
+        url = url_for('datasets_api.view', name='foo')
         res = self.client.get(url)
         assert '404' in res.status, res.status
 
     def test_view_private_dataset(self):
         self.cra.private = True
         db.session.commit()
-        url = url_for('datasets_api3.view', name=self.cra.name)
+        url = url_for('datasets_api.view', name=self.cra.name)
         res = self.client.get(url)
         assert '403' in res.status, res.status
 
     def test_view_model(self):
-        url = url_for('datasets_api3.model', name='cra')
+        url = url_for('datasets_api.model', name='cra')
         res = self.client.get(url)
         assert '200' in res.status, res.status
         assert 'cap_or_cur' in res.json, res.json
@@ -59,7 +59,7 @@ class TestDatasetApiController(ControllerTestCase):
         assert isinstance(res.json['cofog3'], dict), res.json['cofog3']
 
     def test_view_fields(self):
-        url = url_for('datasets_api3.fields', name='cra')
+        url = url_for('datasets_api.fields', name='cra')
         res = self.client.get(url)
         assert '200' in res.status, res.status
         assert 'cap_or_cur' in res.json, res.json
@@ -71,12 +71,12 @@ class TestDatasetApiController(ControllerTestCase):
         cra = Dataset.by_name('cra')
         cra.fields = {}
         db.session.commit()
-        url = url_for('datasets_api3.fields', name='cra')
+        url = url_for('datasets_api.fields', name='cra')
         res = self.client.get(url)
         assert 'cap_or_cur' not in res.json, res.json
 
     def test_create_dataset(self):
-        url = url_for('datasets_api3.create')
+        url = url_for('datasets_api.create')
         res = self.client.post(url, data=json.dumps({}),
                                query_string=self.auth_qs,
                                headers={'content-type': 'application/json'})
@@ -102,7 +102,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'currency': 'EUR', 'languages': ['en'],
                 'territories': ['gb'],
                 'category': 'budget', 'default_time': 2009}
-        self.client.post(url_for('datasets_api3.update', name='cra'),
+        self.client.post(url_for('datasets_api.update', name='cra'),
                          data=json.dumps(data),
                          headers={'content-type': 'application/json'},
                          query_string={'api_key': self.user.api_key})
@@ -117,7 +117,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'currency': 'EUR', 'languages': ['en'],
                 'territories': ['gb'], 'category': 'foo',
                 'default_time': 2009}
-        response = self.client.post(url_for('datasets_api3.update', name='cra'),
+        response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
                                     query_string={'api_key': self.user.api_key})
@@ -130,7 +130,7 @@ class TestDatasetApiController(ControllerTestCase):
         data = {'name': 'cra', 'label': '',
                 'description': 'I\'m a banana',
                 'currency': 'GBP'}
-        response = self.client.post(url_for('datasets_api3.update', name='cra'),
+        response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
                                     query_string={'api_key': self.user.api_key})
@@ -144,7 +144,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'languages': ['esperanto'],
                 'description': 'I\'m a banana',
                 'currency': 'GBP', 'default_time': 2009}
-        response = self.client.post(url_for('datasets_api3.update', name='cra'),
+        response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
                                     query_string={'api_key': self.user.api_key})
@@ -159,7 +159,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'description': 'I\'m a banana',
                 'currency': 'GBP',
                 'default_time': 2009}
-        response = self.client.post(url_for('datasets_api3.update', name='cra'),
+        response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
                                     query_string={'api_key': self.user.api_key})
@@ -175,7 +175,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'category': 'budget',
                 'currency': 'glass pearls',
                 'default_time': 2009}
-        response = self.client.post(url_for('datasets_api3.update', name='cra'),
+        response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
                                     query_string={'api_key': self.user.api_key})
@@ -184,7 +184,7 @@ class TestDatasetApiController(ControllerTestCase):
         assert cra.currency == 'GBP', cra.label
 
     def test_update_model(self):
-        url = url_for('datasets_api3.update_model', name='cra')
+        url = url_for('datasets_api.update_model', name='cra')
         data = self.cra.mapping.copy()
         del data['cofog3']
         res = self.client.post(url, data=json.dumps(data),
@@ -198,7 +198,7 @@ class TestDatasetApiController(ControllerTestCase):
         assert res.json.keys() == res2.json.keys(), res2.json
         
     def test_update_model_invalid(self):
-        url = url_for('datasets_api3.update_model', name='cra')
+        url = url_for('datasets_api.update_model', name='cra')
         data = self.cra.mapping.copy()
         del data['cofog3']['label']
         res = self.client.post(url, data=json.dumps(data),
@@ -208,7 +208,7 @@ class TestDatasetApiController(ControllerTestCase):
         assert 'cofog3' in res.data, res.data
 
     def test_update_model_invalid_json(self):
-        url = url_for('datasets_api3.update_model', name='cra')
+        url = url_for('datasets_api.update_model', name='cra')
         data = 'huhu'
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
@@ -219,7 +219,7 @@ class TestDatasetApiController(ControllerTestCase):
         cra = Dataset.by_name('cra')
         cra.private = True
         db.session.commit()
-        url = url_for('datasets_api3.view', name='cra')
+        url = url_for('datasets_api.view', name='cra')
         res = self.client.get(url)
         assert '403' in res.status, res.status
         res = self.client.get(url, query_string={'api_key': self.user.api_key})
@@ -236,7 +236,7 @@ class TestDatasetApiController(ControllerTestCase):
 
     def test_delete_dataset(self):
         name = self.cra.name
-        url = url_for('datasets_api3.delete', name=name)
+        url = url_for('datasets_api.delete', name=name)
         res = self.client.delete(url, query_string=self.auth_qs)
         assert '410' in res.status, res.status
         ds = Dataset.by_name(name)
@@ -244,7 +244,7 @@ class TestDatasetApiController(ControllerTestCase):
     
     def test_delete_dataset_requires_auth(self):
         name = self.cra.name
-        url = url_for('datasets_api3.delete', name=name)
+        url = url_for('datasets_api.delete', name=name)
         res = self.client.delete(url, query_string={})
         assert '403' in res.status, res.status
         ds = Dataset.by_name(name)
