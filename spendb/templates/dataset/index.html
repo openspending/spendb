@@ -5,7 +5,7 @@
 
 {% block content %}
   <h1 class="page-header">
-    {% trans %}Available data sets{% endtrans %}
+    {% trans %}Datasets in our store{% endtrans %}
     <div class="pull-right">
       <a class="btn btn-success" href="{{url_for('dataset.new')}}">
         {% trans %}Import{% endtrans %} &raquo;
@@ -15,45 +15,44 @@
 
   <div class="row">
     <div class="col-md-8">
-      <p>{% trans %}The database contains the following datasets{% endtrans %}:</p>
+      <p>{% trans %}The database contains the following datasets:{% endtrans %}</p>
       
-      {{ dataset_listing(page) }}
-      {{ page.pager() }}
+      {{ dataset_listing(pager) }}
+
     </div>
     <div class="col-md-4">
       <h3>{% trans %}Countries{% endtrans %}</h3>
-      <ul>
-        {% for territory in territory_options %}
-        <li>
-  	      {% if not ('territories', territory.get('code')) in query %}
-  	        <a href="{{add_filter('territories', territory.get('code'))}}">
+      <div class="list-group">
+        {% for territory in territories %}
+          {% if not pager.has_url_state('territories', territory.get('code')) %}
+  	        <a class="list-group-item" href="{{pager.add_url_state('territories', territory.get('code'))}}">
+              <span class="badge">{{territory.get('count')}}</span>
               {{territory.get('label')}}
             </a>
-  	        {% else %}
-  	        <a class="unfilter" href="{{del_filter('territories', territory.get('code'))}}">
+  	      {% else %}
+  	        <a class="list-group-item active" href="{{pager.remove_url_state('territories', territory.get('code'))}}">
+              <span class="badge">{{territory.get('count')}}</span>
               {{territory.get('label')}}
             </a>
-  	        {% endif %}
-            ({{territory.get('count')}})
-        </li>
+  	      {% endif %}
         {% endfor %}
-      </ul>
+      </div>
       <h3>{% trans %}Languages{% endtrans %}</h3>
-      <ul>
-        {% for language in language_options %}
-        <li>
-  	      {% if not ('languages', language.get('code')) in query %}
-            <a href="{{add_filter('languages', language.get('code'))}}">
+      <div class="list-group">
+        {% for language in languages %}
+          {% if not pager.has_url_state('languages', language.get('code')) %}
+            <a class="list-group-item" href="{{pager.add_url_state('languages', language.get('code'))}}">
+              <span class="badge">{{language.get('count')}}</span>
               {{language.get('label')}}
             </a>
-            {% else %}
-            <a class="unfilter" href="{{del_filter('languages', language.get('code'))}}">
-              {{language.get('label')}}</a>
-  	        {% endif %}
-            ({{language.get('count')}})
-        </li>
+          {% else %}
+            <a class="list-group-item active" href="{{pager.remove_url_state('languages', language.get('code'))}}">
+              <span class="badge">{{language.get('count')}}</span>
+              {{language.get('label')}}
+            </a>
+          {% endif %}
         {% endfor %}
-      </ul>
+      </div>
     </div>
   </div>
 {% endblock %}

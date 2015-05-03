@@ -10,7 +10,6 @@ from spendb.core import db
 from spendb.model import Dataset
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
-from spendb.lib.indices import clear_index_cache
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.error import api_json_errors
 from spendb.validation.dataset import dataset_schema
@@ -20,6 +19,8 @@ from spendb.validation.common import ValidationState
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('datasets_api3', __name__)
+
+
 
 
 @blueprint.route('/datasets')
@@ -54,7 +55,6 @@ def create():
     dataset.managers.append(current_user)
     db.session.add(dataset)
     db.session.commit()
-    clear_index_cache()
     return view(dataset.name)
 
 
@@ -67,7 +67,6 @@ def update(name):
     data = schema.deserialize(request_data())
     dataset.update(data)
     db.session.commit()
-    clear_index_cache()
     return view(name)
 
 
@@ -110,5 +109,4 @@ def delete(name):
     dataset.fact_table.drop()
     db.session.delete(dataset)
     db.session.commit()
-    clear_index_cache()
     return jsonify({'status': 'deleted'}, status=410)

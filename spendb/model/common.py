@@ -93,11 +93,10 @@ class JSONType(TypeDecorator):
 class DatasetFacetMixin(object):
 
     @classmethod
-    def dataset_counts(cls, datasets):
-        ds_ids = [d.id for d in datasets]
-        if not len(ds_ids):
-            return []
+    def dataset_counts(cls, datasets_q):
+        sq = datasets_q.subquery()
         q = select([cls.code, func.count(cls.dataset_id)],
-                   cls.dataset_id.in_(ds_ids), group_by=cls.code,
+                   group_by=cls.code,
                    order_by=func.count(cls.dataset_id).desc())
+        q = q.where(cls.dataset_id == sq.c.id)
         return db.session.bind.execute(q).fetchall()

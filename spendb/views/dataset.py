@@ -5,18 +5,18 @@ from urllib import urlencode
 
 from webhelpers.feedgenerator import Rss201rev2Feed
 from werkzeug.exceptions import BadRequest
+from sqlalchemy.orm import aliased
 from flask import Blueprint, render_template, request
 from flask import Response, current_app
 from flask.ext.login import current_user
 from flask.ext.babel import gettext as _
+from apikit import Pager
 
 from spendb.core import db, url_for
-from spendb.model import Dataset
-from spendb.lib.paramparser import DatasetIndexParamParser
+from spendb.reference import COUNTRIES, LANGUAGES
+from spendb.model import Dataset, DatasetLanguage, DatasetTerritory
 from spendb import auth
-from spendb.lib.indices import cached_index
 from spendb.lib.helpers import get_dataset
-from spendb.lib.pagination import Page
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.context import angular_templates
 
@@ -27,74 +27,34 @@ blueprint = Blueprint('dataset', __name__)
 
 
 @blueprint.route('/datasets')
-@blueprint.route('/datasets.<fmt:format>')
-def index(format='html'):
+def index():
     """ Get a list of all datasets along with territory, language, and
     category counts (amount of datasets for each). """
+    q = Dataset.all_by_account(current_user, order=False)
+    q = q.order_by(Dataset.updated_at.desc())
 
-    # Parse the request parameters to get them into the right format
-    parser = DatasetIndexParamParser(request.args)
-    params, errors = parser.parse()
-    if errors:
-        concatenated_errors = ', '.join(errors)
-        raise BadRequest(_('Parameter values not supported: %(errors)s',
-                           errors=concatenated_errors))
+    # Filter by languages if they have been provided
+    for language in request.args.getlist('languages'):
+        l = aliased(DatasetLanguage)
+        q = q.join(l, Dataset._languages)
+        q = q.filter(l.code == language)
 
-    # We need to pop the page and pagesize parameters since they're not
-    # used for the cache (we have to get all of the datasets to do the
-    # language, territory, and category counts (these are then only used
-    # for the html response)
-    params.pop('page')
-    pagesize = params.pop('pagesize')
+    # Filter by territories if they have been provided
+    for territory in request.args.getlist('territories'):
+        t = aliased(DatasetTerritory)
+        q = q.join(t, Dataset._territories)
+        q = q.filter(t.code == territory)
 
-    # Get cached indices (this will also generate them if there are no
-    # cached results (the cache is invalidated when a dataset is published
-    # or retracted
-    account = current_user if current_user.is_authenticated() else None
-    results = cached_index(account, **params)
+    # Return a list of languages as dicts with code, count, url and label
+    languages = [{'code': code, 'count': count, 'label': LANGUAGES.get(code)}
+                 for (code, count) in DatasetLanguage.dataset_counts(q)]
 
-    # Generate the ETag from the last modified timestamp of the first
-    # dataset (since they are ordered in descending order by last
-    # modified). It doesn't matter that this happens if it has (possibly)
-    # generated the index (if not cached) since if it isn't cached then
-    # the ETag is definitely modified. We wrap it in a try clause since
-    # if there are no public datasets we'll get an index error.
-    # We also don't set c._must_revalidate to True since we don't care
-    # if the index needs a hard refresh
-    try:
-        first = results['datasets'][0]
-        etag_cache_keygen(first['updated_at'])
-    except IndexError:
-        etag_cache_keygen(None)
+    territories = [{'code': code, 'count': count, 'label': COUNTRIES.get(code)}
+                   for (code, count) in DatasetTerritory.dataset_counts(q)]
 
-    # Assign the results to template context variables
-    language_options = results['languages']
-    territory_options = results['territories']
-    category_options = results['categories']
-
-    # Create facet filters (so we can look at a single country,
-    # language etc.)
-    query = request.args.items()
-    add_filter = lambda f, v: \
-        '?' + urlencode(query +
-                        [(f, v)] if (f, v) not in query else query)
-    del_filter = lambda f, v: \
-        '?' + urlencode([(k, x) for k, x in
-                         query if (k, x) != (f, v)])
-
-    # The page parameter we popped earlier is part of request.params but
-    # we now know it was parsed. We have to send in request.params to
-    # retain any parameters already supplied (filters)
-    page = Page(results['datasets'], items_per_page=pagesize,
-                item_count=len(results['datasets']),
-                **dict(request.args.items()))
-    return render_template('dataset/index.html', page=page,
-                           query=query,
-                           language_options=language_options,
-                           territory_options=territory_options,
-                           category_options=category_options,
-                           add_filter=add_filter,
-                           del_filter=del_filter)
+    pager = Pager(q)
+    return render_template('dataset/index.html', pager=pager,
+                           languages=languages, territories=territories)
 
 
 @blueprint.route('/datasets/new')
