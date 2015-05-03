@@ -1,7 +1,5 @@
 import logging
-import os
 
-from flask import current_app
 from flask.ext.migrate import upgrade
 
 from spendb.core import db
@@ -38,23 +36,3 @@ def drop_dataset(name):
 def migrate():
     """ Initialize or upgrade the database """
     upgrade()
-
-
-@manager.command
-def modelmigrate():
-    """ Run pending data model migrations """
-    from spendb.validation.migration import migrate_model
-    dataset = db.Table('dataset', db.metadata, autoload=True)
-    rp = db.engine.execute(dataset.select())
-    while True:
-        ds = rp.fetchone()
-        if ds is None:
-            break
-        log.info('Migrating %s...', ds['name'])
-        model = migrate_model(ds['data'])
-        version = model.get('dataset').get('schema_version')
-        if 'dataset' in model:
-            del model['dataset']
-        q = dataset.update().where(dataset.c.id == ds['id'])
-        q = q.values({'data': model, 'schema_version': version})
-        db.engine.execute(q)

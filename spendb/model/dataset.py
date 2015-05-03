@@ -30,7 +30,6 @@ class Dataset(db.Model):
     description = Column(Unicode())
     currency = Column(Unicode())
     default_time = Column(Unicode())
-    schema_version = Column(Unicode())
     category = Column(Unicode())
     private = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -97,13 +96,10 @@ class Dataset(db.Model):
             'name': self.name,
             'description': self.description,
             'default_time': self.default_time,
-            'schema_version': self.schema_version,
             'currency': self.currency,
             'category': self.category,
-            'timestamps': {
-                'created': self.created_at,
-                'last_modified': self.updated_at
-            },
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
             'languages': list(self.languages),
             'territories': list(self.territories),
             'api_url': url_for('datasets_api3.view', name=self.name)

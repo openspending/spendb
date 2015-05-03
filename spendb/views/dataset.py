@@ -63,7 +63,7 @@ def index(format='html'):
     # if the index needs a hard refresh
     try:
         first = results['datasets'][0]
-        etag_cache_keygen(first['timestamps']['last_modified'])
+        etag_cache_keygen(first['updated_at'])
     except IndexError:
         etag_cache_keygen(None)
 
