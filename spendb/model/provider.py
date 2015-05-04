@@ -7,100 +7,6 @@ from cubes.logging import get_logger
 
 from spendb.core import db
 from spendb.model import Dataset
-from spendb.model.visitor import ModelVisitor
-from spendb.model.constants import FULL_DATE_CUBES_TEMPLATE, NUM_DATE_CUBES_TEMPLATE
-
-
-class CubesModelVisitor(ModelVisitor):
-
-    def __init__(self, dataset):
-        self.mappings = {}
-        self.dataset = dataset
-        self.dimensions = []
-        self.measures = []
-        self.aggregates = [MeasureAggregate('num_entries',
-                                            label='Numer of entries',
-                                            function='count')]
-
-    def visit_measure(self, measure):
-        cubes_measure = Measure(measure.name, label=measure.label)
-        self.measures.append(cubes_measure)
-        aggregate = MeasureAggregate(measure.name,
-                                     label=measure.label,
-                                     measure=measure.name,
-                                     function='sum')
-        self.aggregates.append(aggregate)
-        self.mappings[measure.name] = measure.column
-
-    def add_dimension(self, dimension, meta):
-        meta.update({'name': dimension.name, 'label': dimension.label})
-        self.dimensions.append(create_dimension(meta))
-
-    def visit_attribute_dimension(self, dimension):
-        if dimension.column is None:
-            return
-        name = '%s.%s' % (dimension.name, dimension.name)
-        self.mappings[name] = dimension.column
-        self.add_dimension(dimension, {
-            'levels': [{
-                'name': dimension.name,
-                'label': dimension.label,
-                'key': dimension.name,
-                'attributes': [dimension.name]
-            }]
-        })
-
-    def visit_compound_dimension(self, dimension):
-        attributes = []
-        for attr in dimension.attributes:
-            if attr.column is None:
-                continue
-            attributes.append(attr.name)
-            name = '%s.%s' % (dimension.name, attr.name)
-            self.mappings[name] = attr.column
-
-        self.add_dimension(dimension, {
-            'levels': [{
-                'name': dimension.name,
-                'label': dimension.label,
-                'key': 'name',
-                'attributes': attributes
-            }]
-        })
-
-    def visit_date_dimension(self, dimension):
-        if dimension.column is None:
-            return
-        field = self.dataset.fields.get(dimension.column, {})
-        field_type = field.get('type')
-        self.mappings['%s.name' % dimension.name] = dimension.column
-        if field_type == 'date':
-            for a in ['year', 'quarter', 'month', 'week', 'day']:
-                name = '%s.%s' % (dimension.name, a)
-                self.mappings[name] = {
-                    'column': dimension.column,
-                    'extract': a
-                }
-            self.add_dimension(dimension, FULL_DATE_CUBES_TEMPLATE)
-        elif field_type == 'integer':
-            self.mappings['%s.year' % dimension.name] = dimension.column
-            self.add_dimension(dimension, NUM_DATE_CUBES_TEMPLATE)
-
-    @property
-    def table(self):
-        return self.dataset.fact_table.table.name
-
-    def generate_cube(self, store):
-        self.visit(self.dataset.model)
-        return Cube(name=self.dataset.name,
-                    fact=self.table,
-                    aggregates=self.aggregates,
-                    measures=self.measures,
-                    label=self.dataset.label,
-                    description=self.dataset.description,
-                    dimensions=self.dimensions,
-                    store=store,
-                    mappings=self.mappings)
 
 
 class SpendingModelProvider(ModelProvider):
@@ -116,8 +22,49 @@ class SpendingModelProvider(ModelProvider):
         dataset = Dataset.by_name(name)
         if name is None:
             raise NoSuchCubeError("Unknown dataset %s" % name, name)
-        visitor = CubesModelVisitor(dataset)
-        return visitor.generate_cube(self.store)
+        measures, dimensions, mappings = [], [], {}
+        aggregates = [MeasureAggregate('num_entries',
+                                       label='Numer of entries',
+                                       function='count')]
+
+        for measure in dataset.model.measures:
+            cubes_measure = Measure(measure.name, label=measure.label)
+            measures.append(cubes_measure)
+            aggregate = MeasureAggregate(measure.name,
+                                         label=measure.label,
+                                         measure=measure.name,
+                                         function='sum')
+            aggregates.append(aggregate)
+            mappings[measure.name] = measure.column
+
+        for dimension in dataset.model.dimensions:
+            attributes = []
+            for attr in dimension.attributes:
+                attributes.append(attr.name)
+                name = '%s.%s' % (dimension.name, attr.name)
+                mappings[name] = attr.column
+
+            meta = {
+                'label': dimension.label,
+                'name': dimension.name,
+                'levels': [{
+                    'name': dimension.name,
+                    'label': dimension.label,
+                    'key': 'name',
+                    'attributes': attributes
+                }]
+            }
+            dimensions.append(create_dimension(meta))
+
+        return Cube(name=dataset.name,
+                    fact=dataset.fact_table.table.name,
+                    aggregates=aggregates,
+                    measures=measures,
+                    label=dataset.label,
+                    description=dataset.description,
+                    dimensions=dimensions,
+                    store=self.store,
+                    mappings=mappings)
 
     def dimension(self, name, locale=None, templates=[]):
         raise NoSuchDimensionError('No global dimensions in OS', name)

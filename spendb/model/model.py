@@ -1,9 +1,61 @@
 import logging
 
-from spendb.model.dimension import (CompoundDimension, DateDimension,
-                                          AttributeDimension, Measure)
-
 log = logging.getLogger(__name__)
+
+
+class Attribute(object):
+    """ An attribute describes some concrete value stored in the data model.
+    This value will be stored directly on the facts table as a column. """
+
+    def __init__(self, parent, name, data):
+        self.data = data
+        self.name = name
+        self.label = data.get('label', name)
+        self.column = data.get('column')
+        self.description = data.get('description')
+
+    def __repr__(self):
+        return "<Attribute(%s)>" % self.name
+
+    def to_dict(self):
+        return self.data
+
+
+class Dimension(object):
+    """ A dimension is any property of an entry that can serve to describe
+    it beyond its purely numeric ``Measures``. It is defined by several
+    attributes, which contain actual values. """
+
+    def __init__(self, model, name, data):
+        self.data = data
+        self.model = model
+        self.name = name
+        self.label = data.get('label', name)
+        self.description = data.get('description', name)
+
+    @property
+    def attributes(self):
+        for name, attr in self.data.get('attributes', {}).items():
+            yield Attribute(self, name, attr)
+
+    def __repr__(self):
+        return "<Dimension(%s)>" % self.name
+
+    def to_dict(self):
+        return self.data.copy()
+
+
+class Measure(Attribute):
+    """ A value on the facts table that can be subject to aggregation,
+    and is specific to this one fact. This would typically be some
+    financial unit, i.e. the amount associated with the transaction or
+    a specific portion thereof (i.e. co-financed amounts). """
+
+    def __init__(self, model, name, data):
+        Attribute.__init__(self, model, name, data)
+
+    def __repr__(self):
+        return "<Measure(%s)>" % self.name
 
 
 class Model(object):
@@ -18,20 +70,24 @@ class Model(object):
         the dataset from the SQLAlchemy store.
         """
         self.dataset = dataset
-        self.dimensions = []
-        self.measures = []
-        for dim, data in self.dataset.mapping.items():
-            if data.get('type') == 'measure' or dim == 'amount':
-                self.measures.append(Measure(self, dim, data))
-                continue
-            elif data.get('type') == 'date' or \
-                    (dim == 'time' and data.get('datatype') == 'date'):
-                dimension = DateDimension(self, dim, data)
-            elif data.get('type') in ['value', 'attribute']:
-                dimension = AttributeDimension(self, dim, data)
-            else:
-                dimension = CompoundDimension(self, dim, data)
-            self.dimensions.append(dimension)
+
+    @property
+    def dimensions(self):
+        for name, data in self.dataset.mapping.get('dimensions', {}).items():
+            yield Dimension(self, name, data)
+
+    @property
+    def measures(self):
+        for name, data in self.dataset.mapping.get('measures', {}).items():
+            yield Measure(self, name, data)
+
+    @property
+    def attributes(self):
+        for measure in self.measures:
+            yield measure
+        for dimension in self.dimensions:
+            for attribute in dimension.attributes:
+                yield attribute
 
     @property
     def exists(self):
@@ -54,13 +110,7 @@ class Model(object):
     @property
     def axes(self):
         """ Both the dimensions and metrics in this dataset. """
-        return self.dimensions + self.measures
-
-    @property
-    def compounds(self):
-        """ Return only compound dimensions. """
-        return filter(lambda d: isinstance(d, CompoundDimension),
-                      self.dimensions)
+        return list(self.dimensions) + list(self.measures)
 
     def __repr__(self):
         return "<Model(%r)>" % (self.dataset)

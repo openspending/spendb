@@ -1,12 +1,11 @@
 import json
 from itertools import count
-from datetime import date
 
 # from apikit import cache_hash
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
-from sqlalchemy.types import Unicode, BigInteger, Date, Float
-from sqlalchemy.sql.expression import select, func, extract
+from sqlalchemy.types import Unicode, BigInteger, Float
+from sqlalchemy.sql.expression import select
 
 from spendb.core import db
 from spendb.model.visitor import ModelVisitor
@@ -16,8 +15,7 @@ from spendb.model.common import json_default
 TYPES = {
     'string': Unicode,
     'integer': BigInteger,
-    'float': Float,
-    'date': Date
+    'float': Float
 }
 
 
@@ -50,22 +48,6 @@ class FactTableMapping(ModelVisitor):
             return
         col = self.alias.c[attribute.column]
         self.columns[attribute.path] = col
-
-    def visit_date_dimension(self, dimension):
-        if dimension.column not in self.alias.columns:
-            return
-        col = self.alias.c[dimension.column]
-        name_attr = dimension['name']
-        self.columns[name_attr.path] = col.label(name_attr.column)
-
-        field_type = self.fields.get(dimension.column).get('type')
-        if field_type == 'date':
-            for a in ['year', 'quarter', 'month', 'week', 'day']:
-                attr = dimension[a]
-                self.columns[attr.path] = extract(a, col).label(attr.column)
-        elif field_type == 'integer':
-            year_attr = dimension['year']
-            self.columns[year_attr.path] = col.label(year_attr.column)
 
     def unpack_entry(self, row):
         """ Convert a database-returned row into a nested and mapped
@@ -132,7 +114,6 @@ class FactTable(object):
     def _fields_columns(self, table):
         """ Transform the (auto-detected) fields into a set of column
         specifications. """
-
         for name, field in self.dataset.fields.items():
             data_type = TYPES.get(field.get('type'), Unicode)
             col = Column(name, data_type, nullable=True)
@@ -240,36 +221,6 @@ class FactTable(object):
                     break
                 first_row = False
                 yield self.mapping.unpack_entry(row)
-
-    def timerange(self):
-        """ Get the timerange of the dataset (based on the time attribute).
-        Returns a tuple of (first timestamp, last timestamp) where timestamp
-        is a datetime object """
-        if not self.exists or not self.dataset.model.exists:
-            return (None, None)
-
-        # Get the time column
-        time = self.dataset.model['time']
-        time = self.alias.c[time.column]
-        # We use SQL's min and max functions to get the timestamps
-        query = db.session.query(func.min(time), func.max(time))
-        # We just need one result to get min and max time
-
-        def convert(d):
-            if isinstance(d, date):
-                return d
-            if isinstance(d, int):
-                return date(d, 1, 1)
-        return [convert(d) for d in query.one()]
-
-    def years(self):
-        """ Return all the years represented in the current fact table. """
-        try:
-            dim = self.dataset.model['time']
-            times = [m['year'] for m in self.dimension_members(dim)]
-            return list(set(times))
-        except KeyError:
-            return []
 
     def __repr__(self):
         return "<FactTable(%r)>" % (self.dataset)
