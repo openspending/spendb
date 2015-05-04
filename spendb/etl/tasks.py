@@ -55,7 +55,6 @@ def load(job, dataset, source_name):
         raise ValueError('No columns recognized in source data.')
 
     db.session.commit()
-
     dataset.fact_table.drop()
     dataset.fact_table.create()
     dataset.fact_table.load_iter(table.records())

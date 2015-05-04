@@ -1,11 +1,11 @@
 # coding=utf-8
 import datetime
-from json import dumps, loads
+import json
 
 import colander
-from sqlalchemy.types import Text, TypeDecorator
+import sqlalchemy as sqla
 from sqlalchemy.sql.expression import select, func
-from sqlalchemy.ext.mutable import Mutable
+from sqlalchemy.ext import mutable
 
 from spendb.core import db
 
@@ -32,62 +32,17 @@ class Ref(object):
         return []
 
 
-class MutableDict(Mutable, dict):
-
-    """
-    Create a mutable dictionary to track mutable values
-    and notify listeners upon change.
-    """
-
-    @classmethod
-    def coerce(cls, key, value):
-        """
-        Convert plain dictionaries to MutableDict
-        """
-
-        # If it isn't a MutableDict already we conver it
-        if not isinstance(value, MutableDict):
-            # If it is a dictionary we can convert it
-            if isinstance(value, dict):
-                return MutableDict(value)
-
-            # Try to coerce but it will probably return a ValueError
-            return Mutable.coerce(key, value)
-        else:
-            # Since we already have a MutableDict we can just return it
-            return value
-
-    def __setitem__(self, key, value):
-        """
-        Set a value to a key and notify listeners of change
-        """
-
-        dict.__setitem__(self, key, value)
-        self.changed()
-
-    def __delitem__(self, key):
-        """
-        Delete a key and notify listeners of change
-        """
-
-        dict.__delitem__(self, key)
-        self.changed()
-
-
-class JSONType(TypeDecorator):
-    impl = Text
-
-    def __init__(self):
-        super(JSONType, self).__init__()
+class JSONType(sqla.TypeDecorator):
+    """Enables JSON storage by encoding and decoding on the fly."""
+    impl = sqla.Unicode
 
     def process_bind_param(self, value, dialect):
-        return dumps(value, default=json_default)
+        return json.dumps(value, default=json_default)
 
-    def process_result_value(self, value, dialiect):
-        return loads(value)
+    def process_result_value(self, value, dialect):
+        return json.loads(value)
 
-    def copy_value(self, value):
-        return loads(dumps(value))
+mutable.MutableDict.associate_with(JSONType)
 
 
 class DatasetFacetMixin(object):

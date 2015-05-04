@@ -8,8 +8,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from spendb.core import db, url_for
 from spendb.model.model import Model
 from spendb.model.fact_table import FactTable
-from spendb.model.common import (MutableDict, JSONType,
-                                 DatasetFacetMixin)
+from spendb.model.common import DatasetFacetMixin, JSONType
 
 
 class Dataset(db.Model):
@@ -35,7 +34,7 @@ class Dataset(db.Model):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow,
                         onupdate=datetime.utcnow)
-    data = Column(MutableDict.as_mutable(JSONType), default=dict)
+    data = Column(JSONType)
 
     languages = association_proxy('_languages', 'code')
     territories = association_proxy('_territories', 'code')

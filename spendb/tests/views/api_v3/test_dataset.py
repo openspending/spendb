@@ -73,7 +73,7 @@ class TestDatasetApiController(ControllerTestCase):
         db.session.commit()
         url = url_for('datasets_api.fields', name='cra')
         res = self.client.get(url)
-        assert 'cap_or_cur' not in res.json, res.json
+        assert 'cap_or_cur' not in res.json, res.json.keys()
 
     def test_create_dataset(self):
         url = url_for('datasets_api.create')
@@ -190,13 +190,13 @@ class TestDatasetApiController(ControllerTestCase):
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
-        assert 'cofog3' not in res.json, res.json
-        assert 'cofog1' in res.json, res.json
+        assert 'cofog3' not in res.json, res.json.keys()
+        assert 'cofog1' in res.json, res.json.keys()
 
         res2 = self.client.get(url,
                                query_string={'api_key': self.user.api_key})
         assert res.json.keys() == res2.json.keys(), res2.json
-        
+
     def test_update_model_invalid(self):
         url = url_for('datasets_api.update_model', name='cra')
         data = self.cra.mapping.copy()
@@ -214,7 +214,7 @@ class TestDatasetApiController(ControllerTestCase):
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
         assert '400' in res.status, res.status
-        
+
     def test_publish(self):
         cra = Dataset.by_name('cra')
         cra.private = True
@@ -241,7 +241,7 @@ class TestDatasetApiController(ControllerTestCase):
         assert '410' in res.status, res.status
         ds = Dataset.by_name(name)
         assert ds is None, ds
-    
+
     def test_delete_dataset_requires_auth(self):
         name = self.cra.name
         url = url_for('datasets_api.delete', name=name)

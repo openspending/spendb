@@ -30,8 +30,7 @@ def field_transform(fields):
 
 
 def random_sample(data, samples, row, num=10):
-    """ Collect a random sample of the values in a particular
-    field based on the reservoir sampling technique. """
+    """ Collect a random sample of the rows based on reservoir sampling. """
     if len(samples) < num:
         samples.append(data)
     else:
