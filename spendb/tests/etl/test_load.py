@@ -4,7 +4,7 @@ from spendb.core import db, data_manager
 from spendb.model import Dataset, Run
 from spendb.etl import tasks
 
-from spendb.tests.helpers import model_fixture
+from spendb.tests.helpers import meta_fixture
 from spendb.tests.helpers import csvimport_fixture_path
 from spendb.tests.helpers import csvimport_fixture_file
 from spendb.tests.base import DatabaseTestCase
@@ -15,7 +15,7 @@ class TestLoad(DatabaseTestCase):
     def setUp(self):
         super(TestLoad, self).setUp()
         data_manager._index = None
-        model = model_fixture('cra')
+        model = meta_fixture('cra')
         self.ds = Dataset(model)
         db.session.add(self.ds)
         db.session.commit()

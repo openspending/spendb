@@ -1,8 +1,29 @@
 {
-  "dataset": {
-    "name": "test-csv",
-    "label": "Label for Test CSV Import",
-    "description": "Description for Test CSV Import",
-    "currency": "EUR"
-  }
+    "time": {
+        "label": "Time",
+        "type": "value",
+        "column": "date",
+        "datatype": "date"
+    },
+    "amount": {
+        "label": "Amount",
+        "type": "value",
+        "column": "amount",
+        "datatype": "float"
+    },
+    "from": {
+        "label": "Paid by",
+        "type": "entity",
+        "attributes": {
+            "name": {"column": "from_id", "datatype": "id"},
+            "label": {"column": "from_label", "datatype": "string"}
+        }
+    },
+    "entry_id": {
+        "type": "value",
+        "column": "id",
+        "label": "Entry ID",
+        "datatype": "string",
+        "key": true
+    }
 }

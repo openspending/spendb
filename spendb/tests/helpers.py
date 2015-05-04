@@ -15,11 +15,11 @@ def fixture_file(name):
     return open(fixture_path(name))
 
 
-def model_fixture(name):
-    model_fp = fixture_file('model/' + name + '.json')
-    model = json.load(model_fp)
-    model_fp.close()
-    return model
+def meta_fixture(name):
+    meta_fp = fixture_file('meta/' + name + '.json')
+    meta = json.load(meta_fp)
+    meta_fp.close()
+    return meta
 
 
 def validation_fixture(name):
@@ -34,9 +34,7 @@ def data_fixture(name):
 
 
 def fixture_path(name):
-    """
-    Return the full path to a named fixture.
-
+    """Return the full path to a named fixture.
     Use fixture_file rather than this method wherever possible.
     """
     # Get the directory of this file (helpers is placed in the test directory)
@@ -85,11 +83,9 @@ def csvimport_table(name):
 
 
 def load_fixture(name, manager=None):
-    """
-    Load fixture data into the database.
-    """
-    model = model_fixture(name)
-    dataset = Dataset(model)
+    """ Load fixture data into the database. """
+    meta = meta_fixture(name)
+    dataset = Dataset(meta)
     dataset.updated_at = datetime.utcnow()
     if manager is not None:
         dataset.managers.append(manager)

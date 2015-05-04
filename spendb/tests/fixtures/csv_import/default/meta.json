@@ -1,0 +1,8 @@
+{
+  "dataset": {
+    "name": "test-csv",
+    "label": "Label for Test CSV Import",
+    "description": "Description for Test CSV Import",
+    "currency": "EUR"
+  }
+}

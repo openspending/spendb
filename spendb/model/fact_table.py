@@ -72,7 +72,6 @@ class FactTable(object):
 
     def __init__(self, dataset):
         self.dataset = dataset
-
         self.bind = db.engine
         self.meta = MetaData()
         self.meta.bind = self.bind

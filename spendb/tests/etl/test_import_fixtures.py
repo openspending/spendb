@@ -11,12 +11,12 @@ from spendb.tests.helpers import csvimport_fixture_path
 
 
 def import_fixture(name):
-    model_fp = csvimport_fixture_file(name, 'model.json')
-    mapping_fp = csvimport_fixture_file(name, 'mapping.json')
-    model = json.load(model_fp)
-    if mapping_fp:
-        model['mapping'] = json.load(mapping_fp)
-    dataset = Dataset(model)
+    meta_fp = csvimport_fixture_file(name, 'model.json')
+    model_fp = csvimport_fixture_file(name, 'mapping.json')
+    meta = json.load(meta_fp)
+    if model_fp:
+        meta['model'] = json.load(model_fp)
+    dataset = Dataset(meta)
     db.session.add(dataset)
     data_path = csvimport_fixture_path(name, 'data.csv')
     db.session.commit()
@@ -76,4 +76,3 @@ class TestImportFixtures(DatabaseTestCase):
 
         for run in db.session.query(Run).all():
             assert run.status == Run.STATUS_FAILED, run
-
