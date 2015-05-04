@@ -1,8 +1,8 @@
 {
-  "dataset": {
-    "name": "test-csv",
-    "label": "Label for Test CSV Import",
-    "description": "Description for Test CSV Import",
-    "currency": "EUR"
-  }
+    "dataset": {
+        "currency": "EUR",
+        "description": "Description for Test CSV Import",
+        "label": "Label for Test CSV Import",
+        "name": "test-csv"
+    }
 }

@@ -1,55 +1,65 @@
 {
-  "from": {
-    "attributes": {
-      "name": {
-        "column": "paid_by",
-        "datatype": "id"
-      },
-      "label": {
-        "column": "paid_by",
-        "datatype": "string"
-      }
+    "dimensions": {
+        "additionaldate": {
+            "attributes": {
+                "year": {
+                    "column": "additional_date",
+                    "type": "integer"
+                }
+            },
+            "label": "Additional Date"
+        },
+        "entry_id": {
+            "attributes": {
+                "entry_id": {
+                    "column": "id",
+                    "type": "string"
+                }
+            },
+            "label": "Entry ID"
+        },
+        "from": {
+            "attributes": {
+                "label": {
+                    "column": "paid_by",
+                    "datatype": "string"
+                },
+                "name": {
+                    "column": "paid_by",
+                    "datatype": "id"
+                }
+            },
+            "label": "Spender"
+        },
+        "time": {
+            "attributes": {
+                "year": {
+                    "column": "date",
+                    "type": "integer"
+                }
+            },
+            "label": "Time"
+        },
+        "to": {
+            "attributes": {
+                "label": {
+                    "column": "paid_to",
+                    "datatype": "string"
+                },
+                "name": {
+                    "column": "paid_to",
+                    "datatype": "id"
+                }
+            },
+            "label": "Recipient"
+        }
     },
-    "label": "Spender",
-    "type": "entity"
-  },
-  "to": {
-    "attributes": {
-      "name": {
-        "column": "paid_to",
-        "datatype": "id"
-      },
-      "label": {
-        "column": "paid_to",
-        "datatype": "string"
-      }
-    },
-    "label": "Recipient",
-    "type": "entity"
-  },
-  "amount": {
-    "column": "amount",
-    "label": "Amount",
-    "datatype": "float",
-    "type": "value"
-  },
-  "time": {
-    "column": "date",
-    "label": "Time",
-    "datatype": "date",
-    "type": "value"
-  },
- "additionaldate": {
-    "column": "additional_date",
-    "datatype": "date",
-    "type": "value",
-    "label": "Additional Date"
-  },
-  "entry_id": {
-    "type": "value",
-    "label": "Entry ID",
-    "column": "id",
-    "datatype": "string",
-    "key": true
-  }
+    "measures": {
+        "amount": {
+            "column": "amount",
+            "datatype": "float",
+            "label": "Amount",
+            "type": "value"
+        }
+    }
 }

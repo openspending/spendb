@@ -1,29 +1,42 @@
 {
-    "time": {
-        "label": "Time",
-        "type": "value",
-        "column": "date",
-        "datatype": "date"
-    },
-    "amount": {
-        "label": "Amount",
-        "type": "value",
-        "column": "amount",
-        "datatype": "float"
-    },
-    "from": {
-        "label": "Paid by",
-        "type": "entity",
-        "attributes": {
-            "name": {"column": "from_id", "datatype": "id"},
-            "label": {"column": "from_label", "datatype": "string"}
+    "dimensions": {
+        "entry_id": {
+            "attributes": {
+                "entry_id": {
+                    "column": "id",
+                    "type": "string"
+                }
+            },
+            "label": "Entry ID"
+        },
+        "from": {
+            "attributes": {
+                "label": {
+                    "column": "from_label",
+                    "type": "string"
+                },
+                "name": {
+                    "column": "from_id",
+                    "type": "string"
+                }
+            },
+            "label": "Paid by"
+        },
+        "time": {
+            "attributes": {
+                "year": {
+                    "column": "date",
+                    "type": "integer"
+                }
+            },
+            "label": "Time"
         }
     },
-    "entry_id": {
-        "type": "value",
-        "column": "id",
-        "label": "Entry ID",
-        "datatype": "string",
-        "key": true
+    "measures": {
+        "amount": {
+            "column": "amount",
+            "label": "Amount",
+            "type": "float"
+        }
     }
 }
