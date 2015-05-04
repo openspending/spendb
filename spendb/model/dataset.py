@@ -12,11 +12,7 @@ from spendb.model.common import DatasetFacetMixin, JSONType
 
 
 class Dataset(db.Model):
-
-    """ The dataset is the core entity of any access to data. All
-    requests to the actual data store are routed through it, as well
-    as data loading and model generation.
-
+    """ The dataset is the core entity of any access to data.
     The dataset keeps an in-memory representation of the data model
     (including all dimensions and measures) which can be used to
     generate necessary queries.
