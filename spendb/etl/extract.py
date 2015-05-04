@@ -1,34 +1,32 @@
-import os
 import logging
 import random
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, date
 
-from messytables import type_guess, types_processor, headers_guess
-from messytables import headers_processor, offset_processor
-
-from loadkit.operators.table import column_alias, resource_row_set
+from loadkit.operators.table import resource_row_set
+from loadkit.operators.table import generate_field_spec
 
 log = logging.getLogger(__name__)
 
 
-def generate_field_spec(row):
-    """ Generate a set of metadata for each field/column in
-    the data. This is loosely based on jsontableschema. """
-    names = set()
-    fields = []
-    for cell in row:
-        name = column_alias(cell, names)
-        field = {
-            'name': name,
-            'title': cell.column,
-            'type': unicode(cell.type).lower()
-        }
-        if hasattr(cell.type, 'format'):
-            field['type'] = 'date'
-            field['format'] = cell.type.format
-        fields.append(field)
-    return fields
+def date_field(name, section):
+    return '%s__%s' % (name, section)
+
+
+def field_transform(fields):
+    spec = {}
+    for field in fields:
+        if field['type'] == 'date':
+            for section in ['year', 'month', 'day']:
+                name = date_field(field['name'], section)
+                spec[name] = {
+                    'name': name,
+                    'type': 'integer',
+                    'title': '%s (%s)' % (field['title'], section)
+                }
+        else:
+            spec[field['name']] = field
+    return spec
 
 
 def random_sample(data, samples, row, num=10):
@@ -47,21 +45,26 @@ def parse_table(row_set):
 
     for i, row in enumerate(row_set):
         if not len(fields):
-            print 'ROW', row
             fields = generate_field_spec(row)
-            fields_dict = {f.get('name'): f for f in fields}
+            fields_dict = field_transform(fields)
 
         data = {}
         for cell, field in zip(row, fields):
             value = cell.value
-            if isinstance(value, datetime):
-                value = value.date()
-            if isinstance(value, Decimal):
-                # Baby jesus forgive me.
-                value = float(value)
-            if isinstance(value, basestring) and not len(value.strip()):
-                value = None
-            data[field['name']] = value
+            if field['type'] == 'date':
+                values = None, None, None
+                if isinstance(value, (datetime, date)):
+                    values = value.year, value.month, value.day
+                data[date_field(field['name'], 'year')] = values[0]
+                data[date_field(field['name'], 'month')] = values[1]
+                data[date_field(field['name'], 'day')] = values[2]
+            else:
+                if isinstance(value, Decimal):
+                    # Baby jesus forgive me.
+                    value = float(value)
+                if isinstance(value, basestring) and not len(value.strip()):
+                    value = None
+                data[field['name']] = value
 
         check_empty = set(data.values())
         if None in check_empty and len(check_empty) == 1:
