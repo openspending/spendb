@@ -65,16 +65,22 @@ def csvimport_fixture_file(name, path):
 
 
 def csvimport_table(name):
-    from messytables import CSVTableSet
-    from loadkit.operators.table import parse_table
-    table_set = CSVTableSet(data_fixture(name))
-    row_set = table_set.tables[0]
-    rows = []
+    from messytables import CSVTableSet, type_guess
+    from messytables import types_processor, headers_guess
+    from messytables import headers_processor, offset_processor
+    from spendb.etl.extract import parse_table
 
-    def save_row(row):
+    row_set = CSVTableSet(data_fixture(name)).tables[0]
+    offset, headers = headers_guess(row_set.sample)
+    row_set.register_processor(headers_processor(headers))
+    row_set.register_processor(offset_processor(offset + 1))
+    types = type_guess(row_set.sample, strict=True)
+    row_set.register_processor(types_processor(types))
+
+    rows = []
+    for num_rows, (fields, row, samples) in enumerate(parse_table(row_set)):
         rows.append(row)
 
-    num_rows, fields = parse_table(row_set, save_row)
     return fields, rows
 
 

@@ -2,10 +2,10 @@ import logging
 
 from archivekit import Source
 from loadkit.types.table import Table
-from loadkit.operators.table import TableExtractOperator
 
 from spendb.core import db
 from spendb.etl.job import job
+from spendb.etl.extract import extract_table
 
 log = logging.getLogger(__name__)
 
@@ -37,10 +37,9 @@ def transform_source(job, dataset, source_name):
     well-understood file format. """
     source = Source(job.package, source_name)
     job.set_source(source)
-    op = TableExtractOperator(None, None, {})
     table = Table(job.package, ARTIFACT_NAME)
-    op.transform(source, table)
-    # TODO: log when there was no data.
+    table.meta.update(source.meta)
+    table = extract_table(source, table)
     return table
 
 
