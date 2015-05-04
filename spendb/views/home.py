@@ -4,8 +4,8 @@ from flask.ext.babel import gettext
 from apikit import jsonify
 
 from spendb.core import pages
+from spendb.model import Dataset, DatasetTerritory
 from spendb.views.i18n import set_session_locale
-from spendb.model.dataset import Dataset, DatasetTerritory
 from spendb.views.cache import disable_cache
 
 

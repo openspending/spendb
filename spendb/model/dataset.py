@@ -8,7 +8,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from spendb.core import db, url_for
 from spendb.model.model import Model
 from spendb.model.fact_table import FactTable
-from spendb.model.common import DatasetFacetMixin, JSONType
+from spendb.model.common import JSONType
 
 
 class Dataset(db.Model):
@@ -101,6 +101,7 @@ class Dataset(db.Model):
             'default_time': self.default_time,
             'currency': self.currency,
             'category': self.category,
+            'private': self.private,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
             'languages': list(self.languages),
@@ -124,34 +125,3 @@ class Dataset(db.Model):
     @classmethod
     def by_name(cls, name):
         return db.session.query(cls).filter_by(name=name).first()
-
-
-class DatasetLanguage(db.Model, DatasetFacetMixin):
-    __tablename__ = 'dataset_language'
-
-    id = Column(Integer, primary_key=True)
-    code = Column(Unicode)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, onupdate=datetime.utcnow)
-
-    dataset_id = Column(Integer, ForeignKey('dataset.id'))
-    dataset = relationship(Dataset, backref=backref('_languages', lazy=False))
-
-    def __init__(self, code):
-        self.code = code
-
-
-class DatasetTerritory(db.Model, DatasetFacetMixin):
-    __tablename__ = 'dataset_territory'
-
-    id = Column(Integer, primary_key=True)
-    code = Column(Unicode)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, onupdate=datetime.utcnow)
-
-    dataset_id = Column(Integer, ForeignKey('dataset.id'))
-    dataset = relationship(Dataset, backref=backref('_territories',
-                                                    lazy=False))
-
-    def __init__(self, code):
-        self.code = code

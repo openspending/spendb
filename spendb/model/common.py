@@ -4,10 +4,7 @@ import json
 
 import colander
 import sqlalchemy as sqla
-from sqlalchemy.sql.expression import select, func
 from sqlalchemy.ext import mutable
-
-from spendb.core import db
 
 
 def json_default(obj):
@@ -43,15 +40,3 @@ class JSONType(sqla.TypeDecorator):
         return json.loads(value)
 
 mutable.MutableDict.associate_with(JSONType)
-
-
-class DatasetFacetMixin(object):
-
-    @classmethod
-    def dataset_counts(cls, datasets_q):
-        sq = datasets_q.subquery()
-        q = select([cls.code, func.count(cls.dataset_id)],
-                   group_by=cls.code,
-                   order_by=func.count(cls.dataset_id).desc())
-        q = q.where(cls.dataset_id == sq.c.id)
-        return db.session.bind.execute(q).fetchall()
