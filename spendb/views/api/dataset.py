@@ -97,12 +97,15 @@ def update(name):
     return view(name)
 
 
-@blueprint.route('/datasets/<name>/fields')
+@blueprint.route('/datasets/<name>/structure')
 @api_json_errors
-def fields(name):
+def structure(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
-    return jsonify(dataset.fields)
+    return jsonify({
+        'fields': dataset.fields,
+        'samples': dataset.samples
+    })
 
 
 @blueprint.route('/datasets/<name>/model')

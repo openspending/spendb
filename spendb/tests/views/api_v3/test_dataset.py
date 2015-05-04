@@ -59,21 +59,23 @@ class TestDatasetApiController(ControllerTestCase):
         assert isinstance(res.json['cofog3'], dict), res.json['cofog3']
 
     def test_view_fields(self):
-        url = url_for('datasets_api.fields', name='cra')
+        url = url_for('datasets_api.structure', name='cra')
         res = self.client.get(url)
+        fields = res.json.get('fields')
         assert '200' in res.status, res.status
-        assert 'cap_or_cur' in res.json, res.json
-        assert 'cofog1_name' in res.json, res.json
-        c1n = res.json['cofog1_name']
+        assert 'cap_or_cur' in fields, res.json
+        assert 'cofog1_name' in fields, res.json
+        c1n = fields['cofog1_name']
         assert c1n['title'] == 'cofog1.name', c1n
 
     def test_view_fields_empty(self):
         cra = Dataset.by_name('cra')
         cra.fields = {}
         db.session.commit()
-        url = url_for('datasets_api.fields', name='cra')
+        url = url_for('datasets_api.structure', name='cra')
         res = self.client.get(url)
-        assert 'cap_or_cur' not in res.json, res.json.keys()
+        fields = res.json.get('fields')
+        assert 'cap_or_cur' not in fields, res.json
 
     def test_create_dataset(self):
         url = url_for('datasets_api.create')

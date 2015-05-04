@@ -71,6 +71,14 @@ class Dataset(db.Model):
     def fields(self, value):
         self.data['fields'] = value
 
+    @property
+    def samples(self):
+        return self.data.get('samples', {})
+
+    @samples.setter
+    def samples(self, value):
+        self.data['samples'] = value
+
     @reconstructor
     def _load_model(self):
         self.model = Model(self)

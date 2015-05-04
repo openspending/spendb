@@ -51,6 +51,7 @@ def load(job, dataset, source_name):
     job.set_source(source)
     table = Table(job.package, ARTIFACT_NAME)
     dataset.fields = table.meta.get('fields', {})
+    dataset.samples = table.meta.get('samples', {})
     if not len(dataset.fields):
         raise ValueError('No columns recognized in source data.')
 
