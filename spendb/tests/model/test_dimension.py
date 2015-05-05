@@ -1,34 +1,35 @@
-from nose.tools import assert_raises
-
 from spendb.tests.helpers import load_fixture
 from spendb.tests.base import DatabaseTestCase
 
 from spendb.core import db
-from spendb.model.dimension import CompoundDimension
+from spendb.model.model import Dimension
 
 
-class TestCompoundDimension(DatabaseTestCase):
+class TestDimension(DatabaseTestCase):
 
     def setUp(self):
-        super(TestCompoundDimension, self).setUp()
+        super(TestDimension, self).setUp()
         self.engine = db.engine
         self.meta = db.metadata
         self.meta.bind = self.engine
         self.ds = load_fixture('cra')
-        self.entity = self.ds.model['from']
-        self.classifier = self.ds.model['cofog1']
+        self.dims = list(self.ds.model.dimensions)
+        print self.dims
+        for d in self.dims:
+            if d.name == 'from':
+                self.entity = d
 
-    def test_is_compound(self):
-        assert isinstance(self.entity, CompoundDimension), self.entity
+    def test_is_dimension(self):
+        assert isinstance(self.dims[0], Dimension), self.dims
 
     def test_basic_properties(self):
         assert self.entity.name == 'from', self.entity.name
-        assert self.classifier.name == 'cofog1', self.classifier.name
 
     def test_attributes_exist_on_object(self):
-        assert len(self.entity.attributes) == 3, self.entity.attributes
-        assert_raises(KeyError, self.entity.__getitem__, 'field')
-        assert self.entity['name'].name == 'name'
+        attrs = list(self.entity.attributes)
+        assert len(attrs) == 3, attrs
+        names = [a.name for a in attrs]
+        assert 'name' in names, names
 
     def test_members(self):
         members = list(self.ds.fact_table.dimension_members(self.entity))

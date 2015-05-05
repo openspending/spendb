@@ -63,9 +63,6 @@ class TestImportFixtures(DatabaseTestCase):
     def test_imports_sample(self):
         self._test_import('sample')
 
-    def test_imports_uganda(self):
-        self._test_import('uganda')
-
     def test_imports_quoting(self):
         self._test_import('quoting', lines=5)
 

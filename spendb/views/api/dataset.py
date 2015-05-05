@@ -90,7 +90,7 @@ def create():
 def update(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    schema = dataset_schema(ValidationState(dataset.model_data))
+    schema = dataset_schema(ValidationState(dataset.to_dict()))
     data = schema.deserialize(request_data())
     dataset.update(data)
     db.session.commit()
@@ -113,7 +113,7 @@ def structure(name):
 def model(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
-    return jsonify(dataset.mapping)
+    return jsonify(dataset.model_data)
 
 
 @blueprint.route('/datasets/<name>/model', methods=['POST', 'PUT'])
@@ -121,11 +121,11 @@ def model(name):
 def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    model_data = dataset.model_data
-    model_data['mapping'] = request_data()
-    schema = mapping_schema(ValidationState(model_data))
-    new_mapping = schema.deserialize(model_data['mapping'])
-    dataset.data['mapping'] = new_mapping
+    data = dataset.to_full_dict()
+    data['model'] = request_data()
+    schema = mapping_schema(ValidationState(data))
+    new_mapping = schema.deserialize(data['model'])
+    dataset.data['model'] = new_mapping
     db.session.commit()
     return model(name)
 

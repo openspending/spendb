@@ -54,9 +54,10 @@ class TestDatasetApiController(ControllerTestCase):
         url = url_for('datasets_api.model', name='cra')
         res = self.client.get(url)
         assert '200' in res.status, res.status
-        assert 'cap_or_cur' in res.json, res.json
-        assert 'cofog3' in res.json, res.json
-        assert isinstance(res.json['cofog3'], dict), res.json['cofog3']
+        assert 'cap_or_cur' in res.json['dimensions'], res.json
+        assert 'cofog3' in res.json['dimensions'], res.json
+        assert isinstance(res.json['dimensions']['cofog3'], dict), \
+            res.json['dimensions']['cofog3']
 
     def test_view_fields(self):
         url = url_for('datasets_api.structure', name='cra')
@@ -187,13 +188,13 @@ class TestDatasetApiController(ControllerTestCase):
 
     def test_update_model(self):
         url = url_for('datasets_api.update_model', name='cra')
-        data = self.cra.mapping.copy()
-        del data['cofog3']
+        data = self.cra.model_data.copy()
+        del data['dimensions']['cofog3']
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
-        assert 'cofog3' not in res.json, res.json.keys()
-        assert 'cofog1' in res.json, res.json.keys()
+        assert 'cofog3' not in res.json.get('dimensions', {}), res.json.keys()
+        assert 'cofog1' in res.json.get('dimensions', {}), res.json.keys()
 
         res2 = self.client.get(url,
                                query_string={'api_key': self.user.api_key})
@@ -201,13 +202,13 @@ class TestDatasetApiController(ControllerTestCase):
 
     def test_update_model_invalid(self):
         url = url_for('datasets_api.update_model', name='cra')
-        data = self.cra.mapping.copy()
-        del data['cofog3']['label']
+        data = self.cra.model_data.copy()
+        del data['dimensions']['cofog3']['label']
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
         assert '400' in res.status, res.status
-        assert 'cofog3' in res.data, res.data
+        assert 'cofog3' in res.json.get('dimensions', {}), res.data
 
     def test_update_model_invalid_json(self):
         url = url_for('datasets_api.update_model', name='cra')

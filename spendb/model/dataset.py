@@ -55,13 +55,7 @@ class Dataset(db.Model):
 
     @property
     def model_data(self):
-        model = self.data.copy()
-        model['dataset'] = self.to_dict()
-        return model
-
-    @property
-    def mapping(self):
-        return self.data.get('mapping', {})
+        return self.data.get('model', {})
 
     @property
     def fields(self):
@@ -108,6 +102,11 @@ class Dataset(db.Model):
             'territories': list(self.territories),
             'api_url': url_for('datasets_api.view', name=self.name)
         }
+
+    def to_full_dict(self):
+        full = self.data.copy()
+        full['dataset'] = self.to_dict()
+        return full
 
     @classmethod
     def all_by_account(cls, account, order=True):

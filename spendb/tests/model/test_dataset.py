@@ -5,8 +5,7 @@ from spendb.tests.helpers import load_fixture
 from spendb.tests.base import DatabaseTestCase
 
 from spendb.core import db
-from spendb.model.dimension import (AttributeDimension, Measure,
-                                          CompoundDimension, DateDimension)
+from spendb.model.model import Dimension, Measure
 
 
 class TestDataset(DatabaseTestCase):
@@ -16,8 +15,8 @@ class TestDataset(DatabaseTestCase):
         self.ds = load_fixture('simple')
 
     def test_load_model_properties(self):
-        assert self.ds.name == self.ds.model_data['dataset']['name'], self.ds.name
-        assert self.ds.label == self.ds.model_data['dataset']['label'], self.ds.label
+        assert self.ds.name == self.ds.to_dict()['name'], self.ds.name
+        assert self.ds.label == self.ds.to_dict()['label'], self.ds.label
 
     def test_load_model_dimensions(self):
         assert len(self.ds.model.dimensions) == 4, self.ds.model.dimensions

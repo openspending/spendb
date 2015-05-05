@@ -73,12 +73,12 @@ class Model(object):
 
     @property
     def dimensions(self):
-        for name, data in self.dataset.mapping.get('dimensions', {}).items():
+        for name, data in self.dataset.model_data.get('dimensions', {}).items():
             yield Dimension(self, name, data)
 
     @property
     def measures(self):
-        for name, data in self.dataset.mapping.get('measures', {}).items():
+        for name, data in self.dataset.model_data.get('measures', {}).items():
             yield Measure(self, name, data)
 
     @property
