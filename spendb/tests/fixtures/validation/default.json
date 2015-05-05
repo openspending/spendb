@@ -6,10 +6,8 @@
     "currency": "EUR",
     "category": "other",
     "private": false,
-    "schema_version": "2011-12-07",
     "languages": ["en"],
-    "territories": ["DE", "FR", "ES"],
-    "ckan_uri": "urn:/dev/null"
+    "territories": ["DE", "FR", "ES"]
   },
   "mapping": {
     "amount": {

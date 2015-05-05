@@ -7,9 +7,9 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, Boolean
 
-from spendb.core import db, login_manager, url_for
+from spendb.core import db, login_manager
 from spendb.model.dataset import Dataset
-from spendb.model.common import Ref
+from spendb.validation.common import Ref
 
 REGISTER_NAME_RE = r"^[a-zA-Z0-9_\-]{3,255}$"
 

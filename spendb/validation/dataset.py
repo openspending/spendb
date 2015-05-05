@@ -1,68 +1,33 @@
-from spendb.validation.common import mapping
-from spendb.validation.common import key, sequence, boolean
-from spendb.validation.predicates import chained, \
-    reserved_name, database_name, nonempty_string
+from colander import Schema, SchemaNode, String, Boolean, SequenceSchema
+from colander import OneOf, Length, drop
+
 from spendb.reference import CURRENCIES, LANGUAGES
 from spendb.reference import COUNTRIES, CATEGORIES
+from spendb.validation.common import valid_name, prepare_name
 
 
-def no_double_underscore(name):
-    """ Double underscores are used for dataset bunkering in the
-    application, may not occur in the dataset name. """
-    if '__' in name:
-        return "Double underscores are not allowed in dataset names."
-    return True
+class DatasetLanguages(SequenceSchema):
+    language = SchemaNode(String(), validator=OneOf(LANGUAGES.keys()))
 
 
-def valid_currency(code):
-    if code.upper() not in CURRENCIES:
-        return "%s is not a valid currency code." % code
-    return True
+class DatasetTerritories(SequenceSchema):
+    territory = SchemaNode(String(), validator=OneOf(COUNTRIES.keys()))
 
 
-def valid_category(cat):
-    if cat.lower() not in CATEGORIES:
-        return "%s is not a valid category." % cat
-    return True
+class DatasetForm(Schema):
+    label = SchemaNode(String(), preparer=prepare_name,
+                       validator=Length(min=2))
+    name = SchemaNode(String(), preparer=prepare_name,
+                      validator=valid_name)
+    description = SchemaNode(String(), missing=drop)
+    private = SchemaNode(Boolean(), missing=drop)
+    currency = SchemaNode(String(), missing=drop,
+                          validator=OneOf(CURRENCIES.keys()))
+    category = SchemaNode(String(), missing=drop,
+                          validator=OneOf(CATEGORIES.keys()))
+    languages = DatasetLanguages(missing=drop)
+    territories = DatasetTerritories(missing=drop)
 
 
-def valid_language(code):
-    if code.lower() not in LANGUAGES:
-        return "%s is not a valid language code." % code
-    return True
-
-
-def valid_country(code):
-    if code.upper() not in COUNTRIES:
-        return "%s is not a valid country code." % code
-    return True
-
-
-def dataset_schema(state):
-    schema = mapping('dataset')
-    schema.add(key('name', validator=chained(
-        nonempty_string,
-        reserved_name,
-        database_name,
-        no_double_underscore
-    ), preparer=lambda x: x.lower().strip() if x else None))
-    schema.add(boolean('private', missing=True))
-    schema.add(key('currency', validator=chained(
-        valid_currency
-    ), missing=None))
-    schema.add(key('category', validator=chained(
-        valid_category
-    )))
-    schema.add(key('label', validator=chained(
-        nonempty_string,
-    )))
-    schema.add(key('description', missing=''))
-    schema.add(sequence('languages',
-                        key('language',
-                            validator=valid_language),
-                        missing=[]))
-    schema.add(sequence('territories',
-                        key('territory',
-                            validator=valid_country),
-                        missing=[]))
-    return schema
+def validate_dataset(data):
+    return DatasetForm().deserialize(data)

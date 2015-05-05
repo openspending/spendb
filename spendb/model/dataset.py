@@ -24,7 +24,6 @@ class Dataset(db.Model):
     label = Column(Unicode(2000))
     description = Column(Unicode())
     currency = Column(Unicode())
-    default_time = Column(Unicode())
     category = Column(Unicode())
     private = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -39,19 +38,24 @@ class Dataset(db.Model):
         self.data = data.copy()
         dataset = self.data['dataset']
         del self.data['dataset']
+        self.name = dataset.get('name')
         self.update(dataset)
         self._load_model()
 
     def update(self, dataset):
         self.label = dataset.get('label')
-        self.name = dataset.get('name')
-        self.private = dataset.get('private')
-        self.description = dataset.get('description')
-        self.currency = dataset.get('currency')
-        self.category = dataset.get('category')
-        self.default_time = dataset.get('default_time')
-        self.languages = dataset.get('languages', [])
-        self.territories = dataset.get('territories', [])
+        if 'private' in dataset:
+            self.private = dataset.get('private')
+        if 'description' in dataset:
+            self.description = dataset.get('description')
+        if 'currency' in dataset:
+            self.currency = dataset.get('currency')
+        if 'category' in dataset:
+            self.category = dataset.get('category')
+        if 'languages' in dataset:
+            self.languages = dataset.get('languages', [])
+        if 'territories' in dataset:
+            self.territories = dataset.get('territories', [])
 
     @property
     def model_data(self):
@@ -92,7 +96,6 @@ class Dataset(db.Model):
             'label': self.label,
             'name': self.name,
             'description': self.description,
-            'default_time': self.default_time,
             'currency': self.currency,
             'category': self.category,
             'private': self.private,

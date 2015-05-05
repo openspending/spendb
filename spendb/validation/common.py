@@ -1,68 +1,53 @@
-from colander import SchemaNode, Function, String, Mapping, Sequence
-from colander import Boolean
+import re
+from colander import Function, All, Length, null, Invalid
+
+RESERVED_TERMS = ['entry', 'entries', 'dataset', 'datasets', 'dimension',
+                  'dimensions', 'editor', 'meta', 'id', 'login', 'logout',
+                  'settings', 'browser', 'explorer', 'member', 'register',
+                  'after_login', 'after_logout', 'locale', 'reporterror',
+                  'getinvolved', 'api', '500', 'error', 'url', 'model',
+                  'distinct', 'views', 'new']
 
 
-class ValidationState(object):
-    """ ValidationState is carried through the validation system to
-    allow different parts of the validators to have access to parts
-    of the model which are out of their scope. """
-
-    def __init__(self, model):
-        self.model = model
-
-    @property
-    def mapping_items(self):
-        if not isinstance(self.model, dict):
-            return []
-        if not isinstance(self.model.get('mapping'), dict):
-            return []
-        return self.model.get('mapping').items()
-
-    @property
-    def attributes(self):
-        """ Return all attributes (including measures, atteribute
-        dimensions and compound dimension attributes) of the model.
-        """
-        for prop, meta in self.mapping_items:
-            yield prop
-            for attribute in meta.get('attributes', {}).keys():
-                yield prop + '.' + attribute
-
-    @property
-    def dimensions(self):
-        """ Return all dimensions of the mapping. """
-        for prop, meta in self.mapping_items:
-            if meta.get('type', '').lower() == 'measure':
-                continue
-            yield prop
-
-    def dimension_attributes(self, dimension):
-        return self.model['mapping'][dimension].get('attributes', {}).keys()
+def reserved_name(name):
+    """ These are names that have a special meaning in URLs and
+    cannot be used for dataset or dimension names. """
+    if name is not None and name.lower() in RESERVED_TERMS:
+        return "'%s' is a reserved word and cannot be used here" % name
+    return True
 
 
-def _node(schema, name, *children, **kw):
-    if 'validator' in kw:
-        kw['validator'] = Function(kw['validator'])
-    return SchemaNode(schema,
-                      *children,
-                      name=name,
-                      **kw)
+def database_name(name):
+    if not re.match(r"^[\w\_]+$", name):
+        return ("Name must include only "
+                "letters, numbers, dashes and underscores")
+    if len(name) > 30:
+        return "Names must not be longer than 30 characters."
+    if '__' in name:
+        return "Double underscores are not allowed in dataset names."
+    return True
 
 
-def mapping(name, **kw):
-    return _node(Mapping(unknown='preserve'),
-                 name=name, **kw)
+valid_name = All(Length(min=2), Function(reserved_name),
+                 Function(database_name))
 
 
-def sequence(name, *children, **kw):
-    return _node(Sequence(), name, 
-                 *children, **kw)
+def prepare_name(name):
+    """ Convert a given value to a name. """
+    if name is None or name is null:
+        return ''
+    return unicode(name).strip()
 
 
-def key(name, **kw):
-    return _node(String(), name, **kw)
+class Ref(object):
 
+    def deserialize(self, node, cstruct):
+        if cstruct is null:
+            return null
+        value = self.decode(cstruct)
+        if value is None:
+            raise Invalid(node, 'Missing')
+        return value
 
-def boolean(name, **kw):
-    return _node(Boolean(), name, **kw)
-
+    def cstruct_children(self, node, cstruct):
+        return []

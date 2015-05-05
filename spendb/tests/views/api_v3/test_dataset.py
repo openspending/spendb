@@ -104,7 +104,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'description': 'I\'m a banana',
                 'currency': 'EUR', 'languages': ['en'],
                 'territories': ['gb'],
-                'category': 'budget', 'default_time': 2009}
+                'category': 'budget'}
         self.client.post(url_for('datasets_api.update', name='cra'),
                          data=json.dumps(data),
                          headers={'content-type': 'application/json'},
@@ -118,8 +118,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'label': 'Common Rough Act',
                 'description': 'I\'m a banana',
                 'currency': 'EUR', 'languages': ['en'],
-                'territories': ['gb'], 'category': 'foo',
-                'default_time': 2009}
+                'territories': ['gb'], 'category': 'foo'}
         response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
@@ -146,7 +145,7 @@ class TestDatasetApiController(ControllerTestCase):
         data = {'name': 'cra', 'label': 'CRA',
                 'languages': ['esperanto'],
                 'description': 'I\'m a banana',
-                'currency': 'GBP', 'default_time': 2009}
+                'currency': 'GBP'}
         response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
@@ -160,8 +159,7 @@ class TestDatasetApiController(ControllerTestCase):
         data = {'name': 'cra', 'label': 'CRA',
                 'territories': ['su'],
                 'description': 'I\'m a banana',
-                'currency': 'GBP',
-                'default_time': 2009}
+                'currency': 'GBP'}
         response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},
@@ -176,8 +174,7 @@ class TestDatasetApiController(ControllerTestCase):
                 'label': 'Common Rough Act',
                 'description': 'I\'m a banana',
                 'category': 'budget',
-                'currency': 'glass pearls',
-                'default_time': 2009}
+                'currency': 'glass pearls'}
         response = self.client.post(url_for('datasets_api.update', name='cra'),
                                     data=json.dumps(data),
                                     headers={'content-type': 'application/json'},

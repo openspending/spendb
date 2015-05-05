@@ -2,7 +2,6 @@
 import datetime
 import json
 
-import colander
 import sqlalchemy as sqla
 from sqlalchemy.ext import mutable
 
@@ -13,20 +12,6 @@ def json_default(obj):
     if isinstance(obj, datetime.date):
         obj = obj.isoformat()
     return obj
-
-
-class Ref(object):
-
-    def deserialize(self, node, cstruct):
-        if cstruct is colander.null:
-            return colander.null
-        value = self.decode(cstruct)
-        if value is None:
-            raise colander.Invalid(node, 'Missing')
-        return value
-
-    def cstruct_children(self, node, cstruct):
-        return []
 
 
 class JSONType(sqla.TypeDecorator):

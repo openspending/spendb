@@ -13,9 +13,8 @@ from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.error import api_json_errors
-from spendb.validation.dataset import dataset_schema
-from spendb.validation.mapping import mapping_schema
-from spendb.validation.common import ValidationState
+from spendb.validation.dataset import validate_dataset
+from spendb.validation.model import validate_model
 from spendb.reference import COUNTRIES, LANGUAGES
 
 
@@ -73,12 +72,11 @@ def view(name):
 def create():
     require.dataset.create()
     dataset = request_data()
-    schema = dataset_schema(ValidationState({'dataset': dataset}))
-    data = schema.deserialize(dataset)
+    data = validate_dataset(dataset)
     if Dataset.by_name(data['name']) is not None:
         raise Invalid(SchemaNode(String(), name='name'),
                       _("A dataset with this identifer already exists!"))
-    dataset = Dataset({'dataset': data})
+    dataset = Dataset({'dataset': data, 'model': {}})
     dataset.managers.append(current_user)
     db.session.add(dataset)
     db.session.commit()
@@ -90,8 +88,7 @@ def create():
 def update(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    schema = dataset_schema(ValidationState(dataset.to_dict()))
-    data = schema.deserialize(request_data())
+    data = validate_dataset(request_data())
     dataset.update(data)
     db.session.commit()
     return view(name)
@@ -121,11 +118,7 @@ def model(name):
 def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    data = dataset.to_full_dict()
-    data['model'] = request_data()
-    schema = mapping_schema(ValidationState(data))
-    new_mapping = schema.deserialize(data['model'])
-    dataset.data['model'] = new_mapping
+    dataset.data['model'] = validate_model(request_data())
     db.session.commit()
     return model(name)
 
