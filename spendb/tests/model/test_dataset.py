@@ -19,18 +19,15 @@ class TestDataset(DatabaseTestCase):
         assert self.ds.label == self.ds.to_dict()['label'], self.ds.label
 
     def test_load_model_dimensions(self):
-        assert len(self.ds.model.dimensions) == 4, self.ds.model.dimensions
-        assert isinstance(self.ds.model['time'], DateDimension), \
-            self.ds.model['time']
-        assert isinstance(
-            self.ds.model['field'], AttributeDimension), self.ds.model['field']
-        assert isinstance(self.ds.model['to'], CompoundDimension), \
-            self.ds.model['to']
-        assert isinstance(self.ds.model['function'], CompoundDimension), \
-            self.ds.model['function']
-        assert len(self.ds.model.measures) == 1, self.ds.model.measures
-        assert isinstance(self.ds.model['amount'], Measure), \
-            self.ds.model['amount']
+        dims = {d.name: d for d in self.ds.model.dimensions}
+        assert len(dims) == 4, dims
+        assert isinstance(dims['time'], Dimension), dims['time']
+        assert isinstance(dims['field'], Dimension), dims['field']
+        assert isinstance(dims['to'], Dimension), dims['to']
+        assert isinstance(dims['function'], Dimension), dims['function']
+        meas = {m.name: m for m in self.ds.model.measures}
+        assert len(meas) == 1, meas
+        assert isinstance(meas['amount'], Measure), meas['amount']
 
     def test_generate_db_entry_table(self):
         assert self.ds.fact_table.table.name == 'test__facts', \
@@ -83,7 +80,7 @@ class TestDatasetLoad(DatabaseTestCase):
         tbl = list(itr)
         assert len(tbl) == 6, len(tbl)
         row = tbl[0]
-        assert isinstance(row['field'], unicode), row
+        assert isinstance(row['field'], dict), row
         assert isinstance(row['function'], dict), row
         assert isinstance(row['to'], dict), row
 

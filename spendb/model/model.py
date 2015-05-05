@@ -8,11 +8,16 @@ class Attribute(object):
     This value will be stored directly on the facts table as a column. """
 
     def __init__(self, parent, name, data):
-        self.data = data
+        self.parent = parent
         self.name = name
+        self.data = data
         self.label = data.get('label', name)
         self.column = data.get('column')
         self.description = data.get('description')
+
+    @property
+    def path(self):
+        return '%s.%s' % (self.parent.name, self.name)
 
     def __repr__(self):
         return "<Attribute(%s)>" % self.name
@@ -53,6 +58,10 @@ class Measure(Attribute):
 
     def __init__(self, model, name, data):
         Attribute.__init__(self, model, name, data)
+
+    @property
+    def path(self):
+        return self.name
 
     def __repr__(self):
         return "<Measure(%s)>" % self.name

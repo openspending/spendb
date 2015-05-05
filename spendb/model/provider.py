@@ -22,6 +22,7 @@ class SpendingModelProvider(ModelProvider):
         dataset = Dataset.by_name(name)
         if name is None:
             raise NoSuchCubeError("Unknown dataset %s" % name, name)
+
         measures, dimensions, mappings = [], [], {}
         aggregates = [MeasureAggregate('num_entries',
                                        label='Numer of entries',
@@ -41,8 +42,7 @@ class SpendingModelProvider(ModelProvider):
             attributes = []
             for attr in dimension.attributes:
                 attributes.append(attr.name)
-                name = '%s.%s' % (dimension.name, attr.name)
-                mappings[name] = attr.column
+                mappings[attr.path] = attr.column
 
             meta = {
                 'label': dimension.label,
@@ -50,7 +50,7 @@ class SpendingModelProvider(ModelProvider):
                 'levels': [{
                     'name': dimension.name,
                     'label': dimension.label,
-                    'key': 'name',
+                    # 'key': 'name',
                     'attributes': attributes
                 }]
             }
@@ -72,7 +72,7 @@ class SpendingModelProvider(ModelProvider):
     def list_cubes(self):
         cubes = []
         for dataset in Dataset.all_by_account(None):
-            if not len(dataset.mapping):
+            if not len(dataset.model.axes):
                 continue
             cubes.append({
                 'name': dataset.name,

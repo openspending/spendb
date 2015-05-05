@@ -18,10 +18,10 @@ class TestSlicerController(ControllerTestCase):
 
     def test_cubes(self):
         response = self.client.get(url_for('slicer.list_cubes'))
-        assert 'cra' in response.data
+        assert 'cra' in response.data, response.data
 
     def test_cube_model(self):
         response = self.client.get(url_for('slicer.cube_model',
                                            cube_name='cra'))
-        assert 'cra' in response.data
+        assert 'cra' in response.data, response.data
         assert self.dataset.label in response.data, response.data

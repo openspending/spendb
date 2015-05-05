@@ -11,8 +11,8 @@ from spendb.tests.helpers import csvimport_fixture_path
 
 
 def import_fixture(name):
-    meta_fp = csvimport_fixture_file(name, 'model.json')
-    model_fp = csvimport_fixture_file(name, 'mapping.json')
+    meta_fp = csvimport_fixture_file(name, 'meta.json')
+    model_fp = csvimport_fixture_file(name, 'model.json')
     meta = json.load(meta_fp)
     if model_fp:
         meta['model'] = json.load(model_fp)
