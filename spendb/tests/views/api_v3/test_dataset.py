@@ -103,28 +103,28 @@ class TestDatasetApiController(ControllerTestCase):
         data = {'name': 'cra', 'label': 'Common Rough Act',
                 'description': 'I\'m a banana',
                 'currency': 'EUR', 'languages': ['en'],
-                'territories': ['gb'],
+                'territories': ['GB'],
                 'category': 'budget'}
-        self.client.post(url_for('datasets_api.update', name='cra'),
-                         data=json.dumps(data),
-                         headers={'content-type': 'application/json'},
-                         query_string={'api_key': self.user.api_key})
+        res = self.client.post(url_for('datasets_api.update', name='cra'),
+                               data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
         cra = Dataset.by_name('cra')
-        assert cra.label == 'Common Rough Act', cra.label
-        assert cra.currency == 'EUR', cra.currency
+        assert cra.label == 'Common Rough Act', (cra.label, res.json)
+        assert cra.currency == 'EUR', (cra.currency, res.json)
 
     def test_update_invalid_category(self):
         data = {'name': 'cra',
                 'label': 'Common Rough Act',
                 'description': 'I\'m a banana',
                 'currency': 'EUR', 'languages': ['en'],
-                'territories': ['gb'], 'category': 'foo'}
-        response = self.client.post(url_for('datasets_api.update', name='cra'),
-                                    data=json.dumps(data),
-                                    headers={'content-type': 'application/json'},
-                                    query_string={'api_key': self.user.api_key})
-        assert '400' in response.status, response.status
-        assert 'valid category' in response.data
+                'territories': ['GB'], 'category': 'foo'}
+        res = self.client.post(url_for('datasets_api.update', name='cra'),
+                               data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert '400' in res.status, res.status
+        assert 'not one of' in res.data, res.json
         cra = Dataset.by_name('cra')
         assert cra.label != 'Common Rough Act', cra.label
 
@@ -132,12 +132,12 @@ class TestDatasetApiController(ControllerTestCase):
         data = {'name': 'cra', 'label': '',
                 'description': 'I\'m a banana',
                 'currency': 'GBP'}
-        response = self.client.post(url_for('datasets_api.update', name='cra'),
-                                    data=json.dumps(data),
-                                    headers={'content-type': 'application/json'},
-                                    query_string={'api_key': self.user.api_key})
-        assert '400' in response.status, response.status
-        assert 'Required' in response.data
+        res = self.client.post(url_for('datasets_api.update', name='cra'),
+                               data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert '400' in res.status, res.status
+        assert 'Shorter than' in res.data, res.json
         cra = Dataset.by_name('cra')
         assert cra.label != '', cra.label
 
@@ -175,11 +175,11 @@ class TestDatasetApiController(ControllerTestCase):
                 'description': 'I\'m a banana',
                 'category': 'budget',
                 'currency': 'glass pearls'}
-        response = self.client.post(url_for('datasets_api.update', name='cra'),
-                                    data=json.dumps(data),
-                                    headers={'content-type': 'application/json'},
-                                    query_string={'api_key': self.user.api_key})
-        assert 'not a valid currency' in response.data
+        res = self.client.post(url_for('datasets_api.update', name='cra'),
+                               data=json.dumps(data),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert 'not one of' in res.data, res.json
         cra = Dataset.by_name('cra')
         assert cra.currency == 'GBP', cra.label
 
@@ -200,12 +200,12 @@ class TestDatasetApiController(ControllerTestCase):
     def test_update_model_invalid(self):
         url = url_for('datasets_api.update_model', name='cra')
         data = self.cra.model_data.copy()
-        del data['dimensions']['cofog3']['label']
+        del data['dimensions']['cofog3']['attributes']
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
         assert '400' in res.status, res.status
-        assert 'cofog3' in res.json.get('dimensions', {}), res.data
+        assert 'cofog3.attributes' in res.data, res.data
 
     def test_update_model_invalid_json(self):
         url = url_for('datasets_api.update_model', name='cra')

@@ -72,9 +72,8 @@
         "measures": {
             "amount": {
                 "column": "AMOUNT",
-                "datatype": "float",
-                "label": "Amount",
-                "type": "measure"
+                "type": "float",
+                "label": "Amount"
             },
             "cofinance": {
                 "column": "cofin",

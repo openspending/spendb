@@ -1,6 +1,91 @@
+from colander import All, MappingSchema, Schema, String, SchemaNode
+from colander import Boolean, drop, Length, OneOf
+
+from spendb.core import db
+from spendb.validation.common import valid_name
+
+
+TYPES = {
+    'string': db.Unicode,
+    'integer': db.BigInteger,
+    'float': db.Float
+}
+
+
+def create_named_node(stub, name):
+    """ Create an ad-hoc node to represent a mapping item with
+    the given name. """
+    clone = stub.clone()
+    clone.name = name
+    valid = lambda n, v: valid_name(n, name)
+    if clone.validator is not None:
+        valid = All(clone.validator, valid)
+    clone.validator = valid
+    return clone
+
+
+def generate_mappings(node, kw):
+    """ Hack colander to generate schema on the fly, based on the model
+    that has been submitted. """
+    if not hasattr(node, 'bound_data'):
+        node.bound_data = kw.get('data')
+
+    if not hasattr(node.bound_data, 'items'):
+        return
+
+    children = []
+    for child in node.children:
+        if child.name == '_named':
+            for key, value in node.bound_data.items():
+                children.append(create_named_node(child, key))
+        else:
+            children.append(child)
+    node.children = children
+
+    for child in node.children:
+        child.bound_data = node.bound_data.get(child.name)
+        generate_mappings(child, kw)
+
+
+class Attribute(MappingSchema):
+    label = SchemaNode(String(), missing=drop)
+    description = SchemaNode(String(), missing='')
+    column = SchemaNode(String(), validator=Length(min=1))
+    type = SchemaNode(String(), missing='string',
+                      validator=OneOf(TYPES.keys()))
+
+
+class Attributes(MappingSchema):
+    _named = Attribute()
+
+
+class Dimension(MappingSchema):
+    label = SchemaNode(String(), missing=drop)
+    description = SchemaNode(String(), missing='')
+    facet = SchemaNode(Boolean(), missing=False)
+    attributes = Attributes()
+
+
+class Dimensions(MappingSchema):
+    _named = Dimension()
+
+
+class Measure(Attribute):
+    type = SchemaNode(String(), missing='string',
+                      validator=OneOf(['integer', 'float']))
+
+
+class Measures(MappingSchema):
+    _named = Measure()
+
+
+class Model(Schema):
+    dimensions = Dimensions()
+    measures = Measures()
+
 
 def validate_model(model):
     """ Apply model validation. """
-    # state = ValidationState(model)
-    # schema = model_schema(state)
-    return model
+    schema = Model(after_bind=generate_mappings)
+    schema = schema.bind(data=model)
+    return schema.deserialize(model)

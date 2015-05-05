@@ -1,21 +1,14 @@
 import json
 from itertools import count
 
-# from apikit import cache_hash
 from sqlalchemy import MetaData
 from sqlalchemy.schema import Table, Column
-from sqlalchemy.types import Unicode, BigInteger, Float
+from sqlalchemy.types import Unicode
 from sqlalchemy.sql.expression import select
 
 from spendb.core import db
 from spendb.model.common import json_default
-
-
-TYPES = {
-    'string': Unicode,
-    'integer': BigInteger,
-    'float': Float
-}
+from spendb.validation.model import TYPES
 
 
 class FactTable(object):

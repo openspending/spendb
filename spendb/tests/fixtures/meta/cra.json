@@ -141,7 +141,7 @@
                     },
                     "name": {
                         "column": "from_name",
-                        "type": "id"
+                        "type": "string"
                     }
                 },
                 "description": "The entity that the money was paid from.",
