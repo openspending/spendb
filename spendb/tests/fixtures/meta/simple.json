@@ -1,48 +1,65 @@
 {
     "dataset": {
-        "name": "test",
+        "description": "I'm a banana!",
         "label": "Test Case Model",
-        "description": "I'm a banana!"
+        "name": "test"
     },
     "model": {
-        "amount": {
-            "type": "value",
-            "label": "Amount",
-            "column": "amount",
-            "datatype": "float"
-        },
-        "time": {
-            "type": "value",
-            "label": "Year",
-            "column": "year",
-            "datatype": "date",
-            "key": true
-        },
-        "field": {
-            "type": "value",
-            "label": "Field 1",
-            "column": "field",
-            "datatype": "string"
-        },
-        "to": {
-            "label": "Einzelplan",
-            "type": "entity",
-            "facet": true,
-            "key": true,
-            "attributes": {
-                "name": {"column": "to_name", "datatype": "id"},
-                "label": {"column": "to_label", "datatype": "string"}
+        "dimensions": {
+            "field": {
+                "attributes": {
+                    "field": {
+                        "column": "field",
+                        "type": "string"
+                    }
+                },
+                "label": "Field 1"
+            },
+            "function": {
+                "attributes": {
+                    "label": {
+                        "column": "func_label",
+                        "datatype": "string"
+                    },
+                    "name": {
+                        "column": "func_name",
+                        "datatype": "id"
+                    }
+                },
+                "facet": false,
+                "label": "Function code",
+                "taxonomy": "funny"
+            },
+            "time": {
+                "attributes": {
+                    "year": {
+                        "column": "year",
+                        "type": "integer"
+                    }
+                },
+                "key": true,
+                "label": "Year"
+            },
+            "to": {
+                "attributes": {
+                    "label": {
+                        "column": "to_label",
+                        "datatype": "string"
+                    },
+                    "name": {
+                        "column": "to_name",
+                        "datatype": "id"
+                    }
+                },
+                "facet": true,
+                "label": "Einzelplan"
             }
         },
-        "function": {
-            "label": "Function code",
-            "type": "classifier",
-            "taxonomy": "funny",
-            "facet": false,
-            "key": true,
-            "attributes": {
-                "name": {"column": "func_name", "datatype": "id"},
-                "label": {"column": "func_label", "datatype": "string"}
+        "measures": {
+            "amount": {
+                "column": "amount",
+                "label": "Amount",
+                "type": "float"
             }
         }
     }

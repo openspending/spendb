@@ -22,11 +22,11 @@
             "attributes": {
                 "label": {
                     "column": "paid_by",
-                    "datatype": "string"
+                    "type": "string"
                 },
                 "name": {
                     "column": "paid_by",
-                    "datatype": "id"
+                    "type": "string"
                 }
             },
             "label": "Spender"
@@ -44,11 +44,11 @@
             "attributes": {
                 "label": {
                     "column": "paid_to",
-                    "datatype": "string"
+                    "type": "string"
                 },
                 "name": {
                     "column": "paid_to",
-                    "datatype": "id"
+                    "type": "string"
                 }
             },
             "label": "Recipient"
@@ -57,9 +57,8 @@
     "measures": {
         "amount": {
             "column": "amount",
-            "datatype": "float",
-            "label": "Amount",
-            "type": "value"
+            "type": "float",
+            "label": "Amount"
         }
     }
 }

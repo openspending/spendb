@@ -13,11 +13,11 @@
             "attributes": {
                 "label": {
                     "column": "paid_by",
-                    "datatype": "string"
+                    "type": "string"
                 },
                 "name": {
                     "column": "paid_by",
-                    "datatype": "id"
+                    "type": "string"
                 }
             },
             "description": "Payer",
@@ -72,10 +72,9 @@
     "measures": {
         "amount": {
             "column": "amount",
-            "datatype": "float",
+            "type": "float",
             "description": "Amount",
-            "label": "Amount",
-            "type": "value"
+            "label": "Amount"
         }
     }
 }
