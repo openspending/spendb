@@ -8,7 +8,6 @@ from sqlalchemy.types import Unicode, BigInteger, Float
 from sqlalchemy.sql.expression import select
 
 from spendb.core import db
-from spendb.model.visitor import ModelVisitor
 from spendb.model.common import json_default
 
 
@@ -17,52 +16,6 @@ TYPES = {
     'integer': BigInteger,
     'float': Float
 }
-
-
-class FactTableMapping(ModelVisitor):
-    """ The mapping helps to establish a link between the physical
-    columns on the fact table and the dimensions, measures etc. of
-    the model. """
-
-    def __init__(self, alias, fields, model):
-        self.alias = alias
-        self.fields = fields
-        self.model = model
-        self.columns = {}
-
-    def apply(self):
-        self.visit(self.model)
-
-    def dimension_columns(self, dimension):
-        """ Filter the generated columns for those related to a
-        particular dimension. """
-        prefix = dimension.name + '.'
-        columns = []
-        for path, col in self.columns.items():
-            if path == dimension.name or path.startswith(prefix):
-                columns.append(col)
-        return columns
-
-    def visit_attribute(self, attribute):
-        if attribute.column not in self.alias.columns:
-            return
-        col = self.alias.c[attribute.column]
-        self.columns[attribute.path] = col
-
-    def unpack_entry(self, row):
-        """ Convert a database-returned row into a nested and mapped
-        fact representation. """
-        row = dict(row.items())
-        result = {'id': row.get('_id')}
-        for axis in self.model.axes:
-            if hasattr(axis, 'attributes'):
-                value = {}
-                for attr in axis.attributes:
-                    value[attr.name] = row.get(attr.column)
-            else:
-                value = row.get(axis.column)
-            result[axis.name] = value
-        return result
 
 
 class FactTable(object):
@@ -101,9 +54,11 @@ class FactTable(object):
     @property
     def mapping(self):
         if not hasattr(self, '_mapping'):
-            self._mapping = FactTableMapping(self.alias, self.dataset.fields,
-                                             self.dataset.model)
-            self._mapping.apply()
+            self._mapping = {}
+            for attribute in self.dataset.model.attributes:
+                if attribute.column in self.alias.columns:
+                    col = self.alias.c[attribute.column]
+                    self._mapping[attribute.path] = col
         return self._mapping
 
     @property
@@ -148,6 +103,20 @@ class FactTable(object):
         record['_json'] = json.dumps(record, default=json_default)
         return record
 
+    def unpack_entry(self, row):
+        """ Convert a database-returned row into a nested and mapped
+        fact representation. """
+        row = dict(row.items())
+        result = {'id': row.get('_id')}
+        for dimension in self.dataset.model.dimensions:
+            value = {}
+            for attr in dimension.attributes:
+                value[attr.name] = row.get(attr.column)
+            result[dimension.name] = value
+        for measure in self.dataset.model.measures:
+            result[measure.name] = row.get(measure.column)
+        return result
+
     def create(self):
         """ Create the fact table if it does not exist. """
         if not self.exists:
@@ -166,17 +135,27 @@ class FactTable(object):
         rp = self.bind.execute(self.table.count())
         return rp.fetchone()[0]
 
+    def _dimension_columns(self, dimension):
+        """ Filter the generated columns for those related to a
+        particular dimension. """
+        prefix = dimension.name + '.'
+        columns = []
+        for path, col in self.mapping.items():
+            if path.startswith(prefix):
+                columns.append(col)
+        return columns
+
     def num_members(self, dimension):
         """ Get the number of members for the given dimension. """
         if not self.exists:
             return 0
-        q = select(self.mapping.dimension_columns(dimension), distinct=True)
+        q = select(self._dimension_columns(dimension), distinct=True)
         rp = self.bind.execute(q.count())
         return rp.fetchone()[0]
 
     def dimension_members(self, dimension, conditions="1=1", offset=0,
                           limit=None):
-        selects = self.mapping.dimension_columns(dimension)
+        selects = self._dimension_columns(dimension)
         order_by = [s.asc() for s in selects]
         for entry in self.entries(conditions=conditions, order_by=order_by,
                                   selects=selects, distinct=True,
@@ -192,7 +171,7 @@ class FactTable(object):
             return
 
         if not selects:
-            selects = [self.alias.c._id] + self.mapping.columns.values()
+            selects = [self.alias.c._id] + self.mapping.values()
 
             # enforce stable sorting:
             if order_by is None:
@@ -219,7 +198,7 @@ class FactTable(object):
                         return
                     break
                 first_row = False
-                yield self.mapping.unpack_entry(row)
+                yield self.unpack_entry(row)
 
     def __repr__(self):
         return "<FactTable(%r)>" % (self.dataset)
