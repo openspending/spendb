@@ -8,7 +8,8 @@ from apikit import obj_or_404, Pager, jsonify
 
 from spendb.core import db, login_manager, url_for
 from spendb.auth import require
-from spendb.model.account import Account, AccountRegister, AccountSettings
+from spendb.model.account import Account
+from spendb.validation.account import AccountRegister, AccountSettings
 from spendb.lib.mailer import send_reset_link
 from spendb.lib.helpers import flash_error, flash_success
 from spendb.views.cache import disable_cache

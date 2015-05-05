@@ -1,29 +1,21 @@
-import colander
 import uuid
 import hmac
 
 from flask.ext.login import AnonymousUserMixin
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.schema import Table, Column, ForeignKey
-from sqlalchemy.types import Integer, Unicode, Boolean
 
 from spendb.core import db, login_manager
-from spendb.model.dataset import Dataset
-from spendb.validation.common import Ref
-
-REGISTER_NAME_RE = r"^[a-zA-Z0-9_\-]{3,255}$"
 
 
 def make_uuid():
     return unicode(uuid.uuid4())
 
 
-account_dataset_table = Table(
+account_dataset_table = db.Table(
     'account_dataset', db.metadata,
-    Column('dataset_id', Integer, ForeignKey('dataset.id'),
-           primary_key=True),
-    Column('account_id', Integer, ForeignKey('account.id'),
-           primary_key=True)
+    db.Column('dataset_id', db.Integer, db.ForeignKey('dataset.id'),
+              primary_key=True),
+    db.Column('account_id', db.Integer, db.ForeignKey('account.id'),
+              primary_key=True)
 )
 
 
@@ -44,20 +36,20 @@ def load_account(account_id):
 class Account(db.Model):
     __tablename__ = 'account'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode(255), unique=True)
-    fullname = Column(Unicode(2000))
-    email = Column(Unicode(2000))
-    twitter_handle = Column(Unicode(140))
-    public_email = Column(Boolean, default=False)
-    public_twitter = Column(Boolean, default=False)
-    password = Column(Unicode(2000))
-    api_key = Column(Unicode(2000), default=make_uuid)
-    admin = Column(Boolean, default=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Unicode(255), unique=True)
+    fullname = db.Column(db.Unicode(2000))
+    email = db.Column(db.Unicode(2000))
+    twitter_handle = db.Column(db.Unicode(140))
+    public_email = db.Column(db.Boolean, default=False)
+    public_twitter = db.Column(db.Boolean, default=False)
+    password = db.Column(db.Unicode(2000))
+    api_key = db.Column(db.Unicode(2000), default=make_uuid)
+    admin = db.Column(db.Boolean, default=False)
 
-    datasets = relationship(Dataset,
-                            secondary=account_dataset_table,
-                            backref=backref('managers', lazy='dynamic'))
+    datasets = db.relationship('Dataset',
+                               secondary=account_dataset_table,
+                               backref=db.backref('managers', lazy='dynamic'))
 
     def __init__(self):
         self.api_key = make_uuid()
@@ -116,45 +108,3 @@ class Account(db.Model):
 
     def __repr__(self):
         return '<Account(%r,%r)>' % (self.id, self.name)
-
-
-class AccountRef(Ref):
-
-    def decode(self, cstruct):
-        if isinstance(cstruct, basestring):
-            return Account.by_name(cstruct)
-        if isinstance(cstruct, dict):
-            return self.decode(cstruct.get('name'))
-        return None
-
-
-class DatasetAccounts(colander.SequenceSchema):
-    account = colander.SchemaNode(AccountRef())
-
-
-class AccountRegister(colander.MappingSchema):
-    name = colander.SchemaNode(colander.String(),
-                               validator=colander.Regex(REGISTER_NAME_RE))
-    fullname = colander.SchemaNode(colander.String())
-    email = colander.SchemaNode(colander.String(),
-                                validator=colander.Email())
-    public_email = colander.SchemaNode(colander.Boolean(), missing=False)
-    password1 = colander.SchemaNode(colander.String(),
-                                    validator=colander.Length(min=4))
-    password2 = colander.SchemaNode(colander.String(),
-                                    validator=colander.Length(min=4))
-    terms = colander.SchemaNode(colander.Bool())
-
-
-class AccountSettings(colander.MappingSchema):
-    fullname = colander.SchemaNode(colander.String())
-    email = colander.SchemaNode(colander.String(),
-                                validator=colander.Email())
-    public_email = colander.SchemaNode(colander.Boolean(), missing=False)
-    twitter = colander.SchemaNode(colander.String(), missing=None,
-                                  validator=colander.Length(max=140))
-    public_twitter = colander.SchemaNode(colander.Boolean(), missing=False)
-    password1 = colander.SchemaNode(colander.String(),
-                                    missing=None, default=None)
-    password2 = colander.SchemaNode(colander.String(),
-                                    missing=None, default=None)
