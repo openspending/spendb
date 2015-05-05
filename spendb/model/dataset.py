@@ -1,6 +1,6 @@
 from datetime import datetime
-from sqlalchemy.orm import reconstructor, relationship, backref
-from sqlalchemy.schema import Column, ForeignKey
+from sqlalchemy.orm import reconstructor
+from sqlalchemy.schema import Column
 from sqlalchemy.types import Integer, Unicode, Boolean, DateTime
 from sqlalchemy.sql.expression import false, or_
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -15,8 +15,7 @@ class Dataset(db.Model):
     """ The dataset is the core entity of any access to data.
     The dataset keeps an in-memory representation of the data model
     (including all dimensions and measures) which can be used to
-    generate necessary queries.
-    """
+    generate necessary queries. """
     __tablename__ = 'dataset'
 
     id = Column(Integer, primary_key=True)

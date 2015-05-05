@@ -1,56 +1,86 @@
 {
-  "dataset": {
-    "name": "test",
-    "label": "Test Dataset", 
-    "description": "This is a test dataset",
-    "currency": "EUR",
-    "category": "other",
-    "private": false,
-    "languages": ["en"],
-    "territories": ["DE", "FR", "ES"]
-  },
-  "mapping": {
-    "amount": {
-      "type": "measure",
-      "label": "Amount",
-      "datatype": "float",
-      "column": "AMOUNT"
+    "dataset": {
+        "category": "other",
+        "currency": "EUR",
+        "description": "This is a test dataset",
+        "label": "Test Dataset",
+        "languages": [
+            "en"
+        ],
+        "name": "test",
+        "private": false,
+        "territories": [
+            "DE",
+            "FR",
+            "ES"
+        ]
     },
-    "cofinance": {
-      "type": "measure",
-      "label": "Co-Financed Amount",
-      "datatype": "float",
-      "column": "COFIN"
-    },
-    "time": {
-      "type": "date",
-      "label": "Time of transaction",
-      "datatype": "date",
-      "column": "YEAR"
-    },
-    "transaction_id": {
-      "type": "value",
-      "label": "Transaction ID",
-      "datatype": "id",
-      "column": "TX"
-    },
-    "function": {
-      "type": "compound",
-      "key": true,
-      "label": "Function", 
-      "attributes": {
-        "name": {"datatype": "id", "column": "FUNCTION_ID"},
-        "label": {"datatype": "string", "column": "FUNCTION"},
-        "description": {"datatype": "string", "column": "FUNCTION_DESC"}
-      }
-    },
-    "supplier": {
-      "type": "compound",
-      "label": "Supplier", 
-      "attributes": {
-        "name": {"datatype": "id", "column": "SUPPLIER_ID"},
-        "label": {"datatype": "string", "column": "SUPPLIER"}
-      }
+    "model": {
+        "dimensions": {
+            "function": {
+                "attributes": {
+                    "description": {
+                        "column": "FUNCTION_DESC",
+                        "datatype": "string"
+                    },
+                    "label": {
+                        "column": "FUNCTION",
+                        "datatype": "string"
+                    },
+                    "name": {
+                        "column": "FUNCTION_ID",
+                        "datatype": "string"
+                    }
+                },
+                "label": "Function",
+                "type": "compound"
+            },
+            "supplier": {
+                "attributes": {
+                    "label": {
+                        "column": "SUPPLIER",
+                        "datatype": "string"
+                    },
+                    "name": {
+                        "column": "SUPPLIER_ID",
+                        "datatype": "string"
+                    }
+                },
+                "label": "Supplier",
+                "type": "compound"
+            },
+            "time": {
+                "attributes": {
+                    "year": {
+                        "column": "time_from_year",
+                        "type": "string"
+                    }
+                },
+                "description": "The accounting period in which the spending happened",
+                "label": "Tax year"
+            },
+            "transaction_id": {
+                "attributes": {
+                    "transaction_id": {
+                        "column": "tx",
+                        "type": "string"
+                    }
+                },
+                "label": "Transaction ID"
+            }
+        },
+        "measures": {
+            "amount": {
+                "column": "AMOUNT",
+                "datatype": "float",
+                "label": "Amount",
+                "type": "measure"
+            },
+            "cofinance": {
+                "column": "cofin",
+                "label": "Co-Financed Amount",
+                "type": "float"
+            }
+        }
     }
-  }
 }

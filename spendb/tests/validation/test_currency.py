@@ -1,5 +1,4 @@
 from spendb import reference
-from spendb.validation.dataset import valid_currency
 
 from spendb.tests.base import TestCase
 
@@ -12,7 +11,7 @@ class TestCurrency(TestCase):
             reference.CURRENCIES['USD']
 
     def test_currency_type_raises_invalid(self):
-        assert valid_currency('not-a-code') is not True
+        assert 'not-a-code' not in reference.CURRENCIES
 
     def test_currency_type_returns_valid(self):
-        assert valid_currency('usd') is True
+        assert 'USD' in reference.CURRENCIES
