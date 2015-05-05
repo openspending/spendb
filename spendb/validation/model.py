@@ -1,8 +1,8 @@
 from colander import All, MappingSchema, Schema, String, SchemaNode
-from colander import Boolean, drop, Length, OneOf
+from colander import Boolean, drop, Length, OneOf, Function
 
 from spendb.core import db
-from spendb.validation.common import valid_name
+from spendb.validation.common import valid_name, require_one_child
 
 
 TYPES = {
@@ -63,7 +63,7 @@ class Dimension(MappingSchema):
     label = SchemaNode(String(), missing=drop)
     description = SchemaNode(String(), missing='')
     facet = SchemaNode(Boolean(), missing=False)
-    attributes = Attributes()
+    attributes = Attributes(validator=Function(require_one_child))
 
 
 class Dimensions(MappingSchema):
@@ -80,8 +80,8 @@ class Measures(MappingSchema):
 
 
 class Model(Schema):
-    dimensions = Dimensions()
-    measures = Measures()
+    dimensions = Dimensions(validator=Function(require_one_child))
+    measures = Measures(validator=Function(require_one_child))
 
 
 def validate_model(model):

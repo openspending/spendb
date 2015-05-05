@@ -39,6 +39,12 @@ def prepare_name(name):
     return unicode(name).strip()
 
 
+def require_one_child(data):
+    if isinstance(data, dict) and len(data.keys()):
+        return True
+    return "Must have at least one dimension and/or measure."
+
+
 class Ref(object):
 
     def deserialize(self, node, cstruct):
