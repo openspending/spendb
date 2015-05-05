@@ -88,8 +88,7 @@ def create():
 def update(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    data = validate_dataset(request_data())
-    dataset.update(data)
+    dataset.update(validate_dataset(request_data()))
     db.session.commit()
     return view(name)
 
