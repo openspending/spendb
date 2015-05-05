@@ -54,27 +54,5 @@
         "label": {"datatype": "string", "column": "SUPPLIER"}
       }
     }
-  },
-  "views": [
-    {
-      "name": "default",
-      "label": "By Function",
-      "dimension": "dataset",
-      "drilldown": "function",
-      "cuts": {
-        "supplier.name": "harry"
-      }
-    },
-    {
-      "name": "default",
-      "label": "By Supplier",
-      "dimension": "function",
-      "drilldown": "supplier"
-    },
-    {
-      "name": "default",
-      "label": "Grand Total",
-      "dimension": "function"
-    }
-  ]
+  }
 }
