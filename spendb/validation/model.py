@@ -71,7 +71,7 @@ class Dimensions(MappingSchema):
 
 
 class Measure(Attribute):
-    type = SchemaNode(String(), missing='string',
+    type = SchemaNode(String(), missing='integer',
                       validator=OneOf(['integer', 'float']))
 
 
