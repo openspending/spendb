@@ -32,3 +32,19 @@ var loadRun = ['$route', '$q', '$http', function($route, $q, $http) {
   return $http.get(url);
 }];
 
+
+var loadModel = ['$route', '$q', '$http', function($route, $q, $http) {
+  var url = '/api/3/datasets/' + $route.current.params.dataset,
+      dfd = $q.defer();
+  $q.all([
+    $http.get(url + '/structure'),
+    $http.get(url + '/model')
+  ]).then(function(data) {
+    dfd.resolve({
+      structure: data[0].data,
+      model: data[1].data
+    });
+  });
+  return dfd.promise;
+}];
+

@@ -44,7 +44,8 @@ spendb.config(['$routeProvider', '$locationProvider',
     templateUrl: 'admin/model.html',
     controller: 'AdminModelCtrl',
     resolve: {
-      dataset: loadDataset
+      dataset: loadDataset,
+      data: loadModel
     }
   });
 

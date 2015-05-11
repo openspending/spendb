@@ -1,4 +1,14 @@
 
-<h1>Je suis working, too.</h1>
 
-<a href="meta">Go...</a>
+<table class="table table-condensed model-table">
+  <tr>
+    <th ng-repeat="(name, field) in structure.fields">
+      {{field.title}}
+    </th>
+  </tr>
+  <tr ng-repeat="row in structure.samples">
+    <td ng-repeat="(name, field) in structure.fields">
+      {{row[name] || '&mdash;'}}
+    </th>
+  </tr>
+</table>

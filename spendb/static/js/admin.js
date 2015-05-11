@@ -23,30 +23,21 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeP
 }]);
 
 
-spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
-  function($scope, $http, $window, $routeParams, dataset) {
-  var fieldsApi = dataset.api_url + '/fields',
-      modelApi = dataset.api_url + '/model';
+spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset', 'data',
+  function($scope, $http, $window, $routeParams, dataset, data) {
+  var modelApi = dataset.api_url + '/model';
   
   $scope.dataset = dataset;
-  $scope.fields = {};
-  $scope.model = {};
+  $scope.structure = data.structure;
+  $scope.model = data.model;
 
-  $scope.save = function(form) {
-    var dfd = $http.post(modelApi, $scope.model);
-    dfd.then(function(res) {
-      $scope.model = res.data;
-      flash.setMessage("Your changes have been saved!", "success");
-    }, validation.handle(form));
-  };
-
-  $http.get(fieldsApi).then(function(res) {
-      $scope.fields = res.data;
-  });
-
-  $http.get(modelApi).then(function(res) {
-      $scope.model = res.data;
-  });
+  // $scope.save = function(form) {
+  //   var dfd = $http.post(modelApi, $scope.model);
+  //   dfd.then(function(res) {
+  //     $scope.model = res.data;
+  //     flash.setMessage("Your changes have been saved!", "success");
+  //   }, validation.handle(form));
+  // };
 
 }]);
 
