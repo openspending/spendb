@@ -7,9 +7,8 @@ from flask.ext.migrate import MigrateCommand
 from spendb.core import create_web_app
 from spendb.tasks import load_from_url
 from spendb.assets import assets
-from spendb.command import user, db
+from spendb.command import db
 from spendb.command.importer import get_or_create_dataset, get_model
-from spendb.command.util import CommandException
 
 log = logging.getLogger(__name__.split('.')[0])
 
@@ -22,7 +21,6 @@ manager.add_option('-q', '--quiet',
                    dest='verbose', action='append_const', const=-1,
                    help='Decrease the logging level')
 
-manager.add_command('user', user.manager)
 manager.add_command('db', db.manager)
 manager.add_command('alembic', MigrateCommand)
 manager.add_command('assets', ManageAssets(assets))
@@ -36,7 +34,7 @@ def grantadmin(username):
 
     account = Account.by_name(username)
     if account is None:
-        raise CommandException("Account `%s` not found." % username)
+        raise Exception("Account `%s` not found." % username)
 
     account.admin = True
     db.session.add(account)
