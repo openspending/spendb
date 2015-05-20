@@ -5,9 +5,6 @@
 *.pyc
 *.egg
 *.DS_Store
-/.pylons_data
-/solr/conf
-/solr/data
 /.noseids
 /linesman-enabled
 *.DS_Store
@@ -15,7 +12,6 @@
 .*.swp
 spendb/templates/help/*
 doc/_build/*
-spendb/static/spendbjs
 spendb/static/.webassets-cache/*
 # spendb/static/prod/*
 spendb/static/vendor/*

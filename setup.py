@@ -44,7 +44,8 @@ setup(
     package_data={
         'spendb': (
             files_in_pkgdir('spendb', 'static') +
-            files_in_pkgdir('spendb', 'templates')
+            files_in_pkgdir('spendb', 'templates') +
+            files_in_pkgdir('spendb', 'reference/data')
         )
     },
     test_suite='nose.collector',
