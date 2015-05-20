@@ -32,7 +32,7 @@ setup(
     name='spendb',
     version='0.17',
     description='SpenDB',
-    author='Map The Moeny',
+    author='Map The Money',
     author_email='info@mapthemoney.org',
     url='http://github.com/mapthemoney/spendb',
     install_requires=[
