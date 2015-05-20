@@ -1,14 +1,58 @@
 
 
-<table class="table table-condensed model-table">
-  <tr>
-    <th ng-repeat="(name, field) in structure.fields">
-      {{field.title}}
-    </th>
-  </tr>
-  <tr ng-repeat="row in structure.samples">
-    <td ng-repeat="(name, field) in structure.fields">
-      {{row[name] || '&mdash;'}}
-    </th>
-  </tr>
-</table>
+<div id="model-table-wrap">
+  <table class="table table-condensed table-bordered model-table">
+    <!-- Things needed here: dimension select/edit/create,
+         attribute label, attribute name. -->
+    <tr>
+      <th class="legend">
+        Title:
+      </th>
+      <th ng-repeat="(name, field) in structure.fields">
+        <input type="text" class="form-control" ng-model="field.title">
+      </th>
+    </tr>
+
+    <tr>
+      <th class="legend">
+        API name:
+      </th>
+      <th ng-repeat="(name, field) in structure.fields">
+        <input type="text" class="form-control" ng-model="field.name">
+      </th>
+    </tr>
+
+    <tr ng-repeat="row in structure.samples">
+      <th class="legend" rowspan="{{structure.samples.length}}" ng-show="$first">
+        Samples:
+      </th>
+      <td ng-repeat="(name, field) in structure.fields"
+          ng-class="getCellClass(field, row[name])">
+        {{row[name] || '&hellip;'}}
+      </td>
+    </tr>
+
+  </table>
+</div>
+
+<!-- 
+<script>
+  (function ($) {
+    $(document).on('mousewheel', function(e) { 
+      var $target = $(e.target).closest('.scrollable-h');
+      var scroll = $target.scrollLeft();
+      var maxScroll = $target.find('.scrollable-h-content').width() - $target.width();
+
+      if(scroll <= 0) {
+        if(scroll <= 0 && e.originalEvent.wheelDeltaX >= 0) {
+          e.preventDefault();
+        }
+      }
+      if(scroll >= maxScroll) {
+        if (scroll >1 && e.originalEvent.wheelDeltaX <= 0) {
+          e.preventDefault();
+        }
+      }
+  });}(jQuery));
+</script>
+ -->

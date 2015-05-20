@@ -23,8 +23,8 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeP
 }]);
 
 
-spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset', 'data',
-  function($scope, $http, $window, $routeParams, dataset, data) {
+spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', 'dataset', 'data',
+  function($scope, $http, $window, $timeout, $rootScope, dataset, data) {
   var modelApi = dataset.api_url + '/model';
   
   $scope.dataset = dataset;
@@ -38,6 +38,38 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$routeParams
   //     flash.setMessage("Your changes have been saved!", "success");
   //   }, validation.handle(form));
   // };
+
+  var checkModel = function() {
+    $scope.model.measures = $scope.model.measures || {};
+    $scope.model.dimensions = $scope.model.dimensions || {};
+
+    var fields = [];
+    angular.forEach(data.structure.fields, function(v, k) {
+      fields.push(k);
+    });
+
+    var usedFields = [];
+    angular.forEach($scope.model.measures, function(v, k) {
+      usedFields.push(k.column);
+    });
+    angular.forEach($scope.model.dimensions, function(v, k) {
+      angular.forEach(k.attributes, function(v, k) {
+        usedFields.push(k.column);
+      });
+    });
+
+    //console.log(fields, usedFields);
+  };
+
+  checkModel();
+  $scope.getCellClass = function(field, value) {
+    var clazz = 'text';
+    if (['integer', 'float', 'decimal'].indexOf(field.type) != -1) {
+      clazz = 'numeric';
+    }
+    if (!value) { clazz += ' empty'; }
+    return clazz;
+  };
 
 }]);
 

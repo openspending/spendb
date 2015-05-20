@@ -195,15 +195,66 @@ footer {
 @import "cookies.less";
 @import "home.less";
 
+#model-table-wrap {
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+
+    &::-webkit-scrollbar:horizontal {
+        height: 11px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        border: 2px solid white;
+        background-color: rgba(0, 0, 0, .5);
+    }
+
+    &::-webkit-scrollbar-track { 
+        background-color: #fff; 
+        border-radius: 8px; 
+    }
+
+    border: 1px solid @table-border-color;
+    border-right: 2px solid @table-border-color;
+    border-bottom: 2px solid @table-border-color;
+    margin-bottom: -8px;
+}
 
 .table.model-table {
     table-layout: fixed;
-    overflow-y: scroll;
     width: inherit;
     border-collapse: collapse;
+    margin-bottom: 0;
 
-    td, tr {
+    td, th {
         min-width: 17em;
         overflow: hidden;
+        border-right: 2px solid @table-border-color;
     }
+
+    th {
+        background-color: lighten(@gray-lighter, 5%);
+    }
+
+    th.legend {
+        text-align: left;
+        vertical-align: middle;
+        min-width: 10em;
+    }
+
+    td {
+        &.numeric {
+            text-align: right;
+        }
+
+        &.empty {
+            color: @gray-lighter;
+            background-color: lighten(@gray-lighter, 5%);
+        }
+    }
+
+
 }
