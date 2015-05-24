@@ -37,6 +37,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
       $scope.columns = modelToColumns(res.data);
       flash.setMessage("Your changes have been saved!", "success");
     }, function(res) {
+      $scope.columns = modelToColumns(model);
       $scope.errors = res.data.errors;
     });
   };
@@ -137,8 +138,29 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
 
   var columnsToModel = function(columns) {
     var model = {dimensions: {}, measures: {}};
-
-    console.log(model);
+    for (var idx in columns) {
+      var col = columns[idx];
+      if (col.concept == 'measure') {
+        model.measures[col.name] = {
+          label: col.label,
+          column: col.column
+        };
+      } else {
+        console.log('COL', col);
+        var dim = col.dimension.name;
+        if (!model.dimensions[dim]) {
+          model.dimensions[dim] = {
+            label: col.dimension.label,
+            attributes: {}
+          };
+        }
+        model.dimensions[dim].attributes[col.name] = {
+          label: col.label,
+          column: col.column
+        };
+      }
+    }
+    console.log('MODEL', model);
     return model;
   };
 
