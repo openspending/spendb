@@ -75,9 +75,10 @@
 
     <!-- script boot section -->
     <script defer="defer">
-      var SpenDB = SpenDB || {};
-	    SpenDB.localeGroupSeparator = "{{ number_symbols_group }}";
-	    SpenDB.localeDecimalSeparator = "{{ number_symbols_decimal }}";
+      var SPENDB_CONFIG = SPENDB_CONFIG || {};
+	    SPENDB_CONFIG.localeGroupSeparator = "{{ number_symbols_group }}";
+	    SPENDB_CONFIG.localeDecimalSeparator = "{{ number_symbols_decimal }}";
+      SPENDB_CONFIG.reserved_terms = {{ reserved_terms | tojson }};
     </script>
 
     {% assets "js_base" %}

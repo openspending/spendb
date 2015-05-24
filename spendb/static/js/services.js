@@ -19,9 +19,21 @@ spendb.factory('flash', ['$rootScope', function($rootScope) {
 }]);
 
 
-spendb.factory('validation', ['flash', function(flash) {
+spendb.factory('validation', ['flash', 'config', function(flash, config) {
   // handle server-side form validation errors.
+  var makeSlug = function(text) {
+    return getSlug(text, '_');
+  };
+
+  var validSlug = function(text) {
+    if (makeSlug(text) != text) return false;
+    if (text.length < 3 || text.length > 29) return false;
+    return config.reserved_terms.indexOf(text) == -1;
+  };
+
   return {
+    makeSlug: makeSlug,
+    validSlug: validSlug,
     handle: function(form) {
       return function(res) {
         if (res.status == 400 || !form) {

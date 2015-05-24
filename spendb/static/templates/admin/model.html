@@ -53,7 +53,7 @@
       <th class="legend">
         Field slug:
       </th>
-      <th ng-repeat="col in columns">
+      <th ng-repeat="col in columns" ng-class="{'has-error': !validSlug(col.name)}">
         <input type="text" class="form-control" ng-model="col.name">
       </th>
     </tr>

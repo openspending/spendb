@@ -6,6 +6,7 @@ from flask.ext.login import current_user
 
 from spendb import auth, _version
 from spendb.core import url_for
+from spendb.validation.common import RESERVED_TERMS
 from spendb.views.i18n import get_available_locales
 from spendb.views.cache import setup_caching, cache_response
 from spendb.views.home import blueprint as home
@@ -60,6 +61,7 @@ def template_context_processor():
         'DEBUG': current_app.config.get('DEBUG'),
         'current_language': locale.language,
         'current_locale': get_locale(),
+        'reserved_terms': RESERVED_TERMS,
         'url_for': url_for,
         'site_url': url_for('home.index').rstrip('/'),
         'number_symbols_group': locale.number_symbols.get('group'),

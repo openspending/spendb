@@ -7,6 +7,7 @@ from spendb.core import assets
 
 js_vendor = Bundle('vendor/jquery/dist/jquery.js',
                    'vendor/moment/moment.js',
+                   'vendor/speakingurl/speakingurl.min.js',
                    'vendor/angular/angular.js',
                    'vendor/angular-route/angular-route.js',
                    'vendor/angular-moment/angular-moment.js',

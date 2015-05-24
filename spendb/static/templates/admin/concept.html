@@ -10,7 +10,7 @@
       <label for="label">Dimension title</label>
       <input type="text" class="form-control" ng-model="dimension.label" id="label" placeholder="Dimension title">
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-class="{'has-error': !validSlug(dimension.name)}">
       <label for="name">API slug</label>
       <input type="text" class="form-control" ng-model="dimension.name" id="name" placeholder="api_slug">
     </div>
@@ -18,5 +18,6 @@
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" ng-click="close()">OK</button>
+  <button type="button" class="btn btn-default" ng-click="close()"
+    ng-disabled="!validSlug(dimension.name)">OK</button>
 </div>

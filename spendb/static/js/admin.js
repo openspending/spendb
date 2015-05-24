@@ -22,8 +22,9 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeP
 
 }]);
 
-spendb.controller('AdminConceptCtrl', ['$scope', '$modalInstance', 'concept', 'dimension',
-  function($scope, $modalInstance, concept, dimension) {
+spendb.controller('AdminConceptCtrl', ['$scope', '$modalInstance', 'concept', 'dimension', 'validation',
+  function($scope, $modalInstance, concept, dimension, validation) {
+  $scope.validSlug = validation.validSlug;
   $scope.concept = concept;
   $scope.dimension = dimension;
 
@@ -35,6 +36,7 @@ spendb.controller('AdminConceptCtrl', ['$scope', '$modalInstance', 'concept', 'd
 
 spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', '$modal', 'dataset', 'data', 'validation',
   function($scope, $http, $window, $timeout, $rootScope, $modal, dataset, data, validation) {
+  $scope.validSlug = validation.validSlug;
   $scope.dataset = dataset;
   $scope.samples = data.structure.samples;
   $scope.model = data.model;
