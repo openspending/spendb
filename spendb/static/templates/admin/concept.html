@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Edit: {{dimension.label}}</h4>
+</div>
+
+<div class="modal-body">
+  <p>
+  <form>
+    <div class="form-group">
+      <label for="label">Dimension title</label>
+      <input type="text" class="form-control" ng-model="dimension.label" id="label" placeholder="Dimension title">
+    </div>
+    <div class="form-group">
+      <label for="name">API slug</label>
+      <input type="text" class="form-control" ng-model="dimension.name" id="name" placeholder="api_slug">
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="close()">OK</button>
+</div>

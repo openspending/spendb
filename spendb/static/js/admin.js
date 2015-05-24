@@ -22,9 +22,19 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeP
 
 }]);
 
+spendb.controller('AdminConceptCtrl', ['$scope', '$modalInstance', 'concept', 'dimension',
+  function($scope, $modalInstance, concept, dimension) {
+  $scope.concept = concept;
+  $scope.dimension = dimension;
 
-spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', 'dataset', 'data', 'validation',
-  function($scope, $http, $window, $timeout, $rootScope, dataset, data, validation) {
+  $scope.close = function() {
+    $modalInstance.dismiss('ok');
+  };
+
+}]);
+
+spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', '$modal', 'dataset', 'data', 'validation',
+  function($scope, $http, $window, $timeout, $rootScope, $modal, dataset, data, validation) {
   $scope.dataset = dataset;
   $scope.samples = data.structure.samples;
   $scope.model = data.model;
@@ -79,7 +89,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
       // column titles are: "Foo (Year)"
       var dim = c.label.split(' (')[0];
       c.dimension = inferDimension(parts[0], dim);
-    } else if (spec.type == 'integer' || spec.type == 'float') {
+    } else if ($scope.possibleMeasure(spec)) {
       // treat most numbers as measures
       if (!isYearsColumn(name)) {
         c.concept = 'measure';
@@ -100,10 +110,11 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     model.measures = model.measures || {};
     model.dimensions = model.dimensions || {};
 
-    var pushColumn = function(data, concept) {
-      data.concept = concept;
-      usedFields.push(data.column);
-      columns.push(data);
+    var pushColumn = function(col, concept) {
+      col.concept = concept;
+      col.type = data.structure.fields[col.column].type;
+      usedFields.push(col.column);
+      columns.push(col);
     };
 
     for (var measure in model.measures) {
@@ -160,14 +171,32 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     $scope.model = model;
   };
 
-  $scope.columns = modelToColumns();
+  $scope.possibleMeasure = function(col) {
+    return col.type == 'integer' || col.type == 'float';
+  };
 
-  $scope.changeConcept = function(col) {
+  $scope.updateConcept = function(col) {
     if (col.concept == 'attribute') {
       col.dimension = inferDimension(col.name, col.label);
     } else {
       delete col.dimension;
     }
+  };
+
+  $scope.editConcept = function(col){
+    var d = $modal.open({
+      templateUrl: 'admin/concept.html',
+      controller: 'AdminConceptCtrl',
+      backdrop: false,
+      resolve: {
+        concept: function() {
+          return col.concept;
+        },
+        dimension: function () {
+          return col.concept == 'attribute' ? col.dimension : col;
+        }
+      }
+    });
   };
 
   $scope.getDimensions = function() {
@@ -194,6 +223,8 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     if (!value) { clazz += ' empty'; }
     return clazz;
   };
+
+  $scope.columns = modelToColumns();
 
 }]);
 

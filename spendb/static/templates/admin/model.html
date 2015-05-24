@@ -9,30 +9,14 @@
          attribute label, attribute name. -->
     <tr>
       <th class="legend">
-        Title:
-      </th>
-      <th ng-repeat="col in columns">
-        <input type="text" class="form-control" ng-model="col.label">
-      </th>
-    </tr>
-
-    <tr>
-      <th class="legend">
-        Field:
-      </th>
-      <th ng-repeat="col in columns">
-        <input type="text" class="form-control" ng-model="col.name">
-      </th>
-    </tr>
-
-    <tr>
-      <th class="legend">
         Type:
       </th>
       <th ng-repeat="col in columns">
-        <select class="form-control" ng-model="col.concept" ng-change="changeConcept(col)">
+        <select class="form-control" ng-model="col.concept"
+          ng-change="updateConcept(col)"
+          ng-disabled="!possibleMeasure(col)">
           <option value="attribute">Descriptive attribute</option>
-          <option value="measure">Money</option>
+          <option value="measure">Amount</option>
         </select>
       </th>
     </tr>
@@ -42,16 +26,44 @@
         Dimension:
       </th>
       <th ng-repeat="col in columns">
-        <select ng-show="col.concept == 'measure'" class="form-control tbl-select"
+        <select ng-show="col.concept == 'measure'" class="form-control"
           ng-model="col.label" disabled>
           <option value="{{col.label}}">{{col.label}}</option>
         </select>
-        <select ng-show="col.concept == 'attribute'" class="form-control tbl-select"
-          ng-model="col.dimension.name" ng-options="d.name as d.label for d in getDimensions()"></select>
-        <a class="btn">
-          <i class="fa fa-pencil-square-o"></i>
-        </a>
-      
+        <span ng-show="col.concept == 'attribute'">
+          <select class="form-control tbl-select"
+            ng-model="col.dimension.name" ng-options="d.name as d.label for d in getDimensions()"></select>
+          <a class="btn" ng-click="editConcept(col)">
+            <i class="fa fa-pencil-square-o"></i>
+          </a>
+        </span>
+      </th>
+    </tr>
+
+    <tr>
+      <th class="legend">
+        Field title:
+      </th>
+      <th ng-repeat="col in columns">
+        <input type="text" class="form-control" ng-model="col.label">
+      </th>
+    </tr>
+
+    <tr>
+      <th class="legend">
+        Field slug:
+      </th>
+      <th ng-repeat="col in columns">
+        <input type="text" class="form-control" ng-model="col.name">
+      </th>
+    </tr>
+
+    <tr>
+      <th class="legend">
+        Field type:
+      </th>
+      <th ng-repeat="col in columns">
+        <input type="text" class="form-control" ng-model="col.type" readonly>
       </th>
     </tr>
 
