@@ -8,8 +8,8 @@
       <th class="legend">
         Title:
       </th>
-      <th ng-repeat="(name, field) in structure.fields">
-        <input type="text" class="form-control" ng-model="field.title">
+      <th ng-repeat="col in columns">
+        <input type="text" class="form-control" ng-model="col.label">
       </th>
     </tr>
 
@@ -17,18 +17,18 @@
       <th class="legend">
         API name:
       </th>
-      <th ng-repeat="(name, field) in structure.fields">
-        <input type="text" class="form-control" ng-model="field.name">
+      <th ng-repeat="col in columns">
+        <input type="text" class="form-control" ng-model="col.name">
       </th>
     </tr>
 
-    <tr ng-repeat="row in structure.samples">
-      <th class="legend" rowspan="{{structure.samples.length}}" ng-show="$first">
+    <tr ng-repeat="row in samples">
+      <th class="legend" rowspan="{{samples.length}}" ng-show="$first">
         Samples:
       </th>
-      <td ng-repeat="(name, field) in structure.fields"
-          ng-class="getCellClass(field, row[name])">
-        {{row[name] || '&hellip;'}}
+      <td ng-repeat="col in columns"
+          ng-class="getCellClass(col.column, row[col.column])">
+        {{row[col.column] || '&hellip;'}}
       </td>
     </tr>
 
