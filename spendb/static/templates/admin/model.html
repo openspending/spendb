@@ -18,7 +18,7 @@
 
     <tr>
       <th class="legend">
-        API name:
+        Field:
       </th>
       <th ng-repeat="col in columns">
         <input type="text" class="form-control" ng-model="col.name">
@@ -27,13 +27,31 @@
 
     <tr>
       <th class="legend">
-        Purpose:
+        Type:
       </th>
       <th ng-repeat="col in columns">
         <select class="form-control" ng-model="col.concept" ng-change="changeConcept(col)">
-          <option value="attribute">Independent variable (Dimension attribute)</option>
-          <option value="measure">Dependent variable (Measure)</option>
+          <option value="attribute">Descriptive attribute</option>
+          <option value="measure">Money</option>
         </select>
+      </th>
+    </tr>
+
+    <tr>
+      <th class="legend">
+        Dimension:
+      </th>
+      <th ng-repeat="col in columns">
+        <select ng-show="col.concept == 'measure'" class="form-control tbl-select"
+          ng-model="col.label" disabled>
+          <option value="{{col.label}}">{{col.label}}</option>
+        </select>
+        <select ng-show="col.concept == 'attribute'" class="form-control tbl-select"
+          ng-model="col.dimension.name" ng-options="d.name as d.label for d in getDimensions()"></select>
+        <a class="btn">
+          <i class="fa fa-pencil-square-o"></i>
+        </a>
+      
       </th>
     </tr>
 

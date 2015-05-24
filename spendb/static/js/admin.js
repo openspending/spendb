@@ -27,17 +27,18 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
   function($scope, $http, $window, $timeout, $rootScope, dataset, data, validation) {
   $scope.dataset = dataset;
   $scope.samples = data.structure.samples;
+  $scope.model = data.model;
   $scope.errors = {};
 
   $scope.save = function(form) {
-    var model = columnsToModel($scope.columns);
-    var dfd = $http.post(dataset.api_url + '/model', model);
+    columnsToModel($scope.columns);
+    var dfd = $http.post(dataset.api_url + '/model', data.model);
     dfd.then(function(res) {
       $scope.errors = {};
-      $scope.columns = modelToColumns(res.data);
+      data.model = res.data;
+      $scope.columns = modelToColumns();
       flash.setMessage("Your changes have been saved!", "success");
     }, function(res) {
-      $scope.columns = modelToColumns(model);
       $scope.errors = res.data.errors;
     });
   };
@@ -53,17 +54,17 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     return true;
   };
 
-  var inferDimension = function(name, label, model) {
-    if (!model.dimensions[name]) {
-      model.dimensions[name] = {
+  var inferDimension = function(name, label) {
+    if (!data.model.dimensions[name]) {
+      data.model.dimensions[name] = {
         name: name,
         label: label
       }
     }
-    return model.dimensions[name];
+    return data.model.dimensions[name];
   };
 
-  var generateColumn = function(name, spec, model) {
+  var generateColumn = function(name, spec) {
     var c = {
       name: name, 
       label: spec.title,
@@ -77,7 +78,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
       c.concept = 'attribute';
       // column titles are: "Foo (Year)"
       var dim = c.label.split(' (')[0];
-      c.dimension = inferDimension(parts[0], dim, model);
+      c.dimension = inferDimension(parts[0], dim);
     } else if (spec.type == 'integer' || spec.type == 'float') {
       // treat most numbers as measures
       if (!isYearsColumn(name)) {
@@ -88,18 +89,16 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     // so it's a dimension
     if (!c.concept) {
       c.concept = 'attribute';
-      c.dimension = inferDimension(name, c.label, model);
+      c.dimension = inferDimension(name, c.label);
     }
 
     return c;
   };
 
-  var modelToColumns = function(model) {
-    var columns = [], usedFields = [];
+  var modelToColumns = function() {
+    var model = data.model, columns = [], usedFields = [];
     model.measures = model.measures || {};
     model.dimensions = model.dimensions || {};
-
-    console.log(model);
 
     var pushColumn = function(data, concept) {
       data.concept = concept;
@@ -131,8 +130,6 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
         pushColumn(col, col.concept);
       }
     }
-
-    console.log(columns);
     return columns;
   };
 
@@ -146,7 +143,6 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
           column: col.column
         };
       } else {
-        console.log('COL', col);
         var dim = col.dimension.name;
         if (!model.dimensions[dim]) {
           model.dimensions[dim] = {
@@ -160,19 +156,34 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
         };
       }
     }
-    console.log('MODEL', model);
-    return model;
+    data.model = model;
+    $scope.model = model;
   };
 
-  $scope.columns = modelToColumns(data.model);
+  $scope.columns = modelToColumns();
 
   $scope.changeConcept = function(col) {
     if (col.concept == 'attribute') {
-      var model = {dimensions: {}};
-      col.dimension = inferDimension(col.name, col.label, model);
+      col.dimension = inferDimension(col.name, col.label);
     } else {
       delete col.dimension;
     }
+  };
+
+  $scope.getDimensions = function() {
+    var dimensions = [], objects = [];
+    for (var i in $scope.columns) {
+      var col = $scope.columns[i];
+      if (col.dimension && dimensions.indexOf(col.dimension.name) == -1) {
+        dimensions.push(col.dimension.name);
+        objects.push(col.dimension);
+      }
+    }
+    return objects.sort(function(a, b) {
+      if (a.label > b.label) return 1;
+      if (a.label < b.label) return -1;
+      return 0;
+    });
   };
 
   $scope.getCellClass = function(field, value) {

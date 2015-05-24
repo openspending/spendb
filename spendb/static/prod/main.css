@@ -7154,3 +7154,7 @@ footer p {
   color: #eeeeee;
   background-color: #fbfbfb;
 }
+.table.model-table .form-control.tbl-select {
+  width: 80%;
+  display: inline-block;
+}
