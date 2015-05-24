@@ -3,6 +3,7 @@
 spendb.controller('NewCtrl', ['$scope', '$document', '$http', '$location', 'reference', 'validation', 'session',
   function($scope, $document, $http, $location, reference, validation, session) {
 
+  $scope.validSlug = validation.validSlug;
   $scope.dataset = {'category': 'budget', 'territories': []};
   $scope.reference = reference;
   $scope.session = session;
