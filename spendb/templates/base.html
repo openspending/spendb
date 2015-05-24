@@ -32,7 +32,7 @@
       {% include '_nav.html' %}
 
       <div class="banner" ng-cloak>
-        <div class="container">
+        <div class="container-fluid">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               <div class="row">
@@ -55,12 +55,12 @@
         </div>
       </div>
 
-      <div class="container">
+      <div class="container-fluid">
         {% block content %}{% endblock %}
       </div>
     </div>
 
-    <div id="catapult-cookie-bar" ng-show="showCookieWarning">
+    <div id="catapult-cookie-bar" ng-show="showCookieWarning" ng-cloak>
       {% trans %}This site uses cookies{% endtrans %}
       <button id="catapultCookie" ng-click="hideCookieWarning()">
         {% trans %}Okay, thanks{% endtrans %}
