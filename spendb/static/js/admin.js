@@ -140,6 +140,15 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
 
   $scope.columns = modelToColumns(data.model);
 
+  $scope.changeConcept = function(col) {
+    if (col.concept == 'attribute') {
+      var model = {dimensions: {}};
+      col.dimension = inferDimension(col.name, col.label, model);
+    } else {
+      delete col.dimension;
+    }
+  };
+
   $scope.getCellClass = function(field, value) {
     var clazz = 'text';
     if (['integer', 'float', 'decimal'].indexOf(field.type) != -1) {

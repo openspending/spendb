@@ -22,6 +22,18 @@
       </th>
     </tr>
 
+    <tr>
+      <th class="legend">
+        Purpose:
+      </th>
+      <th ng-repeat="col in columns">
+        <select class="form-control" ng-model="col.concept" ng-change="changeConcept(col)">
+          <option value="attribute">Independent variable (Dimension attribute)</option>
+          <option value="measure">Dependent variable (Measure)</option>
+        </select>
+      </th>
+    </tr>
+
     <tr ng-repeat="row in samples">
       <th class="legend" rowspan="{{samples.length}}" ng-show="$first">
         Samples:
@@ -35,24 +47,3 @@
   </table>
 </div>
 
-<!-- 
-<script>
-  (function ($) {
-    $(document).on('mousewheel', function(e) { 
-      var $target = $(e.target).closest('.scrollable-h');
-      var scroll = $target.scrollLeft();
-      var maxScroll = $target.find('.scrollable-h-content').width() - $target.width();
-
-      if(scroll <= 0) {
-        if(scroll <= 0 && e.originalEvent.wheelDeltaX >= 0) {
-          e.preventDefault();
-        }
-      }
-      if(scroll >= maxScroll) {
-        if (scroll >1 && e.originalEvent.wheelDeltaX <= 0) {
-          e.preventDefault();
-        }
-      }
-  });}(jQuery));
-</script>
- -->
