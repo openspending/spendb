@@ -23,20 +23,22 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeP
 }]);
 
 
-spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', 'dataset', 'data',
-  function($scope, $http, $window, $timeout, $rootScope, dataset, data) {
-  var modelApi = dataset.api_url + '/model';
-  
+spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', 'dataset', 'data', 'validation',
+  function($scope, $http, $window, $timeout, $rootScope, dataset, data, validation) {
   $scope.dataset = dataset;
   $scope.samples = data.structure.samples;
+  $scope.errors = {};
 
   $scope.save = function(form) {
     var model = columnsToModel($scope.columns);
-    var dfd = $http.post(modelApi, model);
+    var dfd = $http.post(dataset.api_url + '/model', model);
     dfd.then(function(res) {
+      $scope.errors = {};
       $scope.columns = modelToColumns(res.data);
       flash.setMessage("Your changes have been saved!", "success");
-    }, validation.handle(form));
+    }, function(res) {
+      $scope.errors = res.data.errors;
+    });
   };
 
   var isYearsColumn = function(column) {
@@ -134,7 +136,9 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
   };
 
   var columnsToModel = function(columns) {
-    var model = {};
+    var model = {dimensions: {}, measures: {}};
+
+    console.log(model);
     return model;
   };
 

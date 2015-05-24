@@ -1,4 +1,7 @@
-
+<div ng-repeat="(field, message) in errors"
+  class="alert alert-danger" role="alert">
+  <strong>{{field}}:</strong> {{message}}
+</div>
 
 <div id="model-table-wrap">
   <table class="table table-condensed table-bordered model-table">
@@ -47,3 +50,10 @@
   </table>
 </div>
 
+<hr/>
+
+<div class="">
+  <a ng-click="save()" class="btn btn-lg btn-success">
+    Save and apply
+  </a>
+</div>
