@@ -32,7 +32,7 @@
         </select>
         <span ng-show="col.concept == 'attribute'">
           <select class="form-control tbl-select"
-            ng-model="col.dimension.name" ng-options="d.name as d.label for d in getDimensions()"></select>
+            ng-model="col.dimension" ng-options="d as d.label group by d.group for d in getDimensions(col)"></select>
           <a class="btn" ng-click="editConcept(col)">
             <i class="fa fa-pencil-square-o"></i>
           </a>

@@ -177,7 +177,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     return col.type == 'integer' || col.type == 'float';
   };
 
-  $scope.updateConcept = function(col) {
+  $scope.updateConcept = function() {
     if (col.concept == 'attribute') {
       col.dimension = inferDimension(col.name, col.label);
     } else {
@@ -201,14 +201,22 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     });
   };
 
-  $scope.getDimensions = function() {
-    var dimensions = [], objects = [];
+  $scope.getDimensions = function(col) {
+    var dimensions = [], objects = [], colDim = false;
     for (var i in $scope.columns) {
-      var col = $scope.columns[i];
-      if (col.dimension && dimensions.indexOf(col.dimension.name) == -1) {
-        dimensions.push(col.dimension.name);
-        objects.push(col.dimension);
+      var coli = $scope.columns[i],
+          dim = coli.dimension;
+      if (dim && dimensions.indexOf(dim.name) == -1) {
+        if (col.name == dim.name) colDim = true;
+        dim.group = 'Currently in use';
+        dimensions.push(dim.name);
+        objects.push(dim);
       }
+    }
+    if (!colDim) {
+      var dim = inferDimension(col.name, col.label)
+      dim.group = 'Create a new dimension'
+      objects.push(dim);
     }
     return objects.sort(function(a, b) {
       if (a.label > b.label) return 1;
