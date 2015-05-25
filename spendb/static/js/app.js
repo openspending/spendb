@@ -39,7 +39,8 @@ spendb.config(['$routeProvider', '$locationProvider',
     controller: 'AdminMetadataCtrl',
     resolve: {
       dataset: loadDataset,
-      reference: loadReferenceData
+      reference: loadReferenceData,
+      managers: loadManagers
     }
   });
 

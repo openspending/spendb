@@ -6,11 +6,35 @@ spendb.controller('AdminIndexCtrl', ['$scope', '$http', '$window', '$routeParams
 }]);
 
 
-spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeParams', 'reference', 'dataset', 'flash', 'validation',
-  function($scope, $http, $location, $routeParams, reference, dataset, flash, validation) {
+spendb.controller('AdminMetadataCtrl', ['$scope', '$q', '$http', '$location', '$routeParams', 'reference', 'dataset', 'managers', 'flash', 'validation',
+  function($scope, $q, $http, $location, $routeParams, reference, dataset, managers, flash, validation) {
 
   $scope.reference = reference;
   $scope.dataset = dataset;
+  $scope.managers = managers;
+
+  $scope.suggestAccounts = function(query) {
+    var dfd = $q.defer(),
+        params =  {q: query};
+    $http.get('/accounts/_complete', {params: params}).then(function(es) {
+        dfd.resolve(es.data.results);
+    });
+    return dfd.promise;
+  };
+
+  $scope.addAccount = function() {
+    if ($scope.managers.fresh && $scope.managers.fresh.name) {
+      // Check if this account is already there.
+      $scope.managers.push($scope.managers);
+      $scope.managers.fresh = null;
+    }
+  };
+
+  $scope.removeAccount = function(account) {
+    if ($scope.managers.indexOf(account) != -1) {
+      $scope.managers.splice($scope.managers.indexOf(account), 1);
+    }
+  };
 
   $scope.save = function(form) {
     var dfd = $http.post(dataset.api_url, $scope.dataset);
