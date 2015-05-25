@@ -59,8 +59,8 @@ spendb.config(['$routeProvider', '$locationProvider',
 }]);
 
 
-spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$sce', 'flash', 'session',
-  function($scope, $location, $http, $cookies, $window, $sce, flash, session) {
+spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'flash', 'session',
+  function($scope, $location, $http, $cookies, $window, $document, $sce, flash, session) {
   
   $scope.flash = flash;
   $scope.session = {};
@@ -80,6 +80,13 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
     });
     return false;
   };
+
+  // reset the page.
+  $scope.resetScroll = function() {
+    var elem = angular.element(document.getElementsByTagName('body'));
+    $document.scrollToElement(elem, 0, 300);
+  };
+
 
   // Allow SCE escaping in the app
   $scope.trustAsHtml = function(text) {

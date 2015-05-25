@@ -17,6 +17,7 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$http', '$location', '$routeP
     dfd.then(function(res) {
       $scope.dataset = res.data;
       flash.setMessage("Your changes have been saved!", "success");
+      $scope.resetScroll();
     }, validation.handle(form));
   };
 
@@ -34,8 +35,8 @@ spendb.controller('AdminConceptCtrl', ['$scope', '$modalInstance', 'concept', 'd
 
 }]);
 
-spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', '$modal', 'dataset', 'data', 'validation',
-  function($scope, $http, $window, $timeout, $rootScope, $modal, dataset, data, validation) {
+spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '$rootScope', '$modal', 'dataset', 'data', 'validation', 'flash',
+  function($scope, $http, $window, $timeout, $rootScope, $modal, dataset, data, validation, flash) {
   $scope.validSlug = validation.validSlug;
   $scope.dataset = dataset;
   $scope.samples = data.structure.samples;
@@ -50,8 +51,10 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
       data.model = res.data;
       $scope.columns = modelToColumns();
       flash.setMessage("Your changes have been saved!", "success");
+      $scope.resetScroll();
     }, function(res) {
       $scope.errors = res.data.errors;
+      $scope.resetScroll();
     });
   };
 
