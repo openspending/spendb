@@ -96,6 +96,7 @@ class Account(db.Model):
         account_dict = {
             'name': self.name,
             'fullname': self.fullname,
+            'display_name': self.display_name,
             'email': self.email,
             'admin': self.admin,
             'twitter_handle': self.twitter_handle

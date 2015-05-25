@@ -215,6 +215,41 @@ class TestDatasetApiController(ControllerTestCase):
                                query_string={'api_key': self.user.api_key})
         assert '400' in res.status, res.status
 
+    def test_view_managers(self):
+        url = url_for('datasets_api.managers', name='cra')
+        res = self.client.get(url)
+        assert '200' in res.status, res.status
+        mgrs = [m['name'] for m in res.json['managers']]
+        assert len(mgrs) == 1, mgrs
+        assert self.user.name in mgrs, res.json
+
+    def test_update_managers(self):
+        url = url_for('datasets_api.managers', name='cra')
+        res = self.client.get(url)
+        m = res.json
+        user2 = make_account('test2')
+        db.session.commit()
+        m['managers'].append(user2.name)
+
+        res = self.client.post(url, data=json.dumps(m),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert '200' in res.status, res.status
+        mgrs = [x['name'] for x in res.json['managers']]
+        assert len(mgrs) == 2, mgrs
+        assert self.user.name in mgrs, res.json
+        assert user2.name in mgrs, res.json
+
+        m['managers'] = [user2.name]
+        res = self.client.post(url, data=json.dumps(m),
+                               headers={'content-type': 'application/json'},
+                               query_string={'api_key': self.user.api_key})
+        assert '200' in res.status, res.status
+        mgrs = [x['name'] for x in res.json['managers']]
+        assert len(mgrs) == 2, mgrs
+        assert self.user.name in mgrs, res.json
+        assert user2.name in mgrs, res.json
+
     def test_publish(self):
         cra = Dataset.by_name('cra')
         cra.private = True

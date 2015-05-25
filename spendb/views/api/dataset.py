@@ -13,7 +13,7 @@ from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.error import api_json_errors
-from spendb.validation.dataset import validate_dataset
+from spendb.validation.dataset import validate_dataset, validate_managers
 from spendb.validation.model import validate_model
 from spendb.reference import COUNTRIES, LANGUAGES
 
@@ -120,6 +120,27 @@ def update_model(name):
     dataset.data['model'] = validate_model(request_data())
     db.session.commit()
     return model(name)
+
+
+@blueprint.route('/datasets/<name>/managers')
+@api_json_errors
+def managers(name):
+    dataset = get_dataset(name)
+    etag_cache_keygen(dataset)
+    return jsonify({'managers': dataset.managers})
+
+
+@blueprint.route('/datasets/<name>/managers', methods=['POST', 'PUT'])
+@api_json_errors
+def update_managers(name):
+    dataset = get_dataset(name)
+    require.dataset.update(dataset)
+    data = validate_managers(request_data())
+    if current_user not in data['managers']:
+        data['managers'].append(current_user)
+    dataset.managers = data['managers']
+    db.session.commit()
+    return managers(name)
 
 
 @blueprint.route('/datasets/<name>', methods=['DELETE'])

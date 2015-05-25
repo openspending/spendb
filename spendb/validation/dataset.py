@@ -4,6 +4,7 @@ from colander import OneOf, Length, drop
 from spendb.reference import CURRENCIES, LANGUAGES
 from spendb.reference import COUNTRIES, CATEGORIES
 from spendb.validation.common import valid_name, prepare_name
+from spendb.validation.account import AccountRef
 
 
 class DatasetLanguages(SequenceSchema):
@@ -29,5 +30,17 @@ class DatasetForm(Schema):
     territories = DatasetTerritories(missing=drop)
 
 
+class Managers(SequenceSchema):
+    manager = SchemaNode(AccountRef())
+
+
+class ManagersForm(Schema):
+    managers = Managers(missing=[])
+
+
 def validate_dataset(data):
     return DatasetForm().deserialize(data)
+
+
+def validate_managers(data):
+    return ManagersForm().deserialize(data)
