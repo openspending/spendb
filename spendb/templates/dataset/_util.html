@@ -1,0 +1,9 @@
+{% macro dimensions_list(dataset) -%}
+    <ul>
+      {% for dimension in dataset.model.dimensions %} 
+        <li>
+          <strong>{{ dimension.label or dimension.name }}</strong>
+        </li>
+      {% endfor %}
+    </ul>
+{%- endmacro %}

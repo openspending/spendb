@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% from "dataset/_util.html" import dimensions_list as dimensions_list %}
+
+{% block page_title %}{{ dataset.label }}{% endblock %}
+{% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
+
+{% block content %}
+  <h1 class="page-header">
+    {{ dataset.label }}
+    <div class="pull-right">
+      <!-- <a class="btn btn-default" href="{{url_for('dataset.view', dataset=dataset.name)}}/admin">
+        {% trans %}Manage{% endtrans %}
+      </a> -->
+    </div>
+  </h1>
+  <div>
+    <div class="row">
+      <div class="col-md-10">
+        {% block inner_content %}{% endblock %}
+      </div>
+      <div class="col-md-2">
+        <ul class="nav nav-pills nav-stacked">
+          <li>
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin">
+              Source Data
+            </a>
+          </li>
+          <li>
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/model">
+              Data Model
+            </a>
+          </li>
+          <li>
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/metadata">
+              Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

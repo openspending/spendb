@@ -30,7 +30,7 @@ def index():
 
 @blueprint.route('/datasets/new')
 def new():
-    return render_template('angular.html', dataset=None,
+    return render_template('angular.html',
                            templates=angular_templates(current_app))
 
 
@@ -50,7 +50,7 @@ def view(dataset):
 def app(dataset, *a, **kw):
     dataset = get_dataset(dataset)
     etag_cache_keygen(dataset.updated_at)
-    return render_template('angular.html', dataset=dataset,
+    return render_template('dataset/angular.html', dataset=dataset,
                            templates=angular_templates(current_app))
 
 

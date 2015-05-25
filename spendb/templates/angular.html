@@ -1,12 +1,8 @@
 {% extends "base.html" %}
-
-{% block page_title %}{{ dataset.label if dataset else '' }}{% endblock %}
-{% block page_desc %}{{ dataset.description if dataset else '' | markdown_preview }}{% endblock %}
+{% from "_util.html" import angular_templates %}
 
 {% block scripts %}
-  {% for path, tmpl in templates %}
-    <script id="{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
-  {% endfor %}
+  {{ angular_templates(templates) }}
 {% endblock %}
 
 {% block content %}

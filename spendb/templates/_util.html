@@ -55,3 +55,10 @@
     </nav>
   {% endif %}
 {%- endmacro %}
+
+{% macro angular_templates(templates) -%}
+  {% for path, tmpl in templates %}
+    <script id="{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
+  {% endfor %}
+{%- endmacro %}
+
