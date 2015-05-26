@@ -28,13 +28,12 @@
                   ng-click="removeManager(manager)">remove</a>
               </td>
             </tr>
-            <tr ng-repeat="manager in managers.managers">
-              <td>
+            <tr>
+              <td colspan="2">
                 <input class="form-control" placeholder="Add another user"
-                  ng-model="managers.fresh" ng-change="addAccount()"
+                  ng-model="managers.fresh"
+                  typeahead-editable="false" typeahead-on-select="addAccount($item)"
                   typeahead="a as a.display_name for a in suggestAccounts($viewValue)">
-              </td>
-              <td width="20%">
               </td>
             </tr>
           </table>
