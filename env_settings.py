@@ -4,6 +4,7 @@ get = os.environ.get
 DEBUG = False
 ASSETS_DEBUG = False
 CELERY_ALWAYS_EAGER = False
+CACHE = True
 
 SECRET_KEY = get('SECRET')
 
