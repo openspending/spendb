@@ -30,3 +30,5 @@ apikit>=0.3.1
 
 #cubes>=1.0 - until pull request comes through
 git+https://github.com/pudo/cubes.git@a18f043424155594321ce83f89218850febd949c
+
+gunicorn>=19.3.0
