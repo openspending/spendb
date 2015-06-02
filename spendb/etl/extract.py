@@ -16,6 +16,10 @@ def date_field(name, section):
 def field_transform(fields):
     spec = {}
     for field in fields:
+        # have mercy:
+        if field['type'] == 'decimal':
+            field['type'] = 'float'
+
         if field['type'] == 'date':
             for section in ['year', 'month', 'day']:
                 name = date_field(field['name'], section)
