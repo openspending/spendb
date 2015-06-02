@@ -1,17 +1,21 @@
 
-spendb.controller('AdminIndexCtrl', ['$scope', '$http', '$window', '$routeParams', 'dataset',
-  function($scope, $http, $window, $routeParams, dataset, sources) {
+spendb.controller('AdminDataCtrl', ['$scope', '$rootScope', '$http', '$window', '$routeParams', 'dataset',
+  function($scope, $rootScope, $http, $window, $routeParams, dataset, sources) {
   $scope.dataset = dataset;
+
+  $rootScope.setSection('data');
 
 }]);
 
 
-spendb.controller('AdminMetadataCtrl', ['$scope', '$q', '$http', '$location', '$routeParams', 'reference', 'dataset', 'managers', 'flash', 'validation',
-  function($scope, $q, $http, $location, $routeParams, reference, dataset, managers, flash, validation) {
+spendb.controller('AdminMetadataCtrl', ['$scope', '$rootScope', '$q', '$http', '$location', '$routeParams', 'reference', 'dataset', 'managers', 'flash', 'validation',
+  function($scope, $rootScope, $q, $http, $location, $routeParams, reference, dataset, managers, flash, validation) {
 
   $scope.reference = reference;
   $scope.dataset = dataset;
   $scope.managers = managers;
+
+  $rootScope.setSection('metadata');
 
   $scope.suggestAccounts = function(query) {
     var dfd = $q.defer(),
@@ -79,6 +83,8 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
   $scope.samples = data.structure.samples;
   $scope.model = data.model;
   $scope.errors = {};
+
+  $rootScope.setSection('model');
 
   $scope.save = function(form) {
     columnsToModel($scope.columns);
@@ -284,5 +290,7 @@ spendb.controller('AdminRunCtrl', ['$scope', '$http', '$location', '$routeParams
 
   $scope.dataset = dataset;
   $scope.run = run.data;
+
+  $rootScope.setSection('data');
 
 }]);

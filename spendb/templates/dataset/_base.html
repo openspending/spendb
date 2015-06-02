@@ -6,42 +6,44 @@
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
 
 {% block content %}
-  <h1 class="page-header">
-    {{ dataset.label }}
-    <div class="pull-right">
-      <!-- <a class="btn btn-default" href="{{url_for('dataset.view', dataset=dataset.name)}}/admin">
-        {% trans %}Manage{% endtrans %}
-      </a> -->
-    </div>
-  </h1>
-  <div>
-    <div class="row">
-      <div class="col-md-10">
-        {% block inner_content %}{% endblock %}
+  <div ng-controller="DatasetCtrl">
+    <h1 class="page-header">
+      {{ dataset.label }}
+      <div class="pull-right">
+        <!-- <a class="btn btn-default" href="{{url_for('dataset.view', dataset=dataset.name)}}/admin">
+          {% trans %}Manage{% endtrans %}
+        </a> -->
       </div>
-      <div class="col-md-2">
-        <ul class="nav nav-pills nav-stacked">
-          <li>
-            <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin">
-              Source Data
-            </a>
-          </li>
-          <li>
-            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/model">
-              Data Model
-            </a>
-          </li>
-          <li>
-            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/metadata">
-              Settings
-            </a>
-          </li>
-        </ul>
+    </h1>
+    <div>
+      <div class="row">
+        <div class="col-md-10">
+          {% block inner_content %}{% endblock %}
+        </div>
+        <div class="col-md-2">
+          <ul class="nav nav-pills nav-stacked">
+            <li ng-class="{'active': currentSection == 'home'}">
+              <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
+                Home
+              </a>
+            </li>
+            <li ng-class="{'active': currentSection == 'data'}">
+              <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/data">
+                Source Data
+              </a>
+            </li>
+            <li ng-class="{'active': currentSection == 'model'}">
+              <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/model">
+                Data Model
+              </a>
+            </li>
+            <li ng-class="{'active': currentSection == 'metadata'}">
+              <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/metadata">
+                Settings
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

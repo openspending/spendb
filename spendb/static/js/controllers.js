@@ -46,3 +46,16 @@ spendb.controller('NewCtrl', ['$scope', '$document', '$http', '$location', 'refe
   };
 
 }]);
+
+
+
+spendb.controller('DatasetCtrl', ['$scope', '$rootScope', '$http',
+  function($scope, $rootScope, $http) {
+  $scope.currentSection = 'home';
+
+  $rootScope.setSection = function(section) {
+    $scope.currentSection = section;
+  }
+
+
+}]);

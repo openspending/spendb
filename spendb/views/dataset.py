@@ -43,7 +43,7 @@ def view(dataset):
                            managers=managers)
 
 
-@blueprint.route('/datasets/<dataset>/admin')
+@blueprint.route('/datasets/<dataset>/admin/data')
 @blueprint.route('/datasets/<dataset>/admin/metadata')
 @blueprint.route('/datasets/<dataset>/admin/model')
 @blueprint.route('/datasets/<dataset>/admin/runs/<run>')

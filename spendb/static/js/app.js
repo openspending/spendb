@@ -17,9 +17,9 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/admin', {
-    templateUrl: 'admin/index.html',
-    controller: 'AdminIndexCtrl',
+  $routeProvider.when('/datasets/:dataset/admin/data', {
+    templateUrl: 'admin/data.html',
+    controller: 'AdminDataCtrl',
     resolve: {
       dataset: loadDataset
     }

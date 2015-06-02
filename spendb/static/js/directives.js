@@ -1,5 +1,4 @@
 
-
 spendb.directive('metadataEditor', ['$http',
   function ($http, data) {
   return {
