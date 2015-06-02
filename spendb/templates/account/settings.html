@@ -1,15 +1,8 @@
 {% extends "base.html" %}
 
-{% block page_title %}{% trans %}Settings for:{% endtrans %} {{ current_user.name }}{% endblock %}
+{% block page_title %}{% trans %}Account Settings{% endtrans %}{% endblock %}
 
 {% block content %}
-  <h1 class="page-header">
-    {% trans %}Account Settings{% endtrans %}
-    <small>
-      {{ current_user.fullname }}
-    </small>
-  </h1>
-
   <div class="row">
     <div class="col-sm-offset-2 col-sm-10">
       {% formfill form_fill with form_errors %}

@@ -4,55 +4,56 @@
 {% block page_title %}{{ dataset.label }}{% endblock %}
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
 
-{% block content %}
+
+{% block title_buttons %}
+  {% if can.dataset.update(dataset) %}
+  <div class="btn-group" role="group" ng-cloak>
+    <button type="button" class="btn" ng-click="togglePrivate()"
+      ng-class="{'btn-danger': !dataset.private, 'btn-success': dataset.private}">
+      <span ng-show="dataset.private">Publish</span>
+      <span ng-hide="dataset.private">Retract</span>
+    </button>
+    <button type="button" ng-click="deleteDataset()" class="btn btn-danger">Delete</button>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block page %}
   <div ng-controller="DatasetCtrl">
-    <h1 class="page-header">
-      {{ dataset.label }}
-      <div class="pull-right">
+    {{ super() }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-10">
+      {% block inner_content %}{% endblock %}
+    </div>
+    <div class="col-md-2" ng-cloak>
+      <ul class="nav nav-pills nav-stacked">
+        <li ng-class="{'active': currentSection == 'home'}">
+          <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
+            Home
+          </a>
+        </li>
         {% if can.dataset.update(dataset) %}
-        <div class="btn-group" role="group" ng-cloak>
-          <button type="button" class="btn" ng-click="togglePrivate()"
-            ng-class="{'btn-danger': !dataset.private, 'btn-success': dataset.private}">
-            <span ng-show="dataset.private">Publish</span>
-            <span ng-hide="dataset.private">Retract</span>
-          </button>
-          <button type="button" ng-click="deleteDataset()" class="btn btn-danger">Delete</button>
-        </div>
+          <li ng-class="{'active': currentSection == 'data'}">
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/data">
+              Source Data
+            </a>
+          </li>
+          <li ng-class="{'active': currentSection == 'model'}">
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/model">
+              Data Model
+            </a>
+          </li>
+          <li ng-class="{'active': currentSection == 'metadata'}">
+            <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/metadata">
+              Settings
+            </a>
+          </li>
         {% endif %}
-      </div>
-    </h1>
-    <div>
-      <div class="row">
-        <div class="col-md-10">
-          {% block inner_content %}{% endblock %}
-        </div>
-        <div class="col-md-2" ng-cloak>
-          <ul class="nav nav-pills nav-stacked">
-            <li ng-class="{'active': currentSection == 'home'}">
-              <a href="{{url_for('dataset.view', dataset=dataset.name)}}">
-                Home
-              </a>
-            </li>
-            {% if can.dataset.update(dataset) %}
-              <li ng-class="{'active': currentSection == 'data'}">
-                <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/data">
-                  Source Data
-                </a>
-              </li>
-              <li ng-class="{'active': currentSection == 'model'}">
-                <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/model">
-                  Data Model
-                </a>
-              </li>
-              <li ng-class="{'active': currentSection == 'metadata'}">
-                <a href="{{url_for('dataset.view', dataset=dataset.name)}}/admin/metadata">
-                  Settings
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
+      </ul>
     </div>
   </div>
 {% endblock %}

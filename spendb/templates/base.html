@@ -4,7 +4,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block page_title %}{% endblock %} - {{ site_title }}</title>
+    <title>
+      {% block page_title %}{% endblock %} - 
+      {{ site_title }}
+    </title>
 
     <meta name="description" content="{% block page_desc %}{% trans %}We're enabling anyone to explore, visualize and track government spending.{% endtrans %}{% endblock %}" />
     <meta name="author" content="Open Knowledge Foundation" />
@@ -28,8 +31,18 @@
 
   <!-- templates/layout.html body -->
   <body ng-controller="AppCtrl">
+    {% block page %}
     <div id="page">
       {% include '_nav.html' %}
+
+      <div class="container-fluid title" ng-cloak>
+        <div class="pull-right">
+            {% block title_buttons %}{% endblock %}
+        </div>
+        <h1 class="page-header">
+          {{ self.page_title() }}
+        </h1>
+      </div>
 
       <div class="banner" ng-cloak>
         <div class="container-fluid">
@@ -59,6 +72,7 @@
         {% block content %}{% endblock %}
       </div>
     </div>
+    {% endblock page %}
 
     <div id="catapult-cookie-bar" ng-show="showCookieWarning" ng-cloak>
       {% trans %}This site uses cookies{% endtrans %}

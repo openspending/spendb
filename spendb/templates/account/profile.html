@@ -3,19 +3,13 @@
 
 {% block page_title %}{{ profile.fullname }}{% endblock %}
 
+{% block title_buttons %}
+  <a class="btn btn-success" href="{{ url_for('account.settings') }}">
+    {% trans %}Settings{% endtrans %}
+  </a>
+{% endblock %}
+
 {% block content %}
-  <h1 class="page-header">
-    {{ profile.fullname }}
-
-    {% if current_user == profile %}
-      <div class="pull-right">
-        <a class="btn btn-success" href="{{ url_for('account.settings') }}">
-          {% trans %}Settings{% endtrans %}
-        </a>
-      </div>
-    {% endif %}
-  </h1>
-
   <div class="row">
     <div class="col-md-3">
       <img src="{{ profile.email | gravatar(size=200) }}" alt="Gravatar for {{profile.name}}">
