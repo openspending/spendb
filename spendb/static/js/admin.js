@@ -124,6 +124,17 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     });
   };
 
+  $scope.canModel = function() {
+    if (data.structure.fields) {
+      for (var f in data.structure.fields) {
+        if (data.structure.fields.hasOwnProperty(f)) {
+          return true;
+        }
+      }  
+    }
+    return false;
+  };
+
   var isYearsColumn = function(column) {
     // just kidding
     for (var row in data.structure.samples) {

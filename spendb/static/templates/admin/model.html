@@ -3,87 +3,97 @@
   <strong>{{field}}:</strong> {{message}}
 </div>
 
-<div id="model-table-wrap">
-  <table class="table table-condensed table-bordered model-table">
-    <!-- Things needed here: dimension select/edit/create,
-         attribute label, attribute name. -->
-    <tr>
-      <th class="legend">
-        Type:
-      </th>
-      <th ng-repeat="col in columns">
-        <select class="form-control" ng-model="col.concept"
-          ng-change="updateConcept(col)"
-          ng-disabled="!possibleMeasure(col)">
-          <option value="attribute">Descriptive attribute</option>
-          <option value="measure">Amount</option>
-        </select>
-      </th>
-    </tr>
-
-    <tr>
-      <th class="legend">
-        Dimension:
-      </th>
-      <th ng-repeat="col in columns">
-        <select ng-show="col.concept == 'measure'" class="form-control"
-          ng-model="col.label" disabled>
-          <option value="{{col.label}}">{{col.label}}</option>
-        </select>
-        <span ng-show="col.concept == 'attribute'">
-          <select class="form-control tbl-select"
-            ng-model="col.dimension" ng-options="d as d.label group by d.group for d in getDimensions(col)"></select>
-          <a class="btn" ng-click="editConcept(col)">
-            <i class="fa fa-pencil-square-o"></i>
-          </a>
-        </span>
-      </th>
-    </tr>
-
-    <tr>
-      <th class="legend">
-        Field title:
-      </th>
-      <th ng-repeat="col in columns">
-        <input type="text" class="form-control" ng-model="col.label">
-      </th>
-    </tr>
-
-    <tr>
-      <th class="legend">
-        Field slug:
-      </th>
-      <th ng-repeat="col in columns" ng-class="{'has-error': !validSlug(col.name)}">
-        <input type="text" class="form-control" ng-model="col.name">
-      </th>
-    </tr>
-
-    <tr>
-      <th class="legend">
-        Field type:
-      </th>
-      <th ng-repeat="col in columns">
-        <input type="text" class="form-control" ng-model="col.type" readonly>
-      </th>
-    </tr>
-
-    <tr ng-repeat="row in samples">
-      <th class="legend" rowspan="{{samples.length}}" ng-show="$first">
-        Samples:
-      </th>
-      <td ng-repeat="col in columns"
-          ng-class="getCellClass(col.column, row[col.column])">
-        {{row[col.column] || '&hellip;'}}
-      </td>
-    </tr>
-
-  </table>
+<div ng-hide="canModel()">
+  <div class="alert alert-warning" role="alert">
+  <strong>Please make sure data is loaded first.</strong> Before you can create
+  a data model, load a source data file that can be interpreted by the system.
 </div>
 
-<hr/>
+</div>
 
-<div class="">
-  <a ng-click="save()" class="btn btn-lg btn-success">
-    Save and apply
-  </a>
+<div ng-show="canModel()">
+  <div id="model-table-wrap">
+    <table class="table table-condensed table-bordered model-table">
+      <!-- Things needed here: dimension select/edit/create,
+           attribute label, attribute name. -->
+      <tr>
+        <th class="legend">
+          Type:
+        </th>
+        <th ng-repeat="col in columns">
+          <select class="form-control" ng-model="col.concept"
+            ng-change="updateConcept(col)"
+            ng-disabled="!possibleMeasure(col)">
+            <option value="attribute">Descriptive attribute</option>
+            <option value="measure">Amount</option>
+          </select>
+        </th>
+      </tr>
+
+      <tr>
+        <th class="legend">
+          Dimension:
+        </th>
+        <th ng-repeat="col in columns">
+          <select ng-show="col.concept == 'measure'" class="form-control"
+            ng-model="col.label" disabled>
+            <option value="{{col.label}}">{{col.label}}</option>
+          </select>
+          <span ng-show="col.concept == 'attribute'">
+            <select class="form-control tbl-select"
+              ng-model="col.dimension" ng-options="d as d.label group by d.group for d in getDimensions(col)"></select>
+            <a class="btn" ng-click="editConcept(col)">
+              <i class="fa fa-pencil-square-o"></i>
+            </a>
+          </span>
+        </th>
+      </tr>
+
+      <tr>
+        <th class="legend">
+          Field title:
+        </th>
+        <th ng-repeat="col in columns">
+          <input type="text" class="form-control" ng-model="col.label">
+        </th>
+      </tr>
+
+      <tr>
+        <th class="legend">
+          Field slug:
+        </th>
+        <th ng-repeat="col in columns" ng-class="{'has-error': !validSlug(col.name)}">
+          <input type="text" class="form-control" ng-model="col.name">
+        </th>
+      </tr>
+
+      <tr>
+        <th class="legend">
+          Field type:
+        </th>
+        <th ng-repeat="col in columns">
+          <input type="text" class="form-control" ng-model="col.type" readonly>
+        </th>
+      </tr>
+
+      <tr ng-repeat="row in samples">
+        <th class="legend" rowspan="{{samples.length}}" ng-show="$first">
+          Samples:
+        </th>
+        <td ng-repeat="col in columns"
+            ng-class="getCellClass(col.column, row[col.column])">
+          {{row[col.column] || '&hellip;'}}
+        </td>
+      </tr>
+
+    </table>
+  </div>
+
+  <hr/>
+
+  <div class="">
+    <a ng-click="save()" class="btn btn-lg btn-success">
+      Save and apply
+    </a>
+  </div>
 </div>
