@@ -2,6 +2,7 @@
 
 spendb.controller('NewCtrl', ['$scope', '$document', '$http', '$location', 'reference', 'validation', 'session',
   function($scope, $document, $http, $location, reference, validation, session) {
+  $scope.setTitle("Create a new dataset");
 
   $scope.validSlug = validation.validSlug;
   $scope.dataset = {'category': 'budget', 'territories': []};

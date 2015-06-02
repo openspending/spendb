@@ -26,13 +26,16 @@
 @col-21: #EF58A0;
 @col-22: #C05A89;
 
-@theme-color: @col-10;
+@theme-color: @col-7;
 @theme-darker: darken(@theme-color, 20%);
+@theme-soft: fadeout(@theme-color, 70%);
 @theme-text: #333;
 @theme-body-bg: #fff;
-@theme-footer-bg: @theme-body-bg;
-@theme-header-bg: @theme-body-bg;
-@theme-title-bg: @theme-body-bg;
+@theme-header-bg: @theme-color;
+@theme-title-bg: @gray-lighter;
+@theme-title-text: darken(@theme-title-bg, 20%);
+@theme-footer-bg: @gray-lighter;
+
 
 // @gray-base:              #000;
 // @gray-darker:            lighten(@gray-base, 13.5%); // #222
@@ -130,7 +133,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .table {
@@ -146,18 +149,27 @@ h1, h2, h3, h4 {
     }
 }
 
+.btn, .alert {
+    border: 0;
+}
+
 
 .navbar.navbar-default {
     background-color: @theme-header-bg;
-    border-bottom: 1px solid @gray-lighter;
+    border-bottom: 0;
+    //border-bottom: 1px solid @gray-lighter;
+    margin-bottom: 0;
 
     .navbar-brand {
         font-weight: 900;
-        color: @theme-color;
+        //color: @theme-color;
+        color: @theme-body-bg;
+        padding-left: 0;
     }
 
-    a {
+    a, ul.navbar-nav li a {
         cursor: pointer;
+        color: @theme-body-bg;
     }
 
     img {
@@ -168,8 +180,21 @@ h1, h2, h3, h4 {
     }
 }
 
-h1.page-header {
-    margin-top: 0;
+.title-panel {
+    margin-bottom: 1em;
+    background-color: @theme-title-bg;
+    color: @theme-title-text;
+    //border-bottom: 1px solid @gray-lighter;
+
+    h1 {
+        color: @theme-title-text;
+        padding: 0 0 0.3em 0;
+        //text-transform: uppercase;
+    }
+
+    .controls {
+        margin-top: 1em;
+    }
 }
 
 footer {
@@ -177,8 +202,7 @@ footer {
     padding: 2em 0 1em;
 
     .container-fluid {
-        border-top: 1px solid @gray-lighter;
-        padding: 1em;
+        //border-top: 1px solid @gray-lighter;
     }
 
     ul {
@@ -205,6 +229,13 @@ footer {
     min-height: 4em;
     padding: 0.5em 0 0.5em 0;
     text-align: center;
+}
+
+.alert.guidance {
+   color: lighten(@theme-text, 30%);
+   font-size: 1.2em;
+   padding-top: 0;
+   line-height: 1.7em; 
 }
 
 @import "cookies.less";

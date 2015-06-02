@@ -10,7 +10,6 @@
     </title>
 
     <meta name="description" content="{% block page_desc %}{% trans %}We're enabling anyone to explore, visualize and track government spending.{% endtrans %}{% endblock %}" />
-    <meta name="author" content="Open Knowledge Foundation" />
     <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}"
       type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml"
@@ -35,11 +34,11 @@
     <div id="page">
       {% include '_nav.html' %}
 
-      <div class="container-fluid title" ng-cloak>
-        <div class="pull-right">
+      <div class="container-fluid title-panel" ng-cloak>
+        <div class="pull-right controls">
             {% block title_buttons %}{% endblock %}
         </div>
-        <h1 class="page-header">
+        <h1 id="page-title">
           {{ self.page_title() }}
         </h1>
       </div>
@@ -90,6 +89,7 @@
     <!-- script boot section -->
     <script defer="defer">
       var SPENDB_CONFIG = SPENDB_CONFIG || {};
+      SPENDB_CONFIG.site_title = "{{ site_title }}";
 	    SPENDB_CONFIG.localeGroupSeparator = "{{ number_symbols_group }}";
 	    SPENDB_CONFIG.localeDecimalSeparator = "{{ number_symbols_decimal }}";
       SPENDB_CONFIG.reserved_terms = {{ reserved_terms | tojson }};

@@ -12,7 +12,9 @@
       {{dataset_listing(datasets)}}
     </div>
     <div class="col-md-5">
-      {{page.html | safe}}
+      <div class="alert guidance">
+        {{page.html | safe}}
+      </div>
     </div>
   </div>
 {% endblock %}

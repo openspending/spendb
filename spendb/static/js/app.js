@@ -60,8 +60,8 @@ spendb.config(['$routeProvider', '$locationProvider',
 }]);
 
 
-spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'flash', 'session',
-  function($scope, $location, $http, $cookies, $window, $document, $sce, flash, session) {
+spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'flash', 'session', 'config',
+  function($scope, $location, $http, $cookies, $window, $document, $sce, flash, session, config) {
   
   $scope.flash = flash;
   $scope.session = {};
@@ -80,6 +80,11 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
       $window.location.reload();
     });
     return false;
+  };
+
+  $scope.setTitle = function(title) {
+    angular.element('#page-title').html(title);
+    angular.element('title').html(title + ' - ' + config.site_title);
   };
 
   // reset the page.
