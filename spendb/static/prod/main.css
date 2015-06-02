@@ -6962,7 +6962,8 @@ h4 {
   color: #eeeeee;
   background-color: #fbfbfb;
 }
-.btn,
+.btn.btn-danger,
+.btn.btn-success,
 .alert {
   border: 0;
 }
@@ -7026,6 +7027,10 @@ footer p {
   font-size: 1.2em;
   padding-top: 0;
   line-height: 1.7em;
+}
+.wizard-section {
+  min-height: 40em;
+  height: 40em;
 }
 #catapult-cookie-bar {
   direction: ltr;

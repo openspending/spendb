@@ -254,7 +254,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
   };
 
   $scope.possibleMeasure = function(col) {
-    return col.type == 'integer' || col.type == 'float';
+    return col.type == 'integer' || col.type == 'float' || col.type == 'decimal';
   };
 
   $scope.updateConcept = function() {

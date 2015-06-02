@@ -86,6 +86,13 @@ spendb.directive('sourcesTable', ['$http', '$timeout',
         return angular.isDefined(scope.sources.total);
       };
 
+      scope.canModelRun = function(run) {
+        if (!run.status == 'complete') {
+          return false;  
+        }
+        return run.operation.indexOf('to database') != -1;
+      };
+
       scope.recheck = function() {
         $http.get(sourcesUrl).then(function(res) {
           var sources = res.data;

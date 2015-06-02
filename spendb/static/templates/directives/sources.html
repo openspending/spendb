@@ -40,6 +40,8 @@
       <td>
         <a ng-show="run.status == 'failed'"
           ng-href="/datasets/{{dataset.name}}/admin/runs/{{run.id}}">details &raquo;</a>
+        <a ng-show="canModelRun(run)" class="btn btn-success btn-xs"
+          ng-href="/datasets/{{dataset.name}}/admin/model">Make a model</a>
       </td>
     </tr>
   </tbody>

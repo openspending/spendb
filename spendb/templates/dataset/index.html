@@ -18,37 +18,42 @@
       {{ show_pager(pager) }}
     </div>
     <div class="col-md-4">
-      <h3>{% trans %}Countries{% endtrans %}</h3>
-      <div class="list-group">
-        {% for territory in territories %}
-          {% if not pager.has_url_state('territories', territory.get('code')) %}
-  	        <a class="list-group-item" href="{{pager.add_url_state('territories', territory.get('code'))}}">
-              <span class="badge">{{territory.get('count')}}</span>
-              {{territory.get('label')}}
-            </a>
-  	      {% else %}
-  	        <a class="list-group-item active" href="{{pager.remove_url_state('territories', territory.get('code'))}}">
-              <span class="badge">{{territory.get('count')}}</span>
-              {{territory.get('label')}}
-            </a>
-  	      {% endif %}
-        {% endfor %}
+      <div class="panel panel-default">
+        <div class="panel-heading">{% trans %}Countries covered{% endtrans %}</div>
+        <div class="list-group">
+          {% for territory in territories %}
+            {% if not pager.has_url_state('territories', territory.get('code')) %}
+              <a class="list-group-item" href="{{pager.add_url_state('territories', territory.get('code'))}}">
+                <span class="badge">{{territory.get('count')}}</span>
+                {{territory.get('label')}}
+              </a>
+            {% else %}
+              <a class="list-group-item active" href="{{pager.remove_url_state('territories', territory.get('code'))}}">
+                <span class="badge">{{territory.get('count')}}</span>
+                {{territory.get('label')}}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
-      <h3>{% trans %}Languages{% endtrans %}</h3>
-      <div class="list-group">
-        {% for language in languages %}
-          {% if not pager.has_url_state('languages', language.get('code')) %}
-            <a class="list-group-item" href="{{pager.add_url_state('languages', language.get('code'))}}">
-              <span class="badge">{{language.get('count')}}</span>
-              {{language.get('label')}}
-            </a>
-          {% else %}
-            <a class="list-group-item active" href="{{pager.remove_url_state('languages', language.get('code'))}}">
-              <span class="badge">{{language.get('count')}}</span>
-              {{language.get('label')}}
-            </a>
-          {% endif %}
-        {% endfor %}
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{% trans %}Languages{% endtrans %}</div>
+        <div class="list-group">
+          {% for language in languages %}
+            {% if not pager.has_url_state('languages', language.get('code')) %}
+              <a class="list-group-item" href="{{pager.add_url_state('languages', language.get('code'))}}">
+                <span class="badge">{{language.get('count')}}</span>
+                {{language.get('label')}}
+              </a>
+            {% else %}
+              <a class="list-group-item active" href="{{pager.remove_url_state('languages', language.get('code'))}}">
+                <span class="badge">{{language.get('count')}}</span>
+                {{language.get('label')}}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>

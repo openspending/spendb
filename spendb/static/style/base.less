@@ -118,6 +118,8 @@
 // Base style
 body {
     font-family: @font-default;
+    // font-weight: 300;
+    // letter-spacing: 0.02em;
     background: @theme-footer-bg;
 }
 
@@ -149,7 +151,7 @@ h1, h2, h3, h4 {
     }
 }
 
-.btn, .alert {
+.btn.btn-danger, .btn.btn-success, .alert {
     border: 0;
 }
 
@@ -236,6 +238,11 @@ footer {
    font-size: 1.2em;
    padding-top: 0;
    line-height: 1.7em; 
+}
+
+.wizard-section {
+    min-height: 40em;
+    height: 40em;
 }
 
 @import "cookies.less";
