@@ -41,7 +41,7 @@ spendb.controller('NewCtrl', ['$scope', '$document', '$http', '$location', 'refe
     if (!$scope.hasDataset()) return;
     validation.clear(form);
     $http.post($scope.dataset.api_url, $scope.dataset).then(function(res) {
-      $location.path('/datasets/' + $scope.dataset.name + '/admin')
+      $location.path('/datasets/' + $scope.dataset.name + '/admin/data')
     }, validation.handle(form));
   };
 

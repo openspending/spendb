@@ -132,6 +132,20 @@ h1, h2, h3, h4 {
     font-weight: 700;
 }
 
+.table {
+    td {
+        &.numeric {
+            text-align: right;
+        }
+
+        &.empty {
+            color: @gray-lighter;
+            background-color: lighten(@gray-lighter, 5%);
+        }
+    }
+}
+
+
 .navbar.navbar-default {
     background-color: @theme-header-bg;
     border-bottom: 1px solid @gray-lighter;
@@ -243,17 +257,6 @@ footer {
         text-align: left;
         vertical-align: middle;
         min-width: 10em;
-    }
-
-    td {
-        &.numeric {
-            text-align: right;
-        }
-
-        &.empty {
-            color: @gray-lighter;
-            background-color: lighten(@gray-lighter, 5%);
-        }
     }
 
     .form-control.tbl-select {

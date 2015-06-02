@@ -23,9 +23,11 @@
           <table class="table table-condensed">
             <tr ng-repeat="manager in managers.managers">
               <td>{{manager.display_name}}</td>
-              <td width="20%">
-                <a ng-show="manager.name == session.current_user.name"
-                  ng-click="removeManager(manager)">remove</a>
+              <td width="20%" class="numeric">
+                <a ng-hide="manager.name == session.user.name"
+                  ng-click="removeAccount(manager)">
+                  <i class="fa fa-times"></i>
+                </a>
               </td>
             </tr>
             <tr>

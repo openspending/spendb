@@ -48,8 +48,9 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$rootScope', '$q', '$http', '
   };
 
   $scope.removeAccount = function(account) {
-    if ($scope.managers.indexOf(account) != -1) {
-      $scope.managers.splice($scope.managers.indexOf(account), 1);
+    var idx = $scope.managers.managers.indexOf(account);
+    if (idx != -1) {
+      $scope.managers.managers.splice(idx, 1);
     }
   };
 
@@ -57,8 +58,11 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$rootScope', '$q', '$http', '
     var dfd = $http.post(dataset.api_url, $scope.dataset);
     dfd.then(function(res) {
       $scope.dataset = res.data;
-      flash.setMessage("Your changes have been saved!", "success");
-      $scope.resetScroll();
+      $http.post(dataset.api_url + '/managers', $scope.managers).then(function(res) {
+        $scope.managers = res.data;
+        flash.setMessage("Your changes have been saved!", "success");
+        $scope.resetScroll();
+      });
     }, validation.handle(form));
   };
 

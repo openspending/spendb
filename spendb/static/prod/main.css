@@ -6955,6 +6955,13 @@ h3,
 h4 {
   font-weight: 700;
 }
+.table td.numeric {
+  text-align: right;
+}
+.table td.empty {
+  color: #eeeeee;
+  background-color: #fbfbfb;
+}
 .navbar.navbar-default {
   background-color: #ffffff;
   border-bottom: 1px solid #eeeeee;
@@ -7146,13 +7153,6 @@ footer p {
   text-align: left;
   vertical-align: middle;
   min-width: 10em;
-}
-.table.model-table td.numeric {
-  text-align: right;
-}
-.table.model-table td.empty {
-  color: #eeeeee;
-  background-color: #fbfbfb;
 }
 .table.model-table .form-control.tbl-select {
   width: 80%;
