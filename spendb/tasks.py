@@ -16,7 +16,8 @@ def load_from_url(dataset_name, url):
     with flask_app.app_context():
         dataset = Dataset.by_name(dataset_name)
         source = tasks.extract_url(dataset, url)
-        load_from_source.delay(dataset_name, source.name)
+        if source is not None:
+            load_from_source.delay(dataset_name, source.name)
 
 
 @celery.task(ignore_result=True)

@@ -26,6 +26,8 @@ def extract_fileobj(job, dataset, fh, file_name=None):
 def extract_url(job, dataset, url):
     """ Upload contents of a URL to the data repository. """
     source = job.package.ingest(url, overwrite=False)
+    if source is None:
+        return
     source.save()
     job.set_source(source)
     return source
