@@ -39,7 +39,7 @@ class TestDatasetController(ControllerTestCase):
         db.session.add(self.dataset)
         db.session.commit()
         response = self.client.get(url_for('dataset.view', dataset='cra'))
-        profile_url = url_for('account.profile', name=self.user.name)
+        profile_url = url_for('account.profile', account=self.user.name)
         assert profile_url in response.data
         assert self.user.fullname in response.data.decode('utf-8')
 

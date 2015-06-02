@@ -25,7 +25,7 @@
           <ul>
             {% for account in managers %}
             <li>
-              <a href="{{ url_for('account.profile', name=account.name)}}">
+              <a href="{{url_for('account.profile', account=account.name)}}">
                 {{account.display_name}}
               </a>
             </li>

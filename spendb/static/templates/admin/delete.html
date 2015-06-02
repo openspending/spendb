@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">Delete: {{dataset.label}}</h4>
+</div>
+
+<div class="modal-body">
+  <p>
+    Are you sure you want to delete this dataset?
+  </p>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="close()">Cancel</button>
+  <button type="button" class="btn btn-danger" ng-click="delete()">Delete</button>
+</div>

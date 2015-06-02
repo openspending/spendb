@@ -9,8 +9,12 @@
     <h1 class="page-header">
       {{ dataset.label }}
       <div class="pull-right">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-success">Publish</button>
+        <div class="btn-group" role="group" ng-cloak>
+          <button type="button" class="btn" ng-click="togglePrivate()"
+            ng-class="{'btn-danger': !dataset.private, 'btn-success': dataset.private}">
+            <span ng-show="dataset.private">Publish</span>
+            <span ng-hide="dataset.private">Retract</span>
+          </button>
           <button type="button" ng-click="deleteDataset()" class="btn btn-danger">Delete</button>
         </div>
       </div>
@@ -20,7 +24,7 @@
         <div class="col-md-10">
           {% block inner_content %}{% endblock %}
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" ng-cloak>
           <ul class="nav nav-pills nav-stacked">
             <li ng-class="{'active': currentSection == 'home'}">
               <a href="{{url_for('dataset.view', dataset=dataset.name)}}">

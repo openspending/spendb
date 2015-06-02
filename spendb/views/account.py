@@ -248,10 +248,10 @@ def do_reset():
     return redirect(url_for('account.settings'))
 
 
-@blueprint.route('/account/<name>')
-def profile(name):
+@blueprint.route('/account/<account>')
+def profile(account):
     """ Generate a profile page for a user (from the provided name) """
-    profile = obj_or_404(Account.by_name(name))
+    profile = obj_or_404(Account.by_name(account))
 
     # Set a context boo if email/twitter should be shown, it is only shown
     # to administrators and to owner (account is same as context account)
@@ -261,7 +261,7 @@ def profile(name):
     # ..or if the user has chosen to make it public
     show_email = show_info or profile.public_email
     show_twitter = show_info or profile.public_twitter
-    profile_datasets = Pager(profile.datasets, name=name, limit=15)
+    profile_datasets = Pager(profile.datasets, account=account, limit=15)
     return render_template('account/profile.html', profile=profile,
                            show_email=show_email, show_twitter=show_twitter,
                            profile_datasets=profile_datasets)

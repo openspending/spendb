@@ -118,7 +118,7 @@ class TestAccountController(ControllerTestCase):
         test = make_account('test')
 
         # Get the user profile for an anonymous user
-        response = self.client.get(url_for('account.profile', name='test'))
+        response = self.client.get(url_for('account.profile', account='test'))
 
         assert '200' in response.status, \
             'Profile not successfully returned for anonymous user'
@@ -138,7 +138,7 @@ class TestAccountController(ControllerTestCase):
             'Twitter handle is in profile for anonymous user'
 
         # Display email and twitter handle for the user
-        response = self.client.get(url_for('account.profile', name='test'),
+        response = self.client.get(url_for('account.profile', account='test'),
                                    query_string={'api_key': test.api_key})
 
         assert '200' in response.status, \
@@ -158,7 +158,7 @@ class TestAccountController(ControllerTestCase):
         db.session.commit()
 
         # Get the site as an anonymous user
-        response = self.client.get(url_for('account.profile', name='test'))
+        response = self.client.get(url_for('account.profile', account='test'))
 
         assert '200' in response.status, \
             'Profile with public contact info not returned to anonymous user'
@@ -182,7 +182,7 @@ class TestAccountController(ControllerTestCase):
         db.session.commit()
 
         # Display email for admins
-        response = self.client.get(url_for('account.profile', name='test'),
+        response = self.client.get(url_for('account.profile', account='test'),
                                    query_string={'api_key': admin_user.api_key})
 
         assert '200' in response.status, \
@@ -209,7 +209,7 @@ class TestAccountController(ControllerTestCase):
         db.session.add(test)
         db.session.commit()
 
-        response = self.client.get(url_for('account.profile', name='test'))
+        response = self.client.get(url_for('account.profile', account='test'))
 
         assert '200' in response.status, \
             'Profile page not successfully returned without full name'
@@ -226,7 +226,7 @@ class TestAccountController(ControllerTestCase):
         db.session.add(test)
         db.session.commit()
 
-        response = self.client.get(url_for('account.profile', name='test'),
+        response = self.client.get(url_for('account.profile', account='test'),
                                    query_string={'api_key': test.api_key})
 
         # Test if the other information is missing
