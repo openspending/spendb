@@ -269,7 +269,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     var d = $modal.open({
       templateUrl: 'admin/concept.html',
       controller: 'AdminConceptCtrl',
-      backdrop: false,
+      backdrop: true,
       resolve: {
         concept: function() {
           return col.concept;

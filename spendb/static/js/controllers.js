@@ -63,7 +63,7 @@ spendb.controller('DatasetCtrl', ['$scope', '$rootScope', '$http', '$modal', 'co
     var d = $modal.open({
       templateUrl: 'admin/delete.html',
       controller: 'AdminDeleteCtrl',
-      backdrop: false,
+      backdrop: true,
       resolve: {
         dataset: function() {
           return $scope.dataset;

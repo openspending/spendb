@@ -38,10 +38,10 @@
         <div class="label label-danger" ng-show="run.status == 'failed'">Failed</div>
       </td>
       <td>
-        <a ng-show="run.status == 'failed'"
-          ng-href="/datasets/{{dataset.name}}/admin/runs/{{run.id}}">details &raquo;</a>
-        <a ng-show="canModelRun(run)" class="btn btn-success btn-xs"
-          ng-href="/datasets/{{dataset.name}}/admin/model">Make a model</a>
+        <a ng-show="run.status == 'failed'" class="btn btn-default btn-xs"
+          ng-href="/datasets/{{dataset.name}}/admin/runs/{{run.id}}">View details &raquo;</a>
+        <a ng-show="canModelRun(run)" class="btn btn-default btn-xs"
+          ng-href="/datasets/{{dataset.name}}/admin/model">Model the data</a>
       </td>
     </tr>
   </tbody>
