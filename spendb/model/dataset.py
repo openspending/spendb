@@ -116,11 +116,12 @@ class Dataset(db.Model):
         from spendb.model.account import Account
         has_user = account and account.is_authenticated()
         has_admin = has_user and account.admin
+        q = db.session.query(cls)
         if not has_admin:
-            criteria = [cls.private == False]
+            criteria = [cls.private == False]  # noqa
             if has_user:
                 criteria.append(cls.managers.any(Account.id == account.id))
-            q = db.session.query(cls).filter(or_(*criteria))
+            q = q.filter(or_(*criteria))
 
         if order:
             q = q.order_by(cls.label.asc())

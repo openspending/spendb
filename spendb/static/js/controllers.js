@@ -5,7 +5,7 @@ spendb.controller('NewCtrl', ['$scope', '$document', '$http', '$location', 'refe
   $scope.setTitle("Create a new dataset");
 
   $scope.validSlug = validation.validSlug;
-  $scope.dataset = {'category': 'budget', 'territories': []};
+  $scope.dataset = {'category': 'budget', 'territories': [], 'private': true};
   $scope.reference = reference;
   $scope.session = session;
   $scope.afterUpload = [];

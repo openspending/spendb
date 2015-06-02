@@ -174,10 +174,15 @@ h1, h2, h3, h4 {
         color: @theme-body-bg;
     }
 
-    .dropdown-menu {
-        a, ul.navbar-nav li a {
+    ul.dropdown-menu {
+        a, li a {
             color: @theme-text;
         }
+    }
+
+    .dropdown.open>a {
+        background-color: lighten(@theme-header-bg, 20%);
+        color: @theme-body-bg;
     }
 
     img {

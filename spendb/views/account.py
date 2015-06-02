@@ -8,7 +8,7 @@ from apikit import obj_or_404, Pager, jsonify
 
 from spendb.core import db, login_manager, url_for
 from spendb.auth import require
-from spendb.model.account import Account
+from spendb.model import Account, Dataset
 from spendb.validation.account import AccountRegister, AccountSettings
 from spendb.lib.mailer import send_reset_link
 from spendb.lib.helpers import flash_error, flash_success
@@ -261,7 +261,10 @@ def profile(account):
     # ..or if the user has chosen to make it public
     show_email = show_info or profile.public_email
     show_twitter = show_info or profile.public_twitter
-    profile_datasets = Pager(profile.datasets, account=account, limit=15)
+    profile_datasets = Dataset.all_by_account(current_user)
+    cond = Dataset.managers.any(Account.id == profile.id)
+    profile_datasets = profile_datasets.filter(cond)
+    profile_datasets = Pager(profile_datasets, account=account, limit=15)
     return render_template('account/profile.html', profile=profile,
                            show_email=show_email, show_twitter=show_twitter,
                            profile_datasets=profile_datasets)
