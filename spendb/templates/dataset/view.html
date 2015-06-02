@@ -3,7 +3,7 @@
 
 {% block inner_content %}
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <h3>{% trans %}Description{% endtrans %}</h3>
       {% if not dataset.description %}
       <div class="help-block" i18n:msg="label">
@@ -13,23 +13,6 @@
       {{ dataset.description | markdown }}
 
       <div class="row">
-        <div class="col-md-12">
-          <h3>{% trans %}Sources{% endtrans %}</h3>
-          <span class="help-block">
-            {% trans %}This is a listing of all source data that was registered
-            for this dataset.{% endtrans %}
-          </span>
-          <br/>
-          {% if sources %}
-          <ul>
-            {% for source in sources %}
-            <li>
-              <a href="{{source.url}}">{{ source.url | readable_url }}</a>
-            </li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        </div>
         <div class="col-md-12">
           <h3>{% trans %}Team{% endtrans %}</h3>
           <span class="help-block">
@@ -64,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h3>{% trans %}Measures{% endtrans %}</h3>
       <span class="help-block">
         {% trans %}Measures are the numeric properties of each entry in this

@@ -40,7 +40,8 @@ def view(dataset):
     etag_cache_keygen(dataset.updated_at)
     managers = list(dataset.managers)
     return render_template('dataset/view.html', dataset=dataset,
-                           managers=managers)
+                           managers=managers,
+                           templates=angular_templates(current_app))
 
 
 @blueprint.route('/datasets/<dataset>/admin/data')

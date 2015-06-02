@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-
-{% from "dataset/_util.html" import dimensions_list as dimensions_list %}
+{% from "_util.html" import angular_templates %}
 
 {% block page_title %}{{ dataset.label }}{% endblock %}
 {% block page_desc %}{{ dataset.description | markdown_preview }}{% endblock %}
@@ -10,9 +9,10 @@
     <h1 class="page-header">
       {{ dataset.label }}
       <div class="pull-right">
-        <!-- <a class="btn btn-default" href="{{url_for('dataset.view', dataset=dataset.name)}}/admin">
-          {% trans %}Manage{% endtrans %}
-        </a> -->
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-success">Publish</button>
+          <button type="button" ng-click="deleteDataset()" class="btn btn-danger">Delete</button>
+        </div>
       </div>
     </h1>
     <div>
@@ -47,4 +47,11 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  <script defer="defer">
+    SPENDB_CONFIG.dataset = {{ dataset.to_dict() | tojson }};
+  </script>
+  {{ angular_templates(templates) }}
 {% endblock %}
