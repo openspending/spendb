@@ -6979,7 +6979,7 @@ footer {
   margin-top: 0em;
   padding: 2em 0 1em;
 }
-footer .container {
+footer .container-fluid {
   border-top: 1px solid #eeeeee;
   padding: 1em;
 }

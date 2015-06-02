@@ -32,13 +32,11 @@ setup(
     name='spendb',
     version='0.17',
     description='SpenDB',
-    author='Map The Money',
-    author_email='info@mapthemoney.org',
-    url='http://github.com/mapthemoney/spendb',
-    install_requires=[
-    ],
+    author='Friedrich Lindenberg (formerly OKFN)',
+    author_email='friedrich@pudo.org',
+    url='http://github.com/pudo/spendb',
+    install_requires=[],
     setup_requires=[],
-
     packages=filter(package_filter, find_packages()),
     namespace_packages=['spendb'],
     package_data={
@@ -49,15 +47,12 @@ setup(
         )
     },
     test_suite='nose.collector',
-
     zip_safe=False,
-
     entry_points={
         'console_scripts': [
             'spendb = spendb.command:main'
         ]
     },
-
     message_extractors={
         'spendb': [('**.py', 'python', None),
                    ('templates/**.html', 'jinja2', None),

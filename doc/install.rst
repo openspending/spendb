@@ -20,7 +20,7 @@ Installation
 First, check out the source code from the repository, e.g. via git on 
 the command line::
 
-    $ git clone http://github.com/mapthemoney/spendb.git
+    $ git clone http://github.com/pudo/spendb.git
     $ cd spendb
 
 We also highly recommend you use a virtualenv_ to isolate the installed 
@@ -59,7 +59,7 @@ but you can use anything compatible with SQLAlchemy. For postgres you would do::
 Having done that, you can copy configuration templates::
 
     $ cp settings.py_tmpl settings.py
-    $ export OPENSPENDING_SETTINGS=`pwd`/settings.py
+    $ export SPENDB_SETTINGS=`pwd`/settings.py
 
 Ensure that the ``SPENDB_SETTINGS`` environment variable is set whenever
 you work with the application.
@@ -130,7 +130,7 @@ Import a sample dataset: ::
     $ ostool csvimport --model https://dl.dropbox.com/u/3250791/sample-spendb-model.json http://mk.ucant.org/info/data/sample-spendb-dataset.csv
     $ ostool solr load spendb-example
 
-Verify that the data is visible at http://127.0.0.1:5000/spendb-example/entries
+Verify that the data is visible at http://127.0.0.1:5000/spendb-example
 
 Create an Admin User
 --------------------
