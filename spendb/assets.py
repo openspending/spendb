@@ -32,7 +32,7 @@ assets.register('js_base', js_base)
 # CSS / Stylesheet bundles
 
 css_main = Bundle('style/base.less',
-                  filters='less,cssmin',
+                  filters='less,cssmin,cssrewrite',
                   output='prod/main.css')
 
 assets.register('css_main', css_main)
