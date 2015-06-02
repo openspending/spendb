@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy.orm import reconstructor
 from sqlalchemy.schema import Column
 from sqlalchemy.types import Integer, Unicode, Boolean, DateTime
-from sqlalchemy.sql.expression import false, or_
+from sqlalchemy.sql.expression import or_
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from spendb.core import db, url_for
@@ -114,11 +114,14 @@ class Dataset(db.Model):
     def all_by_account(cls, account, order=True):
         """ Query available datasets based on dataset visibility. """
         from spendb.model.account import Account
-        criteria = [cls.private == false()]
-        if isinstance(account, Account) and account.is_authenticated():
-            criteria += ["1=1" if account.admin else "1=2",
-                         cls.managers.any(Account.id == account.id)]
-        q = db.session.query(cls).filter(or_(*criteria))
+        has_user = account and account.is_authenticated()
+        has_admin = has_user and account.admin
+        if not has_admin:
+            criteria = [cls.private == False]
+            if has_user:
+                criteria.append(cls.managers.any(Account.id == account.id))
+            q = db.session.query(cls).filter(or_(*criteria))
+
         if order:
             q = q.order_by(cls.label.asc())
         return q

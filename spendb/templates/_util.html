@@ -23,6 +23,9 @@
             {{ds.label}}
           </a>
         </strong>
+        {% if ds.description %}
+          &middot; {{ds.description | markdown_preview}}
+        {% endif %}
       </li>
     {% endfor %}
   </ul>
