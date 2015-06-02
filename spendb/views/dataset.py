@@ -24,6 +24,7 @@ def index():
     """ Get a list of all datasets along with territory, language, and
     category counts (amount of datasets for each). """
     pager, languages, territories = query_index()
+    etag_cache_keygen(pager.cache_keys())
     return render_template('dataset/index.html', pager=pager,
                            languages=languages, territories=territories)
 

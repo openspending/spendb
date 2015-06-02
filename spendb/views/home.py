@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, flash
-from flask.ext.login import current_user
 from flask.ext.babel import gettext
 from apikit import jsonify
 
 from spendb.core import pages
-from spendb.model import Dataset, DatasetTerritory
 from spendb.views.i18n import set_session_locale
-from spendb.views.cache import disable_cache
+from spendb.views.api.dataset import query_index
+from spendb.views.cache import disable_cache, etag_cache_keygen
 
 
 blueprint = Blueprint('home', __name__)
@@ -15,9 +14,9 @@ blueprint = Blueprint('home', __name__)
 @blueprint.route('/')
 def index():
     page = pages.get_or_404('index')
-    datasets = Dataset.all_by_account(current_user)
-    territories = DatasetTerritory.dataset_counts(datasets)
-    return render_template('home/index.html', datasets=datasets,
+    pager, _, territories = query_index()
+    etag_cache_keygen(pager.cache_keys())
+    return render_template('home/index.html', pager=pager,
                            territories=territories, page=page)
 
 
