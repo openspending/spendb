@@ -86,18 +86,15 @@ def create_web_app(**config):
 def create_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
-
-    # class ContextTask(celery.Task):
-    #     abstract = True
-    #     def __call__(self, *args, **kwargs):
-    #         with app.app_context():
-    #             return celery.Task.__call__(self, *args, **kwargs)
-    # celery.Task = ContextTask
     return celery
 
 
 def url_for(endpoint, **kwargs):
     try:
-        return _url_for(endpoint, _external=True, **kwargs)
+        from flask import current_app
+        if current_app.config.get('PREFERRED_URL_SCHEME'):
+            kwargs['_scheme'] = current_app.config.get('PREFERRED_URL_SCHEME')
+        url = _url_for(endpoint, _external=True, **kwargs)
+        return url
     except:
         return None
