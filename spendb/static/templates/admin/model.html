@@ -23,7 +23,7 @@
         <th ng-repeat="col in columns">
           <select class="form-control" ng-model="col.concept"
             ng-change="updateConcept(col)"
-            ng-disabled="!possibleMeasure(col)">
+            ng-disabled="!isNumeric(col)">
             <option value="attribute">Descriptive attribute</option>
             <option value="measure">Amount</option>
           </select>
@@ -81,7 +81,7 @@
           Samples:
         </th>
         <td ng-repeat="col in columns"
-            ng-class="getCellClass(col.column, row[col.column])">
+            ng-class="getCellClass(col, row[col.column])">
           {{row[col.column] || '&hellip;'}}
         </td>
       </tr>

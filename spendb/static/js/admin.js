@@ -171,7 +171,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
       // column titles are: "Foo (Year)"
       var dim = c.label.split(' (')[0];
       c.dimension = inferDimension(parts[0], dim);
-    } else if ($scope.possibleMeasure(spec)) {
+    } else if ($scope.isNumeric(spec)) {
       // treat most numbers as measures
       if (!isYearsColumn(name)) {
         c.concept = 'measure';
@@ -253,11 +253,11 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     $scope.model = model;
   };
 
-  $scope.possibleMeasure = function(col) {
+  $scope.isNumeric = function(col) {
     return col.type == 'integer' || col.type == 'float' || col.type == 'decimal';
   };
 
-  $scope.updateConcept = function() {
+  $scope.updateConcept = function(col) {
     if (col.concept == 'attribute') {
       col.dimension = inferDimension(col.name, col.label);
     } else {
@@ -307,10 +307,12 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
 
   $scope.getCellClass = function(field, value) {
     var clazz = 'text';
-    if (['integer', 'float', 'decimal'].indexOf(field.type) != -1) {
+    if ($scope.isNumeric(field)) {
       clazz = 'numeric';
     }
-    if (!value) { clazz += ' empty'; }
+    if (!value) {
+      clazz += ' empty';
+    }
     return clazz;
   };
 
