@@ -100,6 +100,9 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
   };
 
   session.get(function(s) {
+    if (s.logged_in) {
+      $scope.hideCookieWarning();
+    }
     $scope.session = s;
   });
 
