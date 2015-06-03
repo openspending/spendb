@@ -31,10 +31,3 @@ class TestQueueTasks(DatabaseTestCase):
         assert len(sources) == 1, sources
         src0 = sources[0]
         assert src0.meta['name'] == 'cra.csv', src0.meta.items()
-
-    def test_load_from_source(self):
-        tasks.load_from_url(self.dsn, self.cra_url)
-        package = data_manager.package(self.dsn)
-        sources = list(package.all(Source))
-        src0 = sources[0]
-        tasks.load_from_source(self.dsn, src0.name)
