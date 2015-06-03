@@ -16,8 +16,6 @@ from cubes import Workspace
 from cubes.extensions import extensions
 
 from spendb import default_settings
-from spendb.lib.routing import NamespaceRouteRule
-from spendb.lib.routing import FormatConverter, NoDotConverter
 from spendb.etl.manager import DataManager
 
 logging.basicConfig(level=logging.DEBUG)
@@ -41,10 +39,6 @@ data_manager = DataManager()
 
 def create_app(**config):
     app = Flask(__name__)
-    app.url_rule_class = NamespaceRouteRule
-    app.url_map.converters['fmt'] = FormatConverter
-    app.url_map.converters['nodot'] = NoDotConverter
-
     app.config.from_object(default_settings)
     app.config.from_envvar('SPENDB_SETTINGS', silent=True)
     app.config.update(config)

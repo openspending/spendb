@@ -15,6 +15,9 @@ celery = create_celery(flask_app)
 def load_from_url(dataset_name, url):
     with flask_app.app_context():
         dataset = Dataset.by_name(dataset_name)
+        if dataset is None:
+            log.error("Dataset not found: %s", dataset_name)
+            return
         source = tasks.extract_url(dataset, url)
         if source is not None:
             load_from_source.delay(dataset_name, source.name)
@@ -24,7 +27,11 @@ def load_from_url(dataset_name, url):
 def load_from_source(dataset_name, source_name):
     with flask_app.app_context():
         dataset = Dataset.by_name(dataset_name)
+        if dataset is None:
+            log.error("Dataset not found: %s", dataset_name)
+            return
         if source_name is None:
+            log.error("No source specified: %s", dataset_name)
             return
         artifact = tasks.transform_source(dataset, source_name)
         if artifact is None:
