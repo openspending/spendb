@@ -1,6 +1,7 @@
 # SpenDB
 
 [![Build Status](https://travis-ci.org/pudo/spendb.png?branch=master)](https://travis-ci.org/pudo/spendb)
+[![Coverage Status](https://coveralls.io/repos/pudo/spendb/badge.svg)](https://coveralls.io/r/pudo/spendb)
 [![Join the chat at https://gitter.im/pudo/spendb](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pudo/spendb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 SpenDB is a project to make government finances easier to explore

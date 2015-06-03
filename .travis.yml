@@ -22,10 +22,12 @@ install:
   # Without this, installing doesn't work.
   - sudo npm config set registry http://registry.npmjs.org/
   - pip install -r requirements.txt -e .
-  - pip install psycopg2
+  - pip install psycopg2 coveralls
 before_script:
   - psql -c 'create database spendb;' -U postgres
   - cp settings.py_tmpl settings.py
   - nosetests --version
 script:
-  - nosetests
+  - nosetests --with-coverage --cover-package=spendb
+after_success:
+  - coveralls
