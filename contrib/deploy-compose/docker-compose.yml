@@ -1,0 +1,19 @@
+
+web:
+    build: spendb/Dockerfile
+    command: spendb runserver
+    ports:
+        - "5000:5000"
+    links:
+        - db
+
+db:
+    image: postgres:9.4
+    environment:
+        POSTGRES_USER: spendb
+        POSTGRES_PASSWORD: spendb
+    expose: 
+        - "5432"
+    volumes:
+        - /srv/spendb/db:/var/lib/postgresql
+        - /srv/spendb/logs/postgresql:/var/log
