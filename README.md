@@ -1,17 +1,17 @@
 # SpenDB
 
 [![Build Status](https://travis-ci.org/pudo/spendb.png?branch=master)](https://travis-ci.org/pudo/spendb)
+[![Join the chat at https://gitter.im/pudo/spendb](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pudo/spendb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 SpenDB is a project to make government finances easier to explore
 and understand. It started out as "Where does my money go", a platform
 to visualize the United Kingdom's state finance, but has been renamed
 and restructured to allow arbitrary financial data to be loaded and
-displayed. The main use for the software is the site mapthemoney.org
-which aims to track government finance around the world.
+displayed.
 
 ## Developer installation
 
-Please see doc/install.rst or http://spendb.rtfd.org/en/latest/install.html.
+Please see [https://spendb.rtfd.org](https://spendb.readthedocs.org/en/latest/) or the raw version at ``doc/install.rst``.
 
 ## Issue tracking
 
