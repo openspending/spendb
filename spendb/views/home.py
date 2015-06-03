@@ -32,7 +32,7 @@ def set_locale():
 
 @blueprint.route('/__version__')
 def version():
-    from spendb._version import __version__
+    from spendb import __version__
     return __version__
 
 

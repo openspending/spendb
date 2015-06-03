@@ -15,6 +15,12 @@ def files_in_pkgdir(pkg, dirname):
         walkfiles += fpaths
     return walkfiles
 
+try:
+    import spendb
+    release = spendb.__version__
+except:
+    release = 'dev'
+
 
 def package_filter(pkg):
     """
@@ -30,7 +36,7 @@ def package_filter(pkg):
 
 setup(
     name='spendb',
-    version='0.17',
+    version=release,
     description='SpenDB',
     author='Friedrich Lindenberg (formerly OKFN)',
     author_email='friedrich@pudo.org',

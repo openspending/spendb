@@ -4,7 +4,7 @@ from flask import current_app, request
 from flask.ext.babel import get_locale
 from flask.ext.login import current_user
 
-from spendb import auth, _version
+from spendb import auth, __version__
 from spendb.core import url_for
 from spendb.validation.common import RESERVED_TERMS
 from spendb.views.i18n import get_available_locales
@@ -20,7 +20,7 @@ def before_request():
 
 @home.after_app_request
 def after_request(resp):
-    resp.headers['Server'] = 'SpenDB/%s' % _version.__version__
+    resp.headers['Server'] = 'SpenDB/%s' % __version__
 
     if resp.is_streamed and request.endpoint != 'static':
         # http://wiki.nginx.org/X-accel#X-Accel-Buffering

@@ -18,3 +18,6 @@ warnings.filterwarnings(
 warnings.filterwarnings(
     'ignore',
     'Unicode type received non-unicodebind param value.')
+
+
+__version__ = '0.18'
