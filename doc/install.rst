@@ -41,10 +41,10 @@ This should be pretty painless. Just run::
 
     $ pip install -r requirements.txt -e .
 
-> For Windows users, run::
-```
-    $pip install -r windows_reqs.txt
-```
+For Windows users, also run::
+
+    $ pip install -r windows_reqs.txt
+
 
 You will also need to install python bindings for your database. For example,
 for Postgresql you will want to install the psycopg2 library::
@@ -77,7 +77,7 @@ URL is set::
 
 Initialize the database::
 
-    $ ostool db migrate
+    $ spendb db migrate
 
 Generate the help system documentation (this is used by the front-end
 and must be available, developer documents are separate). The output 
@@ -92,7 +92,7 @@ Compile the translations: ::
 
 Run the application::
 
-    $ ostool runserver
+    $ spendb runserver
 
 In order to use web-based importing and loading, you will also need to set up
 the celery-based background daemon. When running this, make sure to have an
@@ -110,27 +110,10 @@ This should result in "Pong." being printed to the background daemon's console.
 Test the install
 ----------------
 
-Create test configuration (which inherits, by default, from `development.ini`): ::
-
-    $ cp settings.py_tmpl test.py
-    $ export SPENDB_SETTINGS=`pwd`/test.py
-
-You will need to either set up a second instance of solr, or comment
-out the solr url in settings file so that the tests use the same instance
-of solr. Regrettably, the tests delete all data from solr when they
-run, so having them share the development instance may be
-inconvenient.
-
 Run the tests.::
 
     $ nosetests 
 
-Import a sample dataset: ::
-
-    $ ostool csvimport --model https://dl.dropbox.com/u/3250791/sample-spendb-model.json http://mk.ucant.org/info/data/sample-spendb-dataset.csv
-    $ ostool solr load spendb-example
-
-Verify that the data is visible at http://127.0.0.1:5000/spendb-example
 
 Create an Admin User
 --------------------
