@@ -1,6 +1,6 @@
-from cubes.providers import ModelProvider
-from cubes.model import Cube, Measure, MeasureAggregate, create_dimension
-from cubes.backends.sql.store import SQLStore, OPTION_TYPES
+from cubes.providers import ModelProvider, link_cube
+from cubes.model import Cube, Measure, MeasureAggregate, Dimension
+from cubes.sql.store import SQLStore, OPTION_TYPES
 from cubes.errors import NoSuchCubeError, NoSuchDimensionError
 from cubes.common import coalesce_options
 from cubes.logging import get_logger
@@ -10,7 +10,6 @@ from spendb.model import Dataset
 
 
 class SpendingModelProvider(ModelProvider):
-    __extension_name__ = 'spending'
 
     def __init__(self, *args, **kwargs):
         super(SpendingModelProvider, self).__init__(*args, **kwargs)
@@ -18,7 +17,11 @@ class SpendingModelProvider(ModelProvider):
     def requires_store(self):
         return True
 
-    def cube(self, name, locale=None):
+    def has_cube(self, name):
+        dataset = Dataset.by_name(name)
+        return dataset is not None
+
+    def cube(self, name, locale=None, namespace=None):
         dataset = Dataset.by_name(name)
         if name is None:
             raise NoSuchCubeError("Unknown dataset %s" % name, name)
@@ -31,7 +34,7 @@ class SpendingModelProvider(ModelProvider):
         for measure in dataset.model.measures:
             cubes_measure = Measure(measure.name, label=measure.label)
             measures.append(cubes_measure)
-            aggregate = MeasureAggregate(measure.name,
+            aggregate = MeasureAggregate(measure.name + '_sum',
                                          label=measure.label,
                                          measure=measure.name,
                                          function='sum')
@@ -54,9 +57,9 @@ class SpendingModelProvider(ModelProvider):
                     'attributes': attributes
                 }]
             }
-            dimensions.append(create_dimension(meta))
+            dimensions.append(Dimension.from_metadata(meta))
 
-        return Cube(name=dataset.name,
+        cube = Cube(name=dataset.name,
                     fact=dataset.fact_table.table.name,
                     aggregates=aggregates,
                     measures=measures,
@@ -65,6 +68,9 @@ class SpendingModelProvider(ModelProvider):
                     dimensions=dimensions,
                     store=self.store,
                     mappings=mappings)
+
+        link_cube(cube, locale, provider=self, namespace=namespace)
+        return cube
 
     def dimension(self, name, locale=None, templates=[]):
         raise NoSuchDimensionError('No global dimensions in OS', name)

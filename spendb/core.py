@@ -12,8 +12,7 @@ from flask.ext.migrate import Migrate
 from flask_flatpages import FlatPages
 import formencode_jinja2
 from celery import Celery
-from cubes import Workspace
-from cubes.extensions import extensions
+from cubes import Workspace, ext
 
 from spendb import default_settings
 from spendb.etl.manager import DataManager
@@ -58,10 +57,11 @@ def create_app(**config):
     pages.init_app(app)
     migrate.init_app(app, db, directory=app.config.get('ALEMBIC_DIR'))
 
-    from spendb.model.provider import SpendingStore
-    extensions.store.extensions['spending'] = SpendingStore
-    app.cubes_workspace = Workspace()
-    app.cubes_workspace.register_default_store('spending')
+    ws = Workspace()
+    ext.model_provider("spending", metadata={})
+    ext.store("spending")
+    ws.register_default_store('spending', model_provider='spending')
+    app.cubes_workspace = ws
     return app
 
 

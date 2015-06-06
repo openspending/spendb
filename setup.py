@@ -57,6 +57,12 @@ setup(
     entry_points={
         'console_scripts': [
             'spendb = spendb.command:main'
+        ],
+        'cubes.providers': [
+            'spending = spendb.model.provider:SpendingModelProvider'
+        ],
+        'cubes.stores': [
+            'spending = spendb.model.provider:SpendingStore'
         ]
     },
     message_extractors={
