@@ -32,7 +32,7 @@ boto>=2.38.0
 
 expressions
 grako
-git+https://github.com/DataBrewery/cubes.git#egg=cubes
+https://github.com/DataBrewery/cubes/tarball/master
 
 gunicorn>=19.3.0
 psycopg2>=2.6
