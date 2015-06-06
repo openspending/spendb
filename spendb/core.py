@@ -9,6 +9,7 @@ from flask.ext.cache import Cache
 from flask.ext.mail import Mail
 from flask.ext.assets import Environment
 from flask.ext.migrate import Migrate
+from flask.ext.cors import CORS
 from flask_flatpages import FlatPages
 import formencode_jinja2
 from celery import Celery
@@ -34,6 +35,7 @@ assets = Environment()
 migrate = Migrate()
 pages = FlatPages()
 data_manager = DataManager()
+cors = CORS()
 
 
 def create_app(**config):
@@ -56,6 +58,8 @@ def create_app(**config):
     data_manager.init_app(app)
     pages.init_app(app)
     migrate.init_app(app, db, directory=app.config.get('ALEMBIC_DIR'))
+    cors.init_app(app, resources=r'/api/*', supports_credentials=True,
+                  methods=['GET', 'HEAD', 'OPTIONS'])
 
     ws = Workspace()
     ext.model_provider("spending", metadata={})
