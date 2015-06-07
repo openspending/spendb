@@ -60,6 +60,22 @@ class Dataset(db.Model):
     def model_data(self):
         return self.data.get('model', {})
 
+    def update_model(self, model):
+        self.data['model'] = model
+        self._load_model()
+
+        # TODO find a better place for this.
+        for dimension in self.model.dimensions:
+            num = self.fact_table.num_members(dimension)
+            cardinality = 'high'
+            if num < 6:
+                cardinality = 'tiny'
+            elif num < 51:
+                cardinality = 'low'
+            elif num < 1001:
+                cardinality = 'medium'
+            dimension.data['cardinality'] = cardinality
+
     @property
     def fields(self):
         return self.data.get('fields', {})

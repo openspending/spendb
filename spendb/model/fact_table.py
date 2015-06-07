@@ -143,7 +143,7 @@ class FactTable(object):
         if not self.exists:
             return 0
         q = select(self._dimension_columns(dimension), distinct=True)
-        rp = self.bind.execute(q.count())
+        rp = self.bind.execute(q.alias('counted').count())
         return rp.fetchone()[0]
 
     def dimension_members(self, dimension, conditions="1=1", offset=0,

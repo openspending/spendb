@@ -117,7 +117,8 @@ def model(name):
 def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    dataset.data['model'] = validate_model(request_data())
+    model_data = validate_model(request_data())
+    dataset.update_model(model_data)
     db.session.commit()
     return model(name)
 

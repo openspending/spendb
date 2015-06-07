@@ -27,7 +27,7 @@ class SpendingModelProvider(ModelProvider):
             raise NoSuchCubeError("Unknown dataset %s" % name, name)
 
         measures, dimensions, mappings = [], [], {}
-        aggregates = [MeasureAggregate('num_entries',
+        aggregates = [MeasureAggregate('fact_count',
                                        label='Numer of entries',
                                        function='count')]
 
@@ -50,9 +50,11 @@ class SpendingModelProvider(ModelProvider):
             meta = {
                 'label': dimension.label,
                 'name': dimension.name,
+                'cardinality': dimension.cardinality,
                 'levels': [{
                     'name': dimension.name,
                     'label': dimension.label,
+                    'cardinality': dimension.cardinality,
                     # 'key': 'name',
                     'attributes': attributes
                 }]

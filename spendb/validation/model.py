@@ -11,6 +11,8 @@ TYPES = {
     'float': db.Float
 }
 
+CARDINALITIES = ['tiny', 'low', 'medium', 'high']
+
 
 def create_named_node(stub, name):
     """ Create an ad-hoc node to represent a mapping item with
@@ -63,6 +65,8 @@ class Dimension(MappingSchema):
     label = SchemaNode(String(), missing=drop)
     description = SchemaNode(String(), missing='')
     facet = SchemaNode(Boolean(), missing=False)
+    cardinality = SchemaNode(String(), missing='high',
+                             validator=OneOf(CARDINALITIES))
     attributes = Attributes(validator=Function(require_one_child))
 
 

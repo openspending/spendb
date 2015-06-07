@@ -24,6 +24,7 @@ logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('cubes').setLevel(logging.WARNING)
 logging.getLogger('markdown').setLevel(logging.WARNING)
 logging.getLogger('boto').setLevel(logging.WARNING)
+logging.getLogger('spendb.core.cors').setLevel(logging.WARNING)
 
 
 db = SQLAlchemy()

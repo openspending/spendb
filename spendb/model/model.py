@@ -37,6 +37,7 @@ class Dimension(object):
         self.name = name
         self.label = data.get('label', name)
         self.description = data.get('description', name)
+        self.cardinality = data.get('cardinality', 'high')
 
     @property
     def attributes(self):
