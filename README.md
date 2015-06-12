@@ -6,13 +6,16 @@
 
 SpenDB is a project to make government finances easier to explore and understand. It started out as "Where does my money go", a platform to visualize the United Kingdom's state finance, but has been renamed and restructured to allow arbitrary financial data to be loaded and displayed.
 
-## Developer installation
+* Documentation is located in the [GitHub Wiki](https://github.com/pudo/spendb/wiki).
+	* [Conceptual overview](https://github.com/pudo/spendb/wiki/Conceptual-overview).
+	* [Using the web API](https://github.com/pudo/spendb/wiki/Web-API).
+	* [Developer installation](https://github.com/pudo/spendb/wiki/Developer-installation).
+* Please report any [issues and feature ideas](https://github.com/pudo/spendb/issues) or browse the issue tracker for tickets to start contributing. 
+* Related codebases:
+	* [fiscalmodel](https://github.com/pudo/fiscalmodel), metadata used for budget dataset classification in spendb.	
+	* [angular-cubes](https://github.com/pudo/angular-cubes), front-end data analysis and visualisation library.
+	* [cubes](https://github.com/DataBrewery/cubes), data analysis API used by spendb	
 
-Please see [the documentation Wiki](https://github.com/pudo/spendb/wiki/Developer-installation).
-
-## Issue tracking
-
-Please report bugs and submit feature requests at https://github.com/pudo/spendb/issues.
 
 ## Licensing
 
