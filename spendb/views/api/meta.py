@@ -2,9 +2,9 @@ import logging
 
 from flask import Blueprint
 from apikit import jsonify
+from fiscalmodel import CURRENCIES, COUNTRIES
+from fiscalmodel import CATEGORIES, LANGUAGES
 
-from spendb.reference import CURRENCIES, COUNTRIES
-from spendb.reference import CATEGORIES, LANGUAGES
 from spendb.views.cache import etag_cache_keygen
 
 log = logging.getLogger(__name__)

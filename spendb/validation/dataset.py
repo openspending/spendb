@@ -1,8 +1,8 @@
 from colander import Schema, SchemaNode, String, Boolean, SequenceSchema
 from colander import OneOf, Length, drop
+from fiscalmodel import CURRENCIES, LANGUAGES
+from fiscalmodel import COUNTRIES, CATEGORIES
 
-from spendb.reference import CURRENCIES, LANGUAGES
-from spendb.reference import COUNTRIES, CATEGORIES
 from spendb.validation.common import valid_name, prepare_name
 from spendb.validation.account import AccountRef
 

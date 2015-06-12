@@ -6,6 +6,7 @@ from flask.ext.babel import gettext as _
 from colander import SchemaNode, String, Invalid
 from sqlalchemy.orm import aliased
 from apikit import jsonify, Pager, request_data
+from fiscalmodel import COUNTRIES, LANGUAGES
 
 from spendb.core import db
 from spendb.model import Dataset, DatasetLanguage, DatasetTerritory
@@ -15,7 +16,6 @@ from spendb.views.cache import etag_cache_keygen
 from spendb.views.error import api_json_errors
 from spendb.validation.dataset import validate_dataset, validate_managers
 from spendb.validation.model import validate_model
-from spendb.reference import COUNTRIES, LANGUAGES
 
 
 log = logging.getLogger(__name__)
