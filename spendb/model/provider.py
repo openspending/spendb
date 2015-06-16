@@ -28,7 +28,7 @@ class SpendingModelProvider(ModelProvider):
 
         measures, dimensions, mappings = [], [], {}
         aggregates = [MeasureAggregate('fact_count',
-                                       label='Numer of entries',
+                                       label='Number of entries',
                                        function='count')]
 
         for measure in dataset.model.measures:
@@ -44,7 +44,10 @@ class SpendingModelProvider(ModelProvider):
         for dimension in dataset.model.dimensions:
             attributes = []
             for attr in dimension.attributes:
-                attributes.append(attr.name)
+                attributes.append({
+                    'name': attr.name,
+                    'label': attr.label
+                })
                 mappings[attr.path] = attr.column
 
             meta = {
