@@ -24,7 +24,7 @@
           <select class="form-control" ng-model="col.concept"
             ng-change="updateConcept(col)"
             ng-disabled="!isNumeric(col)">
-            <option value="attribute">Descriptive attribute</option>
+            <option value="attribute">Dimension attribute</option>
             <option value="measure">Amount</option>
           </select>
         </th>
@@ -35,10 +35,6 @@
           Dimension:
         </th>
         <th ng-repeat="col in columns">
-          <select ng-show="col.concept == 'measure'" class="form-control"
-            ng-model="col.label" disabled>
-            <option value="{{col.label}}">{{col.label}}</option>
-          </select>
           <span ng-show="col.concept == 'attribute'">
             <select class="form-control tbl-select"
               ng-model="col.dimension" ng-options="d as d.label group by d.group for d in getDimensions(col)"></select>
@@ -67,14 +63,14 @@
         </th>
       </tr>
 
-      <tr>
+      <!--tr>
         <th class="legend">
           Field type:
         </th>
         <th ng-repeat="col in columns">
           <input type="text" class="form-control" ng-model="col.type" readonly>
         </th>
-      </tr>
+      </tr-->
 
       <tr ng-repeat="row in samples">
         <th class="legend" rowspan="{{samples.length}}" ng-show="$first">

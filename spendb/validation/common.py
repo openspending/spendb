@@ -18,7 +18,7 @@ def reserved_name(name):
 
 
 def database_name(name):
-    if not re.match(r"^[\w\_]+$", name):
+    if not re.match(r"^[\w\_\-]+$", name):
         return ("Name must include only "
                 "letters, numbers, dashes and underscores")
     if len(name) > 30:

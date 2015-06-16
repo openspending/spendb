@@ -158,8 +158,8 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
 
   var generateColumn = function(name, spec) {
     var c = {
-      name: name, 
-      label: spec.title,
+      name: 'label', 
+      label: 'Label',
       column: name
     };
 
@@ -168,8 +168,9 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     if (parts.length > 1) {
       c.name = parts[1];
       c.concept = 'attribute';
+
       // column titles are: "Foo (Year)"
-      var dim = c.label.split(' (')[0];
+      var dim = spec.title.split(' (')[0];
       c.dimension = inferDimension(parts[0], dim);
     } else if ($scope.isNumeric(spec)) {
       // treat most numbers as measures
@@ -181,7 +182,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     // so it's a dimension
     if (!c.concept) {
       c.concept = 'attribute';
-      c.dimension = inferDimension(name, c.label);
+      c.dimension = inferDimension(name, spec.title);
     }
 
     return c;
@@ -219,7 +220,7 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
     for (var field in data.structure.fields) {
       if (usedFields.indexOf(field) == -1) {
         var fdata = data.structure.fields[field],
-            col = generateColumn(field, fdata, model);
+            col = generateColumn(field, fdata);
         pushColumn(col, col.concept);
       }
     }
