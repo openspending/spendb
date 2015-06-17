@@ -42,13 +42,18 @@ class SpendingModelProvider(ModelProvider):
             mappings[measure.name] = measure.column
 
         for dimension in dataset.model.dimensions:
-            attributes = []
+            attributes, last_col = [], None
             for attr in dimension.attributes:
                 attributes.append({
                     'name': attr.name,
                     'label': attr.label
                 })
-                mappings[attr.path] = attr.column
+                mappings[attr.path] = last_col = attr.column
+
+            # Workaround because the cubes mapper shortens references
+            # for single-attribute dimensions to just the dimension name.
+            if len(attributes) == 1:
+                mappings[dimension.name] = last_col
 
             meta = {
                 'label': dimension.label,

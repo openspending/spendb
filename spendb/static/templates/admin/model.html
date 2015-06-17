@@ -25,7 +25,7 @@
             ng-change="updateConcept(col)"
             ng-disabled="!isNumeric(col)">
             <option value="attribute">Dimension attribute</option>
-            <option value="measure">Amount</option>
+            <option value="measure">Amount measure</option>
           </select>
         </th>
       </tr>
@@ -62,15 +62,6 @@
           <input type="text" class="form-control" ng-model="col.name">
         </th>
       </tr>
-
-      <!--tr>
-        <th class="legend">
-          Field type:
-        </th>
-        <th ng-repeat="col in columns">
-          <input type="text" class="form-control" ng-model="col.type" readonly>
-        </th>
-      </tr-->
 
       <tr ng-repeat="row in samples">
         <th class="legend" rowspan="{{samples.length}}" ng-show="$first">

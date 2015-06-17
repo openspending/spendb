@@ -89,6 +89,7 @@ def update(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
     dataset.update(validate_dataset(request_data()))
+    dataset.touch()
     db.session.commit()
     return view(name)
 
@@ -119,6 +120,7 @@ def update_model(name):
     require.dataset.update(dataset)
     model_data = validate_model(request_data())
     dataset.update_model(model_data)
+    dataset.touch()
     db.session.commit()
     return model(name)
 
@@ -140,6 +142,7 @@ def update_managers(name):
     if current_user not in data['managers']:
         data['managers'].append(current_user)
     dataset.managers = data['managers']
+    dataset.touch()
     db.session.commit()
     return managers(name)
 
@@ -150,6 +153,7 @@ def delete(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
 
+    dataset.flush()
     dataset.fact_table.drop()
     db.session.delete(dataset)
     db.session.commit()
