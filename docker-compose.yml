@@ -1,27 +1,36 @@
 web:
     build: .
-    command: gunicorn -w 5 spendb.wsgi:app
+    command: gunicorn -w 5 -b 0.0.0.0:8000 --error-logfile /var/log/gunicorn.error.log --log-file /var/log/gunicorn.log spendb.wsgi:app
     ports:
         - "8000:8000"
     links:
+        - rabbitmq
         - db
         - worker
+    volumes:
+        - /srv/spendb/logs:/var/log
 
 db:
     image: postgres:9.4
     environment:
-      - POSTGRES_USER= spendb
-      - POSTGRES_PASSWORD= spendb
+      - POSTGRES_USER=spendb
+      - POSTGRES_PASSWORD=spendb
     expose: 
         - "5432"
     volumes:
         - /srv/spendb/db:/var/lib/postgresql
         - /srv/spendb/logs/postgresql:/var/log
+
 rabbitmq:
     image: rabbitmq
+    expose:
+        - "5672"
+
 worker:
     build: .
-    command: celery -A spendb.tasks worker -l info
+    command: celery -A spendb.tasks worker -l info --logfile=/var/log/celery.log
     links:
         - rabbitmq
         - db
+    volumes:
+        - /srv/spendb/logs:/var/log
