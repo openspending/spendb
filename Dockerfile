@@ -30,6 +30,5 @@ ADD . /spendb
 ADD settings.py_tmpl settings.py
 ENV SPENDB_SETTINGS=/spendb/settings.py
 RUN pip install -r requirements.txt -e /spendb
-RUN spendb db migrate
 
 EXPOSE 8000
