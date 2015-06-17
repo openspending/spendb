@@ -13,8 +13,8 @@ web:
 db:
     image: postgres:9.4
     environment:
-      - POSTGRES_USER=spendb
-      - POSTGRES_PASSWORD=spendb
+        - POSTGRES_USER=spendb
+        - POSTGRES_PASSWORD=spendb
     expose: 
         - "5432"
     volumes:
@@ -29,6 +29,8 @@ rabbitmq:
 worker:
     build: .
     command: celery -A spendb.tasks worker -l info --logfile=/var/log/celery.log
+    environment:
+        - C_FORCE_ROOT=true
     links:
         - rabbitmq
         - db
