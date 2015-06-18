@@ -21,6 +21,10 @@ MAIL_DEFAULT_SENDER = 'noreply@mapthemoney.org'
 CACHE = False
 CACHE_TYPE = 'simple'
 
+STORAGE_TYPE = 's3'
+# STORAGE_TYPE = 'file'
+# STORAGE_PATH = '/tmp/foo'
+
 ALEMBIC_DIR = os.path.join(os.path.dirname(__file__), 'migrate')
 ALEMBIC_DIR = os.path.abspath(ALEMBIC_DIR)
 
