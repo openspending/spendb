@@ -195,9 +195,11 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
 
     var pushColumn = function(col, concept) {
       col.concept = concept;
-      col.type = data.structure.fields[col.column].type;
-      usedFields.push(col.column);
-      columns.push(col);
+      if (data.structure.fields[col.column]) {
+        col.type = data.structure.fields[col.column].type;
+        usedFields.push(col.column);
+        columns.push(col);  
+      }
     };
 
     for (var measure in model.measures) {
