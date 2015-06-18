@@ -9,6 +9,8 @@ web:
         - worker
     volumes:
         - /srv/spendb/logs:/var/log
+    env_file:
+        - production.env
 
 db:
     image: postgres:9.4
@@ -29,10 +31,12 @@ rabbitmq:
 worker:
     build: .
     command: celery -A spendb.tasks worker -l info --logfile=/var/log/celery.log
-    environment:
-        - C_FORCE_ROOT=true
     links:
         - rabbitmq
         - db
     volumes:
         - /srv/spendb/logs:/var/log
+    env_file:
+        - production.env
+    environment:
+        - C_FORCE_ROOT=true
