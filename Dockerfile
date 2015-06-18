@@ -27,7 +27,7 @@ ADD bower.json bower.json
 RUN bower install --allow-root
 
 ADD . /spendb
-ADD settings.py_tmpl settings.py
+ADD prod_settings.py settings.py
 ENV SPENDB_SETTINGS=/spendb/settings.py
 RUN pip install -r requirements.txt -e /spendb
 
