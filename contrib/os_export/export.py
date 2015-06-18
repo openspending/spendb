@@ -2,9 +2,10 @@ import os
 import json
 import dataset
 from datetime import datetime
+from normality import slugify
 
 DB_URI = 'postgresql://localhost/openspending'
-OFFENERHAUSHALT_SETS = ['de-bund', 'de-bw', 'open_by', 'berlin_de',
+OFFENERHAUSHALT_SETS = ['de-bw', 'open_by', 'berlin_de',
                         'de-bonn-planung', 'de-bonn', 'de-brandenburg-land',
                         'de-bremen', 'open_gauting', 'de-nrw-cologne',
                         'laatzen2014', 'stadt_lueneburg', 'open_bzmfr',
@@ -12,7 +13,8 @@ OFFENERHAUSHALT_SETS = ['de-bund', 'de-bw', 'open_by', 'berlin_de',
                         'hhos', 'open_rgb', 'open_bzswa', 'uelzen',
                         'haushalt_ulm', 'haushaltwitten']
 
-engine = dataset.connect(os.environ.get('DATABASE_URI', DB_URI))
+engine = dataset.connect(os.environ.get('DATABASE_URI', DB_URI),
+                         reflect_metadata=False)
 
 
 def json_default(obj):
@@ -58,21 +60,21 @@ def get_queries():
                 joins.append((dim_table, dim))
                 for attr, attr_desc in desc.get('attributes').items():
                     alias = '%s_%s' % (dim, attr)
-                    fields.append(('%s.%s' % (dim_table, attr), alias))
+                    fields.append(('%s."%s"' % (dim_table, attr), alias))
             elif desc.get('type') == 'date':
                 dim_table = '"%s%s"' % (table_pattern, dim)
                 joins.append((dim_table, dim))
                 for attr in ['name', 'year', 'month', 'day', 'week',
                              'yearmonth', 'quarter']:
                     alias = '%s_%s' % (dim, attr)
-                    fields.append(('%s.%s' % (dim_table, attr), alias))
+                    fields.append(('%s."%s"' % (dim_table, attr), alias))
                 fields.append(('%s.name' % dim_table, dim))
             else:
-                fields.append(('%s.%s' % (entry_table, dim), dim))
+                fields.append(('%s."%s"' % (entry_table, dim), dim))
 
         select_clause = []
         for src, alias in fields:
-            select_clause.append('%s AS "%s"' % (src, alias))
+            select_clause.append('%s AS "%s"' % (src, slugify(alias, sep='_')))
         select_clause = ', '.join(select_clause)
 
         join_clause = []
@@ -90,6 +92,7 @@ def freeze_all():
     out_base = 'exports'
     for ds, query in get_queries():
         try:
+            ds['export_query'] = query
             path = os.path.join(out_base, ds['name'])
             if not os.path.isdir(path):
                 os.makedirs(path)

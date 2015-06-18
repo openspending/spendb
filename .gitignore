@@ -15,6 +15,7 @@ doc/_build/*
 spendb/static/.webassets-cache/*
 # spendb/static/prod/*
 spendb/static/vendor/*
+contrib/os_export/exports/*
 *~
 .tx/config
 build/*
