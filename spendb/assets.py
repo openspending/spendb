@@ -40,8 +40,8 @@ js_vendor = Bundle('vendor/jquery/dist/jquery.js',
 
 def register_scripts(app):
     assets.register('js_vendor', js_vendor)
-    scripts = ['js/' + b for (a, b) in iter_assets(app, 'js')]
-    js_app = Bundle(*scripts,
+    scripts = ['js/' + b for (a, b) in iter_assets(app, 'js') if b != 'app.js']
+    js_app = Bundle('js/app.js', *scripts,
                     filters='uglifyjs', output='prod/app.js')
     assets.register('js_app', js_app)
 
