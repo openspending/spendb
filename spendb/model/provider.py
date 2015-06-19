@@ -73,10 +73,16 @@ class SpendingModelProvider(ModelProvider):
                     'name': dimension.name,
                     'label': dimension.label,
                     'cardinality': cardinality,
-                    # 'key': 'name',
                     'attributes': attributes
                 }]
             }
+            if dimension.key_attribute:
+                meta['levels'][0]['key'] = dimension.key_attribute.name
+            if dimension.label_attribute:
+                meta['levels'][0]['label_attribute'] = \
+                    dimension.label_attribute.name
+                meta['levels'][0]['order_attribute'] = \
+                    dimension.label_attribute.name
             dimensions.append(Dimension.from_metadata(meta))
 
         cube = Cube(name=dataset.name,

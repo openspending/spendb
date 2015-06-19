@@ -44,6 +44,21 @@ class Dimension(object):
         for name, attr in self.data.get('attributes', {}).items():
             yield Attribute(self, name, attr)
 
+    @property
+    def label_attribute(self):
+        name = self.data.get('label_attribute') or 'label'
+        for attr in self.attributes:
+            if attr.name == name:
+                return attr
+
+    @property
+    def key_attribute(self):
+        name = self.data.get('key_attribute') or 'id'
+        for attr in self.attributes:
+            if attr.name == name:
+                return attr
+        return self.label_attribute
+
     def __repr__(self):
         return "<Dimension(%s)>" % self.name
 
