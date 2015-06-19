@@ -148,14 +148,6 @@ def dashboard(format='html'):
     return profile(current_user.name)
 
 
-@blueprint.route('/logout')
-def logout():
-    disable_cache()
-    logout_user()
-    flash_success(_("You have been logged out."))
-    return redirect(url_for('home.index'))
-
-
 @blueprint.route('/account/forgotten', methods=['POST', 'GET'])
 def trigger_reset():
     """

@@ -93,10 +93,16 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
     $document.scrollToElement(elem, 0, 300);
   };
 
-
   // Allow SCE escaping in the app
   $scope.trustAsHtml = function(text) {
     return $sce.trustAsHtml('' + text);
+  };
+
+  // Logout
+  $scope.logout = function() {
+    session.logout(function(s) {
+      $scope.session = s;
+    });
   };
 
   session.get(function(s) {

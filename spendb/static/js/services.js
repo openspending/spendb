@@ -90,12 +90,26 @@ spendb.factory('data', ['$http', function($http) {
 
 
 spendb.factory('session', ['$http', function($http) {
-  var sessionDfd = $http.get('/api/3/sessions');
-  return {
-    'get': function(cb) {
-      sessionDfd.then(function(res) {
-        cb(res.data);
-      });  
+  var sessionDfd = null;
+
+  var logout = function(cb) {
+    $http.post('/api/3/sessions/logout').then(function() {
+      sessionDfd = null;
+      get(cb);
+    });
+  };
+
+  var get = function(cb) {
+    if (sessionDfd === null) {
+      sessionDfd = $http.get('/api/3/sessions');
     }
+    sessionDfd.then(function(res) {
+      cb(res.data);
+    });
+  };
+
+  return {
+    'get': get,
+    'logout': logout
   }
 }]);
