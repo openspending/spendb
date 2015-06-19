@@ -14,7 +14,7 @@ def _dataset_name(name):
     cannot be used for dataset names. """
     if name is not None and name.lower() in RESERVED_TERMS:
         return "'%s' is a reserved word and cannot be used here" % name
-    if not re.match(r"^[\w\_\-]+$", name):
+    if not re.match(r"^\w[\w\_\-]+$", name):
         return ("Name must include only "
                 "letters, numbers, dashes and underscores")
     if '__' in name:
@@ -28,7 +28,7 @@ dataset_name = All(Length(min=2, max=30), Function(_dataset_name))
 def _field_name(name):
     """ These are names that have a special meaning in URLs and
     cannot be used for dataset names. """
-    if not re.match(r"^[\w\_]+$", name):
+    if not re.match(r"^\w[\w\_]+$", name):
         return ("Name must include only letters, numbers and underscores")
     if '__' in name:
         return "Double underscores are not allowed in field names."

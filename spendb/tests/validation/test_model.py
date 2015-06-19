@@ -21,6 +21,12 @@ class TestModel(TestCase):
         except Invalid, i:
             assert False, i.asdict()
 
+    def test_keep_extra_data(self):
+        ms = self.model['model']
+        ms['ignore_columns'] = ['huhu']
+        os = validate_model(ms)
+        assert 'ignore_columns' in os, os.keys()
+
     @raises(Invalid)
     def test_from_is_compound(self):
         ms = self.model['model']
@@ -113,3 +119,18 @@ class TestModel(TestCase):
         ms = self.model['model'].copy()
         ms['dimensions']['function']['attributes']['description']['type'] = 'banana'
         validate_model(ms)
+
+    def test_set_label_attribute(self):
+        ms = self.model['model'].copy()
+        ms['dimensions']['function']['label_attribute'] = 'label'
+        ms['dimensions']['function']['key_attribute'] = 'name'
+        ms = validate_model(ms)
+        assert ms['dimensions']['function']['label_attribute'] == 'label'
+        assert ms['dimensions']['function']['key_attribute'] == 'name'
+
+    @raises(Invalid)
+    def test_set_invalid_label_attribute(self):
+        ms = self.model['model'].copy()
+        ms['dimensions']['function']['label_attribute'] = 'foo'
+        os = validate_model(ms)
+        assert False, os['dimensions']

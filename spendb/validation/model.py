@@ -1,5 +1,5 @@
 from colander import All, MappingSchema, Schema, String, SchemaNode
-from colander import Boolean, drop, Length, OneOf, Function, Int
+from colander import Boolean, drop, Length, OneOf, Function, Int, Mapping
 
 from spendb.core import db
 from spendb.validation.common import field_name, require_one_child
@@ -47,6 +47,16 @@ def generate_mappings(node, kw):
         generate_mappings(child, kw)
 
 
+def attributes_exist(data):
+    attrs = data['attributes']
+    for name in ['label_attribute', 'key_attribute']:
+        if isinstance(attrs, dict) and len(attrs.keys()) == 1:
+            data[name] = list(attrs)[0]
+        if data[name] is not None and data[name] not in data['attributes']:
+            return 'The specified %s does not exist: %s' % (name, data[name])
+    return True
+
+
 class Attribute(MappingSchema):
     label = SchemaNode(String(), missing=drop)
     description = SchemaNode(String(), missing='')
@@ -62,13 +72,15 @@ class Attributes(MappingSchema):
 class Dimension(MappingSchema):
     label = SchemaNode(String(), missing=drop)
     description = SchemaNode(String(), missing='')
+    label_attribute = SchemaNode(String(), missing=None)
+    key_attribute = SchemaNode(String(), missing=None)
     facet = SchemaNode(Boolean(), missing=False)
     cardinality = SchemaNode(Int(), missing=None, default=None)
     attributes = Attributes(validator=Function(require_one_child))
 
 
 class Dimensions(MappingSchema):
-    _named = Dimension()
+    _named = Dimension(validator=Function(attributes_exist))
 
 
 class Measure(Attribute):
@@ -83,6 +95,9 @@ class Measures(MappingSchema):
 class Model(Schema):
     dimensions = Dimensions(validator=Function(require_one_child))
     measures = Measures(validator=Function(require_one_child))
+
+    def schema_type(self, **kw):
+        return Mapping(unknown='preserve')
 
 
 def validate_model(model):
