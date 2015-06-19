@@ -8,6 +8,13 @@ var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 
 spendb.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
+  $routeProvider.when('/login', {
+    templateUrl: 'account_login.html',
+    controller: 'AccountLoginCtrl',
+    resolve: {}
+  });
+
+
   $routeProvider.when('/datasets/new', {
     templateUrl: 'new.html',
     controller: 'NewCtrl',
@@ -102,6 +109,7 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
   $scope.logout = function() {
     session.logout(function(s) {
       $scope.session = s;
+      $location.path('/');
     });
   };
 

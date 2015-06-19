@@ -20,11 +20,6 @@ class TestAccountApiController(ControllerTestCase):
         account = make_account()
         assert len(account.api_key) == 36
 
-    def test_settings(self):
-        account = make_account()
-        self.client.get(url_for('account_api.settings'),
-                        query_string={'api_key': account.api_key})
-
     def test_trigger_reset_post_fail(self):
         response = self.client.post(url_for('account_api.trigger_reset'),
                                     data=json.dumps({'emailx': "foo@bar"}),
@@ -54,13 +49,12 @@ class TestAccountApiController(ControllerTestCase):
         response = self.client.get(url_for('account.do_reset',
                                    token=account.token,
                                    email=account.email))
-        assert '/settings' in response.headers['location'], response.headers
+        assert '/' in response.headers['location'], response.headers
 
     def test_completion_access_check(self):
-        response = self.client.get(url_for('account_api.complete'))
-        obj = json.loads(response.data)
-        assert u'You are not authorized to see that page' == \
-            obj.get('errors'), response.data
+        res = self.client.get(url_for('account_api.complete'))
+        assert u'You are not authorized to see that page' in \
+            res.json['message'], res.json
 
     def test_distinct_json(self):
         test = make_account()

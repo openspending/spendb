@@ -56,7 +56,9 @@ def login():
             })
     return jsonify({
         'status': 'error',
-        'message': _("Incorrect user name or password!")
+        'errors': {
+            'password': _("Incorrect user name or password!")
+        }
     }, status=400)
 
 

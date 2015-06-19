@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 blueprint = Blueprint('account_api', __name__)
 
 
-@blueprint.route('/register', methods=['POST', 'PUT'])
+@blueprint.route('/account', methods=['POST', 'PUT'])
 def register():
     """ Perform registration of a new user """
     disable_cache()
@@ -58,21 +58,6 @@ def register():
     return jsonify(account)
 
 
-@blueprint.route('/settings')
-def settings():
-    """ Change settings for the logged in user """
-    disable_cache()
-    require.account.update(current_user)
-    values = current_user.to_dict()
-    if current_user.public_email:
-        values['public_email'] = current_user.public_email
-    if current_user.public_twitter:
-        values['public_twitter'] = current_user.public_twitter
-    values['api_key'] = current_user.api_key
-    return render_template('account/settings.html',
-                           form_fill=values)
-
-
 @blueprint.route('/account/<account>', methods=['POST', 'PUT'])
 def update(account):
     """ Change settings for the logged in user """
@@ -107,7 +92,7 @@ def complete(format='json'):
     disable_cache()
     if not current_user.is_authenticated():
         msg = _("You are not authorized to see that page")
-        return jsonify({'errors': msg}, status=403)
+        return jsonify({'status': 'error', 'message': msg}, status=403)
 
     query = db.session.query(Account)
     filter_string = request.args.get('q', '') + '%'
@@ -149,27 +134,27 @@ def trigger_reset():
     })
 
 
-@blueprint.route('/account/_reset')
+@blueprint.route('/reset')
 def do_reset():
     email = request.args.get('email')
     if email is None or not len(email):
         flash_error(_("The reset link is invalid!"))
-        return redirect(url_for('account.login'))
+        return redirect('/login')
 
     account = Account.by_email(email)
     if account is None:
         flash_error(_("No user is registered under this address!"))
-        return redirect(url_for('account.login'))
+        return redirect('/login')
 
     if request.args.get('token') != account.token:
         flash_error(_("The reset link is invalid!"))
-        return redirect(url_for('account.login'))
+        return redirect('/login')
 
     login_user(account)
     flash_success(
         _("Thanks! You have now been signed in - please change "
           "your password!"))
-    return redirect(url_for('account.settings'))
+    return redirect('/')
 
 
 @blueprint.route('/account/<account>')

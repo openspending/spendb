@@ -44,17 +44,6 @@ class TestAccountController(ControllerTestCase):
             assert self.user.email in outbox[0].recipients, \
                 outbox[0].recipients
 
-    def test_reset_get(self):
-        response = self.client.get(url_for('account.do_reset',
-                                   token='huhu',
-                                   email='huhu@example.com'))
-        assert '/login' in response.headers['location'], response.headers
-        account = make_account()
-        response = self.client.get(url_for('account.do_reset',
-                                   token=account.token,
-                                   email=account.email))
-        assert '/settings' in response.headers['location'], response.headers
-
     def test_dashboard_not_logged_in(self):
         response = self.client.get(url_for('account.dashboard'))
         assert '403' in response.status, response.status
@@ -194,46 +183,3 @@ class TestAccountController(ControllerTestCase):
             'Username heading is not in profile when Twitter handle is empty'
         assert 'test' in response.data, \
             'Username for user is not in profile when Twitter handle is empty'
-
-    def test_terms_check(self):
-        """
-        Test whether terms of use are present on the signup page (login) page
-        and whether they are a required field.
-        """
-
-        # Get the login page
-        response = self.client.get(url_for('account.login'))
-        assert '200' in response.status, \
-            'Error (status is not 200) while retrieving the login/signup page'
-
-        # Check if user can send an input field for terms of use/privacy
-        assert 'name="terms"' in response.data, \
-            'Terms of use input field not present'
-
-        # Check that not filling up the field throws a 'required' response
-        # if the terms box is not in the post request (not checked)
-        response = self.client.post(url_for('account.register'),
-                                    data={'name': 'termschecker',
-                                          'fullname': 'Term Checker',
-                                          'email': 'termchecker@test.com',
-                                          'password1': 'secret',
-                                          'password2': 'secret'})
-        assert 'name="terms"' in response.data, \
-            'Terms of use checkbox not present after registering without tick'
-        # Check if user is told it is required (this can be anywhere on the
-        # page, and might not even be tied to terms of use checkbox but it
-        # should be present nonetheless)
-        assert 'Required' in response.data, \
-            'User is not told that a field is "Required"'
-
-        # Check that terms input field is not present after a successful
-        # register
-        response = self.client.post(url_for('account.register'),
-                                    data={'name': 'termschecker',
-                                          'fullname': 'Term Checker',
-                                          'email': 'termchecker@test.com',
-                                          'password1': 'secret',
-                                          'password2': 'secret',
-                                          'terms': True})
-        assert 'name="terms"' not in response.data, \
-            'Terms of use checkbox is present even after a successful register'
