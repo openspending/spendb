@@ -1,10 +1,10 @@
 import urllib
 import os
 import json
-import csv
 import urlparse
 from StringIO import StringIO
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 
 from spendb.model.dataset import Dataset
 from spendb.core import db
@@ -100,7 +100,7 @@ def load_fixture(name, manager=None):
 
 def make_account(name='test', fullname='Test User',
                  email='test@example.com', twitter='testuser',
-                 admin=False):
+                 admin=False, password='password'):
     from spendb.model.account import Account
 
     # First see if the account already exists and if so, return it
@@ -115,6 +115,7 @@ def make_account(name='test', fullname='Test User',
     account.email = email
     account.twitter_handle = twitter
     account.admin = admin
+    account.password = generate_password_hash(password)
     db.session.add(account)
     db.session.commit()
     return account

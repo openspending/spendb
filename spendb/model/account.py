@@ -57,6 +57,9 @@ class Account(db.Model):
     def is_authenticated(self):
         return True
 
+    def is_anonymous(self):
+        return False
+
     def is_active(self):
         return True
 
