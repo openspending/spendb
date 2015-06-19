@@ -84,66 +84,6 @@ def dashboard(format='html'):
     return profile(current_user.name)
 
 
-@blueprint.route('/account/forgotten', methods=['POST', 'GET'])
-def trigger_reset():
-    """
-    Allow user to trigger a reset of the password in case they forget it
-    """
-    disable_cache()
-    # If it's a simple GET method we return the form
-    if request.method == 'GET':
-        return render_template('account/trigger_reset.html')
-
-    # Get the email
-    email = request.form.get('email')
-
-    # Simple check to see if the email was provided. Flash error if not
-    if email is None or not len(email):
-        flash_error(_("Please enter an email address!"))
-        return render_template('account/trigger_reset.html')
-
-    # Get the account for this email
-    account = Account.by_email(email)
-
-    # If no account is found we let the user know that it's not registered
-    if account is None:
-        flash_error(_("No user is registered under this address!"))
-        return render_template('account/trigger_reset.html')
-
-    # Send the reset link to the email of this account
-    send_reset_link(account)
-
-    # Let the user know that email with link has been sent
-    flash_success(_("You've received an email with a link to reset your "
-                    "password. Please check your inbox."))
-
-    # Redirect to the login page
-    return redirect(url_for('account.login'))
-
-
-@blueprint.route('/account/reset')
-def do_reset():
-    email = request.args.get('email')
-    if email is None or not len(email):
-        flash_error(_("The reset link is invalid!"))
-        return redirect(url_for('account.login'))
-
-    account = Account.by_email(email)
-    if account is None:
-        flash_error(_("No user is registered under this address!"))
-        return redirect(url_for('account.login'))
-
-    if request.args.get('token') != account.token:
-        flash_error(_("The reset link is invalid!"))
-        return redirect(url_for('account.login'))
-
-    login_user(account)
-    flash_success(
-        _("Thanks! You have now been signed in - please change "
-          "your password!"))
-    return redirect(url_for('account.settings'))
-
-
 @blueprint.route('/account/<account>')
 def profile(account):
     """ Generate a profile page for a user (from the provided name) """

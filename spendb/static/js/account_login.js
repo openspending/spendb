@@ -1,6 +1,6 @@
 
-spendb.controller('AccountLoginCtrl', ['$scope', '$document', '$http', '$location', 'validation', 'session',
-  function($scope, $document, $http, $location, validation, session) {
+spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location', 'validation', 'session',
+  function($scope, $modal, $http, $location, validation, session) {
   $scope.setTitle("Login and registration");
 
   $scope.credentials = {};
@@ -17,6 +17,15 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$document', '$http', '$locatio
       // session.
       $location.path('/');
     }, validation.handle(form));
+  };
+
+  $scope.resetPassword = function() {
+    var d = $modal.open({
+      templateUrl: 'account_reset.html',
+      controller: 'AccountResetCtrl',
+      backdrop: true,
+      resolve: {},
+    });
   };
 
 }]);

@@ -101,7 +101,7 @@ def complete(format='json'):
     return jsonify(Pager(query))
 
 
-@blueprint.route('/account/_forgotten', methods=['POST', 'GET'])
+@blueprint.route('/reset', methods=['POST', 'GET'])
 def trigger_reset():
     """
     Allow user to trigger a reset of the password in case they forget it

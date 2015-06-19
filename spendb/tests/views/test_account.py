@@ -22,28 +22,6 @@ class TestAccountController(ControllerTestCase):
         self.client.get(url_for('account.settings'),
                         query_string={'api_key': account.api_key})
 
-    def test_trigger_reset_get(self):
-        response = self.client.get(url_for('account.trigger_reset'))
-        assert 'email address you used to register your account'\
-            in response.data, response.data
-
-    def test_trigger_reset_post_fail(self):
-        response = self.client.post(url_for('account.trigger_reset'),
-                                    data={'emailx': "foo@bar"})
-        assert 'Please enter an email address' in response.data, response.data
-        response = self.client.post(url_for('account.trigger_reset'),
-                                    data={'email': "foo@bar"})
-        assert 'No user is registered' in response.data, response.data
-
-    def test_trigger_reset_post_ok(self):
-        with mail.record_messages() as outbox:
-            response = self.client.post(url_for('account.trigger_reset'),
-                                        data={'email': self.user.email})
-            assert '302' in response.status
-            assert len(outbox) == 1, outbox
-            assert self.user.email in outbox[0].recipients, \
-                outbox[0].recipients
-
     def test_dashboard_not_logged_in(self):
         response = self.client.get(url_for('account.dashboard'))
         assert '403' in response.status, response.status

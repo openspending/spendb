@@ -25,6 +25,7 @@ js_base = Bundle(js_vendor,
                  'js/directives.js',
                  'js/controllers.js',
                  'js/account_login.js',
+                 'js/account_reset.js',
                  'js/admin.js',
                  filters='uglifyjs', output='prod/base.js')
 assets.register('js_base', js_base)
