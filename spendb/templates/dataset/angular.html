@@ -1,8 +1,0 @@
-{% extends "dataset/_base.html" %}
-
-{% block page_title %}{{ dataset.label if dataset else '' }}{% endblock %}
-{% block page_desc %}{{ dataset.description if dataset else '' | markdown_preview }}{% endblock %}
-
-{% block inner_content %}
-  <div ng-view></div>
-{% endblock %}

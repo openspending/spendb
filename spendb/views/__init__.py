@@ -7,7 +7,6 @@ from spendb.views.context import home
 from spendb.views.cache import NotModified, handle_not_modified
 from spendb.views.i18n import get_locale
 
-from spendb.views.dataset import blueprint as dataset
 from spendb.views.error import handle_error, handle_invalid
 from spendb.views.api.dataset import blueprint as datasets_api
 from spendb.views.api.meta import blueprint as meta_api
@@ -31,7 +30,6 @@ def register_views(app, babel):
     app.register_blueprint(slicer, url_prefix='/api/slicer', config={})
 
     app.register_blueprint(home)
-    app.register_blueprint(dataset)
 
     app.error_handler_spec[None][400] = handle_error
     app.error_handler_spec[None][401] = handle_error
