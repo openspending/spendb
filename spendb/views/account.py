@@ -18,24 +18,6 @@ from spendb.views.cache import disable_cache
 blueprint = Blueprint('account', __name__)
 
 
-@login_manager.request_loader
-def load_user_from_request(request):
-    api_key = request.args.get('api_key')
-    if api_key and len(api_key):
-        account = Account.by_api_key(api_key)
-        if account:
-            return account
-
-    api_key = request.headers.get('Authorization')
-    if api_key and len(api_key) and ' ' in api_key:
-        method, api_key = api_key.split(' ', 1)
-        if method.lower() == 'apikey':
-            account = Account.by_api_key(api_key)
-            if account:
-                return account
-    return None
-
-
 @blueprint.route('/login', methods=['GET'])
 def login():
     """ Render the login/registration page. """
