@@ -9,7 +9,7 @@ from apikit import jsonify, Pager, request_data
 from fiscalmodel import COUNTRIES, LANGUAGES
 
 from spendb.core import db
-from spendb.model import Dataset, DatasetLanguage, DatasetTerritory
+from spendb.model import Dataset, DatasetLanguage, DatasetTerritory, Account
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
@@ -37,6 +37,12 @@ def query_index():
         t = aliased(DatasetTerritory)
         q = q.join(t, Dataset._territories)
         q = q.filter(t.code == territory)
+
+    # Filter by account if one has been provided
+    for account in request.args.getlist('account'):
+        a = aliased(Account)
+        q = q.join(a, Dataset.managers)
+        q = q.filter(a.name == account)
 
     # Return a list of languages as dicts with code, count, url and label
     languages = [{'code': code, 'count': count, 'label': LANGUAGES.get(code)}
