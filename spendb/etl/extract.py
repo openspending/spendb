@@ -28,6 +28,12 @@ def field_transform(fields):
                     'type': 'integer',
                     'title': '%s (%s)' % (field['title'], section)
                 }
+            name = date_field(field['name'], 'label')
+            spec[name] = {
+                'name': name,
+                'type': 'string',
+                'title': field['title']
+            }
         else:
             spec[field['name']] = field
     return spec
@@ -55,12 +61,16 @@ def parse_table(row_set):
         for cell, field in zip(row, fields):
             value = cell.value
             if field['type'] == 'date':
-                values = None, None, None
-                if isinstance(value, (datetime, date)):
-                    values = value.year, value.month, value.day
+                values = None, None, None, None
+                if isinstance(value, datetime):
+                    value = value.date()
+                if isinstance(value, date):
+                    values = value.year, value.month, value.day, \
+                        value.isoformat()
                 data[date_field(field['name'], 'year')] = values[0]
                 data[date_field(field['name'], 'month')] = values[1]
                 data[date_field(field['name'], 'day')] = values[2]
+                data[date_field(field['name'], 'label')] = values[3]
             else:
                 if isinstance(value, Decimal):
                     # Baby jesus forgive me.
