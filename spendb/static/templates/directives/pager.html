@@ -1,8 +1,12 @@
 
 <ul ng-show="showPager" class="pagination pagination-cursors">
-  <li ng-class="{'disabled': response.prev_url==null}"><a ng-click="load({offset: offset - response.limit})">&laquo;</a></li>
-  <li ng-repeat="page in pages" ng-class="{'active': page.current}">
-    <a ng-click="load({offset: page.offset})">{{page.page}}</a>
+  <li ng-if="response.prev_url">
+    <a class="ng-link" ng-click="load({offset: offset - response.limit})">&laquo;</a>
   </li>
-  <li ng-class="{'disabled': response.next_url==null}"><a ng-click="load({offset: offset + response.limit})">&raquo;</a></li>
+  <li ng-repeat="page in pages" ng-class="{'active': page.current}">
+    <a class="ng-link" ng-click="load({offset: page.offset})">{{page.page}}</a>
+  </li>
+  <li ng-if="response.next_url">
+    <a class="ng-link" ng-click="load({offset: offset + response.limit})">&raquo;</a>
+  </li>
 </ul>
