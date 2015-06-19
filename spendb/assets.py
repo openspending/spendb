@@ -31,6 +31,7 @@ js_base = Bundle(js_vendor,
                  'js/account_reset.js',
                  'js/account_settings.js',
                  'js/account_profile.js',
+                 'js/dataset_index.js',
                  'js/admin.js',
                  filters='uglifyjs', output='prod/base.js')
 assets.register('js_base', js_base)

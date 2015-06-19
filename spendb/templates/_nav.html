@@ -2,7 +2,6 @@
   <div class="navbar-inner">
     <div class="container-fluid">
       <div class="navbar-header">
-        
         <button type="button" class="navbar-toggle collapsed"
           data-toggle="collapse" data-target="#main-collapse">
           <span class="sr-only">Toggle navigation</span>
@@ -10,17 +9,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        
-        <a class="navbar-brand" href="/">
-          {{ site_title }}
-        </a>
-
+        <a class="navbar-brand" href="/">{{ site_title }}</a>
       </div>
 
       <div class="collapse navbar-collapse" id="main-collapse">
         <ul class="nav navbar-nav">
           <li>
-            <a href="{{url_for('dataset.index')}}">
+            <a href="/datasets">
               {% trans %}Datasets{% endtrans %}
             </a>
           </li>
@@ -36,42 +31,40 @@
           </li>
         </ul>
         
-        <ul class="nav navbar-nav navbar-right">
-          {% if logged_in %}
-            <li class="dropdown" dropdown>
-              <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">
-                <strong>{{ current_user.name }}</strong>
-                <img src="{{ current_user.email }}"
-                  alt="{{ current_user.fullname }}">
-              </a>
+        {% raw %}
+        <ul class="nav navbar-nav navbar-right" ng-cloak>
+          <li class="dropdown" dropdown>
+            <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">
+              <strong>{{ session.user.display_name }}</strong>
+              <img ng-src="{{ session.user.gravatar }}?s=26" alt="{{ session.user.display_name }}">
+            </a>
 
-              <ul class="dropdown-menu account-dropdown" role="menu">
-                <li>
-                  <a href="/accounts/{{current_user.name}}">
-                    {% trans %}Dashboard{% endtrans %}
-                  </a>
-                </li>
-                <li>
-                  <a href="/settings">
-                    {% trans %}Settings{% endtrans %}
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a ng-click="logout()" class="clickable">
-                    {% trans %}Logout{% endtrans %}
-                  </a>
-                </li>
-              </ul>
-            </li>
-          {% else %}
-            <li>
-              <a href="/login">
-                {% trans %}Login/Register{% endtrans %}
-              </a>
-            </li>
-          {% endif %}
+            <ul class="dropdown-menu account-dropdown" role="menu">
+              <li>
+                <a ng-href="/accounts/{{session.user.name}}">
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a href="/settings">
+                  Settings
+                </a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a ng-click="logout()" class="clickable">
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li ng-hide="session.logged_in">
+            <a href="/login">
+              Login/Register
+            </a>
+          </li>
         </ul>
+        {% endraw %}
       </div>
     </div>
   </div>

@@ -48,6 +48,14 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/datasets', {
+    templateUrl: 'dataset_index.html',
+    controller: 'DatasetIndexCtrl',
+    resolve: {
+      datasets: loadIndexDatasets
+    }
+  });
+
   $routeProvider.when('/datasets/new', {
     templateUrl: 'new.html',
     controller: 'NewCtrl',

@@ -18,11 +18,6 @@ class TestDatasetController(ControllerTestCase):
         self.dataset = load_fixture('cra')
         self.user = make_account('test')
 
-    def test_index(self):
-        response = self.client.get(url_for('dataset.index'))
-        assert 'The database contains the following datasets' in response.data
-        assert 'cra' in response.data
-
     def test_view_private(self):
         cra = Dataset.by_name('cra')
         cra.private = True

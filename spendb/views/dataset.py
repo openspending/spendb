@@ -11,22 +11,11 @@ from spendb import auth
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
 from spendb.views.context import angular_templates
-from spendb.views.api.dataset import query_index
 
 log = logging.getLogger(__name__)
 
 
 blueprint = Blueprint('dataset', __name__)
-
-
-@blueprint.route('/datasets')
-def index():
-    """ Get a list of all datasets along with territory, language, and
-    category counts (amount of datasets for each). """
-    pager, languages, territories = query_index()
-    etag_cache_keygen(pager.cache_keys())
-    return render_template('dataset/index.html', pager=pager,
-                           languages=languages, territories=territories)
 
 
 @blueprint.route('/datasets/<dataset>')

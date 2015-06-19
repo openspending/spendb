@@ -3,9 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      {% block page_title %}{% endblock %} - {{ site_title }}
-    </title>
+    <title>{{ site_title }}</title>
 
     <meta name="description" content="{% block page_desc %}{% trans %}We're enabling anyone to explore, visualize and track government spending.{% endtrans %}{% endblock %}" />
     <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}"
@@ -21,14 +19,9 @@
     {% assets "css_main" %}
       <link href="{{ ASSET_URL }}" rel="stylesheet" />
     {% endassets %}
-    
-  	<!-- TODO: remove the need for this -->
-  	{% block optional_head %}{% endblock %}
   </head>
 
-  <!-- templates/layout.html body -->
   <body ng-controller="AppCtrl">
-    {% block page %}
     <div id="page">
       {% include '_nav.html' %}
 
@@ -36,40 +29,23 @@
         <div class="pull-right controls">
             {% block title_buttons %}{% endblock %}
         </div>
-        <h1 id="page-title">
-          {{ self.page_title() }}
-        </h1>
+        <h1 id="page-title"></h1>
       </div>
 
       <div class="banner" ng-cloak>
         <div class="container-fluid">
-          {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-              <div class="row">
-                <div class="col-xs-12">
-    	            {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                      {{ message }}
-                    </div>
-    	            {% endfor %}
-                </div>
-              </div>
-            {% endif %}
-          {% endwith %}
           {% raw %}
             <div ng-show="flash.getMessage()" class="alert alert-{{flash.getMessage()[1]}}">
               <p>{{flash.getMessage()[0]}}</p>
             </div>
           {% endraw %}
-          {% block banner %}{% endblock %}
         </div>
       </div>
 
       <div class="container-fluid">
-        {% block content %}{% endblock %}
+        <div ng-view></div>
       </div>
     </div>
-    {% endblock page %}
 
     <div id="catapult-cookie-bar" ng-show="showCookieWarning" ng-cloak>
       {% trans %}This site uses cookies{% endtrans %}
@@ -77,7 +53,7 @@
         {% trans %}Okay, thanks{% endtrans %}
       </button>
 
-      <a href="{{url_for('home.page', path='tos.html')}}">
+      <a href="/docs/tos.html">
         {% trans %}Find out more{% endtrans %}
       </a>
     </div>
@@ -98,6 +74,8 @@
     {% endassets %}
     <!-- end script boot section -->
 
-  	{% block scripts %}{% endblock %}
+    {% for path, tmpl in templates %}
+      <script id="{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
+    {% endfor %}
   </body>
 </html>

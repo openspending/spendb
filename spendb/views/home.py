@@ -15,13 +15,14 @@ blueprint = Blueprint('home', __name__)
 @blueprint.route('/settings')
 @blueprint.route('/accounts/<account>')
 @blueprint.route('/docs/<path:page>')
+@blueprint.route('/datasets')
 @blueprint.route('/datasets/<dataset>/admin/data')
 @blueprint.route('/datasets/<dataset>/admin/metadata')
 @blueprint.route('/datasets/<dataset>/admin/model')
 @blueprint.route('/datasets/<dataset>/admin/runs/<run>')
 def index(*a, **kw):
     from spendb.views.context import angular_templates
-    return render_template('angular.html',
+    return render_template('layout.html',
                            templates=angular_templates(current_app))
 
 
