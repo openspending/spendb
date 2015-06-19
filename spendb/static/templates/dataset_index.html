@@ -1,50 +1,36 @@
 
-<a class="btn btn-success" href="{{url_for('dataset.new')}}">
+<a class="btn btn-success" href="/datasets/new">
   Import &raquo;
 </a>
 
+<p>Our database contains the following datasets:</p>
+
 <div class="row">
   <div class="col-md-8">
-    <p>The database contains the following datasets:</p>
-    
     <dataset-list datasets="datasets"></dataset-list>
   </div>
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">Countries covered</div>
       <div class="list-group">
-        {% for territory in territories %}
-          {% if not pager.has_url_state('territories', territory.get('code')) %}
-            <a class="list-group-item" href="{{pager.add_url_state('territories', territory.get('code'))}}">
-              <span class="badge">{{territory.get('count')}}</span>
-              {{territory.get('label')}}
-            </a>
-          {% else %}
-            <a class="list-group-item active" href="{{pager.remove_url_state('territories', territory.get('code'))}}">
-              <span class="badge">{{territory.get('count')}}</span>
-              {{territory.get('label')}}
-            </a>
-          {% endif %}
-        {% endfor %}
+        <a class="list-group-item" ng-repeat="t in datasets.territories"
+          ng-class="{'active': hasFacet('territories', t.code)}"
+          ng-click="toggleFacet('territories', t.code)">
+          <span class="badge">{{t.count}}</span>
+          {{t.label}}
+        </a>
       </div>
     </div>
 
     <div class="panel panel-default">
       <div class="panel-heading">Languages</div>
       <div class="list-group">
-        {% for language in languages %}
-          {% if not pager.has_url_state('languages', language.get('code')) %}
-            <a class="list-group-item" href="{{pager.add_url_state('languages', language.get('code'))}}">
-              <span class="badge">{{language.get('count')}}</span>
-              {{language.get('label')}}
-            </a>
-          {% else %}
-            <a class="list-group-item active" href="{{pager.remove_url_state('languages', language.get('code'))}}">
-              <span class="badge">{{language.get('count')}}</span>
-              {{language.get('label')}}
-            </a>
-          {% endif %}
-        {% endfor %}
+        <a class="list-group-item" ng-repeat="l in datasets.languages"
+          ng-class="{'active': hasFacet('languages', l.code)}"
+          ng-click="toggleFacet('languages', l.code)">
+          <span class="badge">{{l.count}}</span>
+          {{l.label}}
+        </a>
       </div>
     </div>
   </div>
