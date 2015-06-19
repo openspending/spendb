@@ -46,7 +46,7 @@ class TestAccountApiController(ControllerTestCase):
                                    email='huhu@example.com'))
         assert '/login' in response.headers['location'], response.headers
         account = make_account()
-        response = self.client.get(url_for('account.do_reset',
+        response = self.client.get(url_for('account_api.do_reset',
                                    token=account.token,
                                    email=account.email))
         assert '/' in response.headers['location'], response.headers

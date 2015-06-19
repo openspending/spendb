@@ -34,15 +34,6 @@ class TestDatasetController(ControllerTestCase):
         assert 'spendb_browser' not in response.data, \
             "'spendb_browser' in response!"
 
-    def test_view_has_profile_links(self):
-        self.dataset.managers.append(self.user)
-        db.session.add(self.dataset)
-        db.session.commit()
-        response = self.client.get(url_for('dataset.view', dataset='cra'))
-        profile_url = url_for('account.profile', account=self.user.name)
-        assert profile_url in response.data
-        assert self.user.fullname in response.data.decode('utf-8')
-
     def test_view_has_timestamps(self):
         """
         Test whether about page includes timestamps when dataset was created

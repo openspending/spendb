@@ -9,6 +9,5 @@ class TestErrors(ControllerTestCase):
         assert 'Not Found' in response.data
 
     def test_error_403(self):
-        response = self.client.get('/dashboard')
-        assert 'SpenDB' in response.data
-        assert 'Forbidden' in response.data
+        response = self.client.post('/api/3/datasets')
+        assert response.status_code == 403, response
