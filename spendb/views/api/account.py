@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 blueprint = Blueprint('account_api', __name__)
 
 
-@blueprint.route('/account', methods=['POST', 'PUT'])
+@blueprint.route('/accounts', methods=['POST', 'PUT'])
 def register():
     """ Perform registration of a new user """
     disable_cache()
@@ -58,7 +58,7 @@ def register():
     return jsonify(account)
 
 
-@blueprint.route('/account/<account>', methods=['POST', 'PUT'])
+@blueprint.route('/accounts/<account>', methods=['POST', 'PUT'])
 def update(account):
     """ Change settings for the logged in user """
     require.account.update(current_user)
@@ -154,15 +154,17 @@ def do_reset():
     flash_success(
         _("Thanks! You have now been signed in - please change "
           "your password!"))
-    return redirect('/')
+    return redirect('/settings')
 
 
-@blueprint.route('/account/<account>')
+@blueprint.route('/accounts/<account>')
 def view(account):
     """ Generate a profile page for a user (from the provided name) """
     account = obj_or_404(Account.by_name(account))
     data = account.to_dict()
     if account == current_user or current_user.admin:
         data['email'] = account.email
+        data['public_email'] = account.public_email
         data['twitter_handle'] = account.twitter_handle
+        data['public_twitter'] = account.public_twitter
     return jsonify(data)

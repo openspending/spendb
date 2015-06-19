@@ -7,6 +7,17 @@ var loadSession = ['$q', 'session', function($q, session) {
 }];
 
 
+var loadSessionAccount = ['$q', '$http', 'session', function($q, $http, session) {
+  var dfd = $q.defer();
+  session.get(function(s) {
+    $http.get('/api/3/accounts/' + s.user.name).then(function(res) {
+      dfd.resolve(res.data);
+    });
+  });
+  return dfd.promise;
+}];
+
+
 var loadDataset = ['$route', '$http', '$q', function($route, $http, $q) {
   var dfd = $q.defer(),
       url = '/api/3/datasets/' + $route.current.params.dataset;

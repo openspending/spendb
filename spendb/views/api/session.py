@@ -40,6 +40,7 @@ def session():
     }
     if current_user.is_authenticated():
         data['user'] = current_user
+        data['api_key'] = current_user.api_key
     return jsonify(data)
 
 

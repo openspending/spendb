@@ -18,62 +18,6 @@ from spendb.views.cache import disable_cache
 blueprint = Blueprint('account', __name__)
 
 
-@blueprint.route('/settings')
-def settings():
-    """ Change settings for the logged in user """
-    disable_cache()
-    require.account.update(current_user)
-    values = current_user.to_dict()
-    if current_user.public_email:
-        values['public_email'] = current_user.public_email
-    if current_user.public_twitter:
-        values['public_twitter'] = current_user.public_twitter
-    values['api_key'] = current_user.api_key
-    return render_template('account/settings.html',
-                           form_fill=values)
-
-
-@blueprint.route('/settings', methods=['POST', 'PUT'])
-def settings_save():
-    """ Change settings for the logged in user """
-    require.account.update(current_user)
-    errors, values = {}, dict(request.form.items())
-
-    try:
-        data = AccountSettings().deserialize(values)
-
-        # If the passwords don't match we notify the user
-        if not data['password1'] == data['password2']:
-            raise colander.Invalid(AccountSettings.password1,
-                                   _("Passwords don't match!"))
-
-        current_user.fullname = data['fullname']
-        current_user.email = data['email']
-        current_user.public_email = data['public_email']
-        if data['twitter'] is not None:
-            current_user.twitter_handle = data['twitter'].lstrip('@')
-            current_user.public_twitter = data['public_twitter']
-
-        # If a new password was provided we update it as well
-        if data['password1'] is not None and len(data['password1']):
-            current_user.password = generate_password_hash(
-                data['password1'])
-
-        # Do the actual update in the database
-        db.session.add(current_user)
-        db.session.commit()
-
-        # Let the user know we've updated successfully
-        flash_success(_("Your settings have been updated."))
-    except colander.Invalid as i:
-        # Load errors if we get here
-        errors = i.asdict()
-
-    return render_template('account/settings.html',
-                           form_fill=values,
-                           form_errors=errors)
-
-
 @blueprint.route('/dashboard')
 def dashboard(format='html'):
     """

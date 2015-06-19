@@ -14,6 +14,13 @@ spendb.config(['$routeProvider', '$locationProvider',
     resolve: {}
   });
 
+  $routeProvider.when('/settings', {
+    templateUrl: 'account_settings.html',
+    controller: 'AccountSettingsCtrl',
+    resolve: {
+      account: loadSessionAccount
+    }
+  });
 
   $routeProvider.when('/datasets/new', {
     templateUrl: 'new.html',
