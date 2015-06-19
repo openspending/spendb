@@ -1,23 +1,28 @@
-from flask import Blueprint, render_template, request, redirect, flash
+from flask import Blueprint, render_template, request, redirect, current_app
 from flask.ext.babel import gettext
 from apikit import jsonify
 
-from spendb.core import pages
 from spendb.views.i18n import set_session_locale
-from spendb.views.api.dataset import query_index
-from spendb.views.cache import disable_cache, etag_cache_keygen
+from spendb.views.cache import disable_cache
 
 
 blueprint = Blueprint('home', __name__)
 
 
 @blueprint.route('/')
-def index():
-    page = pages.get_or_404('index')
-    pager, _, territories = query_index()
-    etag_cache_keygen(pager.cache_keys())
-    return render_template('home/index.html', pager=pager,
-                           territories=territories, page=page)
+@blueprint.route('/datasets/new')
+@blueprint.route('/login')
+@blueprint.route('/settings')
+@blueprint.route('/accounts/<account>')
+@blueprint.route('/docs/<path:page>')
+@blueprint.route('/datasets/<dataset>/admin/data')
+@blueprint.route('/datasets/<dataset>/admin/metadata')
+@blueprint.route('/datasets/<dataset>/admin/model')
+@blueprint.route('/datasets/<dataset>/admin/runs/<run>')
+def index(*a, **kw):
+    from spendb.views.context import angular_templates
+    return render_template('angular.html',
+                           templates=angular_templates(current_app))
 
 
 @blueprint.route('/set-locale', methods=['POST'])
@@ -30,12 +35,6 @@ def set_locale():
     return jsonify({'locale': locale})
 
 
-@blueprint.route('/__version__')
-def version():
-    from spendb import __version__
-    return __version__
-
-
 @blueprint.route('/favicon.ico')
 def favicon():
     return redirect('/static/img/favicon.ico', code=301)
@@ -46,13 +45,7 @@ def ping():
     disable_cache()
     from spendb.tasks import ping
     ping.delay()
-    flash(gettext("Sent ping!"), 'success')
-    return redirect('/')
-
-
-@blueprint.route('/docs/<path:path>.html')
-def page(path):
-    page = pages.get_or_404(path)
-    menu = [p for p in pages if not p['hidden']]
-    template = page.meta.get('template', 'home/page.html')
-    return render_template(template, page=page, pages=menu)
+    return jsonify({
+        'status': 'ok',
+        'message': gettext("Sent ping!")
+    })

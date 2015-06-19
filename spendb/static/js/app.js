@@ -1,5 +1,4 @@
-angular.module('spendb.config', [])
-    .constant('config', SPENDB_CONFIG);
+angular.module('spendb.config', []).constant('config', SPENDB_CONFIG);
 
 var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'duScroll', 'ngFileUpload',
                                        'angularMoment', 'ui.bootstrap', 'localytics.directives', 'truncate']);
@@ -7,6 +6,16 @@ var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 
 
 spendb.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
+
+  $routeProvider.when('/', {
+    templateUrl: 'home.html',
+    controller: 'HomeCtrl',
+    reloadOnSearch: true,
+    resolve: {
+      page: loadIndex,
+      datasets: loadIndexDatasets
+    }
+  });
 
   $routeProvider.when('/login', {
     templateUrl: 'account_login.html',
@@ -22,9 +31,18 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/docs/:path', {
+    templateUrl: 'docs.html',
+    controller: 'DocsCtrl',
+    resolve: {
+      page: loadPage
+    }
+  });
+
   $routeProvider.when('/accounts/:account', {
     templateUrl: 'account_profile.html',
     controller: 'AccountProfileCtrl',
+    reloadOnSearch: true,
     resolve: {
       profile: loadProfile
     }
@@ -75,10 +93,7 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  // Router hack to enable plain old links. 
-  angular.element("a").prop("target", "_self");
   $locationProvider.html5Mode(true);
-
 }]);
 
 
@@ -135,4 +150,47 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
     $scope.session = s;
   });
 
+}]);
+
+
+var loadPage = ['$q', '$route', '$http', function($q, $route, $http) {
+  var dfd = $q.defer();
+  $http.get('/api/3/pages/' + $route.current.params.path).then(function(res) {
+    dfd.resolve(res.data);
+  });
+  return dfd.promise;
+}];
+
+
+spendb.controller('DocsCtrl', ['$scope', '$sce', 'page', function($scope, $sce, page) {
+  $scope.setTitle(page.title);
+  $scope.page = page;
+  $scope.page_html = $sce.trustAsHtml('' + page.html);
+}]);
+
+
+var loadIndex = ['$q', '$route', '$http', function($q, $route, $http) {
+  var dfd = $q.defer();
+  // yes that's what baby jesus made APIs for.
+  $http.get('/api/3/pages/index.html').then(function(res) {
+    dfd.resolve(res.data);
+  });
+  return dfd.promise;
+}];
+
+
+var loadIndexDatasets = ['$q', '$http', '$location', '$route', function($q, $http, $location, $route) {
+  var dfd = $q.defer();
+  $http.get('/api/3/datasets', {params: $location.search()}).then(function(res) {
+    dfd.resolve(res.data);
+  });
+  return dfd.promise;
+}];
+
+
+spendb.controller('HomeCtrl', ['$scope', '$sce', 'page', 'datasets', function($scope, $sce, page, datasets) {
+  $scope.setTitle(page.title);
+  $scope.page = page;
+  $scope.datasets = datasets;
+  $scope.page_html = $sce.trustAsHtml('' + page.html);
 }]);

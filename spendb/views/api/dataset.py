@@ -13,7 +13,6 @@ from spendb.model import Dataset, DatasetLanguage, DatasetTerritory, Account
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
 from spendb.views.cache import etag_cache_keygen
-from spendb.views.error import api_json_errors
 from spendb.validation.dataset import validate_dataset, validate_managers
 from spendb.validation.model import validate_model
 
@@ -56,7 +55,6 @@ def query_index():
 
 
 @blueprint.route('/datasets')
-@api_json_errors
 def index():
     pager, languages, territories = query_index()
     data = pager.to_dict()
@@ -66,7 +64,6 @@ def index():
 
 
 @blueprint.route('/datasets/<name>')
-@api_json_errors
 def view(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
@@ -74,7 +71,6 @@ def view(name):
 
 
 @blueprint.route('/datasets', methods=['POST', 'PUT'])
-@api_json_errors
 def create():
     require.dataset.create()
     dataset = request_data()
@@ -90,7 +86,6 @@ def create():
 
 
 @blueprint.route('/datasets/<name>', methods=['POST', 'PUT'])
-@api_json_errors
 def update(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
@@ -101,7 +96,6 @@ def update(name):
 
 
 @blueprint.route('/datasets/<name>/structure')
-@api_json_errors
 def structure(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
@@ -112,7 +106,6 @@ def structure(name):
 
 
 @blueprint.route('/datasets/<name>/model')
-@api_json_errors
 def model(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
@@ -120,7 +113,6 @@ def model(name):
 
 
 @blueprint.route('/datasets/<name>/model', methods=['POST', 'PUT'])
-@api_json_errors
 def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
@@ -132,7 +124,6 @@ def update_model(name):
 
 
 @blueprint.route('/datasets/<name>/managers')
-@api_json_errors
 def managers(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset)
@@ -140,7 +131,6 @@ def managers(name):
 
 
 @blueprint.route('/datasets/<name>/managers', methods=['POST', 'PUT'])
-@api_json_errors
 def update_managers(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
@@ -154,7 +144,6 @@ def update_managers(name):
 
 
 @blueprint.route('/datasets/<name>', methods=['DELETE'])
-@api_json_errors
 def delete(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)

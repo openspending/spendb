@@ -8,7 +8,6 @@ from apikit import jsonify, Pager, request_data
 from spendb.core import data_manager, url_for
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
-from spendb.views.error import api_json_errors
 from spendb.views.cache import disable_cache
 from spendb.tasks import load_from_url, load_from_source
 from spendb.etl.tasks import extract_fileobj
@@ -31,7 +30,6 @@ def source_to_dict(dataset, source):
 
 
 @blueprint.route('/datasets/<dataset>/sources')
-@api_json_errors
 def index(dataset):
     disable_cache()
     dataset = get_dataset(dataset)
@@ -45,7 +43,6 @@ def index(dataset):
 
 
 @blueprint.route('/datasets/<dataset>/sources/upload', methods=['POST', 'PUT'])
-@api_json_errors
 def upload(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
@@ -58,7 +55,6 @@ def upload(dataset):
 
 
 @blueprint.route('/datasets/<dataset>/sources/submit', methods=['POST', 'PUT'])
-@api_json_errors
 def submit(dataset):
     dataset = get_dataset(dataset)
     require.dataset.update(dataset)
@@ -70,7 +66,6 @@ def submit(dataset):
 
 
 @blueprint.route('/datasets/<dataset>/sources/<name>')
-@api_json_errors
 def view(dataset, name):
     dataset = get_dataset(dataset)
     package = data_manager.package(dataset.name)
@@ -79,7 +74,6 @@ def view(dataset, name):
 
 
 @blueprint.route('/datasets/<dataset>/serve/<name>')
-@api_json_errors
 def serve(dataset, name):
     dataset = get_dataset(dataset)
     package = data_manager.package(dataset.name)

@@ -16,7 +16,7 @@ spendb.directive('responsePager', ['$timeout', function ($timeout) {
                 var pages = [],
                     current = (scope.response.offset / scope.response.limit) + 1,
                     num = Math.ceil(scope.response.total / scope.response.limit),
-                    range = 2,
+                    range = 3,
                     low = current - range,
                     high = current + range;
 
@@ -30,12 +30,11 @@ spendb.directive('responsePager', ['$timeout', function ($timeout) {
                 }
 
                 for (var page = low; page <= high; page++) {
-                    var offset = (page-1) * scope.response.limit,
-                        url = scope.response.format.replace('LIMIT', scope.response.limit).replace('OFFSET', offset);
+                    var offset = (page-1) * scope.response.limit;
                     pages.push({
                         page: page,
                         current: page == current,
-                        url: url
+                        offset: offset
                     });
                 }
                 scope.showPager = true;

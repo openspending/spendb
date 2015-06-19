@@ -1,6 +1,6 @@
 
-spendb.directive('datasetList', ['$http', '$timeout',
-  function ($http, $timeout) {
+spendb.directive('datasetList', ['$http', '$location',
+  function ($http, $location) {
   return {
     restrict: 'AE',
     scope: {
@@ -8,10 +8,9 @@ spendb.directive('datasetList', ['$http', '$timeout',
     },
     templateUrl: 'directives/dataset_list.html',
     link: function (scope, element, attrs, model) {
-      scope.load = function(url) {
-        $http.get(url).then(function(res) {
-          scope.datasets = res.data;
-        });
+      scope.load = function(offset) {
+        var state = angular.extend({}, $location.search(), {offset: offset});
+        $location.search(state);
       };
     }
   };

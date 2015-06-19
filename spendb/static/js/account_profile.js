@@ -1,10 +1,12 @@
 
-var loadProfile = ['$q', '$http', '$route', function($q, $http, $route) {
+var loadProfile = ['$q', '$http', '$location', '$route', function($q, $http, $location, $route) {
   var url = '/api/3/accounts/' + $route.current.params.account,
-      dfd = $q.defer();
+      dfd = $q.defer(),
+      account = $route.current.params.account,
+      params = angular.extend({}, $location.search(), {account: account});
   $q.all([
-    $http.get('/api/3/accounts/' + $route.current.params.account),
-    $http.get('/api/3/datasets', {params: {account: $route.current.params.account}})
+    $http.get('/api/3/accounts/' + account),
+    $http.get('/api/3/datasets', {params: params})
   ]).then(function(data) {
     dfd.resolve({
       account: data[0].data,

@@ -29,15 +29,6 @@ def index():
                            languages=languages, territories=territories)
 
 
-@blueprint.route('/datasets/new')
-@blueprint.route('/login')
-@blueprint.route('/settings')
-@blueprint.route('/accounts/<account>')
-def new(*a, **kw):
-    return render_template('angular.html',
-                           templates=angular_templates(current_app))
-
-
 @blueprint.route('/datasets/<dataset>')
 def view(dataset):
     dataset = get_dataset(dataset)
@@ -45,17 +36,6 @@ def view(dataset):
     managers = list(dataset.managers)
     return render_template('dataset/view.html', dataset=dataset,
                            managers=managers,
-                           templates=angular_templates(current_app))
-
-
-@blueprint.route('/datasets/<dataset>/admin/data')
-@blueprint.route('/datasets/<dataset>/admin/metadata')
-@blueprint.route('/datasets/<dataset>/admin/model')
-@blueprint.route('/datasets/<dataset>/admin/runs/<run>')
-def app(dataset, *a, **kw):
-    dataset = get_dataset(dataset)
-    etag_cache_keygen(dataset.updated_at)
-    return render_template('dataset/angular.html', dataset=dataset,
                            templates=angular_templates(current_app))
 
 

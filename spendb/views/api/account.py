@@ -1,19 +1,18 @@
 import colander
 import logging
 
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, request, redirect
 from flask.ext.login import current_user, login_user
 from flask.ext.babel import gettext as _
 from sqlalchemy.sql.expression import or_
 from werkzeug.security import generate_password_hash
 from apikit import obj_or_404, Pager, jsonify, request_data
 
-from spendb.core import db, url_for
+from spendb.core import db
 from spendb.auth import require
 from spendb.model import Account
 from spendb.validation.account import AccountRegister, AccountSettings
 from spendb.lib.mailer import send_reset_link
-from spendb.lib.helpers import flash_error, flash_success
 from spendb.views.cache import disable_cache
 
 

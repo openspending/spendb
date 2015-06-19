@@ -5,8 +5,7 @@ class TestErrors(ControllerTestCase):
 
     def test_error_404(self):
         response = self.client.get('/akhkfhdjkhf/fgfdghfdh')
-        assert 'SpenDB' in response.data
-        assert 'Not Found' in response.data
+        assert response.status_code == 404, response
 
     def test_error_403(self):
         response = self.client.post('/api/3/datasets')

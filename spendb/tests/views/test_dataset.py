@@ -54,10 +54,6 @@ class TestDatasetController(ControllerTestCase):
         assert da in response.data.decode('utf-8'), \
             'Created (and update) timestamp is not on about page'
 
-    def test_new_form(self):
-        response = self.client.get(url_for('dataset.new'),
-                                   query_string={'api_key': self.user.api_key})
-
     def test_feeds(self):
         # Anonymous user with one public dataset
         response = self.client.get(url_for('dataset.feed_rss'))

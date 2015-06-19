@@ -11,8 +11,8 @@
           <span class="icon-bar"></span>
         </button>
         
-        <a class="navbar-brand" href="{{ url_for('home.index') }}">
-           {{ site_title }}
+        <a class="navbar-brand" href="/">
+          {{ site_title }}
         </a>
 
       </div>
@@ -25,33 +25,18 @@
             </a>
           </li>
           <li>
-            <a href="{{url_for('home.page', path='about')}}">
+            <a href="/docs/about.html">
               {% trans %}About{% endtrans %}
             </a>
           </li>
           <li>
-            <a href="{{url_for('home.page', path='contact')}}">
+            <a href="/docs/contact.html">
               {% trans %}Contact{% endtrans %}
             </a>
           </li>
         </ul>
         
         <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown" dropdown>
-            <a class="dropdown-toggle" dropdown-toggle>
-              {% trans %}Language{% endtrans %}
-            </a>
-            <ul class="dropdown-menu locale-dropdown" role="menu">
-              {% for l in languages %}
-                {% set current = l.lang_code == current_locale %}
-                <li class="locale {{ 'current_locale' if current else '' }}">
-                  <a href='#' ng-click="setLocale('{{ l.lang_code }}')">
-                    {{ l.lang_name }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </li>
           {% if logged_in %}
             <li class="dropdown" dropdown>
               <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">

@@ -7,7 +7,6 @@ from loadkit import logger
 from spendb.core import data_manager
 from spendb.model import Run
 from spendb.lib.helpers import get_dataset
-from spendb.views.error import api_json_errors
 from spendb.views.cache import disable_cache
 
 
@@ -16,7 +15,6 @@ blueprint = Blueprint('runs_api', __name__)
 
 
 @blueprint.route('/datasets/<dataset>/runs')
-@api_json_errors
 def index(dataset):
     dataset = get_dataset(dataset)
     disable_cache()
@@ -28,7 +26,6 @@ def index(dataset):
 
 
 @blueprint.route('/datasets/<dataset>/runs/<id>')
-@api_json_errors
 def view(dataset, id):
     dataset = get_dataset(dataset)
     disable_cache()

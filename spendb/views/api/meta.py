@@ -5,6 +5,7 @@ from apikit import jsonify
 from fiscalmodel import CURRENCIES, COUNTRIES
 from fiscalmodel import CATEGORIES, LANGUAGES
 
+from spendb.core import pages
 from spendb.views.cache import etag_cache_keygen
 
 log = logging.getLogger(__name__)
@@ -28,3 +29,16 @@ def reference_data():
         'territories': sorted(dicts(COUNTRIES), key=lambda d: d['label']),
         'categories': sorted(dicts(CATEGORIES), key=lambda d: d['label'])
     })
+
+
+@blueprint.route('/pages/<path:path>.html')
+def page(path):
+    page = pages.get_or_404(path)
+    data = dict(page.meta)
+    data['html'] = page.html
+    data['path'] = page.path + '.html'
+    data['pages'] = {}
+    for p in pages:
+        path = p.path + '.html'
+        data['pages'][path] = p.meta
+    return jsonify(data)
