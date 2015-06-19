@@ -39,11 +39,14 @@ js_vendor = Bundle('vendor/jquery/dist/jquery.js',
 
 
 def register_scripts(app):
-    assets.register('js_vendor', js_vendor)
-    scripts = ['js/' + b for (a, b) in iter_assets(app, 'js') if b != 'app.js']
-    js_app = Bundle('js/app.js', *scripts,
-                    filters='uglifyjs', output='prod/app.js')
-    assets.register('js_app', js_app)
+    if 'js_vendor' not in assets:
+        assets.register('js_vendor', js_vendor)
+    if 'js_app' not in assets:
+        scripts = ['js/' + b for (a, b) in iter_assets(app, 'js')
+                   if b != 'app.js']
+        js_app = Bundle('js/app.js', *scripts,
+                        filters='uglifyjs', output='prod/app.js')
+        assets.register('js_app', js_app)
 
 
 # Angular templates
