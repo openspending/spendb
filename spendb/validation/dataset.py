@@ -3,7 +3,7 @@ from colander import OneOf, Length, drop
 from fiscalmodel import CURRENCIES, LANGUAGES
 from fiscalmodel import COUNTRIES, CATEGORIES
 
-from spendb.validation.common import valid_name, prepare_name
+from spendb.validation.common import dataset_name, prepare_name
 from spendb.validation.account import AccountRef
 
 
@@ -19,7 +19,7 @@ class DatasetForm(Schema):
     label = SchemaNode(String(), preparer=prepare_name,
                        validator=Length(min=2))
     name = SchemaNode(String(), preparer=prepare_name,
-                      validator=valid_name)
+                      validator=dataset_name)
     description = SchemaNode(String(), missing=drop)
     private = SchemaNode(Boolean(), missing=drop)
     currency = SchemaNode(String(), missing=drop,

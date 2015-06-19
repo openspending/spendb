@@ -70,9 +70,26 @@ class TestModel(TestCase):
         validate_model(ms)
 
     @raises(Invalid)
-    def test_compound_field_reserved_name(self):
+    def test_compound_field_with_dash(self):
         ms = self.model['model'].copy()
-        ms['dimensions']['function']['attributes']['id'] = \
+        ms['dimensions']['function']['attributes']['id-col'] = \
+            ms['dimensions']['function']['attributes']['description']
+        del ms['dimensions']['function']['attributes']['description']
+        validate_model(ms)
+
+    @raises(Invalid)
+    def test_compound_field_short(self):
+        ms = self.model['model'].copy()
+        ms['dimensions']['function']['attributes']['i'] = \
+            ms['dimensions']['function']['attributes']['description']
+        del ms['dimensions']['function']['attributes']['description']
+        validate_model(ms)
+
+    @raises(Invalid)
+    def test_compound_field_long(self):
+        ms = self.model['model'].copy()
+        a = 'xxxxfdgjkdhgsjkfhglhdjghdfhlkgshlfdhjkhfdlkjhjklfdhljkgdfhlkjghjk'
+        ms['dimensions']['function']['attributes'][a] = \
             ms['dimensions']['function']['attributes']['description']
         del ms['dimensions']['function']['attributes']['description']
         validate_model(ms)

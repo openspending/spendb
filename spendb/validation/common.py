@@ -9,27 +9,33 @@ RESERVED_TERMS = ['entry', 'entries', 'dataset', 'datasets', 'dimension',
                   'distinct', 'views', 'new']
 
 
-def reserved_name(name):
+def _dataset_name(name):
     """ These are names that have a special meaning in URLs and
-    cannot be used for dataset or dimension names. """
+    cannot be used for dataset names. """
     if name is not None and name.lower() in RESERVED_TERMS:
         return "'%s' is a reserved word and cannot be used here" % name
-    return True
-
-
-def database_name(name):
     if not re.match(r"^[\w\_\-]+$", name):
         return ("Name must include only "
                 "letters, numbers, dashes and underscores")
-    if len(name) > 30:
-        return "Names must not be longer than 30 characters."
     if '__' in name:
         return "Double underscores are not allowed in dataset names."
     return True
 
 
-valid_name = All(Length(min=2), Function(reserved_name),
-                 Function(database_name))
+dataset_name = All(Length(min=2, max=30), Function(_dataset_name))
+
+
+def _field_name(name):
+    """ These are names that have a special meaning in URLs and
+    cannot be used for dataset names. """
+    if not re.match(r"^[\w\_]+$", name):
+        return ("Name must include only letters, numbers and underscores")
+    if '__' in name:
+        return "Double underscores are not allowed in field names."
+    return True
+
+
+field_name = All(Length(min=2, max=30), Function(_field_name))
 
 
 def prepare_name(name):

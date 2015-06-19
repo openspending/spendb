@@ -2,7 +2,7 @@ from colander import All, MappingSchema, Schema, String, SchemaNode
 from colander import Boolean, drop, Length, OneOf, Function
 
 from spendb.core import db
-from spendb.validation.common import valid_name, require_one_child
+from spendb.validation.common import field_name, require_one_child
 
 
 TYPES = {
@@ -19,7 +19,7 @@ def create_named_node(stub, name):
     the given name. """
     clone = stub.clone()
     clone.name = name
-    valid = lambda n, v: valid_name(n, name)
+    valid = lambda n, v: field_name(n, name)
     if clone.validator is not None:
         valid = All(clone.validator, valid)
     clone.validator = valid
