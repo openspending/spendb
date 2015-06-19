@@ -2,7 +2,6 @@ import os
 
 from flask import current_app, request
 from flask.ext.babel import get_locale
-from flask.ext.login import current_user
 
 from spendb import auth, __version__
 from spendb.core import url_for
@@ -28,19 +27,6 @@ def after_request(resp):
     return cache_response(resp)
 
 
-def angular_templates(app):
-    """ Find all angular templates and make them available in a variable
-    which can be included in a Jinja template so that angular can load
-    templates without doing a server round trip. """
-    partials_dir = os.path.join(app.static_folder, 'templates')
-    for (root, dirs, files) in os.walk(partials_dir):
-        for file_name in files:
-            file_path = os.path.join(root, file_name)
-            with open(file_path, 'rb') as fh:
-                file_name = file_path[len(partials_dir) + 1:]
-                yield (file_name, fh.read().decode('utf-8'))
-
-
 @home.app_context_processor
 def template_context_processor():
     locale = get_locale()
@@ -51,9 +37,6 @@ def template_context_processor():
         'site_url': url_for('home.index').rstrip('/'),
         'number_symbols_group': locale.number_symbols.get('group'),
         'number_symbols_decimal': locale.number_symbols.get('decimal'),
-        'site_title': current_app.config.get('SITE_TITLE'),
-        'logged_in': auth.account.logged_in(),
-        'current_user': current_user,
-        'can': auth
+        'site_title': current_app.config.get('SITE_TITLE')
     }
     return data

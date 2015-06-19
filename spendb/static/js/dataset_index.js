@@ -1,5 +1,4 @@
 
-
 spendb.controller('DatasetIndexCtrl', ['$scope', '$location', 'datasets', function($scope, $location, datasets) {
   $scope.setTitle('Datasets in our store');
   $scope.datasets = datasets;

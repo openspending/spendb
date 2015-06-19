@@ -69,7 +69,11 @@
       SPENDB_CONFIG.reserved_terms = {{ reserved_terms | tojson }};
     </script>
 
-    {% assets "js_base" %}
+    {% assets "js_vendor" %}
+      <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "js_app" %}
       <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
     <!-- end script boot section -->

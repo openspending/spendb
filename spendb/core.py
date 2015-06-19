@@ -72,6 +72,9 @@ def create_app(**config):
 def create_web_app(**config):
     app = create_app(**config)
 
+    from spendb.assets import register_scripts
+    register_scripts(app)
+
     from spendb.views import register_views
     register_views(app, babel)
     return app

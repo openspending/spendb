@@ -9,6 +9,7 @@ from apikit import jsonify
 from spendb.core import db, url_for
 from spendb import auth
 from spendb.model import Dataset
+from spendb.assets import angular_templates
 from spendb.views.i18n import set_session_locale
 from spendb.views.cache import disable_cache
 
@@ -24,7 +25,6 @@ blueprint = Blueprint('home', __name__)
 @blueprint.route('/datasets')
 @blueprint.route('/datasets/<path:path>')
 def index(*a, **kw):
-    from spendb.views.context import angular_templates
     return render_template('layout.html',
                            templates=angular_templates(current_app))
 
