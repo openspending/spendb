@@ -20,7 +20,7 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$rootScope', '$q', '$http', '
   $scope.suggestAccounts = function(query) {
     var dfd = $q.defer(),
         params =  {q: query};
-    $http.get('/accounts/_complete', {params: params}).then(function(es) {
+    $http.get('/api/3/accounts/_complete', {params: params}).then(function(es) {
       var accounts = []
       for (var i in es.data.results) {
         var account = es.data.results[i],

@@ -4,7 +4,9 @@ from flask import url_for
 
 from spendb.core import db, mail
 from spendb.tests.base import ControllerTestCase
-from spendb.tests.helpers import make_account, load_fixture
+from spendb.tests.helpers import make_account
+
+JSON = {'content-type': 'application/json'}
 
 
 class TestAccountApiController(ControllerTestCase):
@@ -23,24 +25,22 @@ class TestAccountApiController(ControllerTestCase):
         self.client.get(url_for('account_api.settings'),
                         query_string={'api_key': account.api_key})
 
-    def test_trigger_reset_get(self):
-        response = self.client.get(url_for('account_api.trigger_reset'))
-        assert 'email address you used to register your account'\
-            in response.data, response.data
-
     def test_trigger_reset_post_fail(self):
         response = self.client.post(url_for('account_api.trigger_reset'),
-                                    data={'emailx': "foo@bar"})
+                                    data=json.dumps({'emailx': "foo@bar"}),
+                                    headers=JSON)
         assert 'Please enter an email address' in response.data, response.data
         response = self.client.post(url_for('account_api.trigger_reset'),
-                                    data={'email': "foo@bar"})
+                                    data=json.dumps({'email': "foo@bar"}),
+                                    headers=JSON)
         assert 'No user is registered' in response.data, response.data
 
     def test_trigger_reset_post_ok(self):
         with mail.record_messages() as outbox:
+            msg = json.dumps({'email': self.user.email})
             response = self.client.post(url_for('account_api.trigger_reset'),
-                                        data={'email': self.user.email})
-            assert '302' in response.status
+                                        data=msg, headers=JSON)
+            assert '200' in response.status, response.data
             assert len(outbox) == 1, outbox
             assert self.user.email in outbox[0].recipients, \
                 outbox[0].recipients
@@ -83,18 +83,6 @@ class TestAccountApiController(ControllerTestCase):
         obj = response.json['results']
         assert len(obj) == 0, obj
 
-    def test_dashboard_not_logged_in(self):
-        response = self.client.get(url_for('account_api.dashboard'))
-        assert '403' in response.status, response.status
-
-    def test_dashboard(self):
-        test = make_account('test')
-        cra = load_fixture('cra', manager=test)
-        response = self.client.get(url_for('account_api.dashboard'),
-                                   query_string={'api_key': test.api_key})
-        assert '200' in response.status, response.status
-        assert unicode(cra.label) in response.data.decode('utf-8'), [response.data]
-
     def test_profile(self):
         """
         Profile page test
@@ -106,19 +94,17 @@ class TestAccountApiController(ControllerTestCase):
         test = make_account('test')
 
         # Get the user profile for an anonymous user
-        response = self.client.get(url_for('account_api.profile', account='test'))
+        response = self.client.get(url_for('account_api.view', account='test'))
 
         assert '200' in response.status, \
             'Profile not successfully returned for anonymous user'
-        assert 'Name' in response.data, \
+        assert 'name' in response.data, \
             'Name heading is not in profile for anonymous user'
         assert 'Test User' in response.data, \
             'User fullname is not in profile for anonymous user'
-        assert 'Username' in response.data, \
-            'Username heading is not in profile for anonymous user'
         assert 'test' in response.data, \
             'Username is not in profile for anonymous user'
-        assert 'Email' not in response.data, \
+        assert 'email' not in response.data, \
             'Email heading is in profile for anonymous user'
         assert 'test@example.com' not in response.data, \
             'Email of user is in profile for anonymous user'
@@ -126,16 +112,16 @@ class TestAccountApiController(ControllerTestCase):
             'Twitter handle is in profile for anonymous user'
 
         # Display email and twitter handle for the user
-        response = self.client.get(url_for('account_api.profile', account='test'),
+        response = self.client.get(url_for('account_api.view', account='test'),
                                    query_string={'api_key': test.api_key})
-
+        print response.data
         assert '200' in response.status, \
             'Profile not successfully returned for user'
-        assert 'Email' in response.data, \
+        assert 'email' in response.data, \
             'Email heading is not in profile for the user'
         assert 'test@example.com' in response.data, \
             'Email of user is not in profile for the user'
-        assert '@testuser' in response.data, \
+        assert 'testuser' in response.data, \
             'Twitter handle of user is not in profile for the user'
 
         # Immitate that the user now makes email address and twitter handle
@@ -146,15 +132,15 @@ class TestAccountApiController(ControllerTestCase):
         db.session.commit()
 
         # Get the site as an anonymous user
-        response = self.client.get(url_for('account_api.profile', account='test'))
+        response = self.client.get(url_for('account_api.view', account='test'))
 
         assert '200' in response.status, \
             'Profile with public contact info not returned to anonymous user'
-        assert 'Email' in response.data, \
+        assert 'email' in response.data, \
             'Public email heading not in profile for anonymous user'
         assert 'test@example.com' in response.data, \
             'Public email not in profile for anonymous user'
-        assert '@testuser' in response.data, \
+        assert 'testuser' in response.data, \
             'Public Twitter handle not in profile for anonymous user'
 
         # We take it back and hide the email and the twitter handle
@@ -170,58 +156,25 @@ class TestAccountApiController(ControllerTestCase):
         db.session.commit()
 
         # Display email for admins
-        response = self.client.get(url_for('account_api.profile', account='test'),
+        response = self.client.get(url_for('account_api.view', account='test'),
                                    query_string={'api_key': admin_user.api_key})
 
         assert '200' in response.status, \
             'Profile not successfully returned for admins'
-        assert 'Name' in response.data, \
+        assert 'name' in response.data, \
             'Full name heading not in profile for admins'
         assert 'Test User' in response.data, \
             'Full name of user not in profile for admins'
-        assert 'Username' in response.data, \
-            'Username heading not in profile for admins'
         assert 'test' in response.data, \
             'Username of user not in profile for admins'
-        assert 'Email' in response.data, \
+        assert 'email' in response.data, \
             'Email heading not in profile for admins'
         assert 'test@example.com' in response.data, \
             'Email of user not in profile for admins'
-        assert 'Twitter' in response.data, \
+        assert 'twitter_handle' in response.data, \
             'Twitter heading not in profile for admins'
-        assert '@testuser' in response.data, \
+        assert 'testuser' in response.data, \
             'Twitter handle of user not in profile for admins'
-
-        # Do not display fullname if it's empty
-        test.fullname = ''
-        db.session.add(test)
-        db.session.commit()
-
-        response = self.client.get(url_for('account_api.profile', account='test'))
-
-        assert '200' in response.status, \
-            'Profile page not successfully returned without full name'
-        assert 'Name' not in response.data, \
-            'Name heading is in profile even though full name is empty'
-        # Test if the information is missing or just the full name
-        assert 'Username' in response.data, \
-            'Username heading is not in profile when full name is empty'
-        assert 'test' in response.data, \
-            'Username for user is not in profile when full name is empty'
-
-        # Do not display twitter handle if it's empty
-        test.twitter_handle = None
-        db.session.add(test)
-        db.session.commit()
-
-        response = self.client.get(url_for('account_api.profile', account='test'),
-                                   query_string={'api_key': test.api_key})
-
-        # Test if the other information is missing
-        assert 'Username' in response.data, \
-            'Username heading is not in profile when Twitter handle is empty'
-        assert 'test' in response.data, \
-            'Username for user is not in profile when Twitter handle is empty'
 
     def test_terms_check(self):
         """
@@ -237,11 +190,7 @@ class TestAccountApiController(ControllerTestCase):
                                           'email': 'termchecker@test.com',
                                           'password1': 'secret',
                                           'password2': 'secret'})
-        assert 'name="terms"' in response.data, \
-            'Terms of use checkbox not present after registering without tick'
-        # Check if user is told it is required (this can be anywhere on the
-        # page, and might not even be tied to terms of use checkbox but it
-        # should be present nonetheless)
+        assert response.json['status'] == 400, response.data
         assert 'Required' in response.data, \
             'User is not told that a field is "Required"'
 
@@ -254,5 +203,6 @@ class TestAccountApiController(ControllerTestCase):
                                           'password1': 'secret',
                                           'password2': 'secret',
                                           'terms': True})
-        assert 'name="terms"' not in response.data, \
+        assert response.json['api_url'], response.data
+        assert 'Required' not in response.data, \
             'Terms of use checkbox is present even after a successful register'

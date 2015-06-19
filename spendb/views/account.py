@@ -148,20 +148,6 @@ def dashboard(format='html'):
     return profile(current_user.name)
 
 
-@blueprint.route('/accounts/_complete')
-def complete(format='json'):
-    disable_cache()
-    if not current_user.is_authenticated():
-        msg = _("You are not authorized to see that page")
-        return jsonify({'errors': msg}, status=403)
-
-    query = db.session.query(Account)
-    filter_string = request.args.get('q', '') + '%'
-    query = query.filter(or_(Account.name.ilike(filter_string),
-                             Account.fullname.ilike(filter_string)))
-    return jsonify(Pager(query))
-
-
 @blueprint.route('/logout')
 def logout():
     disable_cache()

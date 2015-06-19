@@ -3,7 +3,7 @@ import hmac
 
 from flask.ext.login import AnonymousUserMixin
 
-from spendb.core import db, login_manager
+from spendb.core import db, login_manager, url_for
 
 
 def make_uuid():
@@ -102,7 +102,8 @@ class Account(db.Model):
             'display_name': self.display_name,
             'email': self.email,
             'admin': self.admin,
-            'twitter_handle': self.twitter_handle
+            'twitter_handle': self.twitter_handle,
+            'api_url': url_for('account_api.view', account=self.name)
         }
         if not self.public_email:
             account_dict.pop('email')

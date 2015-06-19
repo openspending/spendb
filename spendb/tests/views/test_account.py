@@ -17,23 +17,10 @@ class TestAccountController(ControllerTestCase):
         # Create test user
         self.user = make_account('test')
 
-    def test_login(self):
-        self.client.get(url_for('account.login'))
-
-    def test_account_create_gives_api_key(self):
-        account = make_account()
-        assert len(account.api_key) == 36
-
     def test_settings(self):
         account = make_account()
         self.client.get(url_for('account.settings'),
                         query_string={'api_key': account.api_key})
-
-    def test_after_login(self):
-        self.client.get(url_for('account.login'))
-
-    def test_after_logout(self):
-        self.client.get(url_for('account.logout'))
 
     def test_trigger_reset_get(self):
         response = self.client.get(url_for('account.trigger_reset'))
@@ -67,33 +54,6 @@ class TestAccountController(ControllerTestCase):
                                    token=account.token,
                                    email=account.email))
         assert '/settings' in response.headers['location'], response.headers
-
-    def test_completion_access_check(self):
-        response = self.client.get(url_for('account.complete'))
-        obj = json.loads(response.data)
-        assert u'You are not authorized to see that page' == \
-            obj.get('errors'), response.data
-
-    def test_distinct_json(self):
-        test = make_account()
-        response = self.client.get(url_for('account.complete'),
-                                   query_string={'api_key': test.api_key})
-        obj = response.json['results']
-        assert 'fullname' in obj[0].keys(), obj
-        assert len(obj) == 1, obj
-        assert obj[0]['name'] == 'test', obj[0]
-
-        response = self.client.get(url_for('account.complete'),
-                                   query_string={'q': 'tes',
-                                                 'api_key': test.api_key})
-        obj = response.json['results']
-        assert len(obj) == 1, obj
-
-        response = self.client.get(url_for('account.complete'),
-                                   query_string={'q': 'foo',
-                                                 'api_key': test.api_key})
-        obj = response.json['results']
-        assert len(obj) == 0, obj
 
     def test_dashboard_not_logged_in(self):
         response = self.client.get(url_for('account.dashboard'))

@@ -28,7 +28,7 @@ def mail_account(recipient, subject, body, headers=None):
 
 
 def get_reset_body(account):
-    reset_link = url_for('account.do_reset',
+    reset_link = url_for('account_api.do_reset',
                          email=account.email,
                          token=account.token)
     return _(RESET_MESSAGE, reset_link=reset_link,

@@ -6,11 +6,11 @@ from flask.ext.login import current_user, login_user
 from flask.ext.babel import gettext as _
 from sqlalchemy.sql.expression import or_
 from werkzeug.security import generate_password_hash
-from apikit import obj_or_404, Pager, jsonify
+from apikit import obj_or_404, Pager, jsonify, request_data
 
 from spendb.core import db, url_for
 from spendb.auth import require
-from spendb.model import Account, Dataset
+from spendb.model import Account
 from spendb.validation.account import AccountRegister, AccountSettings
 from spendb.lib.mailer import send_reset_link
 from spendb.lib.helpers import flash_error, flash_success
@@ -26,44 +26,36 @@ def register():
     """ Perform registration of a new user """
     disable_cache()
     require.account.create()
-    errors, values = {}, dict(request.form.items())
+    data = AccountRegister().deserialize(request_data())
 
-    try:
-        # Grab the actual data and validate it
-        data = AccountRegister().deserialize(values)
+    # Check if the username already exists, return an error if so
+    if Account.by_name(data['name']):
+        raise colander.Invalid(
+            AccountRegister.name,
+            _("Login name already exists, please choose a "
+              "different one"))
 
-        # Check if the username already exists, return an error if so
-        if Account.by_name(data['name']):
-            raise colander.Invalid(
-                AccountRegister.name,
-                _("Login name already exists, please choose a "
-                  "different one"))
+    # Check if passwords match, return error if not
+    if not data['password1'] == data['password2']:
+        raise colander.Invalid(AccountRegister.password1,
+                               _("Passwords don't match!"))
 
-        # Check if passwords match, return error if not
-        if not data['password1'] == data['password2']:
-            raise colander.Invalid(AccountRegister.password1,
-                                   _("Passwords don't match!"))
+    # Create the account
+    account = Account()
+    account.name = data['name']
+    account.fullname = data['fullname']
+    account.email = data['email']
+    account.public_email = data['public_email']
+    account.password = generate_password_hash(data['password1'])
 
-        # Create the account
-        account = Account()
-        account.name = data['name']
-        account.fullname = data['fullname']
-        account.email = data['email']
-        account.public_email = data['public_email']
-        account.password = generate_password_hash(data['password1'])
+    db.session.add(account)
+    db.session.commit()
 
-        db.session.add(account)
-        db.session.commit()
+    # Perform a login for the user
+    login_user(account, remember=True)
 
-        # Perform a login for the user
-        login_user(account, remember=True)
-
-        # Registration successful - Redirect to the front page
-        return redirect(url_for('home.index'))
-    except colander.Invalid as i:
-        errors = i.asdict()
-    return render_template('account/login.html', form_fill=values,
-                           form_errors=errors)
+    # Registration successful - Redirect to the front page
+    return jsonify(account)
 
 
 @blueprint.route('/settings')
@@ -81,55 +73,33 @@ def settings():
                            form_fill=values)
 
 
-@blueprint.route('/settings', methods=['POST', 'PUT'])
-def settings_save():
+@blueprint.route('/account/<account>', methods=['POST', 'PUT'])
+def update(account):
     """ Change settings for the logged in user """
     require.account.update(current_user)
-    errors, values = {}, dict(request.form.items())
+    data = AccountSettings().deserialize(request_data())
 
-    try:
-        data = AccountSettings().deserialize(values)
+    # If the passwords don't match we notify the user
+    if not data['password1'] == data['password2']:
+        raise colander.Invalid(AccountSettings.password1,
+                               _("Passwords don't match!"))
 
-        # If the passwords don't match we notify the user
-        if not data['password1'] == data['password2']:
-            raise colander.Invalid(AccountSettings.password1,
-                                   _("Passwords don't match!"))
+    current_user.fullname = data['fullname']
+    current_user.email = data['email']
+    current_user.public_email = data['public_email']
+    if data['twitter'] is not None:
+        current_user.twitter_handle = data['twitter'].lstrip('@')
+        current_user.public_twitter = data['public_twitter']
 
-        current_user.fullname = data['fullname']
-        current_user.email = data['email']
-        current_user.public_email = data['public_email']
-        if data['twitter'] is not None:
-            current_user.twitter_handle = data['twitter'].lstrip('@')
-            current_user.public_twitter = data['public_twitter']
+    # If a new password was provided we update it as well
+    if data['password1'] is not None and len(data['password1']):
+        current_user.password = generate_password_hash(
+            data['password1'])
 
-        # If a new password was provided we update it as well
-        if data['password1'] is not None and len(data['password1']):
-            current_user.password = generate_password_hash(
-                data['password1'])
-
-        # Do the actual update in the database
-        db.session.add(current_user)
-        db.session.commit()
-
-        # Let the user know we've updated successfully
-        flash_success(_("Your settings have been updated."))
-    except colander.Invalid as i:
-        # Load errors if we get here
-        errors = i.asdict()
-
-    return render_template('account/settings.html',
-                           form_fill=values,
-                           form_errors=errors)
-
-
-@blueprint.route('/dashboard')
-def dashboard(format='html'):
-    """
-    Show the user profile for the logged in user
-    """
-    disable_cache()
-    require.account.logged_in()
-    return profile(current_user.name)
+    # Do the actual update in the database
+    db.session.add(current_user)
+    db.session.commit()
+    return jsonify(current_user)
 
 
 @blueprint.route('/accounts/_complete')
@@ -146,44 +116,40 @@ def complete(format='json'):
     return jsonify(Pager(query))
 
 
-@blueprint.route('/account/forgotten', methods=['POST', 'GET'])
+@blueprint.route('/account/_forgotten', methods=['POST', 'GET'])
 def trigger_reset():
     """
     Allow user to trigger a reset of the password in case they forget it
     """
     disable_cache()
-    # If it's a simple GET method we return the form
-    if request.method == 'GET':
-        return render_template('account/trigger_reset.html')
-
-    # Get the email
-    email = request.form.get('email')
+    email = request_data().get('email')
 
     # Simple check to see if the email was provided. Flash error if not
     if email is None or not len(email):
-        flash_error(_("Please enter an email address!"))
-        return render_template('account/trigger_reset.html')
+        return jsonify({
+            'status': 'error',
+            'message': _("Please enter an email address!")
+        }, status=400)
 
-    # Get the account for this email
     account = Account.by_email(email)
 
     # If no account is found we let the user know that it's not registered
     if account is None:
-        flash_error(_("No user is registered under this address!"))
-        return render_template('account/trigger_reset.html')
+        return jsonify({
+            'status': 'error',
+            'message': _("No user is registered under this address!")
+        }, status=400)
 
     # Send the reset link to the email of this account
     send_reset_link(account)
-
-    # Let the user know that email with link has been sent
-    flash_success(_("You've received an email with a link to reset your "
-                    "password. Please check your inbox."))
-
-    # Redirect to the login page
-    return redirect(url_for('account.login'))
+    return jsonify({
+        'status': 'ok',
+        'message': _("You've received an email with a link to reset your "
+                     "password. Please check your inbox.")
+    })
 
 
-@blueprint.route('/account/reset')
+@blueprint.route('/account/_reset')
 def do_reset():
     email = request.args.get('email')
     if email is None or not len(email):
@@ -207,22 +173,11 @@ def do_reset():
 
 
 @blueprint.route('/account/<account>')
-def profile(account):
+def view(account):
     """ Generate a profile page for a user (from the provided name) """
-    profile = obj_or_404(Account.by_name(account))
-
-    # Set a context boo if email/twitter should be shown, it is only shown
-    # to administrators and to owner (account is same as context account)
-    show_info = (current_user and current_user.admin) or \
-                (current_user == profile)
-
-    # ..or if the user has chosen to make it public
-    show_email = show_info or profile.public_email
-    show_twitter = show_info or profile.public_twitter
-    profile_datasets = Dataset.all_by_account(current_user)
-    cond = Dataset.managers.any(Account.id == profile.id)
-    profile_datasets = profile_datasets.filter(cond)
-    profile_datasets = Pager(profile_datasets, account=account, limit=15)
-    return render_template('account/profile.html', profile=profile,
-                           show_email=show_email, show_twitter=show_twitter,
-                           profile_datasets=profile_datasets)
+    account = obj_or_404(Account.by_name(account))
+    data = account.to_dict()
+    if account == current_user or current_user.admin:
+        data['email'] = account.email
+        data['twitter_handle'] = account.twitter_handle
+    return jsonify(data)
