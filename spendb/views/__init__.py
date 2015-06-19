@@ -15,6 +15,7 @@ from spendb.views.api.meta import blueprint as meta_api
 from spendb.views.api.session import blueprint as session_api
 from spendb.views.api.source import blueprint as source_api
 from spendb.views.api.run import blueprint as run_api
+from spendb.views.api.account import blueprint as account_api
 
 
 def register_views(app, babel):
@@ -25,6 +26,7 @@ def register_views(app, babel):
     app.register_blueprint(run_api, url_prefix='/api/3')
     app.register_blueprint(source_api, url_prefix='/api/3')
     app.register_blueprint(datasets_api, url_prefix='/api/3')
+    app.register_blueprint(account_api, url_prefix='/api/3')
 
     # expose ``cubes``:
     app.register_blueprint(slicer, url_prefix='/api/slicer', config={})
