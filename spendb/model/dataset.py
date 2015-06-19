@@ -66,15 +66,8 @@ class Dataset(db.Model):
 
         # TODO find a better place for this.
         for dimension in self.model.dimensions:
-            num = self.fact_table.num_members(dimension)
-            cardinality = 'high'
-            if num < 6:
-                cardinality = 'tiny'
-            elif num < 51:
-                cardinality = 'low'
-            elif num < 1001:
-                cardinality = 'medium'
-            dimension.data['cardinality'] = cardinality
+            dimension.data['cardinality'] = \
+                self.fact_table.num_members(dimension)
 
     @property
     def fields(self):

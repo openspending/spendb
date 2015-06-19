@@ -1,5 +1,5 @@
 from colander import All, MappingSchema, Schema, String, SchemaNode
-from colander import Boolean, drop, Length, OneOf, Function
+from colander import Boolean, drop, Length, OneOf, Function, Int
 
 from spendb.core import db
 from spendb.validation.common import field_name, require_one_child
@@ -10,8 +10,6 @@ TYPES = {
     'integer': db.BigInteger,
     'float': db.Float
 }
-
-CARDINALITIES = ['tiny', 'low', 'medium', 'high']
 
 
 def create_named_node(stub, name):
@@ -65,8 +63,7 @@ class Dimension(MappingSchema):
     label = SchemaNode(String(), missing=drop)
     description = SchemaNode(String(), missing='')
     facet = SchemaNode(Boolean(), missing=False)
-    cardinality = SchemaNode(String(), missing='high',
-                             validator=OneOf(CARDINALITIES))
+    cardinality = SchemaNode(Int(), missing=None, default=None)
     attributes = Attributes(validator=Function(require_one_child))
 
 

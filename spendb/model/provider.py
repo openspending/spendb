@@ -55,14 +55,24 @@ class SpendingModelProvider(ModelProvider):
             if len(attributes) == 1:
                 mappings[dimension.name] = last_col
 
+            # Translate into cubes' categories
+            cardinality = 'high'
+            if dimension.cardinality:
+                if dimension.cardinality < 6:
+                    cardinality = 'tiny'
+                elif dimension.cardinality < 51:
+                    cardinality = 'low'
+                elif dimension.cardinality < 1001:
+                    cardinality = 'medium'
+
             meta = {
                 'label': dimension.label,
                 'name': dimension.name,
-                'cardinality': dimension.cardinality,
+                'cardinality': cardinality,
                 'levels': [{
                     'name': dimension.name,
                     'label': dimension.label,
-                    'cardinality': dimension.cardinality,
+                    'cardinality': cardinality,
                     # 'key': 'name',
                     'attributes': attributes
                 }]
