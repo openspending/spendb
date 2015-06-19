@@ -56,13 +56,13 @@
             <li class="dropdown" dropdown>
               <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">
                 <strong>{{ current_user.name }}</strong>
-                <img src="{{ current_user.email | gravatar(size=24) }}"
+                <img src="{{ current_user.email }}"
                   alt="{{ current_user.fullname }}">
               </a>
 
               <ul class="dropdown-menu account-dropdown" role="menu">
                 <li>
-                  <a href="{{ url_for('account.dashboard') }}">
+                  <a href="/accounts/{{current_user.name}}">
                     {% trans %}Dashboard{% endtrans %}
                   </a>
                 </li>

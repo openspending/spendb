@@ -1,0 +1,14 @@
+<ul class="list-group">
+  <li class="list-group-item" ng-repeat="ds in datasets.results">
+    <strong>
+      <a ng-href="/datasets/{{ds.name}}">
+        {{ds.label}}
+      </a>
+    </strong>
+    <span ng-show="ds.description">
+      &middot; {{ds.description | characters:140 }}
+    </span>
+  </li>
+</ul>
+
+<response-pager response="datasets" load="load(url)"></response-pager>

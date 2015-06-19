@@ -2,7 +2,7 @@ angular.module('spendb.config', [])
     .constant('config', SPENDB_CONFIG);
 
 var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'duScroll', 'ngFileUpload',
-                                       'angularMoment', 'ui.bootstrap', 'localytics.directives']);
+                                       'angularMoment', 'ui.bootstrap', 'localytics.directives', 'truncate']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',
@@ -19,6 +19,14 @@ spendb.config(['$routeProvider', '$locationProvider',
     controller: 'AccountSettingsCtrl',
     resolve: {
       account: loadSessionAccount
+    }
+  });
+
+  $routeProvider.when('/accounts/:account', {
+    templateUrl: 'account_profile.html',
+    controller: 'AccountProfileCtrl',
+    resolve: {
+      profile: loadProfile
     }
   });
 

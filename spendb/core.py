@@ -4,7 +4,6 @@ from flask import url_for as _url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.babel import Babel
-from flaskext.gravatar import Gravatar
 from flask.ext.cache import Cache
 from flask.ext.mail import Mail
 from flask.ext.assets import Environment
@@ -75,10 +74,6 @@ def create_web_app(**config):
 
     from spendb.views import register_views
     register_views(app, babel)
-
-    Gravatar(app, size=200, rating='g',
-             default='retro', use_ssl=True)
-
     return app
 
 

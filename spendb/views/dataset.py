@@ -32,7 +32,8 @@ def index():
 @blueprint.route('/datasets/new')
 @blueprint.route('/login')
 @blueprint.route('/settings')
-def new():
+@blueprint.route('/accounts/<account>')
+def new(*a, **kw):
     return render_template('angular.html',
                            templates=angular_templates(current_app))
 

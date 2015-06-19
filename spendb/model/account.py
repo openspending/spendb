@@ -1,9 +1,12 @@
 import uuid
 import hmac
+from hashlib import md5
 
 from flask.ext.login import AnonymousUserMixin
 
 from spendb.core import db, login_manager, url_for
+
+GRAVATAR = 'https://secure.gravatar.com/avatar/%s'
 
 
 def make_uuid():
@@ -71,6 +74,12 @@ class Account(db.Model):
         return self.fullname or self.name
 
     @property
+    def gravatar(self):
+        sig = self.email or self.name
+        sig = md5(sig.encode('utf-8')).hexdigest()
+        return GRAVATAR % sig
+
+    @property
     def token(self):
         h = hmac.new('')
         h.update(self.api_key)
@@ -102,6 +111,7 @@ class Account(db.Model):
             'display_name': self.display_name,
             'email': self.email,
             'admin': self.admin,
+            'gravatar': self.gravatar,
             'twitter_handle': self.twitter_handle,
             'api_url': url_for('account_api.view', account=self.name)
         }
