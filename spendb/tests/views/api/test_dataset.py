@@ -32,6 +32,15 @@ class TestDatasetApiController(ControllerTestCase):
         assert res.json.get('total') == 0, res.json
         assert len(res.json.get('results')) == 0, res.json
 
+    def test_list_datasets_by_account(self):
+        url = url_for('datasets_api.index')
+        res = self.client.get(url, query_string={'account': self.user.name})
+        assert res.json.get('total') == 1, res.json
+        res0 = res.json.get('results')[0]
+        assert res0.get('name') == self.cra.name, res0
+        res = self.client.get(url, query_string={'account': 'foo'})
+        assert res.json.get('total') == 0, res.json
+
     def test_view_dataset(self):
         url = url_for('datasets_api.view', name=self.cra.name)
         res = self.client.get(url)
