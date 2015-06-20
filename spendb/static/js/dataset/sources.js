@@ -66,9 +66,6 @@ spendb.controller('DatasetSourcesCtrl', ['$scope', '$document', '$http', '$locat
           } else {
             loadTimeout = $timeout($scope.recheck, 2000);  
           }
-          if ($scope.wizard && $scope.canContinue()) {
-            $scope.continue();
-          }
         });
       } else {
         $scope.source = {};

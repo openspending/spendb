@@ -100,31 +100,23 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  // $routeProvider.when('/datasets/:dataset/admin/data', {
-  //   templateUrl: 'admin/data.html',
-  //   controller: 'AdminDataCtrl',
-  //   resolve: {
-  //     dataset: loadDataset
-  //   }
-  // });
+  $routeProvider.when('/datasets/:dataset/model/measures', {
+    templateUrl: 'dataset/measures.html',
+    controller: 'DatasetMeasuresCtrl',
+    resolve: {
+      dataset: loadDataset,
+      data: loadModel
+    }
+  });
 
-  // $routeProvider.when('/datasets/:dataset/admin/runs/:run', {
-  //   templateUrl: 'admin/run.html',
-  //   controller: 'AdminRunCtrl',
-  //   resolve: {
-  //     dataset: loadDataset,
-  //     run: loadRun
-  //   }
-  // });
-
-  // $routeProvider.when('/datasets/:dataset/admin/model', {
-  //   templateUrl: 'admin/model.html',
-  //   controller: 'AdminModelCtrl',
-  //   resolve: {
-  //     dataset: loadDataset,
-  //     data: loadModel
-  //   }
-  // });
+  $routeProvider.when('/datasets/:dataset/model/dimensions', {
+    templateUrl: 'dataset/dimensions.html',
+    controller: 'DatasetDimensionsCtrl',
+    resolve: {
+      dataset: loadDataset,
+      data: loadModel
+    }
+  });
 
   $locationProvider.html5Mode(true);
 }]);

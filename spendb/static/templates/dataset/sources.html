@@ -6,12 +6,12 @@
     <div class="col-md-4">
       <div class="alert guidance">
         <p ng-show="wizard">
-          While you've described the dataset, your data has started to be
+          While you've described the dataset, your data started to be
           analyzed and loaded.
         </p>
         <p>
-          If your data has failed to load, please check the processing 
-          details and upload a fixed source data file.
+          If the file has failed to load, please check the processing 
+          details and upload a fixed version.
         </p>
       </div>
     </div>
@@ -25,8 +25,13 @@
         </p>
       </div>
 
-      <div class="panel panel-default">
-        <table class="table" ng-show="hasSource()">
+      <div class="alert alert-success" ng-show="canContinue() && wizard">
+        <strong>Looks good!</strong>
+        Your data seems to have loaded correctly, press <em>Next</em> to continue.
+      </div>
+
+      <div class="panel panel-default" ng-show="hasSource()">
+        <table class="table">
           <tr>
             <th>File</th>
             <th>Tasks</th>

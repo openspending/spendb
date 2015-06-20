@@ -1,0 +1,29 @@
+<dataset-settings dataset="dataset"
+  next="save()" next-label="Describe dimensions" next-active="canSave()"
+  prev="back()" prev-label="Data check-up" prev-active="true">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="alert guidance">
+        <p>
+          Select which columns describe financial
+          amounts. These will be modelled to as
+          <mark>measures</mark>.
+        </p>
+        <p>
+          Make sure not to include code number or dates.
+          If a column isn't shown as a number, you may have to remove
+          commas and currency signs from the data.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <table class="table">
+        <tr>
+          <th width="1%">Measure</th>
+          <th>Column name</th>
+          <th></th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</dataset-settings>

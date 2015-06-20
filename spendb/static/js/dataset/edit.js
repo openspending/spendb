@@ -53,7 +53,7 @@ spendb.controller('DatasetEditCtrl', ['$scope', '$document', '$http', '$location
 
   $scope.save = function() {
     var dfd = $http.post(dataset.api_url, $scope.dataset);
-    validation.handle($scope.forms.dataset);
+    validation.clear($scope.forms.dataset);
     dfd.then(function(res) {
       $scope.dataset = res.data;
       $http.post(dataset.api_url + '/managers', $scope.managers).then(function(res) {
