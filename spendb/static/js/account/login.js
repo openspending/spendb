@@ -21,7 +21,7 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location',
 
   $scope.resetPassword = function() {
     var d = $modal.open({
-      templateUrl: 'account_reset.html',
+      templateUrl: 'account/reset.html',
       controller: 'AccountResetCtrl',
       backdrop: true,
       resolve: {},

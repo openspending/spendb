@@ -5,7 +5,7 @@ spendb.directive('responsePager', ['$timeout', function ($timeout) {
             'response': '=',
             'load': '&load'
         },
-        templateUrl: 'directives/pager.html',
+        templateUrl: 'directives/response_pager.html',
         link: function (scope, element, attrs, model) {
             scope.$watch('response', function(e) {
                 scope.showPager = false;

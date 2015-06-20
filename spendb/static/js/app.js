@@ -17,20 +17,6 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  $routeProvider.when('/login', {
-    templateUrl: 'account_login.html',
-    controller: 'AccountLoginCtrl',
-    resolve: {}
-  });
-
-  $routeProvider.when('/settings', {
-    templateUrl: 'account_settings.html',
-    controller: 'AccountSettingsCtrl',
-    resolve: {
-      account: loadSessionAccount
-    }
-  });
-
   $routeProvider.when('/docs/:path', {
     templateUrl: 'docs.html',
     controller: 'DocsCtrl',
@@ -39,8 +25,22 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/login', {
+    templateUrl: 'account/login.html',
+    controller: 'AccountLoginCtrl',
+    resolve: {}
+  });
+
+  $routeProvider.when('/settings', {
+    templateUrl: 'account/settings.html',
+    controller: 'AccountSettingsCtrl',
+    resolve: {
+      account: loadSessionAccount
+    }
+  });
+
   $routeProvider.when('/accounts/:account', {
-    templateUrl: 'account_profile.html',
+    templateUrl: 'account/profile.html',
     controller: 'AccountProfileCtrl',
     reloadOnSearch: true,
     resolve: {
@@ -49,7 +49,7 @@ spendb.config(['$routeProvider', '$locationProvider',
   });
 
   $routeProvider.when('/datasets', {
-    templateUrl: 'dataset_index.html',
+    templateUrl: 'dataset/index.html',
     controller: 'DatasetIndexCtrl',
     reloadOnSearch: true,
     resolve: {
@@ -58,8 +58,8 @@ spendb.config(['$routeProvider', '$locationProvider',
   });
 
   $routeProvider.when('/datasets/new', {
-    templateUrl: 'new.html',
-    controller: 'NewCtrl',
+    templateUrl: 'dataset/new.html',
+    controller: 'DatasetNewCtrl',
     resolve: {
       session: loadSession,
       reference: loadReferenceData
@@ -67,7 +67,7 @@ spendb.config(['$routeProvider', '$locationProvider',
   });
 
   $routeProvider.when('/datasets/:dataset', {
-    templateUrl: 'dataset_view.html',
+    templateUrl: 'dataset/view.html',
     controller: 'DatasetViewCtrl',
     resolve: {
       dataset: loadDataset
