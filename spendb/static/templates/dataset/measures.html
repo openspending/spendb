@@ -37,7 +37,7 @@
               <span ng-hide="field.measure">
                 {{field.title}}
               </span>
-              <span ng-show="field.measure">
+              <span ng-show="field.measure" ng-class="{'has-error': !validLabel(field)}">
                 <div class="input-group">
                   <span class="input-group-addon">Label</span>
                   <input ng-model="field.measure.label" class="form-control"
@@ -64,9 +64,10 @@
             <td width="1%" class="text-center">
             </td>
             <td>
-              <div class="input-group">
+              <div class="input-group" ng-class="{'has-error': !validSlug(field)}">
                 <span class="input-group-addon">API name</span>
-                <input ng-model="field.measure.name" class="form-control">
+                <input ng-model="field.measure.name" class="form-control"
+                  ng-focus="breakSlugLink(field)">
               </div>
             </td>
             <td></td>

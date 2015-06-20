@@ -79,6 +79,32 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$document', '$http', '$loca
     }
   };
 
+  $scope.validLabel = function(field) {
+    if (!field.measure || !field.measure.label ||
+        field.measure.label.length < 2) {
+      return false;
+    }
+    return true;
+  };
+
+  $scope.validSlug = function(field) {
+    if (!field.measure || !field.measure.name ||
+        field.measure.name.length < 2) {
+      return false;
+    }
+    if (field.measure.name != getSlug(field.measure.name, '_')) {
+      return false;
+    }
+    for (var i in $scope.fields) {
+      var f = $scope.fields[i];
+      if (f.measure && field.name != f.name &&
+          f.measure.name == field.measure.name) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   $scope.canSave = function() {
     for (var i in $scope.fields) {
       var field = $scope.fields[i];
