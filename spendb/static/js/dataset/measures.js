@@ -60,6 +60,18 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
     field.show_samples = !field.show_samples;
   };
 
+  $scope.getSamples = function(field) {
+    var samples = [];
+    for (var i in data.structure.samples) {
+      var row = data.structure.samples[i],
+          val = row[field.name];
+      if (samples.indexOf(val) == -1) {
+        samples.push(val);
+      } 
+    }
+    return samples.sort(function(a, b) { return a - b; });
+  };
+
   $scope.toggleMeasure = function(field) {
     if (field.measure) {
       delete field.measure;
@@ -112,18 +124,6 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
       }
     }
     return false;
-  };
-
-  $scope.getSamples = function(field) {
-    var samples = [];
-    for (var i in data.structure.samples) {
-      var row = data.structure.samples[i],
-          val = row[field.name];
-      if (samples.indexOf(val) == -1) {
-        samples.push(val);
-      } 
-    }
-    return samples.sort(function(a, b) { return a - b; });
   };
 
   $scope.save = function() {
