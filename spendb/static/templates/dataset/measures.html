@@ -5,24 +5,96 @@
     <div class="col-md-4">
       <div class="alert guidance">
         <p>
-          Select which columns describe financial
-          amounts. These will be modelled to as
-          <mark>measures</mark>.
+          Select columns which describe financial amounts. These will
+          be <mark>measures</mark> in your dataset.
         </p>
         <p>
-          Make sure not to include code number or dates.
+          Make sure not to include any code numbers or dates.
           If a column isn't shown as a number, you may have to remove
           commas and currency signs from the data.
         </p>
       </div>
     </div>
     <div class="col-md-8">
-      <table class="table">
+      <div ng-repeat="(field, message) in errors"
+        class="alert alert-danger" role="alert">
+        <strong>{{field}}:</strong> {{message}}
+      </div>
+
+      <table class="table table-model">
         <tr>
           <th width="1%">Measure</th>
           <th>Column name</th>
           <th></th>
         </tr>
+        <tbody ng-repeat="field in fields" ng-show="field.numeric">
+          <tr class="middle">
+            <td width="1%" class="text-center">
+              <input type="checkbox" ng-click="toggleMeasure(field)"
+                ng-checked="field.measure">
+            </td>
+            <th>
+              <span ng-hide="field.measure">
+                {{field.title}}
+              </span>
+              <span ng-show="field.measure">
+                <div class="input-group">
+                  <span class="input-group-addon">Label</span>
+                  <input ng-model="field.measure.label" class="form-control"
+                    ng-change="updateSlug(field)">
+                </div>
+              </span>
+            </th>
+            <td width="20%">
+              <button class="btn btn-xs btn-default"
+                 ng-hide="field.show_samples"
+                 ng-click="toggleSamples(field)" >
+                <i class="fa fa-eye"></i>
+                Show samples
+              </button>
+              <button class="btn btn-xs btn-default"
+                 ng-show="field.show_samples"
+                 ng-click="toggleSamples(field)" >
+                <i class="fa fa-eye-slash"></i>
+                Hide samples
+              </button>
+            </td>
+          </tr>
+          <tr class="middle adjunct" ng-show="field.measure">
+            <td width="1%" class="text-center">
+            </td>
+            <td>
+              <div class="input-group">
+                <span class="input-group-addon">API name</span>
+                <input ng-model="field.measure.name" class="form-control">
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          <tr class="adjunct" ng-show="field.show_samples">
+            <td width="1%" class="text-center">
+            </td>
+            <td colspan="3">
+              <span ng-repeat="row in samples">
+                <code>{{row[field.name]}}</code><span ng-hide="$last">,</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+        <tr>
+          <th colspan="4">
+            Non-numeric columns (cannot be <mark>measures</mark>)
+          </th>
+        </tr>
+        <tbody ng-repeat="field in fields" ng-hide="field.numeric">
+          <tr>
+            <td width="1%" class="text-center">
+              <input type="checkbox" ng-disabled="true">
+            </td>
+            <th>{{field.title}}</th>
+            <td></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

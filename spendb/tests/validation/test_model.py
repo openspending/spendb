@@ -46,12 +46,6 @@ class TestModel(TestCase):
         validate_model(ms)
 
     @raises(Invalid)
-    def test_no_dimensions(self):
-        ms = self.model['model']
-        ms['dimensions'] = {}
-        validate_model(ms)
-
-    @raises(Invalid)
     def test_measure_has_column(self):
         ms = self.model['model'].copy()
         del ms['measures']['cofinance']['column']

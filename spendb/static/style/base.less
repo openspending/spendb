@@ -261,6 +261,31 @@ footer {
         word-wrap: break-word;
         //overflow-y: scroll;
     }
+
+    .table.table-model {        
+        .ignore-toggle {
+            color: @table-border-color;
+        }
+
+        tbody {
+            border-top: 0;
+        }
+
+        tr.middle td {
+            vertical-align: middle;
+        }
+
+        tr.adjunct td {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .input-group-addon {
+            min-width: 7em;
+            text-align: left;
+        }
+    }
+
 }
 
 @import "cookies.less";

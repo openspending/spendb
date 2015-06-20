@@ -93,7 +93,7 @@ class Measures(MappingSchema):
 
 
 class Model(Schema):
-    dimensions = Dimensions(validator=Function(require_one_child))
+    dimensions = Dimensions()
     measures = Measures(validator=Function(require_one_child))
 
     def schema_type(self, **kw):
