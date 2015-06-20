@@ -1,7 +1,7 @@
 angular.module('spendb.config', []).constant('config', SPENDB_CONFIG);
 
 var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'duScroll',
-                                       'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'ui.select', 'truncate']);
+                                       'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'truncate']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',
@@ -66,6 +66,14 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/datasets/:dataset', {
+    templateUrl: 'dataset/view.html',
+    controller: 'DatasetViewCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
+  });
+
   $routeProvider.when('/datasets/:dataset/admin/data', {
     templateUrl: 'admin/data.html',
     controller: 'AdminDataCtrl',
@@ -99,14 +107,6 @@ spendb.config(['$routeProvider', '$locationProvider',
     resolve: {
       dataset: loadDataset,
       data: loadModel
-    }
-  });
-
-  $routeProvider.when('/datasets/:dataset', {
-    templateUrl: 'dataset/view.html',
-    controller: 'DatasetViewCtrl',
-    resolve: {
-      dataset: loadDataset
     }
   });
 
