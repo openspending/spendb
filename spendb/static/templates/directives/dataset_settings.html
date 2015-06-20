@@ -4,17 +4,17 @@
     <div ng-transclude></div>
   </div>
   <hr />
-  <div class="pull-right" ng-show="nextLabel">
+  <div class="pull-right">
     <button ng-show="wizard" class="btn btn-default btn-lg" ng-click="next()" ng-disabled="!nextActive()">
-      Next: {{nextLabel}} <i class="fa fa-chevron-circle-right"></i>
+      {{_nextLabel}} <i class="fa fa-chevron-circle-right"></i>
     </button>
     <button ng-hide="wizard" class="btn btn-default btn-lg" ng-click="next()" ng-disabled="!nextActive()">
-      Update
+      Save
     </button>
   </div>
-  <div class="pull-left" ng-show="prevLabel && wizard">
+  <div class="pull-left" ng-show="prevShow">
     <button class="btn btn-default btn-lg" ng-click="prev()" ng-disabled="!prevActive">
-      <i class="fa fa-chevron-circle-left"></i> Back: {{prevLabel}}
+      <i class="fa fa-chevron-circle-left"></i> {{_prevLabel}}
     </button>
   </div>
   

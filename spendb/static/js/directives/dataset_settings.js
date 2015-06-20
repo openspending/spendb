@@ -9,6 +9,7 @@ spendb.directive('datasetSettings', ['$rootScope', '$http', '$location',
       "nextLabel": "@",
       "prevLabel": "@",
       "prevActive": "=",
+      "prevHidden": "=",
       "nextActive": "&",
       "next": "&",
       "prev": "&"
@@ -19,7 +20,11 @@ spendb.directive('datasetSettings', ['$rootScope', '$http', '$location',
           mode = $location.search().mode,
           wizard = mode == 'wizard' || !scope.dataset || !scope.dataset.api_url;
       $rootScope.setTitle(title);
+      scope._nextLabel = scope.nextLabel || 'Next';
+      scope._prevLabel = scope.prevLabel || 'Back';
+      scope.prevShow = scope.prevHidden ? false : wizard;
       scope.wizard = scope.$parent.wizard = wizard;
+
       console.log(scope.wizard ? "Wizard mode" : "Edit mode");
     }
   };
