@@ -1,0 +1,26 @@
+<dataset-settings dataset="dataset"
+  next="save()" next-label="Done!" next-active="canSave()"
+  prev="back()" prev-label="Describe measures" prev-active="true">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="alert guidance">
+        <p>
+          Specify the <mark>dimensions</mark> that the
+          columns in the data describe.
+        </p>
+        <p>
+          Group columns that refer to the same concept, like
+          code numbers and labels for classification schemes, or
+          different fields describing a company.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div ng-repeat="(field, message) in errors"
+        class="alert alert-danger" role="alert">
+        <strong>{{field}}:</strong> {{message}}
+      </div>
+
+    </div>
+  </div>
+</dataset-settings>
