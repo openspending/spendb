@@ -1,7 +1,7 @@
 angular.module('spendb.config', []).constant('config', SPENDB_CONFIG);
 
 var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'duScroll', 'ngFileUpload',
-                                       'angularMoment', 'ui.bootstrap', 'localytics.directives', 'truncate']);
+                                       'angularMoment', 'ui.bootstrap', 'ui.select', 'truncate']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',
@@ -114,10 +114,9 @@ spendb.config(['$routeProvider', '$locationProvider',
 }]);
 
 
-spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'flash', 'session', 'config',
-  function($scope, $rootScope, $location, $http, $cookies, $window, $document, $sce, flash, session, config) {
+spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'session', 'config',
+  function($scope, $rootScope, $location, $http, $cookies, $window, $document, $sce, session, config) {
   
-  $scope.flash = flash;
   $scope.session = {};
 
   // EU cookie warning
@@ -138,7 +137,7 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
 
   $scope.setTitle = function(title) {
     $rootScope.currentTitle = title;
-    angular.element('title').html(title + ' - ' + config.site_title);
+    angular.element(document.getElementsByTagName('title')).html(title + ' - ' + config.site_title);
   };
 
   // reset the page.

@@ -4,10 +4,12 @@
     Category
   </label>
   <div class="col-sm-10">
-    <select name="category" chosen class="form-control"
-      ng-model="dataset.category" disable-search="true"
-      ng-options="c.code as c.label for c in reference.categories">
-    </select>
+    <ui-select name="category" ng-model="dataset.category" disable-search="true">
+      <ui-select-match placeholder="Pick one...">{{$select.selected.label}}</ui-select-match>
+      <ui-select-choices repeat="c.code as c in reference.categories | filter: $select.search track by c.code">
+         <div ng-bind="c.label"></div>
+      </ui-select-choices>
+    </ui-select>
     <p class="help-block" ng-show="form.category.$invalid"
       ng-bind="form.category.$message"></p>
   </div>
@@ -17,10 +19,12 @@
     Currency
   </label>
   <div class="col-sm-10">
-    <select name="currency" chosen class="form-control"
-      ng-model="dataset.currency"
-      ng-options="c.code as c.label for c in reference.currencies">
-    </select>
+    <ui-select name="currency" ng-model="dataset.currency">
+      <ui-select-match placeholder="Pick one...">{{$select.selected.label}}</ui-select-match>
+      <ui-select-choices repeat="c.code as c in reference.currencies | filter: $select.search track by c.code">
+         <div ng-bind="c.label"></div>
+      </ui-select-choices>
+    </ui-select>
     <p class="help-block" ng-show="form.currency.$invalid"
       ng-bind="form.currency.$message"></p>
   </div>
@@ -30,10 +34,12 @@
     Countries
   </label>
   <div class="col-sm-10">
-    <select name="territories" multiple chosen class="form-control"
-      ng-model="dataset.territories"
-      ng-options="t.code as t.label for t in reference.territories">
-    </select>
+    <ui-select name="territories" ng-model="dataset.territories" multiple>
+      <ui-select-match placeholder="Pick one...">{{$item.label}}</ui-select-match>
+      <ui-select-choices repeat="t.code as t in reference.territories | filter: $select.search">
+         <div ng-bind="t.label"></div>
+      </ui-select-choices>
+    </ui-select>
     <p class="help-block" ng-show="form.territories.$invalid"
       ng-bind="form.territories.$message"></p>
   </div>
@@ -43,10 +49,12 @@
     Languages
   </label>
   <div class="col-sm-10">
-    <select name="languages" multiple chosen class="form-control"
-      ng-model="dataset.languages"
-      ng-options="l.code as l.label for l in reference.languages">
-    </select>
+    <ui-select name="languages" ng-model="dataset.languages" multiple>
+      <ui-select-match placeholder="Pick one...">{{$item.label}}</ui-select-match>
+      <ui-select-choices repeat="l.code as l in reference.languages | filter: $select.search">
+         <div ng-bind="l.label"></div>
+      </ui-select-choices>
+    </ui-select>
     <p class="help-block" ng-show="form.languages.$invalid"
       ng-bind="form.languages.$message"></p>
   </div>

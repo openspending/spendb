@@ -10,12 +10,12 @@ spendb.controller('AdminDataCtrl', ['$scope', '$rootScope', '$http', '$window', 
 
 spendb.controller('AdminMetadataCtrl', ['$scope', '$rootScope', '$q', '$http', '$location', '$routeParams', 'reference', 'dataset', 'managers', 'flash', 'validation',
   function($scope, $rootScope, $q, $http, $location, $routeParams, reference, dataset, managers, flash, validation) {
-
+  $scope.setTitle(dataset.label);
   $scope.reference = reference;
   $scope.dataset = dataset;
   $scope.managers = managers;
 
-  $rootScope.setSection('metadata');
+  //$rootScope.setSection('metadata');
 
   $scope.suggestAccounts = function(query) {
     var dfd = $q.defer(),

@@ -13,7 +13,14 @@ spendb.factory('flash', ['$rootScope', function($rootScope) {
       currentMessage = [message, type];
     },
     getMessage: function() {
-      return currentMessage;
+      if (currentMessage) {
+        return currentMessage[0];
+      }
+    },
+    getType: function() {
+      if (currentMessage) {
+        return currentMessage[1];
+      }
     }
   };
 }]);

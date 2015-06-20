@@ -7,8 +7,8 @@
 
 <div class="banner" ng-cloak>
   <div class="container-fluid">  
-    <div ng-show="flash.getMessage()" class="alert alert-{{flash.getMessage()[1]}}">
-      <p>{{flash.getMessage()[0]}}</p>
+    <div ng-show="flash.getMessage()" class="alert alert-{{flash.getType()}}">
+      <p>{{flash.getMessage()}}</p>
     </div>
   </div>
 </div>

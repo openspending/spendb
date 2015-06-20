@@ -1,53 +1,56 @@
-<div class="row">
-  <div class="col-md-2">&nbsp;</div>
-  <div class="col-md-10 dataset-info">
-    <form class="form-horizontal" name="form" ng-submit="save(form)">
-      <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
-        <label for="label" class="col-sm-2 control-label">
-          Title
-        </label>
-        <div class="col-sm-10">
-          <input name="label" ng-model="dataset.label" class="form-control"
-            placeholder="My Dataset">
-          <p class="help-block" ng-show="form.label.$invalid"
-            ng-bind="form.label.$message"></p>
+<page-header></page-header>
+<page-body>
+  <div class="row">
+    <div class="col-md-2">&nbsp;</div>
+    <div class="col-md-10 dataset-info">
+      <form class="form-horizontal" name="form" ng-submit="save(form)">
+        <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
+          <label for="label" class="col-sm-2 control-label">
+            Title
+          </label>
+          <div class="col-sm-10">
+            <input name="label" ng-model="dataset.label" class="form-control"
+              placeholder="My Dataset">
+            <p class="help-block" ng-show="form.label.$invalid"
+              ng-bind="form.label.$message"></p>
+          </div>
         </div>
-      </div>
-      <metadata-editor dataset="dataset" reference="reference" form="form">
-      </metadata-editor>
-      <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
-        <label for="label" class="col-sm-2 control-label">
-          Managers
-        </label>
-        <div class="col-sm-10">
-          <table class="table table-condensed">
-            <tr ng-repeat="manager in managers.managers">
-              <td>{{manager.display_name}}</td>
-              <td width="20%" class="numeric">
-                <a ng-hide="manager.name == session.user.name"
-                  ng-click="removeAccount(manager)">
-                  <i class="fa fa-times"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <input class="form-control" placeholder="Add another user"
-                  ng-model="managers.fresh"
-                  typeahead-editable="false" typeahead-on-select="addAccount($item)"
-                  typeahead="a as a.display_name for a in suggestAccounts($viewValue)">
-              </td>
-            </tr>
-          </table>
+        <metadata-editor dataset="dataset" reference="reference" form="form">
+        </metadata-editor>
+        <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
+          <label for="label" class="col-sm-2 control-label">
+            Managers
+          </label>
+          <div class="col-sm-10">
+            <table class="table table-condensed">
+              <tr ng-repeat="manager in managers.managers">
+                <td>{{manager.display_name}}</td>
+                <td width="20%" class="numeric">
+                  <a ng-hide="manager.name == session.user.name"
+                    ng-click="removeAccount(manager)">
+                    <i class="fa fa-times"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <input class="form-control" placeholder="Add another user"
+                    ng-model="managers.fresh"
+                    typeahead-editable="false" typeahead-on-select="addAccount($item)"
+                    typeahead="a as a.display_name for a in suggestAccounts($viewValue)">
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-success">
-            Save Changes
-          </button>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success">
+              Save Changes
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
+</page-body>
