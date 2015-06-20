@@ -31,7 +31,8 @@ js_vendor = Bundle('vendor/moment/moment.js',
                    'vendor/angular-cookies/angular-cookies.js',
                    'vendor/angular-ui-select/dist/select.js',
                    'vendor/angular-truncate/src/truncate.js',
-                   'vendor/ng-file-upload/ng-file-upload-all.js',
+                   'vendor/ng-file-upload/ng-file-upload-shim.js',
+                   'vendor/ng-file-upload/ng-file-upload.js',
                    'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
                    filters='uglifyjs', output='prod/vendor.js')
 

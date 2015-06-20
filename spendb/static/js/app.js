@@ -74,41 +74,49 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/admin/data', {
-    templateUrl: 'admin/data.html',
-    controller: 'AdminDataCtrl',
+  $routeProvider.when('/datasets/:dataset/upload', {
+    templateUrl: 'dataset/upload.html',
+    controller: 'DatasetUploadCtrl',
     resolve: {
       dataset: loadDataset
     }
   });
 
-  $routeProvider.when('/datasets/:dataset/admin/runs/:run', {
-    templateUrl: 'admin/run.html',
-    controller: 'AdminRunCtrl',
-    resolve: {
-      dataset: loadDataset,
-      run: loadRun
-    }
-  });
+  // $routeProvider.when('/datasets/:dataset/admin/data', {
+  //   templateUrl: 'admin/data.html',
+  //   controller: 'AdminDataCtrl',
+  //   resolve: {
+  //     dataset: loadDataset
+  //   }
+  // });
 
-  $routeProvider.when('/datasets/:dataset/admin/metadata', {
-    templateUrl: 'admin/metadata.html',
-    controller: 'AdminMetadataCtrl',
-    resolve: {
-      dataset: loadDataset,
-      reference: loadReferenceData,
-      managers: loadManagers
-    }
-  });
+  // $routeProvider.when('/datasets/:dataset/admin/runs/:run', {
+  //   templateUrl: 'admin/run.html',
+  //   controller: 'AdminRunCtrl',
+  //   resolve: {
+  //     dataset: loadDataset,
+  //     run: loadRun
+  //   }
+  // });
 
-  $routeProvider.when('/datasets/:dataset/admin/model', {
-    templateUrl: 'admin/model.html',
-    controller: 'AdminModelCtrl',
-    resolve: {
-      dataset: loadDataset,
-      data: loadModel
-    }
-  });
+  // $routeProvider.when('/datasets/:dataset/admin/metadata', {
+  //   templateUrl: 'admin/metadata.html',
+  //   controller: 'AdminMetadataCtrl',
+  //   resolve: {
+  //     dataset: loadDataset,
+  //     reference: loadReferenceData,
+  //     managers: loadManagers
+  //   }
+  // });
+
+  // $routeProvider.when('/datasets/:dataset/admin/model', {
+  //   templateUrl: 'admin/model.html',
+  //   controller: 'AdminModelCtrl',
+  //   resolve: {
+  //     dataset: loadDataset,
+  //     data: loadModel
+  //   }
+  // });
 
   $locationProvider.html5Mode(true);
 }]);

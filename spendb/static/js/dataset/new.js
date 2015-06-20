@@ -22,8 +22,13 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$document', '$http', '$location'
     validation.clear($scope.forms.dataset);
     $http.post('/api/3/datasets', $scope.dataset).then(function(res) {
       $scope.dataset = res.data;
-      //scrollSection('upload');
+      $location.search({mode: 'setup'});
+      $location.path('/datasets/' + res.data.name + '/admin/upload');
     }, validation.handle($scope.forms.dataset));
+  };
+
+  $scope.canCreate = function() {
+    return $scope.dataset.label && $scope.dataset.label.length >= 2;
   };
 
 }]);

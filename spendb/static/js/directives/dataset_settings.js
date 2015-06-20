@@ -8,6 +8,7 @@ spendb.directive('datasetSettings', ['$rootScope', '$http', '$location',
       "dataset": "=",
       "nextLabel": "@",
       "prevLabel": "@",
+      "nextActive": "&",
       "next": "&",
       "prev": "&"
     },
