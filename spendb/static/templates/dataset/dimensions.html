@@ -35,8 +35,7 @@
         <tbody ng-repeat="field in getAvailableFields()">
           <tr>
             <td width="1%" class="text-center">
-              <input type="checkbox" ng-click="toggleMeasure(field)"
-                ng-checked="field.measure">
+              <input type="checkbox" ng-model="addFields[field.name]">
             </td>
             <th>
               {{ field.title }}

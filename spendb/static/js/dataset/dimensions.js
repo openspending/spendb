@@ -2,6 +2,7 @@
 spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
   function($scope, $document, $http, $location, $q, flash, validation, dataset, data) {
   $scope.dataset = dataset;
+  $scope.addFields = {};
   $scope.dimensions = [];
 
   var load = function() {
@@ -26,7 +27,18 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$lo
   };
 
   var unload = function() {
-
+    var dimensions = {};
+    for (var i in $scope.dimensions) {
+      var dim = $scope.dimensions[i],
+          attributes = {};
+      for (var j in dim.attributes) {
+        var attr = dim.attributes[j];
+        attributes[attr.name] = attr;
+      }
+      dim.attributes = attributes;
+      dimensions[dim.name] = dim;
+    }
+    data.model.dimensions = dimensions;
   };
 
   $scope.getAvailableFields = function() {
@@ -39,6 +51,17 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$lo
         var measure = measures[i];
         if (measure.column == field.name) {
           include = false
+        }
+      }
+      if (include) {
+        for (var i in $scope.dimensions) {
+          var dim = $scope.dimensions[i];
+          for (var j in dim.attributes) {
+            var attr = dim.attributes[j];
+            if (attr.column == field.name) {
+              include = false;
+            }
+          }
         }
       }
       if (include) {
@@ -73,6 +96,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$lo
   };
 
   $scope.save = function() {
+    unload();
   };
 
   load();
