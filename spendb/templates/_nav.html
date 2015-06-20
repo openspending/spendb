@@ -36,7 +36,9 @@
           <li class="dropdown" dropdown ng-show="session.logged_in">
             <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">
               <strong>{{ session.user.display_name }}</strong>
-              <img ng-src="{{ session.user.gravatar }}?s=26" alt="{{ session.user.display_name }}">
+              <img ng-if="session.user.gravatar"
+                ng-src="{{ session.user.gravatar }}?s=26" width="26" height="26"
+                alt="{{ session.user.display_name }}">
             </a>
 
             <ul class="dropdown-menu account-dropdown" role="menu">

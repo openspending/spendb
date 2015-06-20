@@ -170,7 +170,13 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
     });
   };
 
-  $scope.reloadSession();
+  session.get(function(s) {
+    if (s.logged_in) {
+      $scope.hideCookieWarning();
+    }
+    $scope.session = s;
+  });
+
 }]);
 
 
