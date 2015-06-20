@@ -17,13 +17,13 @@ from spendb.views.cache import disable_cache
 blueprint = Blueprint('home', __name__)
 
 
-@blueprint.route('/')
 @blueprint.route('/login')
 @blueprint.route('/settings')
 @blueprint.route('/accounts/<account>')
 @blueprint.route('/docs/<path:page>')
 @blueprint.route('/datasets')
 @blueprint.route('/datasets/<path:path>')
+@blueprint.route('/')
 def index(*a, **kw):
     return render_template('layout.html',
                            templates=angular_templates(current_app))

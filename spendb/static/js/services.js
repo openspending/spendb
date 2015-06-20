@@ -67,7 +67,6 @@ spendb.factory('validation', ['flash', 'config', function(flash, config) {
       if (angular.isDefined(form._errors)) {
         for (var i in form._errors) {
           var field = form._errors[i];
-          console.log(field);
           form[field].$setValidity('value', true);
           form[field].$message = undefined;
         }

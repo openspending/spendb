@@ -135,7 +135,7 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
     return false;
   };
 
-  $scope.setTitle = function(title) {
+  $rootScope.setTitle = function(title) {
     $rootScope.currentTitle = title;
     angular.element(document.getElementsByTagName('title')).html(title + ' - ' + config.site_title);
   };
