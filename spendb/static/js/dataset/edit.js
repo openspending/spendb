@@ -62,7 +62,7 @@ spendb.controller('DatasetEditCtrl', ['$scope', '$document', '$http', '$location
           $location.path('/datasets/' + dataset.name + '/sources');
         } else {
           flash.setMessage("Your changes have been saved!", "success");
-          $scope.resetScroll();  
+          $scope.resetScroll();
         }
       });
     }, validation.handle($scope.forms.dataset));

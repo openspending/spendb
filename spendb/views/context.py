@@ -1,9 +1,7 @@
-import os
-
 from flask import current_app, request
 from flask.ext.babel import get_locale
 
-from spendb import auth, __version__
+from spendb import __version__
 from spendb.core import url_for
 from spendb.validation.common import RESERVED_TERMS
 from spendb.views.cache import setup_caching, cache_response

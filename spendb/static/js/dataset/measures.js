@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetMeasuresCtrl', ['$scope', '$document', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
-  function($scope, $document, $http, $location, $q, flash, validation, dataset, data) {
+spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
+  function($scope, $rootScope, $http, $location, $q, flash, validation, dataset, data) {
   $scope.dataset = dataset;
   $scope.samples = data.structure.samples;
   $scope.columns = [];
@@ -120,8 +120,11 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$document', '$http', '$loca
     $scope.errors = {};
     $http.post(dataset.api_url + '/model', data.model).then(function(res) {
       console.log(res.data);
+      flash.setMessage("Your changes have been saved!", "success");
+      $scope.resetScroll();
     }, function(res) {
       $scope.errors = res.data.errors;
+      $scope.resetScroll();
     });
   };
 

@@ -4,15 +4,6 @@ from flask import session, request
 from babel import Locale
 
 
-def get_available_locales():
-    return babel.list_translations()
-
-
-def set_session_locale(locale):
-    session['locale'] = locale
-    session.modified = True
-
-
 def get_locale():
     if 'locale' in session:
         return Locale.parse(session.get('locale'))

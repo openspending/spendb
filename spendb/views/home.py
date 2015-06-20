@@ -1,7 +1,7 @@
 from StringIO import StringIO
 
 from flask import Blueprint, render_template, request, redirect
-from flask import Response, current_app
+from flask import Response, current_app, session
 from webhelpers.feedgenerator import Rss201rev2Feed
 from flask.ext.babel import gettext
 from apikit import jsonify
@@ -10,7 +10,6 @@ from spendb.core import db, url_for
 from spendb import auth
 from spendb.model import Dataset
 from spendb.assets import angular_templates
-from spendb.views.i18n import set_session_locale
 from spendb.views.cache import disable_cache
 
 
@@ -35,7 +34,8 @@ def set_locale():
     locale = request.json.get('locale')
 
     if locale is not None:
-        set_session_locale(locale)
+        session['locale'] = locale
+        session.modified = True
     return jsonify({'locale': locale})
 
 

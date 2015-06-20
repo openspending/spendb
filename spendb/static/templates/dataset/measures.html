@@ -23,9 +23,9 @@
 
       <table class="table table-model">
         <tr>
-          <th width="1%">Measure</th>
+          <th width="1%"></th>
           <th>Column name</th>
-          <th></th>
+          <th>Samples</th>
         </tr>
         <tbody ng-repeat="field in fields" ng-show="field.numeric">
           <tr class="middle">
@@ -45,18 +45,18 @@
                 </div>
               </span>
             </th>
-            <td width="20%">
+            <td width="10%">
               <button class="btn btn-xs btn-default"
                  ng-hide="field.show_samples"
                  ng-click="toggleSamples(field)" >
                 <i class="fa fa-eye"></i>
-                Show samples
+                Show
               </button>
               <button class="btn btn-xs btn-default"
                  ng-show="field.show_samples"
                  ng-click="toggleSamples(field)" >
                 <i class="fa fa-eye-slash"></i>
-                Hide samples
+                Hide
               </button>
             </td>
           </tr>
@@ -75,7 +75,7 @@
           <tr class="adjunct" ng-show="field.show_samples">
             <td width="1%" class="text-center">
             </td>
-            <td colspan="3">
+            <td colspan="2">
               <span ng-repeat="row in samples">
                 <code>{{row[field.name]}}</code><span ng-hide="$last">,</span>
               </span>
@@ -83,7 +83,7 @@
           </tr>
         </tbody>
         <tr>
-          <th colspan="4">
+          <th colspan="3">
             Non-numeric columns (cannot be <mark>measures</mark>)
           </th>
         </tr>
