@@ -6843,6 +6843,10 @@ footer p {
   padding: 0.1em 0 0.1em 0;
   text-align: center;
 }
+.dataset-settings .log-message {
+  word-break: break-all;
+  word-wrap: break-word;
+}
 #catapult-cookie-bar {
   direction: ltr;
   color: #dddddd;

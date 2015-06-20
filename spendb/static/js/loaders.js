@@ -36,13 +36,6 @@ var loadReferenceData = ['$q', 'data', function($q, data) {
 }];
 
 
-var loadRun = ['$route', '$q', '$http', function($route, $q, $http) {
-  var p = $route.current.params,
-      url = '/api/3/datasets/' + p.dataset + '/runs/' + p.run;
-  return $http.get(url);
-}];
-
-
 var loadModel = ['$route', '$q', '$http', function($route, $q, $http) {
   var url = '/api/3/datasets/' + $route.current.params.dataset,
       dfd = $q.defer();

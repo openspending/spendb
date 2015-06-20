@@ -58,8 +58,12 @@ spendb.controller('DatasetEditCtrl', ['$scope', '$document', '$http', '$location
       $scope.dataset = res.data;
       $http.post(dataset.api_url + '/managers', $scope.managers).then(function(res) {
         $scope.managers = res.data;
-        flash.setMessage("Your changes have been saved!", "success");
-        $scope.resetScroll();
+        if ($scope.wizard) {
+          $location.path('/datasets/' + dataset.name + '/sources');
+        } else {
+          flash.setMessage("Your changes have been saved!", "success");
+          $scope.resetScroll();  
+        }
       });
     }, validation.handle($scope.forms.dataset));
   };

@@ -1,22 +1,4 @@
 
-spendb.controller('AdminDeleteCtrl', ['$scope', '$modalInstance', '$window', '$location', '$http', 'dataset',
-  function($scope, $modalInstance, $window, $location, $http, dataset) {
-  $scope.dataset = dataset;
-
-  $scope.close = function() {
-    $modalInstance.dismiss('cancel');
-  };
-
-  $scope.delete = function() {
-    $http.delete($scope.dataset.api_url).error(function(res) {
-      $location.path('/datasets');
-      $modalInstance.dismiss('ok');
-      $window.location.reload();
-    });
-  };
-
-}]);
-
 spendb.controller('AdminConceptCtrl', ['$scope', '$modalInstance', 'concept', 'dimension', 'validation',
   function($scope, $modalInstance, concept, dimension, validation) {
   $scope.validSlug = validation.validSlug;
@@ -253,13 +235,3 @@ spendb.controller('AdminModelCtrl', ['$scope', '$http', '$window', '$timeout', '
 
 }]);
 
-
-spendb.controller('AdminRunCtrl', ['$scope', '$http', '$location', '$routeParams', 'dataset', 'run',
-  function($scope, $http, $location, $routeParams, dataset, run) {
-
-  $scope.dataset = dataset;
-  $scope.run = run.data;
-
-  $rootScope.setSection('data');
-
-}]);

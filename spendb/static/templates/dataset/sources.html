@@ -28,17 +28,9 @@
       <div class="panel panel-default">
         <table class="table" ng-show="hasSource()">
           <tr>
-            <th>
-              File
-            </th>
-            <th>
-              Tasks
-            </th>
-            <th width="10%">
-              Status
-            </th>
-            <th width="10%">
-            </th>
+            <th>File</th>
+            <th>Tasks</th>
+            <th width="10%">Status</th>
           </tr>
           <tr ng-repeat="run in source.runs">
             <td>
@@ -52,10 +44,14 @@
               <div class="label label-warning" ng-show="run.status == 'running'"><i class="fa fa-spinner fa-spin"></i> Running</div>
               <div class="label label-danger" ng-show="run.status == 'failed'">Failed</div>
             </td>
-            <td>
-              <a ng-show="run.status == 'failed'" class="btn btn-default btn-xs"
-                ng-href="/datasets/{{dataset.name}}/admin/runs/{{run.id}}">View details &raquo;</a>
-            </td>
+          </tr>
+          <tr ng-show="errors.total" colspan="3">
+            <table class="table table-condensed">
+              <tr ng-repeat="msg in errors.messages" ng-class="LOGLEVELS[msg.level]">
+                <td>{{msg.level}}</td>
+                <td class="log-message">{{msg.message}}</td>
+              </tr>
+            </table>
           </tr>
         </table>
         <div class="panel-footer">
