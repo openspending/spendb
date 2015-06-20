@@ -1,119 +1,122 @@
-<div class="row" ng-hide="session.logged_in">
-  <div class="col-md-6">
-    We're gathering <strong>the world's government spending information</strong> in a common database so that we can provide great tools for <strong>analysis, visualization and comparison</strong>. Out goal is an open platform that aims to facilitate the presentation of financial information so anyone - whether data geek or concerned citizen - can contribute their local city budget or spending reports.
-  </div>
-  <div class="col-md-6">
-    <p>
-      There are many projects that aim to track financial information. All require these basic services, which we aim to provide:
-    </p>
-    <ul>
-      <li>Data loading and validation facilities.</li>
-      <li>Common visualization types.</li>
-      <li>Full-text search for all entries.</li>
-      <li>Means to track provenance and provide access to the raw data.</li>
-    </ul>
-    
-  </div>
-  <div class="col-md-12">
-    <a href="/login" target="_self" class="btn btn-lg btn-success">Sign up to contribute</a>
-    <a href="/docs/about.html" target="_self" class="btn btn-lg btn-default">Learn more</a>
-  </div>
-</div>
-
-<div class="row" ng-show="session.logged_in">
-  <div class="wizard-section" id="init">
-    <div class="col-md-4">
-      <div class="alert guidance">
-        <p>
-          Thanks for contributing! To get started, select a name and identifier for your dataset.
-        </p>
-      </div>
+<page-header></page-header>
+<page-body>
+  <div class="row" ng-hide="session.logged_in">
+    <div class="col-md-6">
+      We're gathering <strong>the world's government spending information</strong> in a common database so that we can provide great tools for <strong>analysis, visualization and comparison</strong>. Out goal is an open platform that aims to facilitate the presentation of financial information so anyone - whether data geek or concerned citizen - can contribute their local city budget or spending reports.
     </div>
-    <div class="col-md-8">  
-      <form class="form-horizontal" name="form" ng-submit="createDataset(form)">
-        <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
-          <label for="label" class="col-sm-2 control-label">
-            Title
-          </label>
-          <div class="col-sm-10">
-            <input name="label" ng-model="dataset.label" class="form-control"
-              placeholder="My Dataset">
-            <p class="help-block" ng-show="form.label.$invalid"
-              ng-bind="form.label.$message"></p>
-          </div>
-        </div>
-        <div class="form-group" ng-class="{'has-error': form.name.$invalid || (dataset.name && !validSlug(dataset.name))}">
-          <label for="name" class="col-sm-2 control-label">
-            Identifier
-          </label>
-          <div class="col-sm-10">
-            <input name="name" ng-model="dataset.name" class="form-control"
-              placeholder="my_dataset" ng-readonly="hasDataset()">
-            <p class="help-block" ng-show="form.name.$invalid"
-              ng-bind="form.name.$message"></p>
-            <p class="help-block">
-              The identifier cannot be changed later. It can only contain letters, numbers and underscores.
-            </p>
-          </div>
-        </div>
-        <div class="form-group" ng-show="!hasDataset()">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success">
-              Continue &raquo;
-            </button>
-          </div>
-        </div>
-      </form>
+    <div class="col-md-6">
+      <p>
+        There are many projects that aim to track financial information. All require these basic services, which we aim to provide:
+      </p>
+      <ul>
+        <li>Data loading and validation facilities.</li>
+        <li>Common visualization types.</li>
+        <li>Full-text search for all entries.</li>
+        <li>Means to track provenance and provide access to the raw data.</li>
+      </ul>
+      
     </div>
-  </div>
-</div>
-
-<div id="upload">
-  <div class="row wizard-section" ng-show="hasDataset()">
-    <div class="col-xs-12">
-      <h3 class="page-header">
-        What's your data?
-      </h3>
-    </div>
-    <div class="col-md-4">
-      <div class="alert guidance">
-        <p>
-          Great. Now please tell us where we can find the data which you are contributing.
-        </p>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <upload-panel dataset="dataset" notify="createUpload()"></upload-panel>
-    </div>
-  </div>
-</div>
-
-<div id="metadata">
-  <div class="row wizard-section" ng-repeat="d in afterUpload">
     <div class="col-md-12">
-      <h3 class="page-header">
-        Tell us more!
-      </h3>
-    </div>
-    <div class="col-md-4">
-      <div class="alert guidance">
-        <p>
-          We are now processing your data. While this is in progress, why don't you tell give us a bit more context on the data?
-        </p>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <form class="form-horizontal" name="mdform" ng-submit="saveDataset(mdform)">
-        <metadata-editor dataset="dataset" reference="reference" form="mdform"></metadata-editor>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success">
-              Continue &raquo;
-            </button>
-          </div>
-        </div>
-      </form>
+      <a href="/login" target="_self" class="btn btn-lg btn-success">Sign up to contribute</a>
+      <a href="/docs/about.html" target="_self" class="btn btn-lg btn-default">Learn more</a>
     </div>
   </div>
-  <div class="row wizard-section" ng-repeat="d in afterUpload"></div>
-</div>
+
+  <div class="row" ng-show="session.logged_in">
+    <div class="wizard-section" id="init">
+      <div class="col-md-4">
+        <div class="alert guidance">
+          <p>
+            Thanks for contributing! To get started, select a name and identifier for your dataset.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-8">  
+        <form class="form-horizontal" name="form" ng-submit="createDataset(form)">
+          <div class="form-group" ng-class="{'has-error': form.label.$invalid}">
+            <label for="label" class="col-sm-2 control-label">
+              Title
+            </label>
+            <div class="col-sm-10">
+              <input name="label" ng-model="dataset.label" class="form-control"
+                placeholder="My Dataset">
+              <p class="help-block" ng-show="form.label.$invalid"
+                ng-bind="form.label.$message"></p>
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error': form.name.$invalid || (dataset.name && !validSlug(dataset.name))}">
+            <label for="name" class="col-sm-2 control-label">
+              Identifier
+            </label>
+            <div class="col-sm-10">
+              <input name="name" ng-model="dataset.name" class="form-control"
+                placeholder="my_dataset" ng-readonly="hasDataset()">
+              <p class="help-block" ng-show="form.name.$invalid"
+                ng-bind="form.name.$message"></p>
+              <p class="help-block">
+                The identifier cannot be changed later. It can only contain letters, numbers and underscores.
+              </p>
+            </div>
+          </div>
+          <div class="form-group" ng-show="!hasDataset()">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-success">
+                Continue &raquo;
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="upload">
+    <div class="row wizard-section" ng-show="hasDataset()">
+      <div class="col-xs-12">
+        <h3 class="page-header">
+          What's your data?
+        </h3>
+      </div>
+      <div class="col-md-4">
+        <div class="alert guidance">
+          <p>
+            Great. Now please tell us where we can find the data which you are contributing.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <upload-panel dataset="dataset" notify="createUpload()"></upload-panel>
+      </div>
+    </div>
+  </div>
+
+  <div id="metadata">
+    <div class="row wizard-section" ng-repeat="d in afterUpload">
+      <div class="col-md-12">
+        <h3 class="page-header">
+          Tell us more!
+        </h3>
+      </div>
+      <div class="col-md-4">
+        <div class="alert guidance">
+          <p>
+            We are now processing your data. While this is in progress, why don't you tell give us a bit more context on the data?
+          </p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <form class="form-horizontal" name="mdform" ng-submit="saveDataset(mdform)">
+          <metadata-editor dataset="dataset" reference="reference" form="mdform"></metadata-editor>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-success">
+                Continue &raquo;
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row wizard-section" ng-repeat="d in afterUpload"></div>
+  </div>
+</page-body>

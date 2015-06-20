@@ -33,7 +33,7 @@
         
         {% raw %}
         <ul class="nav navbar-nav navbar-right" ng-cloak>
-          <li class="dropdown" dropdown>
+          <li class="dropdown" dropdown ng-show="session.logged_in">
             <a class="dropdown-toggle" dropdown-toggle data-toggle="dropdown">
               <strong>{{ session.user.display_name }}</strong>
               <img ng-src="{{ session.user.gravatar }}?s=26" alt="{{ session.user.display_name }}">

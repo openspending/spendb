@@ -8,7 +8,7 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location',
 
   $scope.login = function(form) {
     $http.post('/api/3/sessions/login', $scope.credentials).then(function(res) {
-      $location.path('/');
+      $scope.reloadSession();
     }, validation.handle(form));
   };
 

@@ -1,73 +1,73 @@
-
-<div class="row">
-  <div class="col-md-3">
-    <img ng-src="{{account.gravatar}}?s=200" alt="Gravatar for {{account.display_name}}">
-  </div>
-  <div class="col-md-9">
-    <h3>
-      Information
-      <div class="pull-right" ng-show="own_profile">
-        <a class="btn btn-sm btn-success" href="/settings">
-          Settings
-        </a>
-      </div>
-    </h3>
-
-    <table class="table table-condensed">
-      <tr ng-if="account.fullname">
-        <th>
-          Name
-        </th>
-        <td>
-          {{account.fullname}}
-        </td>
-      </tr>
-      <tr>
-        <th>
-          Username
-        </th>
-        <td>
-          {{account.name}}
-        </td>
-      </tr>
-      <tr ng-if="account.email">
-        <th>
-          Email
-        </th>
-        <td>
-          {{account.email}}
-        </td>
-      </tr>
-      <tr ng-if="account.twitter_handle">
-        <th>
-          Twitter
-        </th>
-        <td>
-          <a href="https://twitter.com/{{ account.twitter_handle }}">
-            @{{ account.twitter_handle }}
+<page-header></page-header>
+<page-body>
+  <div class="row">
+    <div class="col-md-3">
+      <img ng-src="{{account.gravatar}}?s=200" alt="Gravatar for {{account.display_name}}">
+    </div>
+    <div class="col-md-9">
+      <h3>
+        Information
+        <div class="pull-right" ng-show="own_profile">
+          <a class="btn btn-sm btn-success" href="/settings">
+            Settings
           </a>
-        </td>
-      </tr>
-    </table>
+        </div>
+      </h3>
+
+      <table class="table table-condensed">
+        <tr ng-if="account.fullname">
+          <th>
+            Name
+          </th>
+          <td>
+            {{account.fullname}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Username
+          </th>
+          <td>
+            {{account.name}}
+          </td>
+        </tr>
+        <tr ng-if="account.email">
+          <th>
+            Email
+          </th>
+          <td>
+            {{account.email}}
+          </td>
+        </tr>
+        <tr ng-if="account.twitter_handle">
+          <th>
+            Twitter
+          </th>
+          <td>
+            <a href="https://twitter.com/{{ account.twitter_handle }}">
+              @{{ account.twitter_handle }}
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-offset-3 col-md-9">
-    <h3>
-      Datasets
-      <div class="pull-right" ng-show="own_profile">
-        <a class="btn btn-sm btn-success" href="/datasets/new">
-          Import a dataset
-        </a>
-      </div>
-    </h3>
-    
-    <dataset-list datasets="datasets"></dataset-list>
-    <p ng-show="own_profile && datasets.total == 0">
-      It looks like you haven't uploaded any datasets.
-    </p>
+  <div class="row">
+    <div class="col-md-offset-3 col-md-9">
+      <h3>
+        Datasets
+        <div class="pull-right" ng-show="own_profile">
+          <a class="btn btn-sm btn-success" href="/datasets/new">
+            Import a dataset
+          </a>
+        </div>
+      </h3>
+      
+      <dataset-list datasets="datasets"></dataset-list>
+      <p ng-show="own_profile && datasets.total == 0">
+        It looks like you haven't uploaded any datasets.
+      </p>
+    </div>
   </div>
-</div>
-
-
+</page-body>

@@ -1,14 +1,16 @@
-
-<div class="row">
-  <div class="col-md-8" ng-bind-html="page_html"></div>
-  <div class="col-md-4">
-    <ul class="nav nav-pills nav-stacked">
-      <li ng-repeat="(path, p) in page.pages" ng-hide="p.hidden"
-        ng-class="{'active': path == page.path}">
-        <a ng-href="/docs/{{path}}">
-          {{p.title}}
-        </a>
-      </li>
-    </ul>
+<page-header></page-header>
+<page-body>
+  <div class="row">
+    <div class="col-md-8" ng-bind-html="page_html"></div>
+    <div class="col-md-4">
+      <ul class="nav nav-pills nav-stacked">
+        <li ng-repeat="(path, p) in page.pages" ng-hide="p.hidden"
+          ng-class="{'active': path == page.path}">
+          <a ng-href="/docs/{{path}}">
+            {{p.title}}
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
+</page-body>

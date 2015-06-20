@@ -1,0 +1,14 @@
+<div class="container-fluid title-panel">
+  <div class="pull-right controls">
+      <div ng-transclude></div>
+  </div>
+  <h1 id="page-title" ng-bind="title"></h1>
+</div>
+
+<div class="banner" ng-cloak>
+  <div class="container-fluid">  
+    <div ng-show="flash.getMessage()" class="alert alert-{{flash.getMessage()[1]}}">
+      <p>{{flash.getMessage()[0]}}</p>
+    </div>
+  </div>
+</div>

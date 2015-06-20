@@ -99,9 +99,14 @@ spendb.factory('session', ['$http', function($http) {
     });
   };
 
+  var flush = function() {
+    sessionDfd = null;
+  };
+
   var get = function(cb) {
     if (sessionDfd === null) {
-      sessionDfd = $http.get('/api/3/sessions');
+      var data = {'_': new Date()}
+      sessionDfd = $http.get('/api/3/sessions', {params: data});
     }
     sessionDfd.then(function(res) {
       cb(res.data);
@@ -110,6 +115,7 @@ spendb.factory('session', ['$http', function($http) {
 
   return {
     'get': get,
+    'flush': flush,
     'logout': logout
   }
 }]);

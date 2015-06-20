@@ -69,7 +69,6 @@ spendb.config(['$routeProvider', '$locationProvider',
   $routeProvider.when('/datasets/:dataset', {
     templateUrl: 'dataset_view.html',
     controller: 'DatasetViewCtrl',
-    reloadOnSearch: false,
     resolve: {
       dataset: loadDataset
     }
@@ -115,8 +114,8 @@ spendb.config(['$routeProvider', '$locationProvider',
 }]);
 
 
-spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'flash', 'session', 'config',
-  function($scope, $location, $http, $cookies, $window, $document, $sce, flash, session, config) {
+spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'flash', 'session', 'config',
+  function($scope, $rootScope, $location, $http, $cookies, $window, $document, $sce, flash, session, config) {
   
   $scope.flash = flash;
   $scope.session = {};
@@ -138,7 +137,7 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
   };
 
   $scope.setTitle = function(title) {
-    angular.element('#page-title').html(title);
+    $rootScope.currentTitle = title;
     angular.element('title').html(title + ' - ' + config.site_title);
   };
 
@@ -156,18 +155,22 @@ spendb.controller('AppCtrl', ['$scope', '$location', '$http', '$cookies', '$wind
   // Logout
   $scope.logout = function() {
     session.logout(function(s) {
+      $scope.reloadSession();
+    });
+  };
+
+  $scope.reloadSession = function() {
+    session.flush();
+    session.get(function(s) {
+      if (s.logged_in) {
+        $scope.hideCookieWarning();
+      }
       $scope.session = s;
       $location.path('/');
     });
   };
 
-  session.get(function(s) {
-    if (s.logged_in) {
-      $scope.hideCookieWarning();
-    }
-    $scope.session = s;
-  });
-
+  $scope.reloadSession();
 }]);
 
 

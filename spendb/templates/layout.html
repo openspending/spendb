@@ -22,29 +22,9 @@
   </head>
 
   <body ng-controller="AppCtrl">
-    <div id="page" ng-cloak>
+    <div id="page">
       {% include '_nav.html' %}
-
-      <div class="container-fluid title-panel">
-        <div class="pull-right controls">
-            {% block title_buttons %}{% endblock %}
-        </div>
-        <h1 id="page-title"></h1>
-      </div>
-
-      <div class="banner" ng-cloak>
-        <div class="container-fluid">
-          {% raw %}
-            <div ng-show="flash.getMessage()" class="alert alert-{{flash.getMessage()[1]}}">
-              <p>{{flash.getMessage()[0]}}</p>
-            </div>
-          {% endraw %}
-        </div>
-      </div>
-
-      <div class="container-fluid">
-        <div ng-view></div>
-      </div>
+      <div ng-view></div>
     </div>
 
     <div id="catapult-cookie-bar" ng-show="showCookieWarning" ng-cloak>
