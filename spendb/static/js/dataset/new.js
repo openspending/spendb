@@ -22,7 +22,7 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$document', '$http', '$location'
     validation.clear($scope.forms.dataset);
     $http.post('/api/3/datasets', $scope.dataset).then(function(res) {
       $scope.dataset = res.data;
-      $location.search({mode: 'setup'});
+      $location.search({mode: 'wizard'});
       $location.path('/datasets/' + res.data.name + '/upload');
     }, validation.handle($scope.forms.dataset));
   };

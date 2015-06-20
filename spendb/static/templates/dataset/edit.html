@@ -1,4 +1,6 @@
-<dataset-settings dataset="dataset" next="save()" next-label="Describe measures" next-active="canSave()">
+<dataset-settings dataset="dataset"
+  next="save()" next-label="Describe measures" next-active="canSave()"
+  prev="upload()" prev-label="Upload data" prev-active="true">
   <div class="row">
     <div class="col-md-4">
       <div class="alert guidance">
@@ -10,7 +12,8 @@
     </div>
     <div class="col-md-8">  
       <form class="form-horizontal" name="forms.dataset">
-        <div class="form-group" ng-class="{'has-error': forms.dataset.label.$invalid}">
+        <div class="form-group" ng-hide="wizard"
+          ng-class="{'has-error': forms.dataset.label.$invalid}">
           <label for="label" class="col-sm-2 control-label">
             Title
           </label>
@@ -19,6 +22,10 @@
               placeholder="My Dataset">
             <p class="help-block" ng-show="forms.dataset.label.$invalid"
               ng-bind="forms.dataset.label.$message"></p>
+            <p class="help-block" ng-hide="forms.dataset.label.$invalid">
+              Please make sure the title is informative for users from another country or
+              region.
+            </p>
           </div>
         </div>
         <div class="form-group" ng-class="{'has-error': forms.dataset.category.$invalid}">
@@ -34,6 +41,10 @@
             </ui-select>
             <p class="help-block" ng-show="forms.dataset.category.$invalid"
               ng-bind="forms.dataset.category.$message"></p>
+            <p class="help-block" ng-hide="forms.dataset.category.$invalid">
+              Choose <mark>Budget</mark> for high-level budgetary planning and analysis data, or 
+              <mark>Expenditure</mark> for fine-grained transactional reports.
+            </p>
           </div>
         </div>
         <div class="form-group" ng-class="{'has-error': forms.dataset.currency.$invalid}">
@@ -64,6 +75,10 @@
             </ui-select>
             <p class="help-block" ng-show="forms.dataset.territories.$invalid"
               ng-bind="forms.dataset.territories.$message"></p>
+            <p class="help-block" ng-hide="forms.dataset.territories.$invalid">
+              Please select all countries in which the spending recorded in this data has taken
+              place.
+            </p>
           </div>
         </div>
         <div class="form-group" ng-class="{'has-error': forms.dataset.languages.$invalid}">
@@ -92,11 +107,15 @@
               rows="4" name="description"></textarea>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-hide="wizard">
           <label for="label" class="col-sm-2 control-label">
             Managers
           </label>
           <div class="col-sm-10">
+            <p class="help-block">
+              A dataset can be managed by more than one user. Please add other users to give them
+              the ability to see unpublished datasets and to edit or delete the dataset.
+            </p>
             <table class="table table-condensed">
               <tr ng-repeat="manager in managers.managers">
                 <td>{{manager.display_name}}</td>

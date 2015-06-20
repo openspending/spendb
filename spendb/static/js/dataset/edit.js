@@ -47,6 +47,10 @@ spendb.controller('DatasetEditCtrl', ['$scope', '$document', '$http', '$location
     return true;
   };
 
+  $scope.upload = function() {
+    $location.path('/datasets/' + dataset.name + '/upload');
+  };
+
   $scope.save = function() {
     var dfd = $http.post(dataset.api_url, $scope.dataset);
     validation.handle($scope.forms.dataset);
