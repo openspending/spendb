@@ -2,7 +2,6 @@
 spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
   function($scope, $rootScope, $http, $location, $q, flash, validation, dataset, data) {
   $scope.dataset = dataset;
-  $scope.samples = data.structure.samples;
   $scope.columns = [];
   $scope.fields = [];
   $scope.errors = {};
@@ -113,6 +112,18 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
       }
     }
     return false;
+  };
+
+  $scope.getSamples = function(field) {
+    var samples = [];
+    for (var i in data.structure.samples) {
+      var row = data.structure.samples[i],
+          val = row[field.name];
+      if (samples.indexOf(val) == -1) {
+        samples.push(val);
+      } 
+    }
+    return samples.sort(function(a, b) { return a - b; });
   };
 
   $scope.save = function() {
