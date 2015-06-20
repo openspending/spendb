@@ -1,0 +1,76 @@
+
+<dataset-settings dataset="dataset"
+  next="continue()" next-label="Select numerical measures" next-active="canContinue()"
+  prev="back()" prev-label="Describe your data" prev-active="true">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="alert guidance">
+        <p ng-show="wizard">
+          While you've described the dataset, your data has started to be
+          analyzed and loaded.
+        </p>
+        <p>
+          If your data has failed to load, please check the processing 
+          details and upload a fixed source data file.
+        </p>
+      </div>
+    </div>
+    <div class="col-md-8">  
+      <div ng-hide="hasSource()">
+        <div class="spinner">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <p class="text-center">
+          Please wait, your data is still being processed...
+        </p>
+      </div>
+
+      <div class="panel panel-default">
+        <table class="table" ng-show="hasSource()">
+          <tr>
+            <th>
+              File
+            </th>
+            <th>
+              Tasks
+            </th>
+            <th width="10%">
+              Status
+            </th>
+            <th width="10%">
+            </th>
+          </tr>
+          <tr ng-repeat="run in source.runs">
+            <td>
+              {{source.name}}
+            </td>
+            <td>
+              {{run.operation}}
+            </td>
+            <td>
+              <div class="label label-success" ng-show="run.status == 'complete'">OK</div>
+              <div class="label label-warning" ng-show="run.status == 'running'"><i class="fa fa-spinner fa-spin"></i> Running</div>
+              <div class="label label-danger" ng-show="run.status == 'failed'">Failed</div>
+            </td>
+            <td>
+              <a ng-show="run.status == 'failed'" class="btn btn-default btn-xs"
+                ng-href="/datasets/{{dataset.name}}/admin/runs/{{run.id}}">View details &raquo;</a>
+            </td>
+          </tr>
+        </table>
+        <div class="panel-footer">
+          <div class="pull-right">
+            <a href="{{source.data_url}}" target="_self" class="btn btn-default">
+              <i class="fa fa-download"></i>
+              Download ({{source.extension || source.mime_type}})
+            </a>
+            <button class="btn btn-default" ng-click="upload()">
+              <i class="fa fa-cloud-upload"></i> Replace source data
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>        
+      </div>
+    </div>
+  </div>
+</dataset-settings>

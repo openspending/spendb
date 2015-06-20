@@ -1,13 +1,4 @@
 
-spendb.controller('AdminDataCtrl', ['$scope', '$rootScope', '$http', '$window', '$routeParams', 'dataset',
-  function($scope, $rootScope, $http, $window, $routeParams, dataset, sources) {
-  $scope.dataset = dataset;
-
-  $rootScope.setSection('data');
-
-}]);
-
-
 spendb.controller('AdminDeleteCtrl', ['$scope', '$modalInstance', '$window', '$location', '$http', 'dataset',
   function($scope, $modalInstance, $window, $location, $http, dataset) {
   $scope.dataset = dataset;

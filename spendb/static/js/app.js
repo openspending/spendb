@@ -92,6 +92,14 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/datasets/:dataset/sources', {
+    templateUrl: 'dataset/sources.html',
+    controller: 'DatasetSourcesCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
+  });
+
   // $routeProvider.when('/datasets/:dataset/admin/data', {
   //   templateUrl: 'admin/data.html',
   //   controller: 'AdminDataCtrl',

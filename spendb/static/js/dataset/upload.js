@@ -7,7 +7,8 @@ spendb.controller('DatasetUploadCtrl', ['$scope', '$document', '$http', '$locati
   $scope.file = {};
 
   var uploadDone = function() {
-    $location.path('/datasets/' + dataset.name + '/edit');
+    var next = $location.search().next || 'edit';
+    $location.path('/datasets/' + dataset.name + '/' + next);
   };
 
   $scope.setFile = function(files) {
