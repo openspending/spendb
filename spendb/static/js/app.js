@@ -82,6 +82,16 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/datasets/:dataset/edit', {
+    templateUrl: 'dataset/edit.html',
+    controller: 'DatasetEditCtrl',
+    resolve: {
+      dataset: loadDataset,
+      reference: loadReferenceData,
+      managers: loadManagers
+    }
+  });
+
   // $routeProvider.when('/datasets/:dataset/admin/data', {
   //   templateUrl: 'admin/data.html',
   //   controller: 'AdminDataCtrl',
@@ -96,16 +106,6 @@ spendb.config(['$routeProvider', '$locationProvider',
   //   resolve: {
   //     dataset: loadDataset,
   //     run: loadRun
-  //   }
-  // });
-
-  // $routeProvider.when('/datasets/:dataset/admin/metadata', {
-  //   templateUrl: 'admin/metadata.html',
-  //   controller: 'AdminMetadataCtrl',
-  //   resolve: {
-  //     dataset: loadDataset,
-  //     reference: loadReferenceData,
-  //     managers: loadManagers
   //   }
   // });
 
