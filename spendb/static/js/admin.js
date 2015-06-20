@@ -15,7 +15,7 @@ spendb.controller('AdminMetadataCtrl', ['$scope', '$rootScope', '$q', '$http', '
   $scope.dataset = dataset;
   $scope.managers = managers;
 
-  $rootScope.setSection('metadata');
+  //$rootScope.setSection('metadata');
 
   $scope.suggestAccounts = function(query) {
     var dfd = $q.defer(),

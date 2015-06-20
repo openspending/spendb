@@ -24,7 +24,9 @@
     "angular-moment": "~0.10.1",
     "angular-scroll": "~0.7.0",
     "speakingurl": "~4.0.0",
-    "angular-truncate": "*"
+    "angular-truncate": "*",
+    "angular-ui-select": "~0.12.0",
+    "angular-sanitize": "~1.4.1"
   },
   "resolutions": {
     "angular": "1.2.28"

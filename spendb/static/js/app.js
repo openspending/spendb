@@ -1,7 +1,7 @@
 angular.module('spendb.config', []).constant('config', SPENDB_CONFIG);
 
-var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'duScroll', 'ngFileUpload',
-                                       'angularMoment', 'ui.bootstrap', 'localytics.directives', 'truncate']);
+var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'duScroll',
+                                       'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'ui.select', 'truncate']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',
@@ -66,14 +66,6 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
-  $routeProvider.when('/datasets/:dataset', {
-    templateUrl: 'dataset/view.html',
-    controller: 'DatasetViewCtrl',
-    resolve: {
-      dataset: loadDataset
-    }
-  });
-
   $routeProvider.when('/datasets/:dataset/admin/data', {
     templateUrl: 'admin/data.html',
     controller: 'AdminDataCtrl',
@@ -110,6 +102,14 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.when('/datasets/:dataset', {
+    templateUrl: 'dataset/view.html',
+    controller: 'DatasetViewCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
+  });
+
   $locationProvider.html5Mode(true);
 }]);
 
@@ -138,7 +138,7 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
 
   $scope.setTitle = function(title) {
     $rootScope.currentTitle = title;
-    angular.element('title').html(title + ' - ' + config.site_title);
+    angular.element(document.getElementsByTagName('title')).html(title + ' - ' + config.site_title);
   };
 
   // reset the page.
