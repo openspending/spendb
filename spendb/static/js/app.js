@@ -12,6 +12,7 @@ spendb.config(['$routeProvider', '$locationProvider',
     controller: 'HomeCtrl',
     reloadOnSearch: true,
     resolve: {
+      session: loadSession,
       page: loadIndex,
       datasets: loadIndexDatasets
     }
@@ -154,16 +155,14 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
     $document.scrollToElement(elem, 0, 300);
   };
 
+  $scope.scrollToId = function(id) {
+    var elem = angular.element(document.getElementById(id));
+    $document.scrollToElement(elem, 0, 200);
+  };
+
   // Allow SCE escaping in the app
   $scope.trustAsHtml = function(text) {
     return $sce.trustAsHtml('' + text);
-  };
-
-  // Logout
-  $scope.logout = function() {
-    session.logout(function(s) {
-      $scope.reloadSession();
-    });
   };
 
   $scope.reloadSession = function() {

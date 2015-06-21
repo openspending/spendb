@@ -18,8 +18,8 @@ var loadIndexDatasets = ['$q', '$http', '$location', '$route', function($q, $htt
 }];
 
 
-spendb.controller('HomeCtrl', ['$scope', '$location', '$sce', 'page', 'datasets',
-    function($scope, $location, $sce, page, datasets) {
+spendb.controller('HomeCtrl', ['$scope', '$rootScope', '$location', '$sce', 'page', 'datasets',
+    function($scope, $rootScope, $location, $sce, page, datasets) {
   $scope.setTitle(page.title);
   $scope.page = page;
   $scope.datasets = datasets;
@@ -55,6 +55,7 @@ spendb.controller('HomeCtrl', ['$scope', '$location', '$sce', 'page', 'datasets'
       delete query['offset'];
     }
     $location.search(query);
+    //$scope.scrollToId('datasets');
   };
 
 }]);
