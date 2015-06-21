@@ -114,20 +114,30 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
         delete $scope.selectedFields[n];
       }
     }
+
     var isNew = !angular.isDefined(dimension.name);
-    dimension.label = dimension.label || longestCommonStart(labels);
-    dimension.name = dimension.name || getSlug(dimension.label, '_');
     if (isNew) {
       dimension.slug_linked = true;
-    }
 
-    // for (var i in dimension.attributes) {
-    //   var attr = dimension.attributes[i];
-    //   if (labels.indexOf(attr.label) != -1) {
-    //     attr.label = attr.label.slice(dimension.label.length);
-    //     attr.name = getSlug(attr.label);
-    //   }
-    // }
+      // try and cleverly generate labels and names for 
+      // attributes and dimensions.
+      var common = longestCommonStart(labels),
+          lastChar = common.length ? common.charAt(common.length - 1) : ' ',
+          atBoundary = new RegExp(/[\W_]/g).test(lastChar);
+      dimension.label = cleanLabel(atBoundary ? common : '');
+      dimension.name = getSlug(dimension.label, '_');
+
+      if (atBoundary) {
+        console.log(atBoundary, common, lastChar);
+        for (var i in dimension.attributes) {
+          var attr = dimension.attributes[i];
+          if (labels.indexOf(attr.label) != -1 && common.length < attr.label.length) {
+            attr.label = cleanLabel(attr.label.slice(common.length));
+            attr.name = getSlug(attr.label);
+          }
+        }  
+      }
+    }
 
     if (isNew) {
       $scope.dimensions.push(dimension);

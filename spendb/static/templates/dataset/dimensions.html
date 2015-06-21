@@ -57,7 +57,7 @@
                 <input type="checkbox" ng-model="selectedFields[field.name]">
               </td>
               <th>
-                <code>{{ field.title }}</code>
+                {{ field.title }}
               </th>
               <td width="10%">
                 <button class="btn btn-xs btn-default"
@@ -95,7 +95,7 @@
         <table class="table">
           <tr>
             <th>Dimension</th>
-            <th>Attributes</th>
+            <th>Attributes (Columns)</th>
             <th width='1%'>Edit</th>
             <th width='1%'>Remove</th>
           </tr>
@@ -105,7 +105,7 @@
             </th>
             <td>
               <span ng-repeat="attr in dim.attributes">
-                {{attr.label}} (<code>{{attr.column}}</code>)<span ng-hide="$last">,</span>
+                {{attr.label}} ({{attr.column}})<span ng-hide="$last">,</span>
               </span>
             </td>
             <td class="text-right">
