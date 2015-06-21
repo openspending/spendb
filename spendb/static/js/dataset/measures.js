@@ -48,8 +48,10 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
         }
       }
     }
-    data.model.dimensions = data.model.dimensions || {};
-    data.model.measures = measures;
+    var model = angular.copy(data.model);
+    model.dimensions = model.dimensions || {};
+    model.measures = measures;
+    return model;
   };
 
   $scope.toggleIgnore = function(field) {
@@ -127,9 +129,9 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
   };
 
   $scope.save = function() {
-    unload();
+    var model = unload();
     $scope.errors = {};
-    $http.post(dataset.api_url + '/model', data.model).then(function(res) {
+    $http.post(dataset.api_url + '/model', model).then(function(res) {
       if ($scope.wizard) {
         $location.path('/datasets/' + dataset.name + '/model/dimensions');
       } else {

@@ -48,7 +48,9 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
       dim.key_attribute = dim.key_attribute.name;
       dimensions[dim.name] = dim;
     }
-    data.model.dimensions = dimensions;
+    var model = angular.copy(data.model);
+    model.dimensions = dimensions;
+    return model;
   };
 
   $scope.getAvailableFields = function() {
@@ -117,9 +119,8 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     dimension.name = dimension.name || getSlug(dimension.label, '_');
     if (isNew) {
       dimension.slug_linked = true;
-      dimension.label_attribute = dimension.attributes[0];
-      dimension.key_attribute = dimension.attributes[0];  
     }
+
     // for (var i in dimension.attributes) {
     //   var attr = dimension.attributes[i];
     //   if (labels.indexOf(attr.label) != -1) {
@@ -127,6 +128,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     //     attr.name = getSlug(attr.label);
     //   }
     // }
+
     if (isNew) {
       $scope.dimensions.push(dimension);
     }
@@ -134,6 +136,13 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   };
 
   $scope.editDimension = function(dimension) {
+    if (!dimension.label_attribute) {
+      dimension.label_attribute = dimension.attributes[0];
+    }
+    if (!dimension.key_attribute) {
+      dimension.key_attribute = dimension.attributes[0];  
+    }
+
     var d = $modal.open({
       templateUrl: 'dataset/dimension_edit.html',
       controller: 'DatasetDimensionEditCtrl',
@@ -175,9 +184,9 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   };
 
   $scope.save = function() {
-    unload();
+    var model = unload();
     $scope.errors = {};
-    $http.post(dataset.api_url + '/model', data.model).then(function(res) {
+    $http.post(dataset.api_url + '/model', model).then(function(res) {
       if ($scope.wizard) {
         $location.path('/datasets/' + dataset.name);
       } else {
