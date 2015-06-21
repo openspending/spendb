@@ -25,6 +25,12 @@
               ng-model="credentials.password">
             <p class="help-block" ng-show="loginForm.password.$invalid"
               ng-bind="loginForm.password.$message"></p>
+            <p class="help-block">
+              Forgot your password?
+              <a class="ng-link" ng-click="resetPassword()">
+                Request a password reset.
+              </a>
+            </p>
           </div>
         </div>
         <div class="form-group">
@@ -35,13 +41,6 @@
           </div>
         </div>
       </form>
-
-      <p class="help-block">
-        Forgot your password?
-        <a class="ng-link" ng-click="resetPassword()">
-          Request a password reset.
-        </a>
-      </p>
     </div>
 
     <div class="col-md-6">
