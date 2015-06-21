@@ -9,9 +9,18 @@ var loadSession = ['$q', 'session', function($q, session) {
 
 var loadDataset = ['$route', '$http', '$q', function($route, $http, $q) {
   var dfd = $q.defer(),
-      url = '/api/3/datasets/' + $route.current.params.dataset;
-  $http.get(url).then(function(res) {
-    dfd.resolve(res.data);
+      url = '/api/3/datasets/' + $route.current.params.dataset,
+      authzUrl = '/api/3/sessions/authz',
+      authzParams = {'dataset': $route.current.params.dataset};
+  $q.all([
+    $http.get(url),
+    $http.get(authzUrl, {params: authzParams})
+  ]).then(function(data) {
+    var dataset = data[0].data,
+        authz = data[1].data;
+    dataset.can_read = authz.read;
+    dataset.can_update = authz.update;
+    dfd.resolve(dataset);
   });
   return dfd.promise;
 }];

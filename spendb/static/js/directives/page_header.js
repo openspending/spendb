@@ -10,7 +10,7 @@ spendb.directive('pageHeader', ['$http', '$rootScope', '$route', '$location', 'f
     },
     templateUrl: 'directives/page_header.html',
     link: function (scope, element, attrs, model) {
-      //scope.site_title = config.site_title;
+      console.log(scope.dataset);
       scope.session = {};
       scope.flash = flash;
       scope.home_page = $route.current.loadedTemplateUrl == 'home.html';

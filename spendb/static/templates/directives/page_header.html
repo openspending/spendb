@@ -14,7 +14,14 @@
             <i class="fa fa-chevron-left"></i>
           </div>
         </a>
-        <span class="navbar-brand" ng-bind="title"></span>
+        <span class="navbar-brand">
+          <span ng-bind="title"></span>
+          <span ng-show="dataset && dataset.private">
+            <i class="fa fa-eye-slash"
+              tooltip="This dataset is private."
+              tooltip-placement="bottom"></i>
+          </span>
+        </span>
       </div>
 
       <div class="collapse navbar-collapse" id="main-collapse">
@@ -36,7 +43,8 @@
               About
             </a>
           </li>
-          <li dropdown ng-class="{'active': section == 'manage'}">
+          <li dropdown ng-class="{'active': section == 'manage'}"
+            ng-show="dataset.can_update">
             <a dropdown-toggle>
               Manage
               <i class="fa fa-caret-down"></i>

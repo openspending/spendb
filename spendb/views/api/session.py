@@ -1,13 +1,14 @@
 import logging
 
-from flask import Blueprint
+from flask import Blueprint, request
 from flask.ext.login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash
 from flask.ext.babel import gettext as _
 from apikit import jsonify, request_data
 
 from spendb.core import login_manager
-from spendb.model import Account
+from spendb.auth import dataset
+from spendb.model import Account, Dataset
 from spendb.views.cache import disable_cache
 
 log = logging.getLogger(__name__)
@@ -42,6 +43,20 @@ def session():
         data['user'] = current_user
         data['api_key'] = current_user.api_key
     return jsonify(data)
+
+
+@blueprint.route('/sessions/authz')
+def authz():
+    obj = Dataset.by_name(request.args.get('dataset'))
+    if obj is None:
+        return jsonify({
+            'read': False,
+            'update': False
+        })
+    return jsonify({
+        'read': dataset.read(obj),
+        'update': dataset.update(obj)
+    })
 
 
 @blueprint.route('/sessions/login', methods=['POST', 'PUT'])
