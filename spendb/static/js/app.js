@@ -69,8 +69,16 @@ spendb.config(['$routeProvider', '$locationProvider',
   });
 
   $routeProvider.when('/datasets/:dataset', {
-    templateUrl: 'dataset/view.html',
-    controller: 'DatasetViewCtrl',
+    templateUrl: 'dataset/query.html',
+    controller: 'DatasetQueryCtrl',
+    resolve: {
+      dataset: loadDataset
+    }
+  });
+
+  $routeProvider.when('/datasets/:dataset/about', {
+    templateUrl: 'dataset/about.html',
+    controller: 'DatasetAboutCtrl',
     resolve: {
       dataset: loadDataset
     }

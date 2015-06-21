@@ -24,6 +24,7 @@ spendb.directive('datasetSettings', ['$rootScope', '$http', '$location',
       scope._prevLabel = scope.prevLabel || 'Back';
       scope.prevShow = scope.prevHidden ? false : wizard;
       scope.wizard = scope.$parent.wizard = wizard;
+      scope.navDataset = wizard ? null : scope.dataset;
 
       console.log(scope.wizard ? "Wizard mode" : "Edit mode");
     }

@@ -26,13 +26,13 @@
           </li>
         </ul>
         <ul class="nav navbar-nav" ng-show="dataset">
-          <li ng-class="{'active': section == 'view'}">
+          <li ng-class="{'active': section == 'query'}">
             <a ng-href="/datasets/{{dataset.name}}">
               Query
             </a>
           </li>
-          <li>
-            <a ng-href="/datasets/{{dataset.name}}/info">
+          <li ng-class="{'active': section == 'about'}">
+            <a ng-href="/datasets/{{dataset.name}}/about">
               About
             </a>
           </li>

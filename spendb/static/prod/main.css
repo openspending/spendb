@@ -6791,6 +6791,7 @@ h4 {
   background-color: #265986;
 }
 .navbar.navbar-default ul.navbar-nav > li.active > a {
+  color: white;
   background-color: #265986;
 }
 .navbar.navbar-default ul.navbar-nav > li:hover > a,
