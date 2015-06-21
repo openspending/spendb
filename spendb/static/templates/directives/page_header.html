@@ -18,7 +18,7 @@
           <span ng-bind="title"></span>
           <span ng-show="dataset && dataset.private">
             <i class="fa fa-eye-slash"
-              tooltip="This dataset is private."
+              tooltip="This dataset is private"
               tooltip-placement="bottom"></i>
           </span>
         </span>
@@ -49,22 +49,42 @@
               Manage
               <i class="fa fa-caret-down"></i>
             </a>
-
             <ul class="dropdown-menu account-dropdown" role="menu">
               <li>
-                <a ng-href="/accounts/{{session.user.name}}">
-                  Dashboard
+                <a ng-href="/datasets/{{dataset.name}}/edit">
+                  Metadata
                 </a>
               </li>
               <li>
-                <a href="/settings">
-                  Settings
+                <a ng-href="/datasets/{{dataset.name}}/sources">
+                  Data sources and upload
+                </a>
+              </li>
+              <li>
+                <a ng-href="/datasets/{{dataset.name}}/model/measures">
+                  Edit measures
+                </a>
+              </li>
+              <li>
+                <a ng-href="/datasets/{{dataset.name}}/model/dimensions">
+                  Edit dimensions
                 </a>
               </li>
               <li class="divider"></li>
+              <li ng-show="dataset.private">
+                <a ng-click="togglePrivate()" class="clickable">
+                  <strong>Publish</strong>
+                </a>
+              </li>
+              <li ng-hide="dataset.private">
+                <a ng-click="togglePrivate()" class="clickable">
+                  Retract
+                </a>
+              </li>
+              
               <li>
-                <a ng-click="logout()" class="clickable">
-                  Logout
+                <a ng-click="deleteDataset()" class="clickable">
+                  Delete
                 </a>
               </li>
             </ul>

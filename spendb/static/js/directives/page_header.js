@@ -1,6 +1,6 @@
 
-spendb.directive('pageHeader', ['$http', '$rootScope', '$route', '$location', 'flash', 'config', 'session',
-  function ($http, $rootScope, $route, $location, flash, config, session) {
+spendb.directive('pageHeader', ['$http', '$rootScope', '$route', '$location', '$modal', 'flash', 'config', 'session',
+  function ($http, $rootScope, $route, $location, $modal, flash, config, session) {
   return {
     restrict: 'E',
     //transclude: true,
@@ -10,7 +10,6 @@ spendb.directive('pageHeader', ['$http', '$rootScope', '$route', '$location', 'f
     },
     templateUrl: 'directives/page_header.html',
     link: function (scope, element, attrs, model) {
-      console.log(scope.dataset);
       scope.session = {};
       scope.flash = flash;
       scope.home_page = $route.current.loadedTemplateUrl == 'home.html';
@@ -28,7 +27,29 @@ spendb.directive('pageHeader', ['$http', '$rootScope', '$route', '$location', 'f
         });
       };
 
-      
+      scope.deleteDataset = function() {
+        var d = $modal.open({
+          templateUrl: 'dataset/delete.html',
+          controller: 'DatasetDeleteCtrl',
+          backdrop: true,
+          resolve: {
+            dataset: function () {
+              return scope.dataset;
+            }
+          }
+        });
+      };
+
+      scope.togglePrivate = function() {
+        scope.dataset.private = !scope.dataset.private;
+        $http.post(scope.dataset.api_url, scope.dataset).then(function(res) {
+          if (res.data.private) {
+            flash.setMessage("The dataset has been made private.", "danger");
+          } else {
+            flash.setMessage("The dataset is now public!", "success");
+          }
+        });
+      };
 
     }
   };
