@@ -1,4 +1,5 @@
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+@import "../vendor/animate.css/animate.min.css";
 @import "../vendor/angular/angular-csp.css";
 @import "../vendor/angular-ui-select/dist/select.css";
 html {
@@ -6837,6 +6838,17 @@ footer p {
   padding-top: 0;
   padding-left: 0;
   line-height: 1.7em;
+}
+.alert.alert-flash {
+  margin-top: -2em;
+  padding-top: 2em;
+  padding-bottom: 1em;
+  font-size: 1.2em;
+  text-align: center;
+  border-radius: 0;
+}
+.alert-flash.ng-hide-add {
+  animation: slideOutUp 2s;
 }
 .dataset-settings {
   min-height: 20em;

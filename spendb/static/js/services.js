@@ -1,6 +1,6 @@
 
 
-spendb.factory('flash', ['$rootScope', function($rootScope) {
+spendb.factory('flash', ['$rootScope', '$timeout', function($rootScope, $timeout) {
   // Message flashing.
   var currentMessage = null;
 
@@ -11,6 +11,9 @@ spendb.factory('flash', ['$rootScope', function($rootScope) {
   return {
     setMessage: function(message, type) {
       currentMessage = [message, type];
+      $timeout(function() {
+        currentMessage = null;
+      }, 2000);
     },
     getMessage: function() {
       if (currentMessage) {
