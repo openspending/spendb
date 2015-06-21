@@ -5,17 +5,21 @@
 
 <form class="form-horizontal dataset-settings" role="form" name="forms.dim" ng-submit="update()">
   <div class="modal-body">
-    <div class="form-group" ng-class="{'has-error': editUser.label.$invalid}">
+    <div class="form-group" ng-class="{'has-error': !validLabel(dimension)}">
       <label class="col-sm-3 control-label" for="label">Label</label>
       <div class="col-sm-9">
-        <input type="text" class="form-control" id="label" name="label" ng-model="dimension.label">
+        <input type="text" class="form-control" id="label" name="label"
+          ng-change="updateSlug(dimension)"
+          ng-model="dimension.label">
       </div>
     </div>
 
     <div class="form-group" ng-class="{'has-error': editUser.name.$invalid}">
       <label class="col-sm-3 control-label" for="name">API name</label>
       <div class="col-sm-9">
-        <input type="text" class="form-control" id="name" name="name" ng-model="dimension.name">
+        <input type="text" class="form-control" id="name" name="name"
+          ng-focus="breakSlugLink(dimension)"
+          ng-model="dimension.name">
         <p class="help-block" ng-hide="forms.dataset.label.$invalid">
           Developers will use this name to query your data. It can only contain
           letters, numbers and underscores.
@@ -31,11 +35,13 @@
         <th width="1%"></th>
       </tr>
       <tr ng-repeat="attribute in dimension.attributes">
-        <td>
-          <input class="form-control" ng-model="attribute.label">
+        <td ng-class="{'has-error': !validLabel(attribute)}">
+          <input class="form-control" ng-model="attribute.label"
+            ng-change="updateSlug(attribute)">
         </td>
         <td>
-          <input class="form-control" ng-model="attribute.name">
+          <input class="form-control" ng-model="attribute.name"
+            ng-focus="breakSlugLink(attribute)">
         </td>
         <td>
           <input class="form-control" ng-model="attribute.column" readonly>

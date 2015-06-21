@@ -16,6 +16,23 @@ spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$win
     }
   };
 
+  $scope.breakSlugLink = function(obj) {
+    obj.slug_linked = false;
+  };
+
+  $scope.updateSlug = function(obj) {
+    if (obj.slug_linked) {
+      obj.name = getSlug(obj.label, '_');
+    }
+  };
+
+  $scope.validLabel = function(obj) {
+    if (!obj || !obj.label || obj.label.length < 2) {
+      return false;
+    }
+    return true;
+  };
+
   $scope.update = function() {
     $modalInstance.dismiss('ok');
   };

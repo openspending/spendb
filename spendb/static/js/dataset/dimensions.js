@@ -13,11 +13,13 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     for (var name in dimensions) {
       var dim = dimensions[name];
       dim.name = name;
+      dim.slug_linked = false;
       var attributes = dim.attributes || {},
           attrs = [];
       for (var an in attributes) {
         var attr = attributes[an];
         attr.name = an;
+        attr.slug_linked = false;
         if (an == dim.label_attribute) {
           dim.label_attribute = attr;
         }
@@ -103,7 +105,8 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
         dimension.attributes.push({
           name: field.name,
           column: field.name,
-          label: field.title
+          label: field.title,
+          slug_linked: true
         });
         labels.push(field.title);
         delete $scope.selectedFields[n];
@@ -113,6 +116,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     dimension.label = dimension.label || longestCommonStart(labels);
     dimension.name = dimension.name || getSlug(dimension.label, '_');
     if (isNew) {
+      dimension.slug_linked = true;
       dimension.label_attribute = dimension.attributes[0];
       dimension.key_attribute = dimension.attributes[0];  
     }
