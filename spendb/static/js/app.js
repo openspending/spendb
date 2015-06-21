@@ -80,7 +80,9 @@ spendb.config(['$routeProvider', '$locationProvider',
     templateUrl: 'dataset/about.html',
     controller: 'DatasetAboutCtrl',
     resolve: {
-      dataset: loadDataset
+      dataset: loadDataset,
+      managers: loadManagers,
+      model: loadModel
     }
   });
 
