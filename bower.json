@@ -24,7 +24,7 @@
     "angular-scroll": "~0.7.0",
     "speakingurl": "~4.0.0",
     "angular-truncate": "*",
-    "angular-cubes": "~0.1.0"
+    "angular-cubes": "~0.1.1"
   },
   "resolutions": {
     "angular": "1.2.28"
