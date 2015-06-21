@@ -6848,18 +6848,19 @@ footer p {
   word-break: break-all;
   word-wrap: break-word;
 }
+.dataset-settings .table tr.middle td,
+.dataset-settings .table td.middle {
+  vertical-align: middle;
+}
+.dataset-settings .table tr.adjunct td {
+  border-top: 0;
+  padding-top: 0;
+}
 .dataset-settings .table.table-model .ignore-toggle {
   color: #dddddd;
 }
 .dataset-settings .table.table-model tbody {
   border-top: 0;
-}
-.dataset-settings .table.table-model tr.middle td {
-  vertical-align: middle;
-}
-.dataset-settings .table.table-model tr.adjunct td {
-  border-top: 0;
-  padding-top: 0;
 }
 .dataset-settings .table.table-model .input-group-addon {
   min-width: 7em;

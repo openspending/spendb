@@ -263,6 +263,17 @@ footer {
         //overflow-y: scroll;
     }
 
+    .table {
+        tr.middle td, td.middle {
+            vertical-align: middle;
+        }
+
+        tr.adjunct td {
+            border-top: 0;
+            padding-top: 0;
+        }
+    }
+
     .table.table-model {        
         .ignore-toggle {
             color: @table-border-color;
@@ -272,15 +283,7 @@ footer {
             border-top: 0;
         }
 
-        tr.middle td {
-            vertical-align: middle;
-        }
-
-        tr.adjunct td {
-            border-top: 0;
-            padding-top: 0;
-        }
-
+        
         .input-group-addon {
             min-width: 7em;
             text-align: left;

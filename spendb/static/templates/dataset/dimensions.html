@@ -106,16 +106,10 @@
           <tr>
             <th width='40%'>Attribute</th>
             <th>Column</th>
-            <th width='1%'></th>
           </tr>
           <tr ng-repeat="attr in dim.attributes">
             <td>{{attr.label}}</td>
             <td>{{attr.column}}</td>
-            <td>
-              <a ng-click="removeAttribute(dim, attr)">
-                <i class="fa fa-times"></i>
-              </a>
-            </td>
           </tr>
         </table>
       </div>

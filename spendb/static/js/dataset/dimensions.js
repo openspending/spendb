@@ -18,6 +18,12 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
       for (var an in attributes) {
         var attr = attributes[an];
         attr.name = an;
+        if (an == dim.label_attribute) {
+          dim.label_attribute = attr;
+        }
+        if (an == dim.key_attribute) {
+          dim.key_attribute = attr;
+        }
         attrs.push(attr);
       }
       dim.attributes = attrs;
@@ -36,6 +42,8 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
         attributes[attr.name] = attr;
       }
       dim.attributes = attributes;
+      dim.label_attribute = dim.label_attribute.name;
+      dim.key_attribute = dim.key_attribute.name;
       dimensions[dim.name] = dim;
     }
     data.model.dimensions = dimensions;
@@ -104,6 +112,10 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     var isNew = !angular.isDefined(dimension.name);
     dimension.label = dimension.label || longestCommonStart(labels);
     dimension.name = dimension.name || getSlug(dimension.label, '_');
+    if (isNew) {
+      dimension.label_attribute = dimension.attributes[0];
+      dimension.key_attribute = dimension.attributes[0];  
+    }
     // for (var i in dimension.attributes) {
     //   var attr = dimension.attributes[i];
     //   if (labels.indexOf(attr.label) != -1) {
@@ -135,14 +147,6 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     $scope.dimensions.splice(idx, 1);
   };
 
-  $scope.removeAttribute = function(dimension, attribute) {
-    var idx = dimension.attributes.indexOf(attribute);
-    dimension.attributes.splice(idx, 1);
-    if (!dimension.attributes.length) {
-      $scope.deleteDimension(dimension);
-    }
-  };
-
   $scope.getSamples = function(field) {
     var samples = [];
     for (var i in data.structure.samples) {
@@ -165,6 +169,18 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
 
   $scope.save = function() {
     unload();
+    $scope.errors = {};
+    $http.post(dataset.api_url + '/model', data.model).then(function(res) {
+      if ($scope.wizard) {
+        $location.path('/datasets/' + dataset.name);
+      } else {
+        flash.setMessage("Your changes have been saved!", "success");
+        $scope.resetScroll();  
+      }
+    }, function(res) {
+      $scope.errors = res.data.errors;
+      $scope.resetScroll();
+    });
   };
 
   load();
