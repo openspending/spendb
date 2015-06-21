@@ -25,7 +25,7 @@
 
 <!-- logged in: create a dataset. -->
 <div ng-show="session.logged_in">
-  <dataset-settings next="createDataset()" next-active="canCreate()">
+  <dataset-settings step="1" next="createDataset()" next-active="canCreate()">
     <div class="row">
       <div class="col-md-4">
         <div class="alert guidance">

@@ -1,6 +1,17 @@
 <page-header dataset="navDataset" section="manage"></page-header>
 <page-body>
   <div class="dataset-settings">
+    <div class="wizard-progress" ng-show="wizard">
+      <ul class="pagination pagination-sm">
+        <li ng-class="{'active': _step == 1, 'seen': _step > 1}"><a>New dataset</a></li>
+        <li ng-class="{'active': _step == 2, 'seen': _step > 2}"><a>Source data</a></li>
+        <li ng-class="{'active': _step == 3, 'seen': _step > 3}"><a>Metadata</a></li>
+        <li ng-class="{'active': _step == 4, 'seen': _step > 4}"><a>Data check-up</a></li>
+        <li ng-class="{'active': _step == 5, 'seen': _step > 5}"><a>Measures</a></li>
+        <li ng-class="{'active': _step == 6, 'seen': _step > 6}"><a>Dimensions</a></li>
+        <li><a>Done</a></li>
+      </ul>
+    </div>
     <div ng-transclude></div>
   </div>
   <hr />

@@ -137,8 +137,8 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
         $location.path('/datasets/' + dataset.name + '/model/dimensions');
       } else {
         flash.setMessage("Your changes have been saved!", "success");
-        $scope.resetScroll();  
       }
+      $scope.resetScroll();
     }, function(res) {
       $scope.errors = res.data.errors;
       $scope.resetScroll();

@@ -6,6 +6,7 @@ spendb.directive('datasetSettings', ['$rootScope', '$http', '$location',
     transclude: true,
     scope: {
       "dataset": "=",
+      "step": "@",
       "nextLabel": "@",
       "prevLabel": "@",
       "prevActive": "=",
@@ -20,6 +21,7 @@ spendb.directive('datasetSettings', ['$rootScope', '$http', '$location',
           mode = $location.search().mode,
           wizard = mode == 'wizard' || !scope.dataset || !scope.dataset.api_url;
       $rootScope.setTitle(title);
+      scope._step = parseInt(scope.step, 10);
       scope._nextLabel = scope.nextLabel || 'Next';
       scope._prevLabel = scope.prevLabel || 'Back';
       scope.prevShow = scope.prevHidden ? false : wizard;

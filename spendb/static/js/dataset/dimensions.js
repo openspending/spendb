@@ -222,11 +222,13 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     $http.post(dataset.api_url + '/model', model).then(function(res) {
       load(res.data);
       if ($scope.wizard) {
+        $location.search({});
         $location.path('/datasets/' + dataset.name);
+        flash.setMessage("That's it! Your dataset is now ready for use.", "success");
       } else {
         flash.setMessage("Your changes have been saved!", "success");
-        $scope.resetScroll();  
       }
+      $scope.resetScroll();
     }, function(res) {
       $scope.errors = res.data.errors;
       $scope.resetScroll();

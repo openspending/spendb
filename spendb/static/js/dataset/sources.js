@@ -37,7 +37,7 @@ spendb.controller('DatasetSourcesCtrl', ['$scope', '$document', '$http', '$locat
     } else {
       flash.setMessage("Yeah this doesn't do anything.", "success");
     }
-    
+    $scope.resetScroll();
   };
 
   $scope.back = function() {

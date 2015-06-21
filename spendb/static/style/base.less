@@ -256,6 +256,31 @@ footer {
 .dataset-settings {
     min-height: 20em;
 
+    .wizard-progress {
+        .pagination {
+            margin-top: 0;
+            width: 100%;
+            li a, li:hover a {
+                width: 14.2%;
+                color: @theme-text;
+                text-align: center;
+                background-color: @theme-body-bg;
+            }
+
+            li.active a {
+                color: @theme-body-bg;
+                background-color: @brand-primary;
+                font-weight: bolder;
+            }
+
+            li.seen a {
+                color: @theme-body-bg;
+                background-color: lighten(@brand-primary, 20%);
+                border: 1px solid lighten(@brand-primary, 20%);
+            }
+        }
+    }
+
     .spinner {
         font-size: 10em;
         width: 100%;

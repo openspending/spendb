@@ -4,16 +4,16 @@ spendb.factory('flash', ['$rootScope', '$timeout', function($rootScope, $timeout
   // Message flashing.
   var currentMessage = null;
 
-  $rootScope.$on("$routeChangeSuccess", function() {
-    currentMessage = null;
-  });
+  // $rootScope.$on("$routeChangeSuccess", function() {
+  //   currentMessage = null;
+  // });
 
   return {
     setMessage: function(message, type) {
       currentMessage = [message, type];
       $timeout(function() {
         currentMessage = null;
-      }, 2000);
+      }, 4000);
     },
     getMessage: function() {
       if (currentMessage) {
