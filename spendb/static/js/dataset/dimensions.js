@@ -141,6 +141,9 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
       resolve: {
         dimension: function () {
           return dimension;
+        },
+        dimensions: function () {
+          return $scope.dimensions;
         }
       }
     });

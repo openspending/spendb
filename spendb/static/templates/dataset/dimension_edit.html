@@ -14,16 +14,18 @@
       </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error': editUser.name.$invalid}">
+    <div class="form-group" ng-class="{'has-error': !validDimensionSlug(dimension)}">
       <label class="col-sm-3 control-label" for="name">API name</label>
       <div class="col-sm-9">
         <input type="text" class="form-control" id="name" name="name"
           ng-focus="breakSlugLink(dimension)"
           ng-model="dimension.name">
-        <p class="help-block" ng-hide="forms.dataset.label.$invalid">
+        <p class="help-block" ng-hide="dimension.$invalidName">
           Developers will use this name to query your data. It can only contain
           letters, numbers and underscores.
         </p>
+        <p class="help-block" ng-show="dimension.$invalidName"
+          ng-bind="dimension.$invalidName"></p>
       </div>
     </div>
 
@@ -39,7 +41,7 @@
           <input class="form-control" ng-model="attribute.label"
             ng-change="updateSlug(attribute)">
         </td>
-        <td>
+        <td ng-class="{'has-error': !validAttributeSlug(attribute)}">
           <input class="form-control" ng-model="attribute.name"
             ng-focus="breakSlugLink(attribute)">
         </td>
@@ -54,7 +56,7 @@
       </tr>
     </table>
 
-    <div class="form-group" ng-class="{'has-error': editUser.label_attribute.$invalid}">
+    <div class="form-group">
       <label class="col-sm-3 control-label" for="label_attribute">Label attribute</label>
       <div class="col-sm-9">
         <select name="label_attribute" class="form-control"
@@ -62,12 +64,12 @@
           ng-init="dimension.attributes[0]"
           ng-model="dimension.label_attribute"></select>
         <p class="help-block">
-          Select an attribute that can represent this dimension, e.g. a classification title
+          Select an attribute that represents this dimension, e.g. a classification title
           or company name.
         </p>
       </div>
     </div>
-    <div class="form-group" ng-class="{'has-error': editUser.key_attribute.$invalid}">
+    <div class="form-group">
       <label class="col-sm-3 control-label" for="key_attribute">Key attribute</label>
       <div class="col-sm-9">
         <select name="key_attribute" class="form-control"

@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$window', '$location', '$http', 'dimension',
-  function($scope, $modalInstance, $window, $location, $http, dimension) {
+spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$window', '$location', '$http', 'dimension', 'dimensions',
+  function($scope, $modalInstance, $window, $location, $http, dimension, dimensions) {
   $scope.dimension = dimension;
 
   $scope.removeAttribute = function(attribute) {
@@ -29,6 +29,44 @@ spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$win
   $scope.validLabel = function(obj) {
     if (!obj || !obj.label || obj.label.length < 2) {
       return false;
+    }
+    return true;
+  };
+
+  var validSlug = function(obj) {
+    if (!obj || !obj.name || obj.name.length < 2) {
+      return false;
+    }
+    if (obj.name != getSlug(obj.name, '_')) {
+      return false;
+    }
+    return true;
+  };
+
+  $scope.validAttributeSlug = function(obj) {
+    if (!validSlug(obj)) {
+      return false;
+    }
+    for (var i in $scope.dimension.attributes) {
+      var attr = $scope.dimension.attributes[i];
+      if (attr != obj && attr.name == obj.name) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  $scope.validDimensionSlug = function(obj) {
+    obj.$invalidName = null;
+    if (!validSlug(obj)) {
+      return false;
+    }
+    for (var i in dimensions) {
+      var dim = dimensions[i];
+      if (dim != obj && dim.name == obj.name) {
+        obj.$invalidName = 'A dimension with this name already exists.';
+        return false;
+      }
     }
     return true;
   };
