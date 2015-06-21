@@ -202,29 +202,3 @@ spendb.controller('DocsCtrl', ['$scope', '$sce', 'page', function($scope, $sce, 
   $scope.page_html = $sce.trustAsHtml('' + page.html);
 }]);
 
-
-var loadIndex = ['$q', '$route', '$http', function($q, $route, $http) {
-  var dfd = $q.defer();
-  // yes that's what baby jesus made APIs for.
-  $http.get('/api/3/pages/index.html').then(function(res) {
-    dfd.resolve(res.data);
-  });
-  return dfd.promise;
-}];
-
-
-var loadIndexDatasets = ['$q', '$http', '$location', '$route', function($q, $http, $location, $route) {
-  var dfd = $q.defer();
-  $http.get('/api/3/datasets', {params: $location.search()}).then(function(res) {
-    dfd.resolve(res.data);
-  });
-  return dfd.promise;
-}];
-
-
-spendb.controller('HomeCtrl', ['$scope', '$sce', 'page', 'datasets', function($scope, $sce, page, datasets) {
-  $scope.setTitle(page.title);
-  $scope.page = page;
-  $scope.datasets = datasets;
-  $scope.page_html = $sce.trustAsHtml('' + page.html);
-}]);

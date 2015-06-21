@@ -78,7 +78,8 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
     if (field.measure) {
       delete field.measure;
     } else {
-      field.measure = {name: field.name, label: field.title};
+      var label = cleanLabel(field.title);
+      field.measure = {name: getSlug(label, '_'), label: label};
     }
   };
 
