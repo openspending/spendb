@@ -99,12 +99,12 @@
             <th width='1%'>Edit</th>
             <th width='1%'>Remove</th>
           </tr>
-          <tr ng-repeat="dim in dimensions">
+          <tr ng-repeat="dim in getDimensions()">
             <th>
               {{dim.label}}
             </th>
             <td>
-              <span ng-repeat="attr in dim.attributes">
+              <span ng-repeat="attr in getAttributes(dim)">
                 {{attr.label}} ({{attr.column}})<span ng-hide="$last">,</span>
               </span>
             </td>

@@ -71,7 +71,32 @@ spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$win
     return true;
   };
 
+  $scope.canUpdate = function() {
+    if (!$scope.validDimensionSlug($scope.dimension)) {
+      return false;
+    }
+    if (!$scope.validLabel($scope.dimension)) {
+      return false;
+    }
+    for (var i in $scope.dimension.attributes) {
+      var attr = $scope.dimension.attributes[i];
+      if (!$scope.validAttributeSlug(attr)) {
+        return false;
+      }
+      if (!$scope.validLabel(attr)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   $scope.update = function() {
+    if ($scope.canUpdate) {
+      $modalInstance.close($scope.dimension);  
+    }
+  };
+
+  $scope.close = function() {
     $modalInstance.dismiss('ok');
   };
 }]);

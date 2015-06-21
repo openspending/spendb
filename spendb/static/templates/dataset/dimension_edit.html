@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="update()" aria-hidden="true">&times;</button>
+  <button type="button" class="close" ng-click="close()" aria-hidden="true">&times;</button>
   <h4 class="modal-title">Dimension configuration</h4>
 </div>
 
@@ -86,5 +86,6 @@
 </form>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" ng-click="update()">Save</button>
+  <button type="button" class="btn btn-primary" ng-disabled="!canUpdate()"
+    ng-click="update()">Save</button>
 </div>

@@ -5,9 +5,8 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   $scope.selectedFields = {};
   $scope.dimensions = [];
 
-  var load = function() {
-    var model = data.model,
-        measures = model.measures || {},
+  var load = function(model) {
+    var measures = model.measures || {},
         dimensions = model.dimensions || {},
         dims = [];
     for (var name in dimensions) {
@@ -37,7 +36,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   var unload = function() {
     var dimensions = {};
     for (var i in $scope.dimensions) {
-      var dim = $scope.dimensions[i],
+      var dim = angular.copy($scope.dimensions[i]),
           attributes = {};
       for (var j in dim.attributes) {
         var attr = dim.attributes[j];
@@ -121,14 +120,14 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
 
       // try and cleverly generate labels and names for 
       // attributes and dimensions.
+      // this will cause a headache, but it might just be worth it.
       var common = longestCommonStart(labels),
           lastChar = common.length ? common.charAt(common.length - 1) : ' ',
           atBoundary = new RegExp(/[\W_]/g).test(lastChar);
-      dimension.label = cleanLabel(atBoundary ? common : '');
+      dimension.label = cleanLabel(atBoundary || labels.length == 1 ? common : '');
       dimension.name = getSlug(dimension.label, '_');
 
       if (atBoundary) {
-        console.log(atBoundary, common, lastChar);
         for (var i in dimension.attributes) {
           var attr = dimension.attributes[i];
           if (labels.indexOf(attr.label) != -1 && common.length < attr.label.length) {
@@ -138,19 +137,17 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
         }  
       }
     }
-
-    if (isNew) {
-      $scope.dimensions.push(dimension);
-    }
     $scope.editDimension(dimension);
   };
 
   $scope.editDimension = function(dimension) {
-    if (!dimension.label_attribute) {
-      dimension.label_attribute = dimension.attributes[0];
+    var dim = angular.copy(dimension)
+
+    if (!dim.label_attribute) {
+      dim.label_attribute = dim.attributes[0];
     }
-    if (!dimension.key_attribute) {
-      dimension.key_attribute = dimension.attributes[0];  
+    if (!dim.key_attribute) {
+      dim.key_attribute = dim.attributes[0];  
     }
 
     var d = $modal.open({
@@ -159,18 +156,44 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
       backdrop: true,
       resolve: {
         dimension: function () {
-          return dimension;
+          return dim;
         },
         dimensions: function () {
-          return $scope.dimensions;
+          var dimensions = [];
+          for (var i in $scope.dimensions) {
+            var d = $scope.dimensions[i];
+            if (d != dimension) {
+              dimensions.push(d);
+            }
+          }
+          return dimensions;
         }
       }
+    });
+
+    d.result.then(function(changed) {
+      $scope.deleteDimension(dimension);
+      $scope.dimensions.push(changed);
     });
   };
 
   $scope.deleteDimension = function(dimension) {
     var idx = $scope.dimensions.indexOf(dimension);
-    $scope.dimensions.splice(idx, 1);
+    if (idx != -1) {
+      $scope.dimensions.splice(idx, 1);  
+    }
+  };
+
+  $scope.getDimensions = function() {
+    return $scope.dimensions.sort(function(a, b) {
+      return a.label.localeCompare(b.label);
+    });
+  };
+
+  $scope.getAttributes = function(dim) {
+    return dim.attributes.sort(function(a, b) {
+      return a.label.localeCompare(b.label);
+    });
   };
 
   $scope.getSamples = function(field) {
@@ -197,6 +220,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     var model = unload();
     $scope.errors = {};
     $http.post(dataset.api_url + '/model', model).then(function(res) {
+      load(res.data);
       if ($scope.wizard) {
         $location.path('/datasets/' + dataset.name);
       } else {
@@ -209,7 +233,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     });
   };
 
-  load();
+  load(data.model);
 
 }]);
 
