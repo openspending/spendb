@@ -52,6 +52,7 @@ def load(job, dataset, source_name):
     source = Source(job.package, source_name)
     job.set_source(source)
     table = Table(job.package, ARTIFACT_NAME)
+    dataset.data = {}
     dataset.fields = table.meta.get('fields', {})
     dataset.samples = table.meta.get('samples', {})
     if not len(dataset.fields):

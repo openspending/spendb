@@ -60,6 +60,11 @@ class Dataset(db.Model):
     def model_data(self):
         return self.data.get('model', {})
 
+    @property
+    def has_model(self):
+        model = self.model_data
+        return 'measures' in model and 'dimensions' in model
+
     def update_model(self, model):
         self.data['model'] = model
         self._load_model()
@@ -117,6 +122,7 @@ class Dataset(db.Model):
             'updated_at': self.updated_at,
             'languages': list(self.languages),
             'territories': list(self.territories),
+            'has_model': self.has_model,
             'api_url': url_for('datasets_api.view', name=self.name)
         }
 
