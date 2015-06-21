@@ -14,6 +14,24 @@
           different fields describing a company.
         </p>
       </div>
+
+      <div>
+        <div class="btn-group" role="group" dropdown>
+          <button class="btn btn-primary" ng-disabled="!canAdd()"
+            ng-click="addFields()">
+            Create dimension
+          </button>
+          <button type="button" class="btn btn-primary dropdown-toggle"
+            dropdown-toggle ng-disabled="!canAdd() || dimensions.length == 0">
+            Add to dimension <i class="fa fa-chevron-down"></i>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="dim in dimensions">
+              <a ng-click="addFields(dim)">{{dim.label}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="col-md-8">
       <div ng-repeat="(field, message) in errors"
@@ -23,50 +41,67 @@
 
       <div class="alert alert-success" ng-hide="getAvailableFields().length">
         <strong>Looks good!</strong>
-        All source columns are in dimensions, press <em>Next</em> to continue.
+        All source columns are in dimensions, press <em>Done</em> to continue.
       </div>
 
-      <table class="table table-model" ng-show="getAvailableFields().length">
-        <tr>
-          <th width="1%"></th>
-          <th>Column name</th>
-          <th>Samples</th>
-        </tr>
-        <tbody ng-repeat="field in getAvailableFields()">
+      <div ng-show="getAvailableFields().length">
+        <table class="table table-model">
           <tr>
-            <td width="1%" class="text-center">
-              <input type="checkbox" ng-model="addFields[field.name]">
-            </td>
-            <th>
-              {{ field.title }}
-            </th>
-            <td width="10%">
-              <button class="btn btn-xs btn-default"
-                 ng-hide="field.show_samples"
-                 ng-click="toggleSamples(field)" >
-                <i class="fa fa-eye"></i>
-                Show
-              </button>
-              <button class="btn btn-xs btn-default"
-                 ng-show="field.show_samples"
-                 ng-click="toggleSamples(field)" >
-                <i class="fa fa-eye-slash"></i>
-                Hide
-              </button>
-            </td>
+            <th width="1%"></th>
+            <th>Column name</th>
+            <th>Samples</th>
           </tr>
-          <tr class="adjunct" ng-show="field.show_samples">
-            <td width="1%" class="text-center">
-            </td>
-            <td colspan="2">
-              <span ng-repeat="sample in getSamples(field)">
-                <code>{{sample}}</code><span ng-hide="$last">,</span>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <tbody ng-repeat="field in getAvailableFields()">
+            <tr>
+              <td width="1%" class="text-center">
+                <input type="checkbox" ng-model="selectedFields[field.name]">
+              </td>
+              <th>
+                {{ field.title }}
+              </th>
+              <td width="10%">
+                <button class="btn btn-xs btn-default"
+                   ng-hide="field.show_samples"
+                   ng-click="toggleSamples(field)" >
+                  <i class="fa fa-eye"></i>
+                  Show
+                </button>
+                <button class="btn btn-xs btn-default"
+                   ng-show="field.show_samples"
+                   ng-click="toggleSamples(field)" >
+                  <i class="fa fa-eye-slash"></i>
+                  Hide
+                </button>
+              </td>
+            </tr>
+            <tr class="adjunct" ng-show="field.show_samples">
+              <td width="1%" class="text-center">
+              </td>
+              <td colspan="2">
+                <span ng-repeat="sample in getSamples(field)">
+                  <code>{{sample}}</code><span ng-hide="$last">,</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <div class="panel panel-default" ng-repeat="dim in dimensions">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{dim.label}}</h3>
+        </div>
+        <table class="table">
+          <tr>
+            <th width='40%'>Attribute</th>
+            <th>Column</th>
+          </tr>
+          <tr ng-repeat="attr in dim.attributes">
+            <td>{{attr.label}}</td>
+            <td>{{attr.column}}</td>
+          </tr>
+        </table>
+      </div>
 
     </div>
   </div>

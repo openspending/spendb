@@ -2,7 +2,7 @@
 spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
   function($scope, $document, $http, $location, $q, flash, validation, dataset, data) {
   $scope.dataset = dataset;
-  $scope.addFields = {};
+  $scope.selectedFields = {};
   $scope.dimensions = [];
 
   var load = function() {
@@ -73,6 +73,51 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$lo
 
   $scope.toggleSamples = function(field) {
     field.show_samples = !field.show_samples;
+  };
+
+  $scope.canAdd = function() {
+    for (var n in $scope.selectedFields) {
+      if($scope.selectedFields[n]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  $scope.addFields = function(dimension) {
+    dimension = dimension || {};
+    dimension.attributes = dimension.attributes || [];
+
+    var labels = [];
+    for (var n in $scope.selectedFields) {
+      if ($scope.selectedFields[n]) {
+        var field = data.structure.fields[n];
+        dimension.attributes.push({
+          name: field.name,
+          column: field.name,
+          label: field.title
+        });
+        labels.push(field.title);
+        delete $scope.selectedFields[n];
+      }
+    }
+    var isNew = !angular.isDefined(dimension.name);
+    dimension.label = dimension.label || longestCommonStart(labels);
+    dimension.name = dimension.name || getSlug(dimension.label, '_');
+    // for (var i in dimension.attributes) {
+    //   var attr = dimension.attributes[i];
+    //   if (labels.indexOf(attr.label) != -1) {
+    //     attr.label = attr.label.slice(dimension.label.length);
+    //     attr.name = getSlug(attr.label);
+    //   }
+    // }
+    if (isNew) {
+      $scope.dimensions.push(dimension);
+    }
+  };
+
+  $scope.editDimension = function(dimension) {
+    console.log(dimension);
   };
 
   $scope.getSamples = function(field) {
