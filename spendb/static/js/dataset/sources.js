@@ -32,7 +32,12 @@ spendb.controller('DatasetSourcesCtrl', ['$scope', '$document', '$http', '$locat
   };
 
   $scope.continue = function() {
-    $location.path('/datasets/' + dataset.name + '/model/measures');
+    if ($scope.wizard) {
+      $location.path('/datasets/' + dataset.name + '/model/measures');  
+    } else {
+      flash.setMessage("Yeah this doesn't do anything.", "success");
+    }
+    
   };
 
   $scope.back = function() {
