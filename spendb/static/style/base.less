@@ -114,6 +114,7 @@
 @import "../vendor/bootstrap/less/responsive-utilities.less";
 
 // External vendor libs.
+@import "../vendor/angular/angular-csp.css";
 @import "../vendor/angular-ui-select/dist/select.css";
 // @import "typeahead.less";
 
@@ -127,11 +128,6 @@ body {
     background-color: @theme-body-bg;
     padding-bottom: 2em;
     min-height: 40em;
-}
-
-// Angular ugliness fix 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
 }
 
 .ng-link {
@@ -214,23 +210,6 @@ h1, h2, h3, h4 {
         border: 1px solid @gray-lighter;
     }
 }
-
-// .title-panel {
-//     margin-bottom: 1em;
-//     background-color: @theme-title-bg;
-//     color: @theme-title-text;
-//     //border-bottom: 1px solid @gray-lighter;
-
-//     h1 {
-//         color: @theme-title-text;
-//         padding: 0 0 0.3em 0;
-//         //text-transform: uppercase;
-//     }
-
-//     .controls {
-//         margin-top: 1em;
-//     }
-// }
 
 footer {
     margin-top: 0em;
@@ -318,66 +297,3 @@ footer {
 
 @import "cookies.less";
 @import "home.less";
-
-#model-table-wrap {
-    overflow-x: scroll;
-
-    &::-webkit-scrollbar {
-        -webkit-appearance: none;
-    }
-
-    &::-webkit-scrollbar:horizontal {
-        height: 11px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 8px;
-        border: 2px solid white;
-        background-color: rgba(0, 0, 0, .5);
-    }
-
-    &::-webkit-scrollbar-track { 
-        background-color: #fff; 
-        border-radius: 8px; 
-    }
-
-    border: 1px solid @table-border-color;
-    border-right: 2px solid @table-border-color;
-    border-bottom: 2px solid @table-border-color;
-    //margin-bottom: -8px;
-}
-
-.table.model-table {
-    table-layout: fixed;
-    width: inherit;
-    border-collapse: collapse;
-    margin-bottom: 0;
-
-    td, th {
-        min-width: 17em;
-        border-right: 2px solid @table-border-color;
-    }
-
-    td {
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    th {
-        background-color: lighten(@gray-lighter, 5%);
-    }
-
-    th.legend {
-        text-align: left;
-        vertical-align: middle;
-        min-width: 10em;
-    }
-
-    .form-control.tbl-select {
-        //border: 2px solid red;
-        width: 80%;
-        display: inline-block;
-    }
-
-
-}

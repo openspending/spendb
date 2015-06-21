@@ -1,4 +1,5 @@
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+@import "../vendor/angular/angular-csp.css";
 @import "../vendor/angular-ui-select/dist/select.css";
 html {
   font-family: sans-serif;
@@ -6743,14 +6744,6 @@ body {
   padding-bottom: 2em;
   min-height: 40em;
 }
-[ng\:cloak],
-[ng-cloak],
-[data-ng-cloak],
-[x-ng-cloak],
-.ng-cloak,
-.x-ng-cloak {
-  display: none !important;
-}
 .ng-link {
   cursor: pointer;
 }
@@ -6984,52 +6977,4 @@ footer p {
   padding: 6px;
   font-size: 1.1em;
   margin-bottom: 0px;
-}
-#model-table-wrap {
-  overflow-x: scroll;
-  border: 1px solid #dddddd;
-  border-right: 2px solid #dddddd;
-  border-bottom: 2px solid #dddddd;
-}
-#model-table-wrap::-webkit-scrollbar {
-  -webkit-appearance: none;
-}
-#model-table-wrap::-webkit-scrollbar:horizontal {
-  height: 11px;
-}
-#model-table-wrap::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  border: 2px solid white;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-#model-table-wrap::-webkit-scrollbar-track {
-  background-color: #fff;
-  border-radius: 8px;
-}
-.table.model-table {
-  table-layout: fixed;
-  width: inherit;
-  border-collapse: collapse;
-  margin-bottom: 0;
-}
-.table.model-table td,
-.table.model-table th {
-  min-width: 17em;
-  border-right: 2px solid #dddddd;
-}
-.table.model-table td {
-  overflow: hidden;
-  white-space: nowrap;
-}
-.table.model-table th {
-  background-color: #fbfbfb;
-}
-.table.model-table th.legend {
-  text-align: left;
-  vertical-align: middle;
-  min-width: 10em;
-}
-.table.model-table .form-control.tbl-select {
-  width: 80%;
-  display: inline-block;
 }
