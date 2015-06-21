@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
-  function($scope, $document, $http, $location, $q, flash, validation, dataset, data) {
+spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
+  function($scope, $modal, $http, $location, $q, flash, validation, dataset, data) {
   $scope.dataset = dataset;
   $scope.selectedFields = {};
   $scope.dimensions = [];
@@ -114,10 +114,33 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$document', '$http', '$lo
     if (isNew) {
       $scope.dimensions.push(dimension);
     }
+    $scope.editDimension(dimension);
   };
 
   $scope.editDimension = function(dimension) {
-    console.log(dimension);
+    var d = $modal.open({
+      templateUrl: 'dataset/dimension_edit.html',
+      controller: 'DatasetDimensionEditCtrl',
+      backdrop: true,
+      resolve: {
+        dimension: function () {
+          return dimension;
+        }
+      }
+    });
+  };
+
+  $scope.deleteDimension = function(dimension) {
+    var idx = $scope.dimensions.indexOf(dimension);
+    $scope.dimensions.splice(idx, 1);
+  };
+
+  $scope.removeAttribute = function(dimension, attribute) {
+    var idx = dimension.attributes.indexOf(attribute);
+    dimension.attributes.splice(idx, 1);
+    if (!dimension.attributes.length) {
+      $scope.deleteDimension(dimension);
+    }
   };
 
   $scope.getSamples = function(field) {

@@ -6865,6 +6865,10 @@ footer p {
   min-width: 7em;
   text-align: left;
 }
+.dataset-settings .panel.panel-dimension .panel-title {
+  margin-top: 0.5em;
+  font-weight: bold;
+}
 #catapult-cookie-bar {
   direction: ltr;
   color: #dddddd;

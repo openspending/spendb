@@ -87,22 +87,38 @@
         </table>
       </div>
 
-      <div class="panel panel-default" ng-repeat="dim in dimensions">
+      <div class="panel panel-default panel-dimension" ng-repeat="dim in dimensions">
         <div class="panel-heading">
+          <div class="pull-right">
+            <div class="btn-group" role="group" dropdown>
+              <button class="btn btn-primary" ng-click="editDimension(dim)">
+                <i class="fa fa-pencil-square-o"></i> Edit
+              </button>
+              <button class="btn btn-primary" ng-click="deleteDimension(dim)">
+                <i class="fa fa-times"></i> Delete
+              </button>
+            </div>
+          </div>
           <h3 class="panel-title">{{dim.label}}</h3>
+          <div class="clearfix"></div>
         </div>
         <table class="table">
           <tr>
             <th width='40%'>Attribute</th>
             <th>Column</th>
+            <th width='1%'></th>
           </tr>
           <tr ng-repeat="attr in dim.attributes">
             <td>{{attr.label}}</td>
             <td>{{attr.column}}</td>
+            <td>
+              <a ng-click="removeAttribute(dim, attr)">
+                <i class="fa fa-times"></i>
+              </a>
+            </td>
           </tr>
         </table>
       </div>
-
     </div>
   </div>
 </dataset-settings>
