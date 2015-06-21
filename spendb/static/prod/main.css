@@ -1,7 +1,7 @@
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
-@import "../vendor/animate.css/animate.min.css";
 @import "../vendor/angular/angular-csp.css";
 @import "../vendor/angular-ui-select/dist/select.css";
+@import "../vendor/angular-cubes/build/angular-cubes.css";
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -6846,9 +6846,6 @@ footer p {
   font-size: 1.2em;
   text-align: center;
   border-radius: 0;
-}
-.alert-flash.ng-hide-add {
-  animation: slideOutUp 2s;
 }
 .dataset-settings {
   min-height: 20em;

@@ -34,6 +34,7 @@ js_vendor = Bundle('vendor/moment/moment.js',
                    'vendor/ng-file-upload/ng-file-upload-shim.js',
                    'vendor/ng-file-upload/ng-file-upload.js',
                    'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                   'vendor/angular-cubes/build/angular-cubes.js',
                    filters='uglifyjs', output='prod/vendor.js')
 
 

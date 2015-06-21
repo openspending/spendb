@@ -23,7 +23,8 @@
     "angular-moment": "~0.10.1",
     "angular-scroll": "~0.7.0",
     "speakingurl": "~4.0.0",
-    "angular-truncate": "*"
+    "angular-truncate": "*",
+    "angular-cubes": "~0.1.0"
   },
   "resolutions": {
     "angular": "1.2.28"
