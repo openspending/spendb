@@ -18,10 +18,11 @@ var loadIndexDatasets = ['$q', '$http', '$location', '$route', function($q, $htt
 }];
 
 
-spendb.controller('HomeCtrl', ['$scope', '$rootScope', '$location', '$sce', 'page', 'datasets',
-    function($scope, $rootScope, $location, $sce, page, datasets) {
-  $scope.setTitle(page.title);
+spendb.controller('HomeCtrl', ['$scope', '$rootScope', '$location', '$sce', 'page', 'config', 'datasets', 'session',
+    function($scope, $rootScope, $location, $sce, page, config, datasets, session) {
+  $scope.setTitle(config.site_title);
   $scope.page = page;
+  $scope.session = session;
   $scope.datasets = datasets;
   $scope.page_html = $sce.trustAsHtml('' + page.html);
 

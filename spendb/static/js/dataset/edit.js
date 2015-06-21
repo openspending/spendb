@@ -1,10 +1,11 @@
 
-spendb.controller('DatasetEditCtrl', ['$scope', '$document', '$http', '$location', '$q', 'flash', 'reference', 'validation', 'dataset', 'managers',
-  function($scope, $document, $http, $location, $q, flash, reference, validation, dataset, managers) {
+spendb.controller('DatasetEditCtrl', ['$scope', '$document', '$http', '$location', '$q', 'flash', 'reference', 'validation', 'dataset', 'managers', 'session',
+  function($scope, $document, $http, $location, $q, flash, reference, validation, dataset, managers, session) {
   $scope.dataset = dataset;
   $scope.reference = reference;
   $scope.managers = managers;
   $scope.forms = {};
+  $scope.session = session;
 
   $scope.suggestAccounts = function(query) {
     var dfd = $q.defer(),

@@ -9,9 +9,8 @@ spendb.controller('DatasetDeleteCtrl', ['$scope', '$modalInstance', '$window', '
 
   $scope.delete = function() {
     $http.delete($scope.dataset.api_url).error(function(res) {
-      $location.path('/datasets');
-      $modalInstance.dismiss('ok');
-      $window.location.reload();
+      $location.path('/');
+      $modalInstance.close('ok');
     });
   };
 }]);

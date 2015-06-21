@@ -1,11 +1,12 @@
 
-spendb.controller('DatasetNewCtrl', ['$scope', '$rootScope', '$http', '$location', 'config', 'validation',
-  function($scope, $rootScope, $http, $location, config, validation) {
+spendb.controller('DatasetNewCtrl', ['$scope', '$rootScope', '$http', '$location', 'config', 'validation', 'session',
+  function($scope, $rootScope, $http, $location, config, validation, session) {
   var bindSlug = true;
 
   $rootScope.setTitle("Create a new dataset");
   $scope.baseUrl = config.site_url + '/datasets/';
   $scope.forms = {};
+  $scope.session = session;
 
   $scope.editSlug = function() {
     bindSlug = false;

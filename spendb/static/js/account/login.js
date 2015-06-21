@@ -8,13 +8,14 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location',
 
   $scope.login = function(form) {
     $http.post('/api/3/sessions/login', $scope.credentials).then(function(res) {
-      $scope.reloadSession();
+      session.flush();
+      $location.path('/');
     }, validation.handle(form));
   };
 
   $scope.register = function(form) {
-    $http.post('/api/3/account', $scope.account).then(function(res) {
-      // session.
+    $http.post('/api/3/accounts', $scope.account).then(function(res) {
+      session.flush();
       $location.path('/');
     }, validation.handle(form));
   };

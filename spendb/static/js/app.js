@@ -36,6 +36,7 @@ spendb.config(['$routeProvider', '$locationProvider',
     templateUrl: 'account/settings.html',
     controller: 'AccountSettingsCtrl',
     resolve: {
+      session: loadSession,
       account: loadSessionAccount
     }
   });
@@ -87,6 +88,7 @@ spendb.config(['$routeProvider', '$locationProvider',
     templateUrl: 'dataset/edit.html',
     controller: 'DatasetEditCtrl',
     resolve: {
+      session: loadSession,
       dataset: loadDataset,
       reference: loadReferenceData,
       managers: loadManagers
@@ -125,8 +127,6 @@ spendb.config(['$routeProvider', '$locationProvider',
 
 spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$cookies', '$window', '$document', '$sce', 'session', 'config',
   function($scope, $rootScope, $location, $http, $cookies, $window, $document, $sce, session, config) {
-  
-  $scope.session = {};
 
   // EU cookie warning
   $scope.showCookieWarning = !$cookies.neelieCookie;
@@ -135,6 +135,12 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
     $cookies.neelieCookie = true;
     $scope.showCookieWarning = !$cookies.neelieCookie;
   };
+
+  session.get(function(s) {
+    if (s.logged_in) {
+      $scope.hideCookieWarning();
+    }
+  });
 
   // Language selector
   $scope.setLocale = function(locale) {
@@ -164,24 +170,6 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
   $scope.trustAsHtml = function(text) {
     return $sce.trustAsHtml('' + text);
   };
-
-  $scope.reloadSession = function() {
-    session.flush();
-    session.get(function(s) {
-      if (s.logged_in) {
-        $scope.hideCookieWarning();
-      }
-      $scope.session = s;
-      $location.path('/');
-    });
-  };
-
-  session.get(function(s) {
-    if (s.logged_in) {
-      $scope.hideCookieWarning();
-    }
-    $scope.session = s;
-  });
 
 }]);
 

@@ -10,10 +10,11 @@ var loadSessionAccount = ['$q', '$http', 'session', function($q, $http, session)
 }];
 
 
-spendb.controller('AccountSettingsCtrl', ['$scope', '$http', '$location', 'validation', 'account', 'flash',
-  function($scope, $http, $location, validation, account, flash) {
+spendb.controller('AccountSettingsCtrl', ['$scope', '$http', '$location', 'validation', 'account', 'flash', 'session',
+  function($scope, $http, $location, validation, account, flash, session) {
   $scope.setTitle("Account Settings");
   $scope.account = account;
+  $scope.session = session;
 
   $scope.save = function(form) {
     $http.post(account.api_url, $scope.account).then(function(res) {
