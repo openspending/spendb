@@ -22,6 +22,7 @@ module.exports = function(config) {
       'spendb/static/vendor/angular-moment/angular-moment.js',
       'spendb/static/vendor/angular-scroll/angular-scroll.js',
       'spendb/static/vendor/angular-cookies/angular-cookies.js',
+      'spendb/static/vendor/angular-ui-select/dist/select.js',
       'spendb/static/vendor/angular-truncate/src/truncate.js',
       'spendb/static/vendor/ng-file-upload/ng-file-upload-shim.js',
       'spendb/static/vendor/ng-file-upload/ng-file-upload.js',
