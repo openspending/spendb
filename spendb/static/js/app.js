@@ -82,7 +82,8 @@ spendb.config(['$routeProvider', '$locationProvider',
     resolve: {
       dataset: loadDataset,
       managers: loadManagers,
-      model: loadModel
+      model: loadModel,
+      reference: loadReferenceData
     }
   });
 

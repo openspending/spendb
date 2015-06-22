@@ -3,12 +3,13 @@
   <div class="row">
     <div class="col-md-6">
       <h4 class="page-header">Data model</h4>
+
       <h4 class="page-header">API</h4>
       <p class="help-block">
         Datasets support visualisations and analysis through
         an API, the developer interface. {{config.site_title}}
         uses the
-        <a href="http://cubes.databrewery.org/documentation.html">Cubes API</a>,
+        <a href="http://cubes.databrewery.org/">Cubes API</a>,
         a powerful web data analysis tool.
       </p>
       <p class="help-block">
@@ -39,11 +40,98 @@
       
     </div>
     <div class="col-md-6">
-      <h4 class="page-header">About {{dataset.label}}</h4>
-      <p ng-show="dataset.description">
-        {{ dataset.description }}
+      <h4 class="page-header">
+        <div class="pull-right" ng-show="dataset.can_update">
+          <small>
+            <a ng-href="/datasets/{{dataset.name}}/edit">change</a>
+          </small>
+        </div>
+        About {{dataset.label}}
+      </h4>
+      <blockquote ng-show="dataset.description">
+        <p>
+          {{ dataset.description }}
+        </p>
+      </blockquote>
+      <table class="table">
+        <tr>
+          <th>Team</th>
+          <td>
+            <span ng-repeat="manager in managers.managers">
+              <a href="/accounts/{{manager.name}}">
+                <img class="gravatar"
+                  ng-src="{{ manager.gravatar }}?s=22" width="22" height="22"
+                  alt="{{ manager.display_name }}">
+                {{manager.display_name}}
+              </a>
+              <span ng-hide="$last">&middot;</span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th width="30%">Category</th>
+          <td>
+            {{ getReferenceLabel('categories', dataset.category) }}
+          </td>
+        </tr>
+        <tr>
+          <th>Currency</th>
+          <td>
+            {{ getReferenceLabel('currencies', dataset.currency) }}
+            ({{dataset.currency}})
+          </td>
+        </tr>
+        <tr>
+          <th>Countries</th>
+          <td>
+            <span ng-repeat="territory in dataset.territories">
+              <a href="/?territories={{territory}}">
+                {{ getReferenceLabel('territories', territory) }}
+              </a>
+              <span ng-hide="$last">&middot;</span>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th>Created</th>
+          <td>{{ dataset.created_at | amCalendar}}</td>
+        </tr>
+      </table>
+
+      <h4 class="page-header">
+        <div class="pull-right" ng-show="dataset.can_update">
+          <small>
+            <a ng-href="/datasets/{{dataset.name}}/sources">manage</a>
+          </small>
+        </div>
+        Source data
+      </h4>
+      <p class="help-block">
+        Source files are the origin of the data presented here. They are 
+        preserved and available for download.
       </p>
-      <h4 class="page-header">Source data</h4>
+      <table class="table">
+        <tr>
+          <th></th>
+          <th>Uploaded</th>
+          <th>Archive</th>
+        </tr>
+        <tr ng-repeat="source in sources.results">
+          <th>
+            {{source.name}}
+            <a ng-show="source.source_url"
+              ng-href="{{ source.source_url}}"
+              class="btn btn-default btn-xs"
+              target="_self">url</a>
+          </th>
+          <td>
+            {{ source.created_at | amCalendar}}
+          </td>
+          <td>
+            <a ng-href="{{ source.data_url}}" class="btn btn-default btn-xs" target="_self">{{source.mime_type}}</a>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </page-body>

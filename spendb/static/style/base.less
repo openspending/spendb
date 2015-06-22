@@ -140,6 +140,12 @@ h1, h2, h3, h4 {
     font-weight: 500;
 }
 
+.gravatar {
+    border-radius: 50%;
+    border: 1px solid @gray-lighter;
+    margin-top: -2px;
+}
+
 .table {
     td {
         &.numeric {
@@ -208,8 +214,7 @@ h1, h2, h3, h4 {
         margin-top: -5px;
         margin-bottom: -4px;
         margin-left: 5px;
-        border-radius: 50%;
-        border: 1px solid @gray-lighter;
+        .gravatar();   
     }
 }
 
