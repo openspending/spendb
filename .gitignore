@@ -27,3 +27,4 @@ settings.py
 tmp/*
 coverage/*
 .coverage
+node_modules/
