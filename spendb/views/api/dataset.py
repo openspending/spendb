@@ -147,8 +147,6 @@ def update_managers(name):
 def delete(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-
-    dataset.flush()
     dataset.fact_table.drop()
     db.session.delete(dataset)
     db.session.commit()

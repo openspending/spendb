@@ -10,7 +10,7 @@ from spendb.views.home import blueprint as home
 
 @home.before_app_request
 def before_request():
-    request._return_json = False
+    current_app.cubes_workspace.flush_lookup_cache()
     setup_caching()
 
 

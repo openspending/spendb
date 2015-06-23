@@ -100,12 +100,6 @@ class Dataset(db.Model):
         invalidation. """
         self.updated_at = datetime.utcnow()
         db.session.add(self)
-        self.flush()
-
-    def flush(self):
-        """ Flush cached state for the dataset. """
-        from flask import current_app
-        current_app.cubes_workspace.flush_lookup_cache()
 
     def __repr__(self):
         return "<Dataset(%r,%r)>" % (self.id, self.name)
