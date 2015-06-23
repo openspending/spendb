@@ -24,6 +24,7 @@ assets.register('css_main', css_main)
 # Javscript bundles
 js_vendor = Bundle('vendor/moment/moment.js',
                    'vendor/speakingurl/speakingurl.min.js',
+                   'vendor/d3/d3.js',
                    'vendor/angular/angular.js',
                    'vendor/angular-route/angular-route.js',
                    'vendor/angular-moment/angular-moment.js',
