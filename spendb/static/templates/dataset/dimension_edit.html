@@ -64,8 +64,8 @@
           ng-init="dimension.attributes[0]"
           ng-model="dimension.label_attribute"></select>
         <p class="help-block">
-          Select an attribute that represents this dimension, e.g. a classification title
-          or company name.
+          Select the primary attribute that should be shown to the user, e.g. a
+          classification title or company name.
         </p>
       </div>
     </div>
@@ -78,7 +78,8 @@
           ng-model="dimension.key_attribute"></select>
         <p class="help-block">
           Select the attribute holding the shortest identifier for this dimension, e.g.
-          a classification code.
+          a classification code. This will not be shown to the user but included in
+          URLs.
         </p>
       </div>
     </div>

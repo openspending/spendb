@@ -85,13 +85,34 @@
             Non-numeric columns (cannot be <mark>measures</mark>)
           </th>
         </tr>
-        <tbody ng-repeat="field in fields" ng-if="field.numeric">
+        <tbody ng-repeat="field in fields" ng-if="!field.numeric">
           <tr>
             <td width="1%" class="text-center">
-              <input type="checkbox" ng-disabled="true">
             </td>
             <th>{{field.title}}</th>
-            <td></td>
+            <td width="10%">
+              <button class="btn btn-xs btn-default"
+                 ng-hide="field.show_samples"
+                 ng-click="toggleSamples(field)" >
+                <i class="fa fa-eye"></i>
+                Show
+              </button>
+              <button class="btn btn-xs btn-default"
+                 ng-show="field.show_samples"
+                 ng-click="toggleSamples(field)" >
+                <i class="fa fa-eye-slash"></i>
+                Hide
+              </button>
+            </td>
+          </tr>
+          <tr class="adjunct" ng-show="field.show_samples">
+            <td width="1%" class="text-center">
+            </td>
+            <td colspan="2">
+              <span ng-repeat="sample in getSamples(field)">
+                <code>{{sample}}</code><span ng-hide="$last">,</span>
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>

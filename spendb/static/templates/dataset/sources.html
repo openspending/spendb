@@ -4,8 +4,8 @@
     <div class="col-md-4">
       <div class="alert guidance">
         <p ng-show="wizard">
-          While you've described the dataset, your data started to be
-          analyzed and loaded.
+          Since you've uploaded your information source, we've started to
+          upload and analyze the data.
         </p>
         <p>
           If the file has failed to load, please check the processing 
@@ -37,7 +37,7 @@
           </tr>
           <tr ng-repeat="run in source.runs">
             <td>
-              {{source.name}}
+              <span ng-show="$first">{{source.name}}</span>
             </td>
             <td>
               {{run.operation}}
@@ -59,7 +59,7 @@
         </table>
         <div class="panel-footer">
           <div class="pull-right">
-            <a href="{{source.data_url}}" target="_self" class="btn btn-default">
+            <a href="{{source.data_url}}" target="_self" class="btn btn-default" ng-hide="wizard">
               <i class="fa fa-download"></i>
               Download ({{source.extension || source.mime_type}})
             </a>
