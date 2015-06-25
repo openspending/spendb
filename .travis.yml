@@ -27,7 +27,9 @@ before_script:
   - psql -c 'create database spendb;' -U postgres
   - cp settings.py_tmpl settings.py
   - nosetests --version
+  - npm install karma
 script:
   - nosetests --with-coverage --cover-package=spendb
+  - karma start --single-run --browsers PhantomJS karma.conf.js
 after_success:
   - coveralls
