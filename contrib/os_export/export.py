@@ -40,6 +40,14 @@ def get_mappings():
         for src in engine['source'].find(dataset_id=ds['id']):
             ds['sources'].append(src)
 
+        # Add team members for the dataset
+        query_stmt = ('SELECT account.name as username FROM account '
+                      'INNER JOIN account_dataset '
+                      'ON account.id = account_dataset.account_id '
+                      'WHERE account_dataset.dataset_id = {dataset_id}')
+        query = engine.query(query_stmt.format(dataset_id = ds['id']))
+        ds['team'] = [member['username'] for member in query]
+
         mapping = ds['data'].get('mapping')
         if mapping is None or not len(mapping):
             continue
