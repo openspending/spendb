@@ -75,7 +75,7 @@ class Dimension(MappingSchema):
     label_attribute = SchemaNode(String(), missing=None)
     key_attribute = SchemaNode(String(), missing=None)
     facet = SchemaNode(Boolean(), missing=False)
-    cardinality = SchemaNode(Int(), missing=None, default=None)
+    # cardinality = SchemaNode(Int(), missing=None, default=None)
     attributes = Attributes(validator=Function(require_one_child))
 
 

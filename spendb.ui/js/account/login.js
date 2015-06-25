@@ -7,7 +7,9 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location',
   $scope.account = {};
 
   $scope.login = function(form) {
-    $http.post('/api/3/sessions/login', $scope.credentials).then(function(res) {
+    var cred = angular.copy($scope.credentials);
+    $scope.credentials.password = '';
+    $http.post('/api/3/sessions/login', cred).then(function(res) {
       session.flush();
       $location.path('/');
     }, validation.handle(form));

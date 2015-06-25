@@ -19,7 +19,9 @@ class SpendingModelProvider(ModelProvider):
 
     def has_cube(self, name):
         dataset = Dataset.by_name(name)
-        return dataset is not None
+        if dataset is None:
+            return False
+        return dataset.has_model
 
     def cube(self, name, locale=None, namespace=None):
         dataset = Dataset.by_name(name)
@@ -104,7 +106,7 @@ class SpendingModelProvider(ModelProvider):
     def list_cubes(self):
         cubes = []
         for dataset in Dataset.all_by_account(None):
-            if not len(dataset.model.axes):
+            if not dataset.has_model:
                 continue
             cubes.append({
                 'name': dataset.name,
