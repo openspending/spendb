@@ -34,6 +34,8 @@ def transform_dataset(source):
         dim = {
             'label': src['label'],
             'description': src['description'] or '',
+            'label_attribute': 'label',
+            'key_attribute': 'label',
             'attributes': {}
         }
         if src.get('type') == 'date':
@@ -73,6 +75,8 @@ def transform_dataset(source):
                     'label': spec['column'],
                     'column': norm_name + '_' + attr
                 }
+            if 'name' in dim['attributes']:
+                dim['key_attribute'] = 'name',
         model['dimensions'][norm_name] = dim
     return model
 
