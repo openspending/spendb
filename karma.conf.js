@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'spendb.ui/vendor/moment/moment.js',
+      'spendb.ui/vendor/d3/d3.js',
       'spendb.ui/vendor/speakingurl/speakingurl.min.js',
       'spendb.ui/vendor/angular/angular.js',
       'spendb.ui/vendor/angular-route/angular-route.js',
