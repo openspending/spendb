@@ -143,6 +143,10 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   $scope.editDimension = function(dimension) {
     var dim = angular.copy(dimension)
 
+    dim.attributes = dim.attributes.sort(function(a, b) {
+      return a.label.localeCompare(b.label);
+    });
+
     if (!dim.label_attribute) {
       dim.label_attribute = dim.attributes[0];
     }

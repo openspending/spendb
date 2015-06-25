@@ -16,7 +16,7 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location',
   $scope.register = function(form) {
     $http.post('/api/3/accounts', $scope.account).then(function(res) {
       session.flush();
-      $location.path('/');
+      $location.path('/accounts/' + $scope.account.name);
     }, validation.handle(form));
   };
 
