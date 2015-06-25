@@ -15,24 +15,24 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'spendb/static/vendor/moment/moment.js',
-      'spendb/static/vendor/speakingurl/speakingurl.min.js',
-      'spendb/static/vendor/angular/angular.js',
-      'spendb/static/vendor/angular-route/angular-route.js',
-      'spendb/static/vendor/angular-moment/angular-moment.js',
-      'spendb/static/vendor/angular-scroll/angular-scroll.js',
-      'spendb/static/vendor/angular-cookies/angular-cookies.js',
-      'spendb/static/vendor/angular-ui-select/dist/select.js',
-      'spendb/static/vendor/angular-truncate/src/truncate.js',
-      'spendb/static/vendor/ng-file-upload/ng-file-upload-shim.js',
-      'spendb/static/vendor/ng-file-upload/ng-file-upload.js',
-      'spendb/static/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'spendb/static/vendor/angular-cubes/build/angular-cubes.js',
+      'spendb.ui/vendor/moment/moment.js',
+      'spendb.ui/vendor/speakingurl/speakingurl.min.js',
+      'spendb.ui/vendor/angular/angular.js',
+      'spendb.ui/vendor/angular-route/angular-route.js',
+      'spendb.ui/vendor/angular-moment/angular-moment.js',
+      'spendb.ui/vendor/angular-scroll/angular-scroll.js',
+      'spendb.ui/vendor/angular-cookies/angular-cookies.js',
+      'spendb.ui/vendor/angular-ui-select/dist/select.js',
+      'spendb.ui/vendor/angular-truncate/src/truncate.js',
+      'spendb.ui/vendor/ng-file-upload/ng-file-upload-shim.js',
+      'spendb.ui/vendor/ng-file-upload/ng-file-upload.js',
+      'spendb.ui/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
+      'spendb.ui/vendor/angular-cubes/build/angular-cubes.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'spendb/tests/js/helper.js',
-      'spendb/static/js/app.js',
-      'spendb/static/js/**/*.js',
-      'spendb/tests/js/**/*Spec.js'
+      'spendb.ui/tests/js/helper.js',
+      'spendb.ui/js/app.js',
+      'spendb.ui/js/**/*.js',
+      'spendb.ui/tests/js/**/*Spec.js'
     ],
 
 

@@ -13,8 +13,10 @@
 spendb/templates/help/*
 doc/_build/*
 spendb/static/.webassets-cache/*
+spendb.ui/.webassets-cache/*
 # spendb/static/prod/*
 spendb/static/vendor/*
+spendb.ui/vendor/*
 contrib/os_export/exports/*
 *~
 .tx/config
