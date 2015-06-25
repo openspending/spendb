@@ -30,7 +30,7 @@ rabbitmq:
 
 worker:
     build: .
-    command: celery -A spendb.tasks worker -w 4 -l info --logfile=/var/log/celery.log
+    command: celery -A spendb.tasks worker -c 4 -l info --logfile=/var/log/celery.log
     links:
         - rabbitmq
         - db
