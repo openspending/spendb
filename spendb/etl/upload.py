@@ -44,10 +44,12 @@ def generate_s3_upload_policy(source, file_name, mime_type):
         }
 
     enable_bucket_cors(obj.store.bucket)
-    force_http = current_app.config.get('PREFERRED_URL_SCHEME') != 'https'
-    url = obj.key.generate_url(expires_in=0, force_http=force_http,
+    url = obj.key.generate_url(expires_in=0, force_http=False,
                                query_auth=False)
     url = url.split(obj.key.name)[0]
+
+    if 'https' in current_app.config.get('PREFERRED_URL_SCHEME'):
+        url = url.replace('http://', 'https://')
 
     data = {
         'url': url,
