@@ -76,7 +76,7 @@ def transform_dataset(source):
                     'column': norm_name + '_' + attr
                 }
             if 'name' in dim['attributes']:
-                dim['key_attribute'] = 'name',
+                dim['key_attribute'] = 'name'
         model['dimensions'][norm_name] = dim
     return model
 
