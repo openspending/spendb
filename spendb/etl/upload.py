@@ -4,6 +4,7 @@ import json
 from base64 import b64encode
 from datetime import datetime, timedelta
 
+from flask import current_app
 from boto.s3.cors import CORSConfiguration
 from boto.exception import S3ResponseError
 
@@ -43,9 +44,11 @@ def generate_s3_upload_policy(source, file_name, mime_type):
         }
 
     enable_bucket_cors(obj.store.bucket)
-    url = obj.key.generate_url(expires_in=0, force_http=True,
+    force_http = current_app.config.get('PREFERRED_URL_SCHEME') != 'https'
+    url = obj.key.generate_url(expires_in=0, force_http=force_http,
                                query_auth=False)
     url = url.split(obj.key.name)[0]
+
     data = {
         'url': url,
         'status': 'ok',
