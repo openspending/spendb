@@ -13,9 +13,11 @@ ARTIFACT_NAME = 'table.json'
 
 
 @job(operation='Import from file')
-def extract_fileobj(job, dataset, fh, file_name=None):
+def extract_fileobj(job, dataset, fh, file_name=None, mime_type=None):
     """ Upload contents of an opened fh to the data repository. """
     meta = {'source_file': file_name}
+    if mime_type is not None:
+        meta['mime_type'] = mime_type
     source = job.package.ingest(fh, meta=meta, overwrite=False)
     source.save()
     job.set_source(source)

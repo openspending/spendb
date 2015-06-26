@@ -1,4 +1,5 @@
 import logging
+from StringIO import StringIO
 
 from flask import Blueprint, request, redirect, send_file
 from archivekit import Source
@@ -11,6 +12,7 @@ from spendb.lib.helpers import get_dataset
 from spendb.views.cache import disable_cache
 from spendb.tasks import load_from_url, load_from_source
 from spendb.etl.tasks import extract_fileobj
+from spendb.etl.upload import generate_s3_upload_policy
 
 
 log = logging.getLogger(__name__)
@@ -49,9 +51,30 @@ def upload(dataset):
     file_ = request.files.get('file')
     if not file_ or not file_.filename:
         raise BadRequest("You need to upload a file")
+    # TODO: consider copying this into a tempfile before upload to make
+    # boto happy (it appears to be whacky in it's handling of flask uploads)
     source = extract_fileobj(dataset, fh=file_, file_name=file_.filename)
     load_from_source.delay(dataset.name, source.name)
     return jsonify(source_to_dict(dataset, source))
+
+
+@blueprint.route('/datasets/<dataset>/sources/sign', methods=['POST', 'PUT'])
+def sign(dataset):
+    dataset = get_dataset(dataset)
+    require.dataset.update(dataset)
+    data = request_data()
+    if not data.get('file_name'):
+        raise BadRequest("You need to give a file name")
+    data['mime_type'] = data.get('mime_type') or 'application/octet-stream'
+    # create a stub:
+    source = extract_fileobj(dataset, fh=StringIO(),
+                             file_name=data['file_name'],
+                             mime_type=data['mime_type'])
+
+    # generate a policy document to replace with actual content:
+    res = generate_s3_upload_policy(source, data['file_name'],
+                                    data['mime_type'])
+    return jsonify(res)
 
 
 @blueprint.route('/datasets/<dataset>/sources/submit', methods=['POST', 'PUT'])
@@ -82,3 +105,16 @@ def serve(dataset, name):
         return redirect(source.url)
     return send_file(source.fh(),
                      mimetype=source.meta.get('mime_type'))
+
+
+@blueprint.route('/datasets/<dataset>/sources/load/<name>',
+                 methods=['POST', 'PUT'])
+def load(dataset, name):
+    dataset = get_dataset(dataset)
+    require.dataset.update(dataset)
+    package = data_manager.package(dataset.name)
+    source = Source(package, name)
+    if not source.exists():
+        raise BadRequest('Source does not exist.')
+    load_from_source.delay(dataset.name, source.name)
+    return jsonify({'status': 'ok'})

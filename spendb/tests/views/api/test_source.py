@@ -45,6 +45,16 @@ class TestSourceApiController(ControllerTestCase):
         }, query_string=self.auth_qs)
         assert '403' not in res.status, res.status
 
+    def test_source_sign(self):
+        # TODO: how to properly test this?
+        url = url_for('sources_api.sign', dataset=self.cra.name)
+        req = {'file_name': 'cra.csv'}
+        res = self.client.post(url, data=req,
+                               query_string=self.auth_qs)
+        assert '200' in res.status, res.status
+        assert 'status' in res.json, res.json
+        assert res.json['status'] == 'error', res.json
+
     def test_source_submit_anon(self):
         url = url_for('sources_api.submit', dataset=self.cra.name)
         res = self.client.post(url, data={
@@ -58,6 +68,28 @@ class TestSourceApiController(ControllerTestCase):
             'url': self.cra_url
         }, query_string=self.auth_qs)
         assert '200' in res.status, res.status
+
+    def test_source_load(self):
+        url = url_for('sources_api.upload', dataset=self.cra.name)
+        fh = data_fixture('cra')
+        res = self.client.post(url, data={
+            'file': (fh, 'cra.csv')
+        }, query_string=self.auth_qs)
+
+        self.client.post(url_for('sessions_api.logout'))
+
+        url = url_for('sources_api.load', dataset=self.cra.name,
+                      name='cra.csv')
+        res = self.client.post(url)
+        assert '403' in res.status, res.status
+        res = self.client.post(url, query_string=self.auth_qs)
+        assert '200' in res.status, res.status
+
+    def test_source_load_non_existing(self):
+        url = url_for('sources_api.load', dataset=self.cra.name,
+                      name='foo.csv')
+        res = self.client.post(url, query_string=self.auth_qs)
+        assert '400' in res.status, res.json
 
     def test_source_view(self):
         url = url_for('sources_api.upload', dataset=self.cra.name)
