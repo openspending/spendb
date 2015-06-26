@@ -1,8 +1,8 @@
 <page-header></page-header>
 <page-body>
-  <div class="row">
-    <div class="col-md-8" ng-bind-html="page_html"></div>
-    <div class="col-md-4">
+  <div class="row docs">
+    <div class="col-md-8 docs-text" ng-bind-html="page_html"></div>
+    <div class="col-md-4 docs-menu">
       <ul class="nav nav-pills nav-stacked">
         <li ng-repeat="(path, p) in page.pages" ng-hide="p.hidden"
           ng-class="{'active': path == page.path}">
