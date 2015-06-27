@@ -1,12 +1,8 @@
 from cubes.server import slicer
 from colander import Invalid
 
-from spendb.lib import filters
-
-from spendb.views.context import home
-from spendb.views.cache import NotModified, handle_not_modified
-from spendb.views.i18n import get_locale
-
+from spendb.views.context import home, get_locale
+from spendb.views.error import NotModified, handle_not_modified
 from spendb.views.error import handle_error, handle_invalid
 from spendb.views.api.dataset import blueprint as datasets_api
 from spendb.views.api.meta import blueprint as meta_api
@@ -43,10 +39,3 @@ def register_views(app, babel):
         (NotModified, handle_not_modified)
     )
     app.error_handler_spec[None][None] = custom
-
-    app.jinja_env.filters.update({
-        'markdown_preview': filters.markdown_preview,
-        'markdown': filters.markdown,
-        'format_date': filters.format_date,
-        'readable_url': filters.readable_url
-    })

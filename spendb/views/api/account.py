@@ -13,7 +13,6 @@ from spendb.auth import require
 from spendb.model import Account
 from spendb.validation.account import AccountRegister, AccountSettings
 from spendb.lib.mailer import send_reset_link
-from spendb.views.cache import disable_cache
 
 
 log = logging.getLogger(__name__)
@@ -23,7 +22,6 @@ blueprint = Blueprint('account_api', __name__)
 @blueprint.route('/accounts', methods=['POST', 'PUT'])
 def register():
     """ Perform registration of a new user """
-    disable_cache()
     require.account.create()
     data = AccountRegister().deserialize(request_data())
 
@@ -88,7 +86,6 @@ def update(account):
 
 @blueprint.route('/accounts/_complete')
 def complete(format='json'):
-    disable_cache()
     if not current_user.is_authenticated():
         msg = _("You are not authorized to see that page")
         return jsonify({'status': 'error', 'message': msg}, status=403)
@@ -128,7 +125,6 @@ def trigger_reset():
     """
     Allow user to trigger a reset of the password in case they forget it
     """
-    disable_cache()
     email = request_data().get('email')
 
     # Simple check to see if the email was provided. Flash error if not

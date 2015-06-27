@@ -1,7 +1,11 @@
 from werkzeug.exceptions import HTTPException
-from flask import request
+from flask import request, Response
 from colander import Mapping
 from apikit import jsonify
+
+
+class NotModified(Exception):
+    pass
 
 
 def handle_error(exc):
@@ -31,3 +35,7 @@ def handle_invalid(exc):
         'errors': exc.asdict()
     }
     return jsonify(data, status=400)
+
+
+def handle_not_modified(exc):
+    return Response(status=304)

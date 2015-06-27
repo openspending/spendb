@@ -6,7 +6,7 @@ from fiscalmodel import CURRENCIES, COUNTRIES
 from fiscalmodel import CATEGORIES, LANGUAGES
 
 from spendb.core import pages
-from spendb.views.cache import etag_cache_keygen
+from spendb.views.context import etag_cache_keygen
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('meta_api', __name__)
@@ -22,7 +22,7 @@ def dicts(d):
 
 @blueprint.route('/reference')
 def reference_data():
-    etag_cache_keygen('england prevails')
+    etag_cache_keygen('static')
     return jsonify({
         'currencies': sorted(dicts(CURRENCIES), key=lambda d: d['label']),
         'languages': sorted(dicts(LANGUAGES), key=lambda d: d['label']),

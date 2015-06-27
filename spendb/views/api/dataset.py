@@ -12,7 +12,7 @@ from spendb.core import db
 from spendb.model import Dataset, DatasetLanguage, DatasetTerritory, Account
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
-from spendb.views.cache import etag_cache_keygen
+from spendb.views.context import etag_cache_keygen
 from spendb.validation.dataset import validate_dataset, validate_managers
 from spendb.validation.model import validate_model
 
@@ -66,7 +66,7 @@ def index():
 @blueprint.route('/datasets/<name>')
 def view(name):
     dataset = get_dataset(name)
-    etag_cache_keygen(dataset)
+    etag_cache_keygen(dataset, private=dataset.private)
     return jsonify(dataset)
 
 
@@ -98,7 +98,7 @@ def update(name):
 @blueprint.route('/datasets/<name>/structure')
 def structure(name):
     dataset = get_dataset(name)
-    etag_cache_keygen(dataset)
+    etag_cache_keygen(dataset, private=dataset.private)
     return jsonify({
         'fields': dataset.fields,
         'samples': dataset.samples
@@ -108,7 +108,7 @@ def structure(name):
 @blueprint.route('/datasets/<name>/model')
 def model(name):
     dataset = get_dataset(name)
-    etag_cache_keygen(dataset)
+    etag_cache_keygen(dataset, private=dataset.private)
     return jsonify(dataset.model_data)
 
 
@@ -126,7 +126,7 @@ def update_model(name):
 @blueprint.route('/datasets/<name>/managers')
 def managers(name):
     dataset = get_dataset(name)
-    etag_cache_keygen(dataset)
+    etag_cache_keygen(dataset, private=dataset.private)
     return jsonify({'managers': dataset.managers})
 
 

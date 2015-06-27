@@ -9,7 +9,7 @@ from apikit import jsonify, request_data
 from spendb.core import login_manager
 from spendb.auth import dataset
 from spendb.model import Account, Dataset
-from spendb.views.cache import disable_cache
+from spendb.views.context import etag_cache_keygen
 
 log = logging.getLogger(__name__)
 blueprint = Blueprint('sessions_api', __name__)
@@ -48,6 +48,7 @@ def session():
 @blueprint.route('/sessions/authz')
 def authz():
     obj = Dataset.by_name(request.args.get('dataset'))
+    etag_cache_keygen(obj, private=True)
     if obj is None:
         return jsonify({
             'read': False,
@@ -80,7 +81,6 @@ def login():
 
 @blueprint.route('/sessions/logout', methods=['POST', 'PUT'])
 def logout():
-    disable_cache()
     logout_user()
     return jsonify({
         'status': 'ok',

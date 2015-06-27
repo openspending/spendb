@@ -10,7 +10,7 @@ from spendb.core import db, url_for
 from spendb import auth
 from spendb.model import Dataset
 from spendb.assets import angular_templates
-from spendb.views.cache import disable_cache
+from spendb.validation.common import RESERVED_TERMS
 
 
 blueprint = Blueprint('home', __name__)
@@ -24,13 +24,25 @@ blueprint = Blueprint('home', __name__)
 @blueprint.route('/datasets/<path:path>')
 @blueprint.route('/')
 def index(*a, **kw):
-    return render_template('layout.html',
-                           templates=angular_templates(current_app))
+    from flask.ext.babel import get_locale
+    from spendb.views.context import etag_cache_keygen
+    etag_cache_keygen(RESERVED_TERMS)
+    locale = get_locale()
+    data = {
+        'current_language': locale.language,
+        'url_for': url_for,
+        'reserved_terms': RESERVED_TERMS,
+        'templates': angular_templates(current_app),
+        'site_url': url_for('home.index').rstrip('/'),
+        'number_symbols_group': locale.number_symbols.get('group'),
+        'number_symbols_decimal': locale.number_symbols.get('decimal'),
+        'site_title': current_app.config.get('SITE_TITLE')
+    }
+    return render_template('layout.html', **data)
 
 
 @blueprint.route('/set-locale', methods=['POST'])
 def set_locale():
-    disable_cache()
     locale = request.json.get('locale')
 
     if locale is not None:
@@ -46,7 +58,6 @@ def favicon():
 
 @blueprint.route('/__ping__')
 def ping():
-    disable_cache()
     from spendb.tasks import ping
     ping.delay()
     return jsonify({

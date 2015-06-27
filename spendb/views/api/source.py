@@ -9,7 +9,6 @@ from apikit import jsonify, Pager, request_data
 from spendb.core import data_manager, url_for
 from spendb.auth import require
 from spendb.lib.helpers import get_dataset
-from spendb.views.cache import disable_cache
 from spendb.tasks import load_from_url, load_from_source
 from spendb.etl.tasks import extract_fileobj
 from spendb.etl.upload import generate_s3_upload_policy
@@ -33,7 +32,6 @@ def source_to_dict(dataset, source):
 
 @blueprint.route('/datasets/<dataset>/sources')
 def index(dataset):
-    disable_cache()
     dataset = get_dataset(dataset)
     package = data_manager.package(dataset.name)
     sources = list(package.all(Source))
