@@ -3,7 +3,9 @@ import random
 from decimal import Decimal
 from datetime import datetime, date
 
-from loadkit.operators.table import resource_row_set
+from messytables import any_tableset, type_guess
+from messytables import types_processor, headers_guess
+from messytables import headers_processor, offset_processor
 from loadkit.operators.table import generate_field_spec
 
 log = logging.getLogger(__name__)
@@ -88,9 +90,23 @@ def parse_table(row_set):
 
 
 def extract_table(source, table):
-    row_set = resource_row_set(source.package, source)
-    if row_set is None:
-        return table
+
+    # This is a work-around because messytables hangs on boto file
+    # handles, so we're doing it via plain old HTTP.
+    table_set = any_tableset(source.fh(),
+                             extension=source.meta.get('extension'),
+                             mimetype=source.meta.get('mime_type'))
+    tables = list(table_set.tables)
+    if not len(tables):
+        log.error("No tables were found in the source file.")
+        return
+
+    row_set = tables[0]
+    headers = [c.value for c in next(row_set.sample)]
+    row_set.register_processor(headers_processor(headers))
+    row_set.register_processor(offset_processor(1))
+    types = type_guess(row_set.sample, strict=True)
+    row_set.register_processor(types_processor(types, strict=True))
 
     with table.store() as save_func:
         for i, (fields, row, samples) in enumerate(parse_table(row_set)):

@@ -2,10 +2,10 @@ import os
 env = os.environ.get
 
 DEBUG = False
-ASSETS_DEBUG = False
+ASSETS_DEBUG = DEBUG
 ASSETS_AUTO_BUILD = False
 CELERY_ALWAYS_EAGER = False
-CACHE = False
+CACHE = not DEBUG
 
 SITE_TITLE = env('SITE_TITLE', 'SpenDB')
 SECRET_KEY = env('SECRET')
