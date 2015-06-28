@@ -66,7 +66,8 @@ def job(operation=None):
             try:
                 job.start()
                 result = fn(job, dataset, *a, **kw)
-                job.complete()
+                if job.running:
+                    job.complete()
                 return result
             except Exception, e:
                 job.log.exception(e)

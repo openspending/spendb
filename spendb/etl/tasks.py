@@ -38,7 +38,9 @@ def transform_source(job, dataset, source_name):
     well-understood file format. """
     source = Source(job.package, source_name)
     job.set_source(source)
-    validate_table(source)
+    source = validate_table(source)
+    if source.meta.get('num_failed') > 0:
+        return job.failed()
     return source
 
 

@@ -33,8 +33,8 @@ def load_from_source(dataset_name, source_name):
         if source_name is None:
             log.error("No source specified: %s", dataset_name)
             return
-        artifact = tasks.transform_source(dataset, source_name)
-        if artifact is None:
+        source = tasks.transform_source(dataset, source_name)
+        if source is None:
             return
         tasks.load(dataset, source_name=source_name)
 
