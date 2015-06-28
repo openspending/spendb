@@ -11,7 +11,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
   };
 
   var isNumeric = function(fld) {
-    return fld.type == 'integer' || fld.type == 'float' || fld.type == 'decimal';
+    return fld.type == 'integer' || fld.type == 'number';
   };
 
   var load = function() {
@@ -19,13 +19,13 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
         measures = model.measures || {},
         fields = [];
 
-    for (var name in data.structure.fields) {
-      var field = data.structure.fields[name];
+    for (var i in data.structure.fields) {
+      var field = data.structure.fields[i];
       field.numeric = isNumeric(field);
       field.slug_linked = true;
       for (var mn in measures) {
         var m = measures[mn];
-        if (m.column == name) {
+        if (m.column == field.name) {
           m.name = mn;
           field.slug_linked = false;
           field.measure = m;  
@@ -63,15 +63,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
   };
 
   $scope.getSamples = function(field) {
-    var samples = [];
-    for (var i in data.structure.samples) {
-      var row = data.structure.samples[i],
-          val = row[field.name];
-      if (samples.indexOf(val) == -1) {
-        samples.push(val);
-      } 
-    }
-    return samples.sort(function(a, b) { return a - b; });
+    return field.samples.sort(function(a, b) { return a - b; });
   };
 
   $scope.toggleMeasure = function(field) {

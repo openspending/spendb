@@ -102,15 +102,19 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     var labels = [];
     for (var n in $scope.selectedFields) {
       if ($scope.selectedFields[n]) {
-        var field = data.structure.fields[n];
-        dimension.attributes.push({
-          name: field.name,
-          column: field.name,
-          label: field.title,
-          slug_linked: true
-        });
-        labels.push(field.title);
-        delete $scope.selectedFields[n];
+        for (var i in data.structure.fields) {
+          var field = data.structure.fields[i];
+          if (field.name == n) {
+            dimension.attributes.push({
+            name: field.name,
+            column: field.name,
+            label: field.title,
+            slug_linked: true
+          });
+          labels.push(field.title);
+          delete $scope.selectedFields[n];
+          }
+        }
       }
     }
 
@@ -132,7 +136,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
           var attr = dimension.attributes[i];
           if (labels.indexOf(attr.label) != -1 && common.length < attr.label.length) {
             attr.label = cleanLabel(attr.label.slice(common.length));
-            attr.name = getSlug(attr.label);
+            attr.name = getSlug(attr.label, '_');
           }
         }  
       }
@@ -201,15 +205,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   };
 
   $scope.getSamples = function(field) {
-    var samples = [];
-    for (var i in data.structure.samples) {
-      var row = data.structure.samples[i],
-          val = row[field.name];
-      if (samples.indexOf(val) == -1) {
-        samples.push(val);
-      } 
-    }
-    return samples.sort(function(a, b) { return a - b; });
+    return field.samples.sort(function(a, b) { return a - b; });
   };
 
   $scope.back = function() {

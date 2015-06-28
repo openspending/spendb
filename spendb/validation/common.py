@@ -35,7 +35,7 @@ def _field_name(name):
     return True
 
 
-field_name = All(Length(min=2, max=30), Function(_field_name))
+field_name = All(Length(min=2, max=60), Function(_field_name))
 
 
 def prepare_name(name):

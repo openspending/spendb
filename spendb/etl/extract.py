@@ -124,9 +124,9 @@ def validate_table(source):
             log.warning('Error at row %s: %s', i, unicode(exc))
             failed += 1
 
-    log.info("Converted %s rows with %s columns.", i, len(fields))
+    log.info("Converted %s rows with %s columns.", i + 1, len(fields))
     source.meta['fields'] = fields
-    source.meta['num_records'] = i
+    source.meta['num_records'] = i + 1
     source.meta['num_failed'] = failed
     source.meta.save()
     return source
