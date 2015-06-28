@@ -1,5 +1,6 @@
 import urllib
 import os
+import uuid
 import json
 import urlparse
 from StringIO import StringIO
@@ -63,23 +64,14 @@ def csvimport_fixture_file(name, path):
 
 
 def csvimport_table(name):
-    from messytables import CSVTableSet, type_guess
-    from messytables import types_processor, headers_guess
-    from messytables import headers_processor, offset_processor
-    from spendb.etl.extract import parse_table
+    from spendb.core import data_manager
+    from spendb.etl.extract import validate_table, load_table
 
-    row_set = CSVTableSet(data_fixture(name)).tables[0]
-    offset, headers = headers_guess(row_set.sample)
-    row_set.register_processor(headers_processor(headers))
-    row_set.register_processor(offset_processor(offset + 1))
-    types = type_guess(row_set.sample, strict=True)
-    row_set.register_processor(types_processor(types))
-
-    rows = []
-    for num_rows, (fields, row, samples) in enumerate(parse_table(row_set)):
-        rows.append(row)
-
-    return fields, rows
+    package = data_manager.package(uuid.uuid4().hex)
+    source = package.ingest(data_fixture(name))
+    source = validate_table(source)
+    rows = list(load_table(source))
+    return source.meta.get('fields'), rows
 
 
 def load_fixture(name, manager=None):

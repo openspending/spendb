@@ -1,5 +1,5 @@
 from colander import All, MappingSchema, Schema, String, SchemaNode
-from colander import Boolean, drop, Length, OneOf, Function, Int, Mapping
+from colander import Boolean, drop, Length, OneOf, Function, Mapping
 
 from spendb.core import db
 from spendb.validation.common import field_name, require_one_child
@@ -8,7 +8,8 @@ from spendb.validation.common import field_name, require_one_child
 TYPES = {
     'string': db.Unicode,
     'integer': db.BigInteger,
-    'float': db.Float
+    'boolean': db.Boolean,
+    'number': db.Float
 }
 
 
@@ -85,7 +86,7 @@ class Dimensions(MappingSchema):
 
 class Measure(Attribute):
     type = SchemaNode(String(), missing='integer',
-                      validator=OneOf(['integer', 'float']))
+                      validator=OneOf(['integer', 'number']))
 
 
 class Measures(MappingSchema):

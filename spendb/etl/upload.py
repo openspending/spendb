@@ -44,7 +44,7 @@ def generate_s3_upload_policy(source, file_name, mime_type):
         }
 
     enable_bucket_cors(obj.store.bucket)
-    url = obj.key.generate_url(expires_in=0, force_http=False,
+    url = obj.key.generate_url(expires_in=0, force_http=True,
                                query_auth=False)
     url = url.split(obj.key.name)[0]
 

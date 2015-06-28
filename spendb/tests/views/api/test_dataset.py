@@ -73,9 +73,10 @@ class TestDatasetApiController(ControllerTestCase):
         res = self.client.get(url)
         fields = res.json.get('fields')
         assert '200' in res.status, res.status
-        assert 'cap_or_cur' in fields, res.json
-        assert 'cofog1_name' in fields, res.json
-        c1n = fields['cofog1_name']
+        by_name = {f['name']: f for f in fields}
+        assert 'cap_or_cur' in by_name, res.json
+        assert 'cofog1_name' in by_name, res.json
+        c1n = by_name['cofog1_name']
         assert c1n['title'] == 'cofog1.name', c1n
 
     def test_view_fields_empty(self):
@@ -199,8 +200,8 @@ class TestDatasetApiController(ControllerTestCase):
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
-        assert 'cofog3' not in res.json.get('dimensions', {}), res.json.keys()
-        assert 'cofog1' in res.json.get('dimensions', {}), res.json.keys()
+        assert 'cofog3' not in res.json.get('dimensions', {}), res.json
+        assert 'cofog1' in res.json.get('dimensions', {}), res.json
 
         res2 = self.client.get(url,
                                query_string={'api_key': self.user.api_key})

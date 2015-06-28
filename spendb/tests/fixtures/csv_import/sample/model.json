@@ -72,7 +72,7 @@
     "measures": {
         "amount": {
             "column": "amount",
-            "type": "float",
+            "type": "number",
             "description": "Amount",
             "label": "Amount"
         }

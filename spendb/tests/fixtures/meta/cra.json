@@ -174,7 +174,7 @@
                 "attributes": {
                     "population2006": {
                         "column": "population2006",
-                        "type": "float"
+                        "type": "number"
                     }
                 },
                 "label": "Population in 2006"
@@ -224,13 +224,13 @@
                 "column": "amount",
                 "description": "",
                 "label": "Amount",
-                "type": "float"
+                "type": "number"
             },
             "total": {
                 "column": "amount",
                 "description": "",
                 "label": "Total amount",
-                "type": "float"
+                "type": "number"
             }
         }
     }

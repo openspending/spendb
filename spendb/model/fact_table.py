@@ -61,9 +61,9 @@ class FactTable(object):
     def _fields_columns(self, table):
         """ Transform the (auto-detected) fields into a set of column
         specifications. """
-        for name, field in self.dataset.fields.items():
+        for field in self.dataset.fields:
             data_type = TYPES.get(field.get('type'), Unicode)
-            col = Column(name, data_type, nullable=True)
+            col = Column(field.get('name'), data_type, nullable=True)
             table.append_column(col)
 
     def load_iter(self, iterable, chunk_size=1000):

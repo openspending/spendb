@@ -9,13 +9,13 @@
     "amount": {
       "type": "measure",
       "label": "Amount",
-      "datatype": "float",
+      "datatype": "number",
       "column": "AMOUNT"
     },
     "cofinance": {
       "type": "measure",
       "label": "Co-Financed Amount",
-      "datatype": "float",
+      "datatype": "number",
       "column": "COFIN"
     },
     "time": {

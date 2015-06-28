@@ -100,8 +100,7 @@ def structure(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset, private=dataset.private)
     return jsonify({
-        'fields': dataset.fields,
-        'samples': dataset.samples
+        'fields': dataset.fields
     })
 
 

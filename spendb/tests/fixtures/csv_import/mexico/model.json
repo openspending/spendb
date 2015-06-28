@@ -188,7 +188,7 @@
             "column": "importe_pef",
             "description": "Amount approved in the budget.",
             "label": "Amount",
-            "type": "float"
+            "type": "number"
         }
     }
 }

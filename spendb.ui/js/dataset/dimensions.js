@@ -226,9 +226,15 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     $http.post(dataset.api_url + '/model', model).then(function(res) {
       load(res.data);
       if ($scope.wizard) {
-        $location.search({});
-        $location.path('/datasets/' + dataset.name);
-        flash.setMessage("That's it! Your dataset is now ready for use.", "success");
+
+        // final step: publish the dataset
+        var ds = angular.copy(dataset);
+        ds['private'] = false;
+        $http.post(dataset.api_url, ds).then(function() {
+          $location.search({});
+          $location.path('/datasets/' + dataset.name);
+          flash.setMessage("That's it! Your dataset is now ready for use.", "success");
+        });
       } else {
         flash.setMessage("Your changes have been saved!", "success");
       }

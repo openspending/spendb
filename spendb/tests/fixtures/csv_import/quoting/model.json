@@ -48,7 +48,7 @@
     "measures": {
         "amount": {
             "column": "amount",
-            "type": "float",
+            "type": "number",
             "label": "Amount"
         }
     }

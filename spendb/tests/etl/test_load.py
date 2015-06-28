@@ -64,9 +64,9 @@ class TestLoad(DatabaseTestCase):
         fp = csvimport_fixture_file('../data', 'cra.csv')
         source = tasks.extract_fileobj(self.ds, fp,
                                        file_name='cra2.csv')
-        art = tasks.transform_source(self.ds, source.name)
-        assert art.name == tasks.ARTIFACT_NAME, art.name
-        rows = list(art.records())
+        src = tasks.transform_source(self.ds, source.name)
+        assert src.name == source.name, src.name
+        rows = list(tasks.load_table(src))
         assert len(rows) == 36, rows
         assert 'cofog1_label' in rows[1], rows[1]
         assert 'cofog1.label' not in rows[1], rows[1]
@@ -78,8 +78,9 @@ class TestLoad(DatabaseTestCase):
         source = tasks.transform_source(self.ds, source.name)
         fields = source.meta.get('fields')
         assert len(fields) == 34, len(fields)
-        assert 'amount' in fields, fields
-        amt = fields.get('amount')
+        by_name = {f['name']: f for f in fields}
+        assert 'amount' in by_name, fields
+        amt = by_name.get('amount')
         assert amt['type'] == 'integer', amt
 
     def test_load_data(self):

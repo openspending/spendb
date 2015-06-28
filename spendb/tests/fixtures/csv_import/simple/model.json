@@ -54,7 +54,7 @@
             "column": "amount",
             "description": "Amount",
             "label": "Amount",
-            "type": "float"
+            "type": "number"
         }
     }
 }

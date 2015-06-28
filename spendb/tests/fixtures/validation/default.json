@@ -72,13 +72,13 @@
         "measures": {
             "amount": {
                 "column": "AMOUNT",
-                "type": "float",
+                "type": "number",
                 "label": "Amount"
             },
             "cofinance": {
                 "column": "cofin",
                 "label": "Co-Financed Amount",
-                "type": "float"
+                "type": "number"
             }
         }
     }
