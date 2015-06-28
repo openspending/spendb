@@ -1,11 +1,19 @@
-<ul class="list-group">
+<ul class="list-group list-datasets">
   <li class="list-group-item" ng-repeat="ds in datasets.results">
     <strong>
       <a ng-href="/datasets/{{ds.name}}">
         {{ds.label}}
+        <span ng-show="ds.private">
+          <i class="fa fa-eye-slash"
+            tooltip="This dataset is private"
+            tooltip-placement="bottom"></i>
+        </span>
       </a>
     </strong>
-    <span ng-show="ds.description">
+    <span ng-show="ds.currency" class="help-block">
+      ({{ds.currency}})
+    </span>
+    <span ng-show="ds.description" class="help-block">
       &middot; {{ds.description | characters:140 }}
     </span>
   </li>

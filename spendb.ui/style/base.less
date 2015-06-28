@@ -263,6 +263,69 @@ footer {
     border-radius: 0;
 }
 
+.jumbotron {
+    border-radius: 0;
+    margin-top: -2em;
+    background-color: @brand-primary;
+    color: white;
+    background-image: url(../img/header_bg.png);
+
+    h1 {
+        font-weight: bolder;
+        margin-bottom: 0.7em;
+    }
+
+    .container {
+        margin-top: 2em auto 2em auto;
+        max-width: 50em;
+    }
+
+    .call-to-action {
+        margin: 2em 0 2em 0;
+        background-color: @theme-body-bg;
+        color: @theme-text;
+        padding: 1em 1em 0.2em 1em;
+        border-radius: @border-radius-large;
+
+        .btn-default {
+            border: 1px solid @brand-primary;
+            color: @brand-primary;
+        }
+    }
+}
+
+.panel.panel-facet {
+    border-radius: 0;
+    box-shadow: 0px 0 0;
+    border: 0px;
+
+    .badge {
+        background-color: @brand-primary;
+    }
+
+    .panel-heading {
+        background-color: @theme-body-bg;
+        //color: white;
+        border-radius: 0;
+        font-weight: 600;
+    }
+}
+
+.list-group.list-datasets {
+    border: 0;
+    margin-bottom: 0;
+
+    li {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+
+        .help-block {
+            display: inline;
+        }
+    }
+}
+
 .docs {
     .docs-text {
         color: lighten(@theme-text, 10%);

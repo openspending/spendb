@@ -1,28 +1,38 @@
 <page-header>
 </page-header>
+
+<div class="jumbotron" ng-hide="session.logged_in">
+  <div class="container">
+    <h1>Mapping the money</h1>
+
+    <div class="call-to-action">
+      <p ng-bind-html="page_html"></p>
+      <p>
+        <div class="btn-group">
+          <a class="btn btn-primary btn-lg" href="/datasets/new" role="button">
+            Import your data
+          </a>
+          <a class="btn btn-default btn-lg" ng-click="scrollToDatasets()" role="button">
+            Browse
+          </a>
+          <a class="btn btn-default btn-lg" href="/docs/about.html" role="button">
+            Learn more
+          </a>
+        </div>
+      </p>
+    </div>
+  </div>
+</div>
+
 <page-body>
 
-  <div class="jumbotron" ng-hide="session.logged_in">
-    <h1>Mapping the money</h1>
-    <p ng-bind-html="page_html"></p>
-    <p>
-      <div class="btn-group">
-        <a class="btn btn-primary btn-lg" href="/datasets/new" role="button">
-          Import your data
-        </a>
-        <a class="btn btn-default btn-lg" href="/docs/about.html" role="button">
-          Learn more
-        </a>
-      </div>
-    </p>
-  </div>
 
   <div class="row" id="datasets">
     <div class="col-md-8">
       <dataset-list datasets="datasets"></dataset-list>
     </div>
     <div class="col-md-4">
-      <div class="panel panel-default">
+      <div class="panel panel-default panel-facet">
         <div class="panel-heading">Countries covered</div>
         <div class="list-group">
           <a class="list-group-item ng-link" ng-repeat="t in datasets.territories"
@@ -34,7 +44,7 @@
         </div>
       </div>
 
-      <div class="panel panel-default">
+      <div class="panel panel-default panel-facet">
         <div class="panel-heading">Languages</div>
         <div class="list-group">
           <a class="list-group-item ng-link" ng-repeat="l in datasets.languages"

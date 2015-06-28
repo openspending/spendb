@@ -34,6 +34,10 @@ spendb.controller('HomeCtrl', ['$scope', '$rootScope', '$location', '$sce', 'pag
     return query[name] == value;
   };
 
+  $scope.scrollToDatasets = function() {
+    $scope.scrollToId('datasets');
+  }
+
   $scope.toggleFacet = function(name, value) {
     var query = $location.search(),
         isArray = angular.isArray(query[name]);
@@ -56,7 +60,6 @@ spendb.controller('HomeCtrl', ['$scope', '$rootScope', '$location', '$sce', 'pag
       delete query['offset'];
     }
     $location.search(query);
-    //$scope.scrollToId('datasets');
   };
 
 }]);
