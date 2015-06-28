@@ -7256,6 +7256,11 @@ footer p {
   background-color: #ffffff;
   border-radius: 0;
   font-weight: 600;
+  padding-left: 0;
+}
+.panel.panel-facet a.active .badge {
+  background-color: #ffffff;
+  color: #478dcb;
 }
 .list-group.list-datasets {
   border: 0;
@@ -7265,6 +7270,7 @@ footer p {
   border-left: 0;
   border-right: 0;
   border-radius: 0;
+  padding-left: 0;
 }
 .list-group.list-datasets li .help-block {
   display: inline;

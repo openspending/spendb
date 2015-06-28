@@ -132,6 +132,10 @@ spendb.config(['$routeProvider', '$locationProvider',
     }
   });
 
+  $routeProvider.otherwise({
+    redirectTo: '/'
+  });
+
   $locationProvider.html5Mode(true);
 }]);
 

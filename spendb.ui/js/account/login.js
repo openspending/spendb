@@ -11,7 +11,7 @@ spendb.controller('AccountLoginCtrl', ['$scope', '$modal', '$http', '$location',
     $scope.credentials.password = '';
     $http.post('/api/3/sessions/login', cred).then(function(res) {
       session.flush();
-      $location.path('/accounts/' + $scope.account.name);
+      $location.path('/accounts/' + $scope.credentials.login);
     }, validation.handle(form));
   };
 
