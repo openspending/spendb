@@ -7027,6 +7027,10 @@ body > .ui-select-bootstrap.open {
 .ng-link {
   cursor: pointer;
 }
+.ng-icon,
+.ng-icon:hover {
+  text-decoration: none !important;
+}
 .table-cubes {
   overflow-x: scroll;
   min-height: 25em;
@@ -7054,14 +7058,33 @@ body > .ui-select-bootstrap.open {
 }
 .table-cubes .table td,
 .table-cubes .table th {
-  min-width: 8em;
+  min-width: 13em;
   max-width: 25em;
-  border-right: 2px solid #dddddd;
   overflow: hidden;
   white-space: nowrap;
 }
+.table-cubes .table th {
+  border-bottom: 1px solid #dddddd;
+  background-color: #f5f5f5;
+}
+.table-cubes .table th.title {
+  border-right: 0px;
+}
+.table-cubes .table th.operations {
+  width: 1px;
+  min-width: 1em;
+  border-left: 0px;
+  text-align: right;
+}
+.table-cubes .table td.simple {
+  border-bottom: 0;
+  border-top: 0;
+}
 .table-cubes .table td.numeric {
   text-align: right;
+}
+.table-cubes .table th .sublabel {
+  font-weight: normal;
 }
 .table.table-panel td.middle {
   vertical-align: middle;
@@ -7069,6 +7092,34 @@ body > .ui-select-bootstrap.open {
 .table.table-panel tr.adjoined td,
 .table.table-panel tr.adjoined th {
   border-top: 0;
+}
+/* Tree maps */
+.treemap-cubes {
+  min-height: 500px;
+  overflow: hidden;
+}
+.treemap-cubes .node {
+  display: block;
+  border: 0;
+  color: #fff;
+  overflow: hidden;
+  position: absolute;
+  outline: 1px solid #fff;
+  font-size: 0.8em;
+  text-indent: 2px;
+  padding: 5px;
+  box-sizing: border-box;
+  z-index: 5;
+  font-weight: 300;
+  text-shadow: -2px -2px 13px rgba(150, 150, 150, 0.9);
+}
+.treemap-cubes .amount {
+  display: block;
+  padding-bottom: 0.2em;
+  font-size: 1.5em;
+}
+.treemap-cubes .node:hover {
+  text-decoration: none;
 }
 #catapult-cookie-bar {
   direction: ltr;

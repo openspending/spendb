@@ -14,7 +14,7 @@
       ({{ds.currency}})
     </span>
     <span ng-show="ds.description" class="help-block">
-      &middot; {{ds.description | characters:140 }}
+      &middot; {{ds.description | truncate:140:'...':true }}
     </span>
   </li>
 </ul>
