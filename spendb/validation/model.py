@@ -9,7 +9,8 @@ TYPES = {
     'string': db.Unicode,
     'integer': db.BigInteger,
     'boolean': db.Boolean,
-    'number': db.Float
+    'number': db.Float,
+    'date': db.Date
 }
 
 

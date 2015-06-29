@@ -24,7 +24,7 @@ module.exports = function(config) {
       'spendb.ui/vendor/angular-scroll/angular-scroll.js',
       'spendb.ui/vendor/angular-cookies/angular-cookies.js',
       'spendb.ui/vendor/angular-ui-select/dist/select.js',
-      'spendb.ui/vendor/angular-truncate/src/truncate.js',
+      'spendb.ui/vendor/angular-filter/dist/angular-filter.js',
       'spendb.ui/vendor/ng-file-upload/ng-file-upload-shim.js',
       'spendb.ui/vendor/ng-file-upload/ng-file-upload.js',
       'spendb.ui/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
