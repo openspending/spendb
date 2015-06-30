@@ -76,7 +76,7 @@ spendb.controller('DatasetUploadCtrl', ['$scope', '$document', '$http', '$locati
   };
 
   $scope.submitUrl = function() {
-    if (!scope.hasUrl()) return;
+    if (!$scope.hasUrl()) return;
     var form = angular.copy($scope.urlForm);
     $scope.urlForm = {};
 

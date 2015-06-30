@@ -54,7 +54,6 @@
 // Style tiles, Colours
 @border-color: @gray-light;
 @boxed-color: @gray-light;
-
 @code-color:                  @gray;
 @code-bg:                     @theme-body-bg;
 
@@ -112,7 +111,6 @@
 @import (inline) "../vendor/angular/angular-csp.css";
 @import (inline) "../vendor/angular-ui-select/dist/select.css";
 @import "../vendor/angular-cubes/less/style.less";
-// @import "typeahead.less";
 @import "cookies.less";
 
 // Base style
@@ -125,10 +123,6 @@ body {
     background-color: @theme-body-bg;
     padding-bottom: 2em;
     min-height: 40em;
-}
-
-.ng-link {
-    cursor: pointer;
 }
 
 h1, h2, h3, h4 {
@@ -339,33 +333,39 @@ footer {
     }
 }
 
-.dataset-settings {
-    min-height: 20em;
 
-    .wizard-progress {
-        .pagination {
-            margin-top: 0;
-            width: 100%;
-            li a, li:hover a {
-                width: 14.2%;
-                color: @theme-text;
-                text-align: center;
-                background-color: @theme-body-bg;
-            }
+.wizard-progress {
+    .pagination {
+        margin-top: -20px;
+        border-radius: 0;
+        width: 100%;
+        max-width: 100%;
 
-            li.active a {
-                color: @theme-body-bg;
-                background-color: @brand-primary;
-                font-weight: bolder;
-            }
+        li a, li:hover a {
+            width: (100%/7);
+            color: @theme-text;
+            border-radius: 0;
+            text-align: center;
+            background-color: @theme-body-bg;
+        }
 
-            li.seen a {
-                color: @theme-body-bg;
-                background-color: lighten(@brand-primary, 20%);
-                border: 1px solid lighten(@brand-primary, 20%);
-            }
+        li.active a {
+            color: @theme-body-bg;
+            background-color: @brand-primary;
+            font-weight: bolder;
+        }
+
+        li.seen a {
+            color: @theme-body-bg;
+            background-color: lighten(@brand-primary, 20%);
+            border: 1px solid lighten(@brand-primary, 20%);
         }
     }
+}
+
+
+.dataset-settings {
+    min-height: 20em;
 
     .spinner {
         font-size: 10em;

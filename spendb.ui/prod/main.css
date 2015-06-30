@@ -7092,6 +7092,10 @@ body > .ui-select-bootstrap.open {
 .table.table-panel tr.adjoined td,
 .table.table-panel tr.adjoined th {
   border-top: 0;
+  padding-top: 0;
+}
+.table.table-panel tbody {
+  border-top: 0;
 }
 /* Tree maps */
 .treemap-cubes {
@@ -7157,9 +7161,6 @@ body {
   background-color: #ffffff;
   padding-bottom: 2em;
   min-height: 40em;
-}
-.ng-link {
-  cursor: pointer;
 }
 h1,
 h2,
@@ -7331,29 +7332,32 @@ footer p {
   font-size: 1.2em;
   line-height: 1.5em;
 }
-.dataset-settings {
-  min-height: 20em;
-}
-.dataset-settings .wizard-progress .pagination {
-  margin-top: 0;
+.wizard-progress .pagination {
+  margin-top: -20px;
+  border-radius: 0;
   width: 100%;
+  max-width: 100%;
 }
-.dataset-settings .wizard-progress .pagination li a,
-.dataset-settings .wizard-progress .pagination li:hover a {
-  width: 14.2%;
+.wizard-progress .pagination li a,
+.wizard-progress .pagination li:hover a {
+  width: 14.28571429%;
   color: #333333;
+  border-radius: 0;
   text-align: center;
   background-color: #ffffff;
 }
-.dataset-settings .wizard-progress .pagination li.active a {
+.wizard-progress .pagination li.active a {
   color: #ffffff;
   background-color: #478dcb;
   font-weight: bolder;
 }
-.dataset-settings .wizard-progress .pagination li.seen a {
+.wizard-progress .pagination li.seen a {
   color: #ffffff;
   background-color: #97bee1;
   border: 1px solid #97bee1;
+}
+.dataset-settings {
+  min-height: 20em;
 }
 .dataset-settings .spinner {
   font-size: 10em;
