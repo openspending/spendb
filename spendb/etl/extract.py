@@ -4,8 +4,7 @@ from decimal import Decimal
 from datetime import datetime
 
 from normality import slugify
-from messytables import any_tableset, type_guess, types_processor
-from messytables import headers_processor, offset_processor
+import messytables as mt
 from messytables.jts import celltype_as_string
 
 log = logging.getLogger(__name__)
@@ -80,20 +79,25 @@ def convert_row(row, fields, i):
 def parse_table(source):
     # This is a work-around because messytables hangs on boto file
     # handles, so we're doing it via plain old HTTP.
-    table_set = any_tableset(source.fh(),
-                             extension=source.meta.get('extension'),
-                             mimetype=source.meta.get('mime_type'))
+    table_set = mt.any_tableset(source.fh(),
+                                extension=source.meta.get('extension'),
+                                mimetype=source.meta.get('mime_type'))
     tables = list(table_set.tables)
     if not len(tables):
         log.error("No tables were found in the source file.")
         return
-
     row_set = tables[0]
+
+    # FIXME: I'm distrusting the CSV sniffer because it breaks on odd
+    # files.
+    if isinstance(row_set, mt.CSVRowSet):
+        row_set.quotechar = '"'
+
     headers = [c.value for c in next(row_set.sample)]
-    row_set.register_processor(headers_processor(headers))
-    row_set.register_processor(offset_processor(1))
-    types = type_guess(row_set.sample, strict=True)
-    row_set.register_processor(types_processor(types, strict=True))
+    row_set.register_processor(mt.headers_processor(headers))
+    row_set.register_processor(mt.offset_processor(1))
+    types = mt.type_guess(row_set.sample, strict=True)
+    row_set.register_processor(mt.types_processor(types, strict=True))
 
     fields, i = {}, 0
     row_iter = iter(row_set)
@@ -114,6 +118,7 @@ def parse_table(source):
         except StopIteration:
             return
         except Exception, e:
+            log.exception(e)
             yield e, fields, None
 
 
