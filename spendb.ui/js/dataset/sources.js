@@ -63,6 +63,9 @@ spendb.controller('DatasetSourcesCtrl', ['$scope', '$document', '$http', '$locat
       if (sources.results.length) {
         var url = sources.results[0].runs_url;
         $http.get(url).then(function(res) {
+          if (!sources.results.length) {
+            loadTimeout = $timeout($scope.recheck, 2000);
+          }
           sources.results[0].runs = res.data.results;
           $scope.source = sources.results[0];
           var run = res.data.results[res.data.results.length - 1];

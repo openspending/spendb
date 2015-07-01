@@ -12,6 +12,14 @@ spendb.directive('datasetList', ['$http', '$location',
         var state = angular.extend({}, $location.search(), {offset: offset});
         $location.search(state);
       };
+
+      scope.getDatasetLink = function(dataset) {
+        var link = '/datasets/' + dataset.name;
+        if (!dataset.has_model) {
+          link = link + '/about';
+        }
+        return link;
+      };
     }
   };
 }]);

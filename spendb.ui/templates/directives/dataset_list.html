@@ -1,7 +1,7 @@
 <ul class="list-group list-datasets">
   <li class="list-group-item" ng-repeat="ds in datasets.results">
     <strong>
-      <a ng-href="/datasets/{{ds.name}}">
+      <a ng-href="{{getDatasetLink(ds)}}">
         {{ds.label}}
         <span ng-show="ds.private">
           <i class="fa fa-eye-slash"
