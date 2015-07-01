@@ -34,27 +34,26 @@ def after_request(resp):
         # http://wiki.nginx.org/X-accel#X-Accel-Buffering
         resp.headers['X-Accel-Buffering'] = 'no'
 
-    if request.endpoint == 'static':
-        resp.cache_control.max_age = 3600 * 6
-        resp.cache_control.public = True
-        return resp
-
     # skip cache under these conditions:
     if not current_app.config.get('CACHE') \
             or request.method not in ['GET', 'HEAD', 'OPTIONS'] \
-            or resp.status_code > 399 \
-            or resp.is_streamed \
-            or request._http_etag is None:
+            or resp.status_code > 399:
         resp.cache_control.no_cache = True
         return resp
 
-    if not request._http_private:
+    if request.endpoint == 'static':
+        resp.cache_control.max_age = 3600 * 6
         resp.cache_control.public = True
-    else:
-        resp.cache_control.private = True
-    resp.cache_control.max_age = 3600 * 6
-    resp.cache_control.must_revalidate = True
-    resp.set_etag(request._http_etag)
+
+    if request._http_etag:
+        if not request._http_private:
+            resp.cache_control.public = True
+        else:
+            resp.cache_control.private = True
+        resp.cache_control.max_age = 3600 * 6
+        resp.cache_control.must_revalidate = True
+        resp.set_etag(request._http_etag)
+
     return resp
 
 
