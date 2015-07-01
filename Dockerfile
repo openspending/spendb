@@ -29,5 +29,6 @@ ADD . /spendb
 ADD prod_settings.py settings.py
 ENV SPENDB_SETTINGS=/spendb/settings.py
 RUN pip install -r requirements.txt -e /spendb
+RUN spendb db migrate && spendb assets build
 
 EXPOSE 8000
