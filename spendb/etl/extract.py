@@ -79,20 +79,19 @@ def convert_row(row, fields, i):
 def parse_table(source):
     # This is a work-around because messytables hangs on boto file
     # handles, so we're doing it via plain old HTTP.
+    # We're also passing in an extended window size to give more
+    # reliable type detection.
+    # Because Python's CSV dialect sniffer isn't the best, this also
+    # constrains the field quoting character to a double quote.
     table_set = mt.any_tableset(source.fh(),
                                 extension=source.meta.get('extension'),
-                                mimetype=source.meta.get('mime_type'))
+                                mimetype=source.meta.get('mime_type'),
+                                quotechar='"', window=20000)
     tables = list(table_set.tables)
     if not len(tables):
         log.error("No tables were found in the source file.")
         return
     row_set = tables[0]
-
-    # FIXME: I'm distrusting the CSV sniffer because it breaks on odd
-    # files.
-    if isinstance(row_set, mt.CSVRowSet):
-        row_set.quotechar = '"'
-
     headers = [c.value for c in next(row_set.sample)]
     row_set.register_processor(mt.headers_processor(headers))
     row_set.register_processor(mt.offset_processor(1))
@@ -118,6 +117,7 @@ def parse_table(source):
         except StopIteration:
             return
         except Exception, e:
+            # log.exception(e)
             yield e, fields, None
 
 
