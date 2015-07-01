@@ -118,7 +118,6 @@ def parse_table(source):
         except StopIteration:
             return
         except Exception, e:
-            log.exception(e)
             yield e, fields, None
 
 
