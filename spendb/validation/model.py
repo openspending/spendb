@@ -1,5 +1,5 @@
 from colander import All, MappingSchema, Schema, String, SchemaNode
-from colander import Boolean, drop, Length, OneOf, Function, Mapping
+from colander import drop, Length, OneOf, Function, Mapping
 
 from spendb.core import db
 from spendb.validation.common import field_name, require_one_child
@@ -10,7 +10,9 @@ TYPES = {
     'integer': db.BigInteger,
     'boolean': db.Boolean,
     'number': db.Float,
-    'date': db.Date
+    # FIXME: add proper support for dates
+    # 'date': db.Date
+    'date': db.Unicode
 }
 
 
@@ -76,8 +78,6 @@ class Dimension(MappingSchema):
     description = SchemaNode(String(), missing='')
     label_attribute = SchemaNode(String(), missing=None)
     key_attribute = SchemaNode(String(), missing=None)
-    facet = SchemaNode(Boolean(), missing=False)
-    # cardinality = SchemaNode(Int(), missing=None, default=None)
     attributes = Attributes(validator=Function(require_one_child))
 
 
