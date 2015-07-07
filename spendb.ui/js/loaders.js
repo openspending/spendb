@@ -59,4 +59,3 @@ var loadModel = ['$route', '$q', '$http', function($route, $q, $http) {
   });
   return dfd.promise;
 }];
-
