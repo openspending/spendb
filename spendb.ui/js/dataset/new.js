@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetNewCtrl', ['$scope', '$rootScope', '$http', '$location', 'config', 'validation', 'session',
-  function($scope, $rootScope, $http, $location, config, validation, session) {
+spendb.controller('DatasetNewCtrl', ['$scope', '$rootScope', '$http', '$location', 'slugifyFilter', 'config', 'validation', 'session',
+  function($scope, $rootScope, $http, $location, slugifyFilter, config, validation, session) {
   var bindSlug = true;
 
   $rootScope.setTitle("Create a new dataset");
@@ -14,7 +14,7 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$rootScope', '$http', '$location
 
   $scope.$watch('dataset.label', function(e) {
     if (bindSlug && e) {
-      $scope.dataset.name = getSlug(e, '-');
+      $scope.dataset.name = slugifyFilter(e, '-');
     }
   });
 
@@ -34,4 +34,3 @@ spendb.controller('DatasetNewCtrl', ['$scope', '$rootScope', '$http', '$location
   };
 
 }]);
-

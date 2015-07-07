@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
-  function($scope, $rootScope, $http, $location, $q, flash, validation, dataset, data) {
+spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$location', '$q', 'slugifyFilter', 'flash', 'validation', 'dataset', 'data',
+  function($scope, $rootScope, $http, $location, $q, slugifyFilter, flash, validation, dataset, data) {
   $scope.dataset = dataset;
   $scope.columns = [];
   $scope.fields = [];
@@ -28,7 +28,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
         if (m.column == field.name) {
           m.name = mn;
           field.slug_linked = false;
-          field.measure = m;  
+          field.measure = m;
         }
       }
       fields.push(field);
@@ -71,7 +71,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
       delete field.measure;
     } else {
       var label = cleanLabel(field.title);
-      field.measure = {name: getSlug(label, '_'), label: label};
+      field.measure = {name: slugifyFilter(label, '_'), label: label};
     }
   };
 
@@ -81,7 +81,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
 
   $scope.updateSlug = function(field) {
     if (field.slug_linked) {
-      field.measure.name = getSlug(field.measure.label, '_');
+      field.measure.name = slugifyFilter(field.measure.label, '_');
     }
   };
 
@@ -98,7 +98,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
         field.measure.name.length < 2) {
       return false;
     }
-    if (field.measure.name != getSlug(field.measure.name, '_')) {
+    if (field.measure.name != slugifyFilter(field.measure.name, '_')) {
       return false;
     }
     for (var i in $scope.fields) {
@@ -140,4 +140,3 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
   load();
 
 }]);
-

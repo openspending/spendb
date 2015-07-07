@@ -31,19 +31,7 @@ spendb.factory('flash', ['$rootScope', '$timeout', function($rootScope, $timeout
 
 spendb.factory('validation', ['flash', 'config', function(flash, config) {
   // handle server-side form validation errors.
-  var makeSlug = function(text) {
-    return getSlug(text, '_');
-  };
-
-  var validSlug = function(text) {
-    if (makeSlug(text) != text) return false;
-    if (text.length < 3 || text.length > 29) return false;
-    return config.reserved_terms.indexOf(text) == -1;
-  };
-
   return {
-    makeSlug: makeSlug,
-    validSlug: validSlug,
     handle: function(form) {
       return function(res) {
         if (res.status == 400 || !form) {
@@ -83,7 +71,7 @@ spendb.factory('validation', ['flash', 'config', function(flash, config) {
 
 
 spendb.factory('data', ['$http', function($http) {
-  /* This is used to cache reference data once it has been retrieved from the 
+  /* This is used to cache reference data once it has been retrieved from the
   server. Reference data includes the canonical lists of country names,
   currencies, etc. */
   var referenceData = $http.get('/api/3/reference');

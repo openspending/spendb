@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$window', '$location', '$http', 'dimension', 'dimensions',
-  function($scope, $modalInstance, $window, $location, $http, dimension, dimensions) {
+spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$window', '$location', '$http', 'slugifyFilter', 'dimension', 'dimensions',
+  function($scope, $modalInstance, $window, $location, $http, slugifyFilter, dimension, dimensions) {
   $scope.dimension = dimension;
 
   $scope.removeAttribute = function(attribute) {
@@ -22,7 +22,7 @@ spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$win
 
   $scope.updateSlug = function(obj) {
     if (obj.slug_linked) {
-      obj.name = getSlug(obj.label, '_');
+      obj.name = slugifyFilter(obj.label, '_');
     }
   };
 
@@ -37,7 +37,7 @@ spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$win
     if (!obj || !obj.name || obj.name.length < 2) {
       return false;
     }
-    if (obj.name != getSlug(obj.name, '_')) {
+    if (obj.name != slugifyFilter(obj.name, '_')) {
       return false;
     }
     return true;
@@ -92,7 +92,7 @@ spendb.controller('DatasetDimensionEditCtrl', ['$scope', '$modalInstance', '$win
 
   $scope.update = function() {
     if ($scope.canUpdate) {
-      $modalInstance.close($scope.dimension);  
+      $modalInstance.close($scope.dimension);
     }
   };
 

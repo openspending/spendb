@@ -1,6 +1,6 @@
 
-spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$location', '$q', 'flash', 'validation', 'dataset', 'data',
-  function($scope, $modal, $http, $location, $q, flash, validation, dataset, data) {
+spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$location', '$q', 'slugifyFilter', 'flash', 'validation', 'dataset', 'data',
+  function($scope, $modal, $http, $location, $q, slugifyFilter, flash, validation, dataset, data) {
   $scope.dataset = dataset;
   $scope.selectedFields = {};
   $scope.dimensions = [];
@@ -76,7 +76,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
         }
       }
       if (include) {
-        fields.push(field);  
+        fields.push(field);
       }
     }
     return fields.sort(function(a, b) { return a.title.localeCompare(b.title); });
@@ -122,23 +122,23 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     if (isNew) {
       dimension.slug_linked = true;
 
-      // try and cleverly generate labels and names for 
+      // try and cleverly generate labels and names for
       // attributes and dimensions.
       // this will cause a headache, but it might just be worth it.
       var common = longestCommonStart(labels),
           lastChar = common.length ? common.charAt(common.length - 1) : ' ',
           atBoundary = new RegExp(/[\W_]/g).test(lastChar);
       dimension.label = cleanLabel(atBoundary || labels.length == 1 ? common : '');
-      dimension.name = getSlug(dimension.label, '_');
+      dimension.name = slugifyFilter(dimension.label, '_');
 
       if (atBoundary) {
         for (var i in dimension.attributes) {
           var attr = dimension.attributes[i];
           if (labels.indexOf(attr.label) != -1 && common.length < attr.label.length) {
             attr.label = cleanLabel(attr.label.slice(common.length));
-            attr.name = getSlug(attr.label, '_');
+            attr.name = slugifyFilter(attr.label, '_');
           }
-        }  
+        }
       }
     }
     $scope.editDimension(dimension);
@@ -155,7 +155,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
       dim.label_attribute = dim.attributes[0];
     }
     if (!dim.key_attribute) {
-      dim.key_attribute = dim.attributes[0];  
+      dim.key_attribute = dim.attributes[0];
     }
 
     var d = $modal.open({
@@ -188,7 +188,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   $scope.deleteDimension = function(dimension) {
     var idx = $scope.dimensions.indexOf(dimension);
     if (idx != -1) {
-      $scope.dimensions.splice(idx, 1);  
+      $scope.dimensions.splice(idx, 1);
     }
   };
 
@@ -244,4 +244,3 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
   load(data.model);
 
 }]);
-
