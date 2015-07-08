@@ -6,9 +6,9 @@ describe('styleHelper', function(){
     return this.validation = validation;
   }));
 
-  describe('#validation', function() {
-    it('makes a slug', function() {
-      expect(this.validation.makeSlug('test test')).to.eq('test_test');
-    });
-  });
+  // describe('#validation', function() {
+  //   it('makes a slug', function() {
+  //     expect(this.validation.makeSlug('test test')).to.eq('test_test');
+  //   });
+  // });
 });
