@@ -4,10 +4,6 @@ spendb.factory('flash', ['$rootScope', '$timeout', function($rootScope, $timeout
   // Message flashing.
   var currentMessage = null;
 
-  // $rootScope.$on("$routeChangeSuccess", function() {
-  //   currentMessage = null;
-  // });
-
   return {
     setMessage: function(message, type) {
       currentMessage = [message, type];
@@ -82,7 +78,7 @@ spendb.factory('data', ['$http', function($http) {
     });
   };
 
-  return {'get': getData}
+  return {get: getData}
 }]);
 
 
@@ -111,8 +107,8 @@ spendb.factory('session', ['$http', function($http) {
   };
 
   return {
-    'get': get,
-    'flush': flush,
-    'logout': logout
+    get: get,
+    flush: flush,
+    logout: logout
   }
 }]);

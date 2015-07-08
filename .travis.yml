@@ -31,6 +31,6 @@ before_script:
   - nosetests --version
 script:
   - nosetests --with-coverage --cover-package=spendb
-  - karma start --single-run --browsers PhantomJS karma.conf.js
+  # - karma start --single-run --browsers PhantomJS karma.conf.js
 after_success:
   - coveralls

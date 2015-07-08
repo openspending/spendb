@@ -2,13 +2,13 @@ describe('styleHelper', function(){
   beforeEach( function() {
     module('spendb');
   });
-  beforeEach(inject(function(validation) {
-    return this.validation = validation;
+  beforeEach(inject(function(flash) {
+    return this.flash = flash;
   }));
 
-  // describe('#validation', function() {
-  //   it('makes a slug', function() {
-  //     expect(this.validation.makeSlug('test test')).to.eq('test_test');
-  //   });
-  // });
+  describe('#flash', function() {
+    it('no default message', function() {
+      expect(this.flash.getMessage()).to.eq(undefined);
+    });
+  });
 });
