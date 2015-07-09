@@ -17,6 +17,9 @@ module.exports = function(config) {
     files: [
       'spendb.ui/vendor/moment/moment.js',
       'spendb.ui/vendor/d3/d3.js',
+      'spendb.ui/vendor/d3-plugins/sankey/sankey.js',
+      'spendb.ui/vendor/vega-lite/lib/vega.js',
+      'spendb.ui/vendor/vega-lite/vega-lite.js',
       'spendb.ui/vendor/angular/angular.js',
       'spendb.ui/vendor/angular-route/angular-route.js',
       'spendb.ui/vendor/angular-moment/angular-moment.js',

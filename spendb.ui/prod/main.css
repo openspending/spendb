@@ -7097,6 +7097,17 @@ body > .ui-select-bootstrap.open {
 .table.table-panel tbody {
   border-top: 0;
 }
+.embed-link {
+  padding-top: 1em;
+}
+.embed-link p.help-block {
+  margin-bottom: 0.2em;
+}
+.embed-link input[readonly],
+.embed-link span.input-group-addon {
+  background-color: #fff;
+  box-shadow: none;
+}
 /* Tree maps */
 .treemap-cubes {
   min-height: 500px;
@@ -7124,6 +7135,24 @@ body > .ui-select-bootstrap.open {
 }
 .treemap-cubes .node:hover {
   text-decoration: none;
+}
+.sankey-cubes .node rect {
+  shape-rendering: crispEdges;
+  stroke-width: 2px;
+  stroke: #fff;
+}
+.sankey-cubes .node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+  font-family: inherit;
+}
+.sankey-cubes .link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .1;
+}
+.sankey-cubes .link:hover {
+  stroke-opacity: .5;
 }
 #catapult-cookie-bar {
   direction: ltr;

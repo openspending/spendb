@@ -24,6 +24,9 @@ assets.register('css_main', css_main)
 # Javscript bundles
 js_vendor = Bundle('vendor/moment/moment.js',
                    'vendor/d3/d3.js',
+                   'vendor/d3-plugins/sankey/sankey.js',
+                   'vendor/vega-lite/lib/vega.js',
+                   'vendor/vega-lite/vega-lite.js',
                    'vendor/angular/angular.js',
                    'vendor/angular-route/angular-route.js',
                    'vendor/angular-moment/angular-moment.js',
@@ -34,7 +37,7 @@ js_vendor = Bundle('vendor/moment/moment.js',
                    'vendor/ng-file-upload/ng-file-upload-shim.js',
                    'vendor/ng-file-upload/ng-file-upload.js',
                    'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
-                   'vendor/angular-cubes/build/angular-cubes.js',
+                   'vendor/angular-cubes/dist/angular-cubes.js',
                    filters='uglifyjs', output='prod/vendor.js')
 
 

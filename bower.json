@@ -10,7 +10,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "spendb/static/vendor"
+    "spendb.ui/vendor"
   ],
   "dependencies": {
     "bootstrap": "~3.3.1",
@@ -22,9 +22,11 @@
     "moment": "~2.10.2",
     "angular-moment": "~0.10.1",
     "angular-scroll": "~0.7.0",
-    "angular-ui-select": "~0.12.0",
-    "angular-cubes": "~0.1.5",
+    "angular-ui-select": "~0.13.0",
+    "angular-cubes": "~0.1.6",
     "d3": "~3.5.5",
+    "d3-plugins": "*",
+    "vega-lite": "",
     "angular-filter": "~0.5.4"
   },
   "resolutions": {
