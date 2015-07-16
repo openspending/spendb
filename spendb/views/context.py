@@ -1,4 +1,4 @@
-from flask import current_app, request, session, get_flashed_messages
+from flask import current_app, request, session
 from flask.ext.login import current_user
 from babel import Locale
 from apikit import cache_hash
