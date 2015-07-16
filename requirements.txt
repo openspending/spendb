@@ -30,6 +30,7 @@ loadkit>=0.2
 apikit>=0.3.1
 boto>=2.38.0
 https://github.com/spendb/fiscalmodel/tarball/master
+https://github.com/spendb/babbage/tarball/master
 
 expressions
 grako

@@ -41,7 +41,7 @@ class SpendingModelProvider(ModelProvider):
                                          measure=measure.name,
                                          function='sum')
             aggregates.append(aggregate)
-            mappings[measure.name] = measure.column
+            mappings[measure.name] = measure.column_name
 
         for dimension in dataset.model.dimensions:
             attributes, last_col = [], None
@@ -50,7 +50,7 @@ class SpendingModelProvider(ModelProvider):
                     'name': attr.name,
                     'label': attr.label
                 })
-                mappings[attr.path] = last_col = attr.column
+                mappings[attr.ref] = last_col = attr.column_name
 
             # Workaround because the cubes mapper shortens references
             # for single-attribute dimensions to just the dimension name.

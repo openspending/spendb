@@ -51,7 +51,8 @@ class TestImportFixtures(DatabaseTestCase):
 
         # check correct number of entries
         dataset = db.session.query(Dataset).first()
-        entries = list(dataset.fact_table.entries())
+        q = dataset.fact_table.table.select()
+        entries = db.engine.execute(q).fetchall()
         assert len(entries) == lines, len(entries)
 
     def test_imports_mexico(self):

@@ -4,53 +4,55 @@
             "attributes": {
                 "entry_id": {
                     "column": "id",
-                    "type": "string"
+                    "label": "ID"
                 }
             },
+            "key_attribute": "entry_id",
             "label": "Entry ID"
         },
         "from": {
             "attributes": {
                 "label": {
                     "column": "paid_by",
-                    "type": "string"
+                    "label": "Label"
                 },
                 "name": {
                     "column": "paid_by",
-                    "type": "string"
+                    "label": "Name"
                 }
             },
+            "key_attribute": "name",
             "label": "Spender"
         },
         "time": {
             "attributes": {
                 "year": {
                     "column": "date",
-                    "type": "integer"
+                    "label": "Year"
                 }
             },
+            "key_attribute": "year",
             "label": "Time"
         },
         "to": {
             "attributes": {
                 "label": {
                     "column": "paid_to",
-                    "type": "string"
+                    "label": "Label"
                 },
                 "name": {
                     "column": "paid_to",
-                    "type": "string"
+                    "label": "Name"
                 }
             },
+            "key_attribute": "name",
             "label": "Recipient"
         }
     },
     "measures": {
         "amount": {
             "column": "amount",
-            "type": "number",
             "label": "Amount"
         }
     }
 }
-

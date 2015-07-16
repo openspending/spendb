@@ -10,56 +10,57 @@
                 "attributes": {
                     "field": {
                         "column": "field",
-                        "type": "string"
+                        "label": "Field"
                     }
                 },
+                "key_attribute": "field",
                 "label": "Field 1"
             },
             "function": {
                 "attributes": {
                     "label": {
                         "column": "func_label",
-                        "datatype": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "func_name",
-                        "datatype": "id"
+                        "label": "Name"
                     }
                 },
-                "facet": false,
-                "label": "Function code",
-                "taxonomy": "funny"
+                "key_attribute": "name",
+                "label_attribute": "label",
+                "label": "Function code"
             },
             "time": {
                 "attributes": {
                     "year": {
                         "column": "year",
-                        "type": "integer"
+                        "label": "Year"
                     }
                 },
-                "key": true,
+                "key_attribute": "year",
                 "label": "Year"
             },
             "to": {
                 "attributes": {
                     "label": {
                         "column": "to_label",
-                        "datatype": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "to_name",
-                        "datatype": "id"
+                        "label": "Name"
                     }
                 },
-                "facet": true,
+                "key_attribute": "name",
+                "label_attribute": "label",
                 "label": "Einzelplan"
             }
         },
         "measures": {
             "amount": {
                 "column": "amount",
-                "label": "Amount",
-                "type": "number"
+                "label": "Amount"
             }
         }
     }

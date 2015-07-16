@@ -4,9 +4,9 @@ from sqlalchemy.schema import Column
 from sqlalchemy.types import Integer, Unicode, Boolean, DateTime
 from sqlalchemy.sql.expression import or_
 from sqlalchemy.ext.associationproxy import association_proxy
+from babbage.model import Model
 
 from spendb.core import db, url_for
-from spendb.model.model import Model
 from spendb.model.fact_table import FactTable
 from spendb.model.common import JSONType
 
@@ -62,17 +62,19 @@ class Dataset(db.Model):
 
     @property
     def has_model(self):
-        model = self.model_data
-        return 'measures' in model and 'dimensions' in model
+        return 'measures' in self.model_data \
+            and 'dimensions' in self.model_data
 
     def update_model(self, model):
-        self.data['model'] = model
+        model['fact_table'] = self.fact_table.table_name
+        model = Model(model)
+        self.data['model'] = model.to_dict()
         self._load_model()
 
         # TODO find a better place for this.
-        for dimension in self.model.dimensions:
-            dimension.data['cardinality'] = \
-                self.fact_table.num_members(dimension)
+        # for dimension in self.model.dimensions:
+        #     dimension.data['cardinality'] = \
+        #         self.fact_table.num_members(dimension)
 
     @property
     def fields(self):
@@ -84,8 +86,13 @@ class Dataset(db.Model):
 
     @reconstructor
     def _load_model(self):
-        self.model = Model(self)
         self.fact_table = FactTable(self)
+        if not self.has_model:
+            self.model = None
+        else:
+            model_data = self.model_data
+            model_data['fact_table'] = self.fact_table.table_name
+            self.model = Model(self.model_data)
 
     def touch(self):
         """ Update the dataset timestamp. This is used for cache

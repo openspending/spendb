@@ -89,8 +89,6 @@ class TestLoad(DatabaseTestCase):
                                        file_name='cra2.csv')
         tasks.transform_source(self.ds, source.name)
         tasks.load(self.ds, source.name)
-        assert self.ds.fact_table.num_entries() == 36, \
-            self.ds.fact_table.num_entries()
-
-        entries = list(self.ds.fact_table.entries())
-        assert len(entries) == 36, entries
+        q = self.ds.fact_table.table.select()
+        resn = db.engine.execute(q).fetchall()
+        assert len(resn) == 36, resn

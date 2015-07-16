@@ -1,11 +1,11 @@
 from sqlalchemy import Integer, Unicode
 from nose.tools import assert_raises
+from babbage.model import Dimension, Measure
 
 from spendb.tests.helpers import load_fixture
 from spendb.tests.base import DatabaseTestCase
 
 from spendb.core import db
-from spendb.model.model import Dimension, Measure
 
 
 class TestDataset(DatabaseTestCase):
@@ -72,19 +72,6 @@ class TestDatasetLoad(DatabaseTestCase):
         assert 'test__facts' not in tn, tn
 
     def test_dataset_count(self):
-        assert self.ds.fact_table.num_entries() == 6, \
-            self.ds.fact_table.num_entries()
-
-    def test_materialize_table(self):
-        itr = self.ds.fact_table.entries()
-        tbl = list(itr)
-        assert len(tbl) == 6, len(tbl)
-        row = tbl[0]
-        assert isinstance(row['field'], dict), row
-        assert isinstance(row['function'], dict), row
-        assert isinstance(row['to'], dict), row
-
-    def test_entries_are_sane(self):
-        itr = self.ds.fact_table.entries()
-        tbl = list(itr)
-        assert tbl[0]['time']['year'] == 2010, tbl[0]['time']
+        q = self.ds.fact_table.table.select()
+        resn = self.engine.execute(q).fetchall()
+        assert len(resn) == 6, resn

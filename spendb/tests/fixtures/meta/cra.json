@@ -14,9 +14,10 @@
                 "attributes": {
                     "cap_or_cur": {
                         "column": "cap_or_cur",
-                        "type": "string"
+                        "label": "Label"
                     }
                 },
+                "key_attribute": "cap_or_cur",
                 "description": "Central government, local government or public corporation",
                 "label": "CG, LG or PC"
             },
@@ -24,126 +25,105 @@
                 "attributes": {
                     "change_date": {
                         "column": "cofog1_change_date",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Change date"
                     },
                     "description": {
                         "column": "cofog1_description",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Description"
                     },
                     "label": {
                         "column": "cofog1_label",
-                        "default_value": "(Undefined)",
-                        "type": "string"
-                    },
-                    "level": {
-                        "column": "cofog1_level",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "cofog1_name",
-                        "default_value": "XX",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
+                "key_attribute": "name",
+                "label_attribute": "label",
                 "description": "Classification Of Function Of Government, level 1",
-                "facet": true,
-                "label": "COFOG level 1",
-                "taxonomy": "cofog"
+                "label": "COFOG level 1"
             },
             "cofog2": {
                 "attributes": {
                     "change_date": {
                         "column": "cofog2_change_date",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Change date"
                     },
                     "description": {
                         "column": "cofog2_description",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Description"
                     },
                     "label": {
                         "column": "cofog2_label",
-                        "default_value": "(Undefined)",
-                        "type": "string"
-                    },
-                    "level": {
-                        "column": "cofog2_level",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "cofog2_name",
-                        "default_value": "XX.X",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
+                "key_attribute": "name",
+                "label_attribute": "label",
                 "description": "Classification Of Function Of Government, level 2",
-                "label": "COFOG level 2",
-                "taxonomy": "cofog"
+                "label": "COFOG level 2"
             },
             "cofog3": {
                 "attributes": {
                     "change_date": {
                         "column": "cofog3_change_date",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Date"
                     },
                     "description": {
                         "column": "cofog3_description",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Description"
                     },
                     "label": {
                         "column": "cofog3_label",
-                        "default_value": "(Undefined)",
-                        "type": "string"
+                        "label": "Label"
                     },
                     "level": {
                         "column": "cofog3_level",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Level"
                     },
                     "name": {
                         "column": "cofog3_name",
-                        "default_value": "XX.X.X",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
+                "key_attribute": "name",
+                "label_attribute": "label",
                 "description": "Classification Of Function Of Government, level 3",
-                "label": "COFOG level 3",
-                "taxonomy": "cofog",
-                "type": "classifier"
+                "label": "COFOG level 3"
             },
             "currency": {
                 "attributes": {
                     "currency": {
                         "column": "currency",
-                        "type": "string"
+                        "label": "Currency"
                     }
                 },
-                "description": "",
+                "key_attribute": "currency",
                 "label": "Currency"
             },
             "from": {
                 "attributes": {
                     "description": {
                         "column": "from_description",
-                        "default_value": "",
-                        "type": "string"
+                        "label": "Description"
                     },
                     "label": {
                         "column": "from_label",
-                        "type": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "from_name",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
+                "key_attribute": "name",
+                "label_attribute": "label",
                 "description": "The entity that the money was paid from.",
                 "label": "Paid by"
             },
@@ -151,52 +131,55 @@
                 "attributes": {
                     "name": {
                         "column": "name",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
+                "key_attribute": "name",
                 "label": "Name"
             },
             "pog": {
                 "attributes": {
                     "label": {
                         "column": "pog_label",
-                        "type": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "pog_name",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
-                "label": "Programme Object Group",
-                "taxonomy": "pog"
+                "key_attribute": "name",
+                "label_attribute": "label",
+                "label": "Programme Object Group"
             },
             "population2006": {
                 "attributes": {
                     "population2006": {
                         "column": "population2006",
-                        "type": "number"
+                        "label": "Count"
                     }
                 },
+                "key_attribute": "population2006",
                 "label": "Population in 2006"
             },
             "region": {
                 "attributes": {
                     "region": {
                         "column": "region",
-                        "type": "string"
+                        "label": "Label"
                     }
                 },
-                "description": "",
-                "facet": true,
+                "key_attribute": "region",
                 "label": "Region"
             },
             "time": {
               "attributes": {
                     "year": {
                         "column": "time_from_year",
-                        "type": "string"
+                        "label": "Year"
                     }
                 },
+                "key_attribute": "year",
                 "description": "The accounting period in which the spending happened",
                 "label": "Tax year"
             },
@@ -204,17 +187,19 @@
                 "attributes": {
                     "description": {
                         "column": "to_description",
-                        "type": "string"
+                        "label": "Description"
                     },
                     "label": {
                         "column": "to_label",
-                        "type": "string"
+                        "label": "Label"
                     },
                     "name": {
                         "column": "to_name",
-                        "type": "string"
+                        "label": "Name"
                     }
                 },
+                "key_attribute": "name",
+                "label_attribute": "label",
                 "description": "The entity that the money was paid to",
                 "label": "Paid to"
             }
@@ -222,16 +207,13 @@
         "measures": {
             "amount": {
                 "column": "amount",
-                "description": "",
-                "label": "Amount",
-                "type": "number"
+                "label": "Amount"
             },
             "total": {
                 "column": "amount",
-                "description": "",
-                "label": "Total amount",
-                "type": "number"
+                "label": "Total amount"
             }
         }
+
     }
 }

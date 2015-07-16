@@ -4,33 +4,35 @@
             "attributes": {
                 "entry_id": {
                     "column": "id",
-                    "type": "string"
+                    "label": "string"
                 }
             },
+            "key_attribute": "entry_id",
             "label": "Entry ID"
         },
         "from": {
             "attributes": {
                 "label": {
                     "column": "paid_by",
-                    "type": "string"
+                    "label": "string"
                 },
                 "name": {
                     "column": "paid_by",
-                    "type": "string"
+                    "label": "string"
                 }
             },
+            "key_attribute": "name",
             "description": "Payer",
-            "label": "Payer",
-            "type": "entity"
+            "label": "Payer"
         },
         "spendingarea": {
             "attributes": {
                 "spendingarea": {
                     "column": "spending_area",
-                    "type": "string"
+                    "label": "string"
                 }
             },
+            "key_attribute": "spendingarea",
             "description": "Spending Area",
             "label": "Spending Area"
         },
@@ -38,33 +40,35 @@
             "attributes": {
                 "year": {
                     "column": "date",
-                    "type": "integer"
+                    "label": "Year"
                 }
             },
+            "key_attribute": "year",
             "label": "Time"
         },
         "to": {
             "attributes": {
                 "label": {
                     "column": "paid_to",
-                    "datatype": "string"
+                    "label": "Label"
                 },
                 "name": {
                     "column": "paid_to",
-                    "datatype": "id"
+                    "label": "Name"
                 }
             },
+            "key_attribute": "name",
             "description": "Payee",
-            "label": "Payee",
-            "type": "entity"
+            "label": "Payee"
         },
         "transactionid": {
             "attributes": {
                 "transactionid": {
                     "column": "transaction_id",
-                    "type": "string"
+                    "label": "ID"
                 }
             },
+            "key_attribute": "transactionid",
             "description": "Reference",
             "label": "Reference"
         }
@@ -72,8 +76,6 @@
     "measures": {
         "amount": {
             "column": "amount",
-            "type": "number",
-            "description": "Amount",
             "label": "Amount"
         }
     }
