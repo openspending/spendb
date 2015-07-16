@@ -4,9 +4,10 @@
             "attributes": {
                 "administrative_unit": {
                     "column": "ur",
-                    "type": "string"
+                    "label": "UR"
                 }
             },
+            "key_attribute": "administrative_unit",
             "description": "Administrative unit within an institution entrusted with the execution of a program, subprogram or project and its corresponding budget.",
             "label": "Administrative Unit"
         },
@@ -14,9 +15,10 @@
             "attributes": {
                 "budget_account": {
                     "column": "ramo",
-                    "type": "string"
+                    "label": "RAMO"
                 }
             },
+            "key_attribute": "budget_account",
             "description": "Grouping used to identify and classify federal government spending according to the administrative departments of the Executive power, the Legislative and Judicial powers, or other general classification.",
             "label": "Budget Account"
         },
@@ -24,9 +26,10 @@
             "attributes": {
                 "budget_programme": {
                     "column": "pp",
-                    "type": "string"
+                    "label": "PP"
                 }
             },
+            "key_attribute": "budget_programme",
             "description": "Category that lets you organize budget allocations of federal programs and federalized spending by the executors of federal spending to achieve its objectives and goals, as well as non-programmable expenditure.",
             "label": "Budget Programme"
         },
@@ -34,9 +37,10 @@
             "attributes": {
                 "budget_programme_group": {
                     "column": "gpp",
-                    "type": "string"
+                    "label": "GPP"
                 }
             },
+            "key_attribute": "budget_programme_group",
             "description": "Identifier that classifies the budget programs according to the types and modalities.",
             "label": "Budget Programme Group"
         },
@@ -44,9 +48,10 @@
             "attributes": {
                 "budget_programme_identifier": {
                     "column": "ipp",
-                    "type": "string"
+                    "label": "IPP"
                 }
             },
+            "key_attribute": "budget_programme_identifier",
             "description": "Identifier that classifies the budget programs according to the types and modalities with a greater desagregation.",
             "label": "Budget Programme Identifier"
         },
@@ -54,9 +59,10 @@
             "attributes": {
                 "budget_programme_type": {
                     "column": "tpp",
-                    "type": "string"
+                    "label": "TPP"
                 }
             },
+            "key_attribute": "budget_programme_type",
             "description": "Classifier which groups budgetary programs by: federal expenditure, federalized expenditure and non-programme related spending.",
             "label": "Budget Programme Type"
         },
@@ -64,9 +70,10 @@
             "attributes": {
                 "entry_id": {
                     "column": "id",
-                    "type": "string"
+                    "label": "ID"
                 }
             },
+            "key_attribute": "entry_id",
             "description": "",
             "label": "Transaction ID"
         },
@@ -74,9 +81,10 @@
             "attributes": {
                 "expenditure_object": {
                     "column": "og",
-                    "type": "string"
+                    "label": "OG"
                 }
             },
+            "key_attribute": "expenditure_object",
             "description": "Inputs by way of human, material and financial resources (goods and services) that the agencies use to carry out regular operations and the resources the Federal Government transfers to private and social sectors.",
             "label": "Expenditure Object"
         },
@@ -84,9 +92,10 @@
             "attributes": {
                 "expenditure_type": {
                     "column": "tg",
-                    "type": "string"
+                    "label": "TG"
                 }
             },
+            "key_attribute": "expenditure_type",
             "description": "Budget allocation according to their nature, current or capital expenditures, and investments.",
             "label": "Expenditure Type"
         },
@@ -94,9 +103,10 @@
             "attributes": {
                 "financial_source": {
                     "column": "ff",
-                    "type": "string"
+                    "label": "FF"
                 }
             },
+            "key_attribute": "financial_source",
             "description": "Allocations identified by source of their funding: tax revenue, expenditure financed by the IDB-IBRD and other external funding, national counterpart, and own revenues.",
             "label": "Financial Source"
         },
@@ -104,25 +114,25 @@
             "attributes": {
                 "label": {
                     "column": "from",
-                    "default_value": "Government",
-                    "type": "string"
+                    "label": "Label"
                 },
                 "name": {
                     "column": "from",
-                    "default_value": "Government",
-                    "type": "string"
+                    "label": "Name"
                 }
             },
+            "key_attribute": "name",
             "description": "Notional spender",
             "label": "Spender"
         },
         "function": {
             "attributes": {
                 "function": {
-                    "column": "f",
-                    "type": "string"
+                    "column": "func",
+                    "label": "Function"
                 }
             },
+            "key_attribute": "function",
             "description": "Identifies the actions that responsible carry out to fulfill the task imposed upon them by legal regulations.,\n",
             "label": "Function"
         },
@@ -130,9 +140,10 @@
             "attributes": {
                 "functional_group": {
                     "column": "gf",
-                    "type": "string"
+                    "label": "GF"
                 }
             },
+            "key_attribute": "functional_group",
             "description": "Identifies the activities of the State to achieve its goals, in accordance with the Constitution of the United Mexican States and its laws and regulations. There are three major functional groups of programmable expenditure: Government, Social Development and Economic Development. In addition, Other includes the group of non-programmable expenditure.",
             "label": "Functional Group"
         },
@@ -140,9 +151,10 @@
             "attributes": {
                 "institutional_activity": {
                     "column": "ai",
-                    "type": "string"
+                    "label": "AI"
                 }
             },
+            "key_attribute": "institutional_activity",
             "description": "Set actions that the agencies perform or suppor, through the responsible units, in order to fulfill the objectives and goals contained in the programs, in accordance with their responsibilities.",
             "label": "Institutional Activity"
         },
@@ -150,9 +162,10 @@
             "attributes": {
                 "subfunction": {
                     "column": "sf",
-                    "type": "string"
+                    "label": "SF"
                 }
             },
+            "key_attribute": "subfunction",
             "description": "Breakdown of the function that identifies more accurately the activities of the agencies.",
             "label": "Subfunction"
         },
@@ -160,9 +173,10 @@
             "attributes": {
                 "year": {
                     "column": "date",
-                    "type": "integer"
+                    "label": "integer"
                 }
             },
+            "key_attribute": "year",
             "description": "Notional year",
             "label": "Year"
         },
@@ -171,14 +185,15 @@
                 "label": {
                     "column": "to",
                     "default_value": "Society",
-                    "type": "string"
+                    "label": "string"
                 },
                 "name": {
                     "column": "to",
                     "default_value": "Society",
-                    "type": "id"
+                    "label": "id"
                 }
             },
+            "key_attribute": "name",
             "description": "Notional recipient",
             "label": "Recipient"
         }
@@ -188,7 +203,7 @@
             "column": "importe_pef",
             "description": "Amount approved in the budget.",
             "label": "Amount",
-            "type": "number"
+            "label": "number"
         }
     }
 }
