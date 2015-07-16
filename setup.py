@@ -40,7 +40,7 @@ setup(
     description='SpenDB',
     author='Friedrich Lindenberg (formerly OKFN)',
     author_email='friedrich@pudo.org',
-    url='http://github.com/pudo/spendb',
+    url='http://github.com/spendb/spendb',
     install_requires=[],
     setup_requires=[],
     packages=filter(package_filter, find_packages()),
