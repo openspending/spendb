@@ -30,7 +30,7 @@ module.exports = function(config) {
       'spendb.ui/vendor/ng-file-upload/ng-file-upload-shim.js',
       'spendb.ui/vendor/ng-file-upload/ng-file-upload.js',
       'spendb.ui/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'spendb.ui/vendor/angular-cubes/build/angular-cubes.js',
+      'spendb.ui/vendor/angular-cubes/dist/angular-cubes.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'spendb.ui/tests/js/helper.js',
       'spendb.ui/js/app.js',
