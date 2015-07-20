@@ -1,9 +1,11 @@
 from cubes.server import slicer
 from colander import Invalid
+from jsonschema import ValidationError
 
 from spendb.views.context import home, get_locale
 from spendb.views.error import NotModified, handle_not_modified
 from spendb.views.error import handle_error, handle_invalid
+from spendb.views.error import handle_validation_error
 from spendb.views.api.dataset import blueprint as datasets_api
 from spendb.views.api.meta import blueprint as meta_api
 from spendb.views.api.session import blueprint as session_api
@@ -36,6 +38,7 @@ def register_views(app, babel):
 
     custom = (
         (Invalid, handle_invalid),
+        (ValidationError, handle_validation_error),
         (NotModified, handle_not_modified)
     )
     app.error_handler_spec[None][None] = custom

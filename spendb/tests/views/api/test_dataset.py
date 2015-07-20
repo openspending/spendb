@@ -215,7 +215,7 @@ class TestDatasetApiController(ControllerTestCase):
                                headers={'content-type': 'application/json'},
                                query_string={'api_key': self.user.api_key})
         assert '400' in res.status, res.status
-        assert 'cofog3.attributes' in res.data, res.data
+        assert "attributes' is a required" in res.data, res.data
 
     def test_update_model_invalid_json(self):
         url = url_for('datasets_api.update_model', name='cra')

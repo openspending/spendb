@@ -37,5 +37,13 @@ def handle_invalid(exc):
     return jsonify(data, status=400)
 
 
+def handle_validation_error(exc):
+    return jsonify({
+        'status': 400,
+        'message': exc.message,
+        'value': exc.instance
+    }, status=400)
+
+
 def handle_not_modified(exc):
     return Response(status=304)

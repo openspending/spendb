@@ -62,13 +62,12 @@ class Dataset(db.Model):
 
     @property
     def has_model(self):
-        return 'measures' in self.model_data \
+        return self.model_data is not None \
+            and 'measures' in self.model_data \
             and 'dimensions' in self.model_data
 
     def update_model(self, model):
-        model['fact_table'] = self.fact_table.table_name
-        model = Model(model)
-        self.data['model'] = model.to_dict()
+        self.data['model'] = model or {}
         self._load_model()
 
         # TODO find a better place for this.

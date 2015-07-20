@@ -27,6 +27,8 @@ def validation_fixture(name):
     model_fp = fixture_file('validation/' + name + '.json')
     model = json.load(model_fp)
     model_fp.close()
+    if 'fact_table' not in model['model']:
+        model['model']['fact_table'] = 'table'
     return model
 
 

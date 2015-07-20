@@ -21,64 +21,64 @@
                 "attributes": {
                     "description": {
                         "column": "FUNCTION_DESC",
-                        "datatype": "string"
+                        "label": "string"
                     },
                     "label": {
                         "column": "FUNCTION",
-                        "datatype": "string"
+                        "label": "string"
                     },
                     "name": {
                         "column": "FUNCTION_ID",
-                        "datatype": "string"
+                        "label": "string"
                     }
                 },
                 "label": "Function",
-                "type": "compound"
+                "key_attribute": "name"
             },
             "supplier": {
                 "attributes": {
                     "label": {
                         "column": "SUPPLIER",
-                        "datatype": "string"
+                        "label": "string"
                     },
                     "name": {
                         "column": "SUPPLIER_ID",
-                        "datatype": "string"
+                        "label": "string"
                     }
                 },
                 "label": "Supplier",
-                "type": "compound"
+                "key_attribute": "name"
             },
             "time": {
                 "attributes": {
                     "year": {
                         "column": "time_from_year",
-                        "type": "string"
+                        "label": "string"
                     }
                 },
                 "description": "The accounting period in which the spending happened",
-                "label": "Tax year"
+                "label": "Tax year",
+                "key_attribute": "year"
             },
             "transaction_id": {
                 "attributes": {
                     "transaction_id": {
                         "column": "tx",
-                        "type": "string"
+                        "label": "string"
                     }
                 },
-                "label": "Transaction ID"
+                "label": "Transaction ID",
+                "key_attribute": "transaction_id"
             }
         },
         "measures": {
             "amount": {
                 "column": "AMOUNT",
-                "type": "number",
                 "label": "Amount"
             },
             "cofinance": {
                 "column": "cofin",
-                "label": "Co-Financed Amount",
-                "type": "number"
+                "label": "Co-Financed Amount"
             }
         }
     }
