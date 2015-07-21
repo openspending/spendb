@@ -1,7 +1,9 @@
 from cubes.server import slicer
 from colander import Invalid
 from jsonschema import ValidationError
+from babbage import api as babbage_api
 
+from spendb.model.manager import SpendingCubeManager
 from spendb.views.context import home, get_locale
 from spendb.views.error import NotModified, handle_not_modified
 from spendb.views.error import handle_error, handle_invalid
@@ -23,6 +25,10 @@ def register_views(app, babel):
     app.register_blueprint(source_api, url_prefix='/api/3')
     app.register_blueprint(datasets_api, url_prefix='/api/3')
     app.register_blueprint(account_api, url_prefix='/api/3')
+
+    # expose ``babbage``:
+    babbage_api.configure_api(app, SpendingCubeManager())
+    app.register_blueprint(babbage_api.blueprint, url_prefix='/api/babbage')
 
     # expose ``cubes``:
     app.register_blueprint(slicer, url_prefix='/api/slicer', config={})
