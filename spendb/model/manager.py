@@ -1,6 +1,5 @@
 from babbage.manager import CubeManager
 
-from spendb.core import db
 from spendb.model.dataset import Dataset
 
 
@@ -16,14 +15,11 @@ class SpendingCubeManager(CubeManager):
             return False
         return dataset.model is not None
 
-    def get_cube_model(self, name):
+    def get_cube(self, name):
         dataset = Dataset.by_name(name)
         if dataset is None or dataset.model is None:
             return None
-        return dataset.model.to_dict()
-
-    def get_engine(self):
-        return db.engine
+        return dataset.cube
 
     def list_cubes(self):
         # TODO: authz, failing conservatively for now.

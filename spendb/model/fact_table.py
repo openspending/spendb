@@ -73,7 +73,9 @@ class FactTable(object):
         tx = conn.begin()
         try:
             for i, record in enumerate(iterable):
-                chunk.append(self._expand_record(i, record))
+                record['_id'] = i
+                record['_json'] = json.dumps(record, default=json_default)
+                chunk.append(record)
                 if len(chunk) >= chunk_size:
                     stmt = self.table.insert()
                     conn.execute(stmt, chunk)
@@ -86,13 +88,6 @@ class FactTable(object):
         except:
             tx.rollback()
             raise
-
-    def _expand_record(self, i, record):
-        """ Transform an incoming record into a form that matches the
-        fields schema. """
-        record['_id'] = i
-        record['_json'] = json.dumps(record, default=json_default)
-        return record
 
     def create(self):
         """ Create the fact table if it does not exist. """

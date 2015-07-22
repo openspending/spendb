@@ -87,8 +87,10 @@ class Dataset(db.Model):
 
     @property
     def cube(self):
+        """ Babbage query cube for the given dataset. """
         if self.model is not None:
-            return Cube(db.engine, self.name, self.model)
+            return Cube(db.engine, self.name, self.model,
+                        fact_table=self.fact_table.table)
 
     @property
     def fields(self):
