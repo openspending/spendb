@@ -195,7 +195,7 @@ class TestDatasetApiController(ControllerTestCase):
 
     def test_update_model(self):
         url = url_for('datasets_api.update_model', name='cra')
-        data = self.cra.model_data.copy()
+        data = self.cra.model.to_dict()
         del data['dimensions']['cofog3']
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},
@@ -209,7 +209,7 @@ class TestDatasetApiController(ControllerTestCase):
 
     def test_update_model_invalid(self):
         url = url_for('datasets_api.update_model', name='cra')
-        data = self.cra.model_data.copy()
+        data = self.cra.model.to_dict()
         del data['dimensions']['cofog3']['attributes']
         res = self.client.post(url, data=json.dumps(data),
                                headers={'content-type': 'application/json'},

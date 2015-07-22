@@ -5,6 +5,7 @@ from sqlalchemy.types import Integer, Unicode, Boolean, DateTime
 from sqlalchemy.sql.expression import or_
 from sqlalchemy.ext.associationproxy import association_proxy
 from babbage.model import Model
+from babbage.cube import Cube
 
 from spendb.core import db, url_for
 from spendb.model.fact_table import FactTable
@@ -39,7 +40,12 @@ class Dataset(db.Model):
         del self.data['dataset']
         self.name = dataset.get('name')
         self.update(dataset)
-        self._load_model()
+        self._load()
+
+    @reconstructor
+    def _load(self):
+        self.fact_table = FactTable(self)
+        self._model = None
 
     def update(self, dataset):
         self.label = dataset.get('label')
@@ -57,23 +63,32 @@ class Dataset(db.Model):
             self.territories = dataset.get('territories', [])
 
     @property
-    def model_data(self):
-        return self.data.get('model', {})
+    def model(self):
+        if self._model is None:
+            if not self.fact_table.exists:
+                return
+            data = self.data.get('model')
+            if not isinstance(data, dict):
+                return
+            data['fact_table'] = self.fact_table.table_name
+            model = Model(data)
+            if not model.exists:
+                return
+            self._model = model
+        return self._model
+
+    @model.setter
+    def model(self, model):
+        self.data['model'] = model
+        self._model = None
+        if self.model is not None:
+            self.cube.compute_cardinalities()
+        self.touch()
 
     @property
-    def has_model(self):
-        return self.model_data is not None \
-            and 'measures' in self.model_data \
-            and 'dimensions' in self.model_data
-
-    def update_model(self, model):
-        self.data['model'] = model or {}
-        self._load_model()
-
-        # TODO find a better place for this.
-        # for dimension in self.model.dimensions:
-        #     dimension.data['cardinality'] = \
-        #         self.fact_table.num_members(dimension)
+    def cube(self):
+        if self.model is not None:
+            return Cube(db.engine, self.name, self.model)
 
     @property
     def fields(self):
@@ -82,16 +97,6 @@ class Dataset(db.Model):
     @fields.setter
     def fields(self, value):
         self.data['fields'] = value
-
-    @reconstructor
-    def _load_model(self):
-        self.fact_table = FactTable(self)
-        if not self.has_model:
-            self.model = None
-        else:
-            model_data = self.model_data
-            model_data['fact_table'] = self.fact_table.table_name
-            self.model = Model(self.model_data)
 
     def touch(self):
         """ Update the dataset timestamp. This is used for cache
@@ -114,7 +119,7 @@ class Dataset(db.Model):
             'updated_at': self.updated_at,
             'languages': list(self.languages),
             'territories': list(self.territories),
-            'has_model': self.has_model,
+            'has_model': self.model is not None,
             'api_url': url_for('datasets_api.view', name=self.name)
         }
 

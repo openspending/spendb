@@ -21,7 +21,7 @@ class SpendingModelProvider(ModelProvider):
         dataset = Dataset.by_name(name)
         if dataset is None:
             return False
-        return dataset.has_model
+        return dataset.model is not None
 
     def cube(self, name, locale=None, namespace=None):
         dataset = Dataset.by_name(name)
@@ -57,24 +57,14 @@ class SpendingModelProvider(ModelProvider):
             if len(attributes) == 1:
                 mappings[dimension.name] = last_col
 
-            # Translate into cubes' categories
-            cardinality = 'high'
-            if dimension.cardinality:
-                if dimension.cardinality < 6:
-                    cardinality = 'tiny'
-                elif dimension.cardinality < 51:
-                    cardinality = 'low'
-                elif dimension.cardinality < 1001:
-                    cardinality = 'medium'
-
             meta = {
                 'label': dimension.label,
                 'name': dimension.name,
-                'cardinality': cardinality,
+                'cardinality': dimension.cardinality_class,
                 'levels': [{
                     'name': dimension.name,
                     'label': dimension.label,
-                    'cardinality': cardinality,
+                    'cardinality': dimension.cardinality_class,
                     'attributes': attributes
                 }]
             }
@@ -106,7 +96,7 @@ class SpendingModelProvider(ModelProvider):
     def list_cubes(self):
         cubes = []
         for dataset in Dataset.all_by_account(None):
-            if not dataset.has_model:
+            if dataset.model is None:
                 continue
             cubes.append({
                 'name': dataset.name,

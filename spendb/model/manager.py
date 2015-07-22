@@ -14,15 +14,13 @@ class SpendingCubeManager(CubeManager):
         dataset = Dataset.by_name(name)
         if dataset is None:
             return False
-        return dataset.has_model
+        return dataset.model is not None
 
     def get_cube_model(self, name):
         dataset = Dataset.by_name(name)
-        if dataset is None or not dataset.has_model:
+        if dataset is None or dataset.model is None:
             return None
-        model_data = dataset.model_data
-        model_data['fact_table'] = dataset.fact_table.table_name
-        return model_data
+        return dataset.model.to_dict()
 
     def get_engine(self):
         return db.engine
@@ -30,5 +28,5 @@ class SpendingCubeManager(CubeManager):
     def list_cubes(self):
         # TODO: authz, failing conservatively for now.
         for dataset in Dataset.all_by_account(None):
-            if dataset.has_model:
+            if dataset.model is not None:
                 yield dataset.name
