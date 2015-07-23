@@ -116,7 +116,8 @@ def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
     data = request_data()
-    data['fact_table'] = dataset.fact_table.table_name
+    if isinstance(data, dict):
+        data['fact_table'] = dataset.fact_table.table_name
     dataset.model = validate_model(data)
     db.session.commit()
     return model(name)
