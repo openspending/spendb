@@ -10,7 +10,6 @@ from flask.ext.assets import Environment
 from flask.ext.migrate import Migrate
 from flask.ext.cors import CORS
 from flask_flatpages import FlatPages
-import formencode_jinja2
 from celery import Celery
 from cubes import Workspace, ext
 
@@ -43,11 +42,6 @@ def create_app(**config):
     app.config.from_object(default_settings)
     app.config.from_envvar('SPENDB_SETTINGS', silent=True)
     app.config.update(config)
-
-    app.jinja_options['extensions'].extend([
-        formencode_jinja2.formfill,
-        'jinja2.ext.i18n'
-    ])
 
     db.init_app(app)
     babel.init_app(app)
