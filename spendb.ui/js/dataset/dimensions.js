@@ -47,7 +47,7 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
       dim.key_attribute = dim.key_attribute.name;
       dimensions[dim.name] = dim;
     }
-    var model = angular.copy(data.model);
+    var model = angular.copy(data.model) || {};
     model.dimensions = dimensions;
     return model;
   };
@@ -241,6 +241,6 @@ spendb.controller('DatasetDimensionsCtrl', ['$scope', '$modal', '$http', '$locat
     });
   };
 
-  load(data.model);
+  load(data.model || {});
 
 }]);

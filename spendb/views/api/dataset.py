@@ -108,14 +108,16 @@ def structure(name):
 def model(name):
     dataset = get_dataset(name)
     etag_cache_keygen(dataset, private=dataset.private)
-    return jsonify(dataset.model)
+    return jsonify(dataset.model or {})
 
 
 @blueprint.route('/datasets/<name>/model', methods=['POST', 'PUT'])
 def update_model(name):
     dataset = get_dataset(name)
     require.dataset.update(dataset)
-    dataset.model = validate_model(request_data())
+    data = request_data()
+    data['fact_table'] = dataset.fact_table.table_name
+    dataset.model = validate_model(data)
     db.session.commit()
     return model(name)
 

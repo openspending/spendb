@@ -48,7 +48,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
         }
       }
     }
-    var model = angular.copy(data.model);
+    var model = angular.copy(data.model) || {};
     model.dimensions = model.dimensions || {};
     model.measures = measures;
     return model;
@@ -123,6 +123,7 @@ spendb.controller('DatasetMeasuresCtrl', ['$scope', '$rootScope', '$http', '$loc
 
   $scope.save = function() {
     var model = unload();
+    console.log("Saving", model);
     $scope.errors = {};
     $http.post(dataset.api_url + '/model', model).then(function(res) {
       if ($scope.wizard) {
