@@ -1,7 +1,7 @@
 angular.module('spendb.config', []).constant('config', SPENDB_CONFIG);
 
 var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'angular.filter', 'duScroll',
-                                       'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'ui.select', 'ngCubes']);
+                                       'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'ui.select', 'ngBabbage']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',
@@ -203,4 +203,3 @@ spendb.controller('DocsCtrl', ['$scope', '$sce', 'page', function($scope, $sce, 
   $scope.page = page;
   $scope.page_html = $sce.trustAsHtml('' + page.html);
 }]);
-

@@ -7031,59 +7031,59 @@ body > .ui-select-bootstrap.open {
 .ng-icon:hover {
   text-decoration: none !important;
 }
-.table-cubes {
+.table-babbage {
   overflow-x: scroll;
   min-height: 25em;
 }
-.table-cubes::-webkit-scrollbar {
+.table-babbage::-webkit-scrollbar {
   -webkit-appearance: none;
 }
-.table-cubes::-webkit-scrollbar:horizontal {
+.table-babbage::-webkit-scrollbar:horizontal {
   height: 11px;
 }
-.table-cubes::-webkit-scrollbar-thumb {
+.table-babbage::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.table-cubes::-webkit-scrollbar-track {
+.table-babbage::-webkit-scrollbar-track {
   background-color: #fff;
   border-radius: 8px;
 }
-.table-cubes .table {
+.table-babbage .table {
   table-layout: fixed;
   width: inherit;
   min-width: 100%;
   border-collapse: collapse;
   margin-bottom: 0;
 }
-.table-cubes .table td,
-.table-cubes .table th {
+.table-babbage .table td,
+.table-babbage .table th {
   min-width: 13em;
   max-width: 25em;
   overflow: hidden;
   white-space: nowrap;
 }
-.table-cubes .table th {
+.table-babbage .table th {
   border-bottom: 1px solid #dddddd;
   background-color: #f5f5f5;
 }
-.table-cubes .table th.title {
+.table-babbage .table th.title {
   border-right: 0px;
 }
-.table-cubes .table th.operations {
+.table-babbage .table th.operations {
   width: 1px;
   min-width: 1em;
   border-left: 0px;
   text-align: right;
 }
-.table-cubes .table td.simple {
+.table-babbage .table td.simple {
   border-bottom: 0;
   border-top: 0;
 }
-.table-cubes .table td.numeric {
+.table-babbage .table td.numeric {
   text-align: right;
 }
-.table-cubes .table th .sublabel {
+.table-babbage .table th .sublabel {
   font-weight: normal;
 }
 .table.table-panel td.middle {
@@ -7109,11 +7109,11 @@ body > .ui-select-bootstrap.open {
   box-shadow: none;
 }
 /* Tree maps */
-.treemap-cubes {
+.treemap-babbage {
   min-height: 500px;
   overflow: hidden;
 }
-.treemap-cubes .node {
+.treemap-babbage .node {
   display: block;
   border: 0;
   color: #fff;
@@ -7128,30 +7128,30 @@ body > .ui-select-bootstrap.open {
   font-weight: 300;
   text-shadow: -2px -2px 13px rgba(150, 150, 150, 0.9);
 }
-.treemap-cubes .amount {
+.treemap-babbage .amount {
   display: block;
   padding-bottom: 0.2em;
   font-size: 1.5em;
 }
-.treemap-cubes .node:hover {
+.treemap-babbage .node:hover {
   text-decoration: none;
 }
-.sankey-cubes .node rect {
+.sankey-babbage .node rect {
   shape-rendering: crispEdges;
   stroke-width: 2px;
   stroke: #fff;
 }
-.sankey-cubes .node text {
+.sankey-babbage .node text {
   pointer-events: none;
   text-shadow: 0 1px 0 #fff;
   font-family: inherit;
 }
-.sankey-cubes .link {
+.sankey-babbage .link {
   fill: none;
   stroke: #000;
   stroke-opacity: .1;
 }
-.sankey-cubes .link:hover {
+.sankey-babbage .link:hover {
   stroke-opacity: .5;
 }
 #catapult-cookie-bar {
