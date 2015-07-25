@@ -1,1 +1,0 @@
-git+https://github.com/miracle2k/webassets@efd904515aa21f165a6d36929fe1ca5684ccba31

@@ -1,3 +1,0 @@
-include LICENSE requirements.txt README.md
-recursive-include spendb/reference/data *
-global-exclude *.pyc

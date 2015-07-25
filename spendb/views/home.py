@@ -34,8 +34,6 @@ def index(*a, **kw):
         'reserved_terms': RESERVED_TERMS,
         'templates': angular_templates(current_app),
         'site_url': url_for('home.index').rstrip('/'),
-        'number_symbols_group': locale.number_symbols.get('group'),
-        'number_symbols_decimal': locale.number_symbols.get('decimal'),
         'site_title': current_app.config.get('SITE_TITLE')
     }
     return render_template('layout.html', **data)

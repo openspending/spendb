@@ -101,22 +101,16 @@ def complete(format='json'):
 def do_reset():
     email = request.args.get('email')
     if email is None or not len(email):
-        # flash_error(_("The reset link is invalid!"))
         return redirect('/login')
 
     account = Account.by_email(email)
     if account is None:
-        # flash_error(_("No user is registered under this address!"))
         return redirect('/login')
 
     if request.args.get('token') != account.token:
-        # flash_error(_("The reset link is invalid!"))
         return redirect('/login')
 
     login_user(account)
-    # flash_success(
-    #     _("Thanks! You have now been signed in - please change "
-    #       "your password!"))
     return redirect('/settings')
 
 
