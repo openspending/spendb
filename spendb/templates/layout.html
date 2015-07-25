@@ -13,7 +13,7 @@
 
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{ asset_path }}/style.css?v={{version}}" rel="stylesheet" />
+    <link href="{{ asset_path }}/style.css" rel="stylesheet" />
   </head>
   <body ng-controller="AppCtrl">
     <div id="spinner-overlay" ng-show="showSpinner">
@@ -78,12 +78,12 @@
       SPENDB_CONFIG.reserved_terms = {{ reserved_terms | tojson }};
     </script>
 
-    <script src="{{ asset_path }}/vendor.js?v={{version}}"></script>
+    <script src="{{ asset_path }}/vendor.js"></script>
     {% if debug %}
-      <script src="{{ asset_path }}/templates.js?v={{version}}"></script>
-      <script src="{{ asset_path }}/app.js?v={{version}}"></script>
+      <script src="{{ asset_path }}/templates.js"></script>
+      <script src="{{ asset_path }}/app.js"></script>
     {% else %}
-      <script src="{{ asset_path }}/app.min.js?v={{version}}"></script>
+      <script src="{{ asset_path }}/app.min.js"></script>
     {% endif %}
     <!-- end script boot section -->
   </body>
