@@ -12,22 +12,18 @@ RUN echo 'deb http://ftp.de.debian.org/debian wheezy-backports main' >> /etc/apt
   && rm -rf /var/lib/apt/lists/*
 
 RUN curl -L https://www.npmjs.org/install.sh | sh
-RUN npm install -g bower less
-
-RUN pip install psycopg2
+RUN npm install -g bower
 
 RUN mkdir spendb
 WORKDIR spendb
 
 ADD requirements.txt requirements.txt
 ADD setup.py setup.py
-ADD bower.json bower.json
-
-RUN bower install --allow-root
 
 ADD . /spendb
+
 ADD prod_settings.py settings.py
-ENV SPENDB_SETTINGS=/spendb/settings.py
+ENV SPENDB_SETTINGS /spendb/settings.py
 RUN pip install -r requirements.txt -e /spendb
 
 EXPOSE 8000
