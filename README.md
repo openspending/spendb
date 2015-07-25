@@ -12,9 +12,10 @@ SpenDB is a project to make government finances easier to explore and understand
 	* [Developer installation](https://github.com/pudo/spendb/wiki/Developer-installation).
 * Please report any [issues and feature ideas](https://github.com/pudo/spendb/issues) or browse the issue tracker for tickets to start contributing.
 * Related codebases:
-	* [fiscalmodel](https://github.com/pudo/fiscalmodel), metadata used for budget dataset classification in spendb.
-	* [angular-cubes](https://github.com/pudo/angular-cubes), front-end data analysis and visualisation library.
-	* [cubes](https://github.com/DataBrewery/cubes), data analysis API used by spendb
+	* [fiscalmodel](https://github.com/spendb/fiscalmodel), metadata used for budget dataset classification in spendb.
+	* [babbage.ui](https://github.com/spendb/babbage.ui), front-end data analysis and visualisation library.
+	* [babbage](https://github.com/spendb/babbage), data analysis API and analytical domain model.
+	* [cubes](https://github.com/DataBrewery/cubes), data analysis API (deprecated)
 
 
 ## Licensing

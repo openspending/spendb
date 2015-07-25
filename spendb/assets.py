@@ -25,8 +25,6 @@ assets.register('css_main', css_main)
 js_vendor = Bundle('vendor/moment/moment.js',
                    'vendor/d3/d3.js',
                    'vendor/d3-plugins/sankey/sankey.js',
-                   'vendor/vega-lite/lib/vega.min.js',
-                   'vendor/vega-lite/vega-lite.js',
                    'vendor/angular/angular.js',
                    'vendor/angular-route/angular-route.js',
                    'vendor/angular-moment/angular-moment.js',
