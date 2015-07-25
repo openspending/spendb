@@ -20,4 +20,4 @@ warnings.filterwarnings(
     'Unicode type received non-unicodebind param value.')
 
 
-__version__ = '0.18'
+__version__ = '0.19'

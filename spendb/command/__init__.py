@@ -1,12 +1,10 @@
 ''' Interface to common administrative tasks for SpenDB. '''
 import logging
 from flask.ext.script import Manager
-from flask.ext.assets import ManageAssets
 from flask.ext.migrate import MigrateCommand
 
 from spendb.core import create_web_app
 from spendb.tasks import load_from_url
-from spendb.assets import assets
 from spendb.command import db
 from spendb.command.importer import get_or_create_dataset, get_model
 
@@ -16,7 +14,6 @@ manager = Manager(app, description=__doc__)
 
 manager.add_command('db', db.manager)
 manager.add_command('alembic', MigrateCommand)
-manager.add_command('assets', ManageAssets(assets))
 
 
 @manager.command

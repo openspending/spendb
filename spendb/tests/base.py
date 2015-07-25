@@ -14,8 +14,6 @@ class TestCase(FlaskTestCase):
             'DEBUG': True,
             'TESTING': True,
             'SITE_TITLE': 'SpenDB',
-            'ASSETS_AUTO_BUILD': False,
-            'ASSETS_DEBUG': False,
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
             'PRESERVE_CONTEXT_ON_EXCEPTION': False,
             'CELERY_ALWAYS_EAGER': True

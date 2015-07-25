@@ -13,9 +13,7 @@
 
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    {% assets "css_main" %}
-      <link href="{{ ASSET_URL }}" rel="stylesheet" />
-    {% endassets %}
+    <link href="{{ asset_path }}/style.css?v={{version}}" rel="stylesheet" />
   </head>
   <body ng-controller="AppCtrl">
     <div id="spinner-overlay" ng-show="showSpinner">
@@ -80,17 +78,13 @@
       SPENDB_CONFIG.reserved_terms = {{ reserved_terms | tojson }};
     </script>
 
-    {% assets "js_vendor" %}
-      <script src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
-    {% assets "js_app" %}
-      <script src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+    <script src="{{ asset_path }}/vendor.js?v={{version}}"></script>
+    {% if debug %}
+      <script src="{{ asset_path }}/templates.js?v={{version}}"></script>
+      <script src="{{ asset_path }}/app.js?v={{version}}"></script>
+    {% else %}
+      <script src="{{ asset_path }}/app.min.js?v={{version}}"></script>
+    {% endif %}
     <!-- end script boot section -->
-
-    {% for path, tmpl in templates %}
-      <script id="{{path}}" type="text/ng-template">{{ tmpl | safe }}</script>
-    {% endfor %}
   </body>
 </html>

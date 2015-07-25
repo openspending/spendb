@@ -7,9 +7,8 @@ from flask.ext.babel import gettext
 from apikit import jsonify
 
 from spendb.core import db, url_for
-from spendb import auth
+from spendb import auth, __version__
 from spendb.model import Dataset
-from spendb.assets import angular_templates
 from spendb.validation.common import RESERVED_TERMS
 
 
@@ -28,11 +27,16 @@ def index(*a, **kw):
     from spendb.views.context import etag_cache_keygen
     etag_cache_keygen(RESERVED_TERMS)
     locale = get_locale()
+    config = current_app.config
+    asset_path = config['ASSETS_PATH_DEBUG'] if config['DEBUG'] \
+        else config['ASSETS_PATH_PROD']
     data = {
         'current_language': locale.language,
         'url_for': url_for,
+        'version': __version__,
+        'debug': config['DEBUG'],
+        'asset_path': asset_path,
         'reserved_terms': RESERVED_TERMS,
-        'templates': angular_templates(current_app),
         'site_url': url_for('home.index').rstrip('/'),
         'site_title': current_app.config.get('SITE_TITLE')
     }

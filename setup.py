@@ -48,8 +48,7 @@ setup(
     package_data={
         'spendb': (
             files_in_pkgdir('spendb', 'static') +
-            files_in_pkgdir('spendb', 'templates') +
-            files_in_pkgdir('spendb', 'reference/data')
+            files_in_pkgdir('spendb', 'templates')
         )
     },
     test_suite='nose.collector',
@@ -68,7 +67,6 @@ setup(
     message_extractors={
         'spendb': [('**.py', 'python', None),
                    ('templates/**.html', 'jinja2', None),
-                   ('static/**', 'ignore', None),
-                   ]
+                   ('static/**', 'ignore', None)]
     },
 )

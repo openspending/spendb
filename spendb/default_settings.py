@@ -5,6 +5,9 @@ DEBUG = True
 
 SITE_TITLE = 'SpenDB'
 
+ASSETS_PATH_PROD = 'https://dfmbkaoi4kurm.cloudfront.net/libs/spendb.ui/latest/build'
+ASSETS_PATH_DEBUG = '/static/spendb.ui/build'
+
 SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/spendb'
 
 BABEL_DEFAULT_LOCALE = 'en'

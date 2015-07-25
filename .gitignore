@@ -10,13 +10,9 @@
 *.DS_Store
 /db
 .*.swp
-spendb/templates/help/*
 doc/_build/*
-spendb/static/.webassets-cache/*
-spendb.ui/.webassets-cache/*
-# spendb/static/prod/*
-spendb/static/vendor/*
-spendb.ui/vendor/*
+spendb/static/spendb.ui
+spendb/static/spendb.ui/*
 contrib/os_export/exports/*
 *~
 .tx/config

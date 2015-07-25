@@ -6,7 +6,6 @@ from flask.ext.login import LoginManager
 from flask.ext.babel import Babel
 from flask.ext.cache import Cache
 from flask.ext.mail import Mail
-from flask.ext.assets import Environment
 from flask.ext.migrate import Migrate
 from flask.ext.cors import CORS
 from flask_flatpages import FlatPages
@@ -30,7 +29,6 @@ babel = Babel()
 login_manager = LoginManager()
 cache = Cache()
 mail = Mail()
-assets = Environment()
 migrate = Migrate()
 pages = FlatPages()
 data_manager = DataManager()
@@ -38,7 +36,7 @@ cors = CORS()
 
 
 def create_app(**config):
-    app = Flask(__name__, static_folder='../spendb.ui')
+    app = Flask(__name__)
     app.config.from_object(default_settings)
     app.config.from_envvar('SPENDB_SETTINGS', silent=True)
     app.config.update(config)
@@ -47,7 +45,6 @@ def create_app(**config):
     babel.init_app(app)
     cache.init_app(app)
     mail.init_app(app)
-    assets.init_app(app)
     login_manager.init_app(app)
     data_manager.init_app(app)
     pages.init_app(app)
@@ -65,9 +62,6 @@ def create_app(**config):
 
 def create_web_app(**config):
     app = create_app(**config)
-
-    from spendb.assets import register_scripts
-    register_scripts(app)
 
     from spendb.views import register_views
     register_views(app, babel)
