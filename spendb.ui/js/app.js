@@ -1,7 +1,7 @@
 angular.module('spendb.config', []).constant('config', SPENDB_CONFIG);
 
 var spendb = angular.module('spendb', ['spendb.config', 'ngCookies', 'ngRoute', 'angular.filter', 'duScroll',
-                                       'ngFileUpload', 'angularMoment', 'ui.bootstrap', 'ui.select', 'ngBabbage']);
+                                       'ngFileUpload', 'ui.bootstrap', 'ui.select', 'ngBabbage']);
 
 
 spendb.config(['$routeProvider', '$locationProvider',

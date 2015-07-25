@@ -77,7 +77,7 @@
               <span ng-hide="$last">&middot;</span>
             </span>
             <small>
-            in 
+            in
             {{ getReferenceLabel('currencies', dataset.currency) }}
             ({{dataset.currency}})
             </small>
@@ -85,7 +85,7 @@
         </tr>
         <tr>
           <th>Created</th>
-          <td>{{ dataset.created_at | amCalendar}}</td>
+          <td>{{ dataset.created_at | formatDate }}</td>
         </tr>
       </table>
 
@@ -99,7 +99,7 @@
           Source data
         </h4>
         <p class="help-block">
-          Source files are the origin of the data presented here. They are 
+          Source files are the origin of the data presented here. They are
           preserved and available for download.
         </p>
         <table class="table">
@@ -117,7 +117,7 @@
                 target="_self">url</a>
             </th>
             <td>
-              {{ source.created_at | amCalendar}}
+              {{ source.created_at | formatDate }}
             </td>
             <td>
               <a ng-href="{{ source.data_url}}" class="btn btn-default btn-xs" target="_self">
