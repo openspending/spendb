@@ -13,7 +13,11 @@
 
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{ asset_path }}/style.css" rel="stylesheet" />
+    {% if debug %}
+      <link href="{{ asset_path }}/style.css" rel="stylesheet" />
+    {% else %}
+      <link href="{{ asset_path }}/style.min.css" rel="stylesheet" />
+    {% endif %}
   </head>
   <body ng-controller="AppCtrl">
     <div id="spinner-overlay" ng-show="showSpinner">
