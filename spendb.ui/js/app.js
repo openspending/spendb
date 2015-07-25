@@ -145,6 +145,19 @@ spendb.controller('AppCtrl', ['$scope', '$rootScope', '$location', '$http', '$co
 
   // EU cookie warning
   $scope.showCookieWarning = !$cookies.neelieCookie;
+  $scope.showSpinner = true;
+
+  $rootScope.$on("$routeChangeStart", function (event, next, current) {
+    $scope.showSpinner = true;
+  });
+
+  $rootScope.$on("$routeChangeSuccess", function (event, next, current) {
+    $scope.showSpinner = false;
+  });
+
+  $rootScope.$on("$routeChangeError", function (event, next, current) {
+    $scope.showSpinner = false;
+  });
 
   $scope.hideCookieWarning = function() {
     $cookies.neelieCookie = true;

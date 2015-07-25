@@ -135,6 +135,23 @@ h1, h2, h3, h4 {
     margin-top: -2px;
 }
 
+.spinner {
+    font-size: 5em;
+    color: #ddd;
+    width: 100%;
+    padding: 0.1em 0 0.5em 0;
+    text-align: center;
+}
+
+#spinner-overlay {
+    position: absolute;
+    min-height: 100%;
+    width: 100%;
+    background-color: @theme-body-bg;
+    z-index: 999;
+    padding-top: 12em;
+}
+
 .table {
     td {
         &.numeric {
@@ -366,13 +383,6 @@ footer {
 
 .dataset-settings {
     min-height: 20em;
-
-    .spinner {
-        font-size: 10em;
-        width: 100%;
-        padding: 0.1em 0 0.1em 0;
-        text-align: center;
-    }
 
     .log-message {
         //white-space: pre;

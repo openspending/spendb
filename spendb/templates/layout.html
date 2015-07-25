@@ -6,22 +6,23 @@
     <title>{{ site_title }}</title>
 
     <meta name="description" content="{% block page_desc %}{% trans %}We're enabling anyone to explore, visualize and track government spending.{% endtrans %}{% endblock %}" />
-    <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}"
-      type="image/x-icon" />
+    <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}" type="image/x-icon" />
     <link rel="alternate" type="application/rss+xml"
       title="{% trans %}Latest Datasets on {{ site_title }}{% endtrans %}"
       href="{{ url_for('home.feed_rss') }}" />
 
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600'
-      rel='stylesheet' type='text/css'>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
-      rel="stylesheet">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     {% assets "css_main" %}
       <link href="{{ ASSET_URL }}" rel="stylesheet" />
     {% endassets %}
   </head>
-
   <body ng-controller="AppCtrl">
+    <div id="spinner-overlay" ng-show="showSpinner">
+      <div class="spinner">
+        <i class="fa fa-spinner fa-pulse"></i>
+      </div>
+    </div>
     <div id="page">
       <div ng-view></div>
     </div>
@@ -37,7 +38,39 @@
       </a>
     </div>
 
-    {% include '_footer.html' %}
+    <footer>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-8">
+            <ul class="footer-links">
+              <li>
+                <a href="/docs/about.html">About</a>
+              </li>
+              <li>
+                <a href="https://github.com/spendb/spendb/wiki/Web-API">Developers</a>
+              </li>
+              <li>
+                <a href="https://github.com/spendb/spendb">Source Code</a>
+              </li>
+              <li>
+                <a href="/docs/contact.html">Contact</a>
+              </li>
+              <li>
+                <a href="/docs/tos.html">Terms &amp; Privacy</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <p>
+              All <a href="http://www.gnu.org/licenses/agpl.html">code</a>,
+              <a href="http://creativecommons.org/licenses/by/3.0/">content</a>
+              and <a href="http://opendatacommons.org/licenses/odbl/">data</a> is
+              openly licensed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <!-- script boot section -->
     <script>

@@ -7202,6 +7202,21 @@ h4 {
   border: 1px solid #eeeeee;
   margin-top: -2px;
 }
+.spinner {
+  font-size: 5em;
+  color: #ddd;
+  width: 100%;
+  padding: 0.1em 0 0.5em 0;
+  text-align: center;
+}
+#spinner-overlay {
+  position: absolute;
+  min-height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 999;
+  padding-top: 12em;
+}
 .table td.numeric {
   text-align: right;
 }
@@ -7387,12 +7402,6 @@ footer p {
 }
 .dataset-settings {
   min-height: 20em;
-}
-.dataset-settings .spinner {
-  font-size: 10em;
-  width: 100%;
-  padding: 0.1em 0 0.1em 0;
-  text-align: center;
 }
 .dataset-settings .log-message {
   word-break: break-all;

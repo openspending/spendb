@@ -22,18 +22,15 @@ assets.register('css_main', css_main)
 
 
 # Javscript bundles
-js_vendor = Bundle('vendor/moment/moment.js',
-                   'vendor/d3/d3.js',
+js_vendor = Bundle('vendor/d3/d3.js',
                    'vendor/d3-plugins/sankey/sankey.js',
                    'vendor/angular/angular.js',
                    'vendor/angular-route/angular-route.js',
-                   'vendor/angular-moment/angular-moment.js',
                    'vendor/angular-scroll/angular-scroll.js',
                    'vendor/angular-cookies/angular-cookies.js',
                    'vendor/angular-ui-select/dist/select.js',
                    'vendor/angular-filter/dist/angular-filter.js',
-                   'vendor/ng-file-upload/ng-file-upload-shim.js',
-                   'vendor/ng-file-upload/ng-file-upload.js',
+                   'vendor/ng-file-upload/ng-file-upload-all.js',
                    'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
                    'vendor/babbage.ui/dist/babbage.ui.js',
                    filters='uglifyjs', output='prod/vendor.js')
