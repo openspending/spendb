@@ -1,3 +1,5 @@
+import os
+from hashlib import sha1
 from StringIO import StringIO
 
 from flask import Blueprint, render_template, request, redirect
@@ -15,6 +17,15 @@ from spendb.validation.common import RESERVED_TERMS
 blueprint = Blueprint('home', __name__)
 
 
+def asset_link(path):
+    asset_path = current_app.config['ASSETS_PATH_PROD']
+    if current_app.config['DEBUG']:
+        asset_path = current_app.config['ASSETS_PATH_DEBUG']
+    cache_key = os.environ.get('CACHE_KEY', __version__)
+    cache_key = sha1(cache_key).hexdigest()[:10]
+    return '%s%s?_=%s' % (asset_path, path, cache_key)
+
+
 @blueprint.route('/login')
 @blueprint.route('/settings')
 @blueprint.route('/accounts/<account>')
@@ -27,15 +38,11 @@ def index(*a, **kw):
     from spendb.views.context import etag_cache_keygen
     etag_cache_keygen(RESERVED_TERMS)
     locale = get_locale()
-    config = current_app.config
-    asset_path = config['ASSETS_PATH_DEBUG'] if config['DEBUG'] \
-        else config['ASSETS_PATH_PROD']
     data = {
         'current_language': locale.language,
         'url_for': url_for,
-        'version': __version__,
-        'debug': config['DEBUG'],
-        'asset_path': asset_path,
+        'debug': current_app.config['DEBUG'],
+        'asset_link': asset_link,
         'reserved_terms': RESERVED_TERMS,
         'site_url': url_for('home.index').rstrip('/'),
         'site_title': current_app.config.get('SITE_TITLE')

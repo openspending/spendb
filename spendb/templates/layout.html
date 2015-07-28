@@ -14,9 +14,9 @@
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     {% if debug %}
-      <link href="{{ asset_path }}/style.css" rel="stylesheet" />
+      <link href="{{ asset_link('/style.css') }}" rel="stylesheet" />
     {% else %}
-      <link href="{{ asset_path }}/style.min.css" rel="stylesheet" />
+      <link href="{{ asset_link('/style.min.css') }}" rel="stylesheet" />
     {% endif %}
   </head>
   <body ng-controller="AppCtrl">
@@ -82,12 +82,12 @@
       SPENDB_CONFIG.reserved_terms = {{ reserved_terms | tojson }};
     </script>
 
-    <script src="{{ asset_path }}/vendor.js"></script>
+    <script src="{{ asset_link('/vendor.js') }}"></script>
     {% if debug %}
-      <script src="{{ asset_path }}/templates.js"></script>
-      <script src="{{ asset_path }}/app.js"></script>
+      <script src="{{ asset_link('/templates.js') }}"></script>
+      <script src="{{ asset_link('/app.js') }}"></script>
     {% else %}
-      <script src="{{ asset_path }}/app.min.js"></script>
+      <script src="{{ asset_link('/app.min.js') }}"></script>
     {% endif %}
     <!-- end script boot section -->
   </body>
