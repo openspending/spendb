@@ -1,0 +1,87 @@
+{
+  "name": "spendb",
+  "components": {
+    "web": {
+      "image": "registry.giantswarm.io/spendb/spendb:latest",
+      "ports": 8000,
+      "env": {
+        "SITE_TITLE": "$site_title",
+        "SECRET": "$secret",
+        "DATABASE_URL": "$database_url",
+        "AMQP_URL": "$amqp_url",
+        "MAIL_SERVER": "$mail_server",
+        "MAIL_PORT": "$mail_port",
+        "MAIL_USERNAME": "$mail_username",
+        "MAIL_PASSWORD": "$mail_password",
+        "MAIL_DEFAULT_SENDER": "$mail_default_sender",
+        "AWS_KEY_ID": "$aws_key_id",
+        "AWS_SECRET": "$aws_secret",
+        "AWS_DATA_BUCKET": "$aws_data_bucket"
+      },
+      "links": [
+        {"component": "rabbitmq", "target_port": "5672"},
+        {"component": "db", "target_port": "5432"}
+      ],
+      "domains": {
+        "8000": [
+          "spendb.gigantic.io",
+          "dummy.pudo.org"
+        ]
+      },
+      "entrypoint": "gunicorn",
+      "args": [
+        "-w", "5",
+        "-b", "0.0.0.0:8000",
+        "--error-logfile", "-",
+        "--log-file", "-",
+        "spendb.wsgi:app"
+      ]
+    },
+    "db": {
+      "image": "postgres:9.4",
+      "ports": 5432,
+      "env": {
+        "POSTGRES_USER": "spendb",
+        "POSTGRES_PASSWORD": "spendb"
+      },
+      "volumes": [
+        {
+          "path": "/var/lib/postgresql/data",
+          "size": "4 GB"
+        }
+      ]
+    },
+    "rabbitmq": {
+      "image": "rabbitmq",
+      "ports": 5672
+    },
+    "worker": {
+      "image": "registry.giantswarm.io/spendb/spendb:latest",
+      "env": {
+        "C_FORCE_ROOT": "$celery_force_root",
+        "SITE_TITLE": "$site_title",
+        "SECRET": "$secret",
+        "DATABASE_URL": "$database_url",
+        "AMQP_URL": "$amqp_url",
+        "MAIL_SERVER": "$mail_server",
+        "MAIL_PORT": "$mail_port",
+        "MAIL_USERNAME": "$mail_username",
+        "MAIL_PASSWORD": "$mail_password",
+        "MAIL_DEFAULT_SENDER": "$mail_default_sender",
+        "AWS_KEY_ID": "$aws_key_id",
+        "AWS_SECRET": "$aws_secret",
+        "AWS_DATA_BUCKET": "$aws_data_bucket"
+      },
+      "links": [
+        {"component": "rabbitmq", "target_port": "5672"},
+        {"component": "db", "target_port": "5432"}
+      ],
+      "entrypoint": "celery",
+      "args": [
+        "-A", "spendb.tasks", "worker",
+        "-c", "4",
+        "-l", "info"
+      ]
+    }
+  }
+}

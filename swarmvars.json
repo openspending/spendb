@@ -1,0 +1,17 @@
+{
+  "spendb/production": {
+    "celery_force_root": "true",
+    "site_title": "SpenDB",
+    "secret": "foo",
+    "database_url": "postgresql://spendb:spendb@db/spendb",
+    "amqp_url": "amqp://guest:guest@rabbitmq:5672//",
+    "mail_server": "smtp.mandrillapp.com",
+    "mail_port": "587",
+    "mail_username": "",
+    "mail_password": "",
+    "mail_default_sender": "",
+    "aws_key_id": "",
+    "aws_secret": "",
+    "aws_data_bucket": ""
+  }
+}
