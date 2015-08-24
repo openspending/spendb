@@ -14,16 +14,12 @@ RUN echo 'deb http://ftp.de.debian.org/debian wheezy-backports main' >> /etc/apt
 RUN curl -L https://www.npmjs.org/install.sh | sh
 RUN npm install -g bower
 
-RUN mkdir spendb
-WORKDIR spendb
-
-ADD requirements.txt requirements.txt
-ADD setup.py setup.py
-
-ADD . /spendb
+# Use clean checkout because ADD implodes on symlinks.
+RUN git clone https://github.com/spendb/spendb.git /spendb
+WORKDIR /spendb
 
 ADD prod_settings.py settings.py
 ENV SPENDB_SETTINGS /spendb/settings.py
-RUN pip install -r requirements.txt -e /spendb
+RUN pip install functools32 && pip install -r requirements.txt -e /spendb
 
 EXPOSE 8000
