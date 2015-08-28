@@ -2,7 +2,7 @@ web:
     build: .
     command: gunicorn -w 5 -b 0.0.0.0:8000 --error-logfile /var/log/gunicorn.error.log --log-file /var/log/gunicorn.log spendb.wsgi:app
     ports:
-        - "8000:8000"
+        - "127.0.0.1:8000:8000"
     links:
         - rabbitmq
         - db
