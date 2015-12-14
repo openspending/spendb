@@ -32,9 +32,10 @@ class DataManager(object):
         if self._coll is None:
             env = self.app.config
             args = {
+                'path': env.get('STORAGE_PATH'),
                 'aws_key_id': env.get('AWS_KEY_ID'),
                 'aws_secret': env.get('AWS_SECRET'),
                 'bucket_name': env.get('AWS_DATA_BUCKET')
             }
-            self._coll = open_collection('datasets', 's3', **args)
+            self._coll = open_collection('datasets', env.get('STORAGE_TYPE'), **args)
         return self._coll
