@@ -1,7 +1,6 @@
 import logging
 from flask import Flask
 from flask import url_for as _url_for
-from flask import abort, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.babel import Babel
@@ -39,13 +38,6 @@ cors = CORS()
 def create_app(**config):
     app = Flask(__name__)
     
-    from flask import abort, request
-
-    @app.before_request
-    def limit_remote_addr():
-        if app.config.get('RESTRICT_IPS') and request.remote_addr not in app.config.get('ALLOWED_IPS'):
-            abort(403)
-
     app.config.from_object(default_settings)
     app.config.from_envvar('SPENDB_SETTINGS', silent=True)
     app.config.update(config)

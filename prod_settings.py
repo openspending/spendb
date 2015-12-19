@@ -5,9 +5,6 @@ DEBUG = False
 CELERY_ALWAYS_EAGER = False
 CACHE = not DEBUG
 
-RESTRICT_IPS = False
-ALLOWED_IPS = ['127.0.0.1',]
-
 SITE_TITLE = env('SPENDB_SITE_TITLE', 'SpenDB')
 SECRET_KEY = env('SPENDB_SECRET')
 
@@ -24,6 +21,9 @@ MAIL_DEFAULT_SENDER = env('SPENDB_MAIL_SENDER', 'SpenDB <info@mapthemoney.org>')
 
 STORAGE_TYPE = 's3' #Alternative: 'file'
 STORAGE_PATH = '/a/path/only/valid/if/using/local/file/system'
+
+STORAGE_TYPE = env('SPENDB_STORAGE_TYPE', 's3') #Alternative: 'file'
+STORAGE_PATH = env('SPENDB_STORAGE_PATH', '/usr/local/lib/spendb') #Only used if 'file' selected above
 
 AWS_KEY_ID = env('SPENDB_AWS_KEY_ID')
 AWS_SECRET = env('SPENDB_AWS_SECRET')
