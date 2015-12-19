@@ -37,6 +37,7 @@ cors = CORS()
 
 def create_app(**config):
     app = Flask(__name__)
+    
     app.config.from_object(default_settings)
     app.config.from_envvar('SPENDB_SETTINGS', silent=True)
     app.config.update(config)

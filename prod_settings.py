@@ -19,6 +19,9 @@ MAIL_PASSWORD = env('SPENDB_SMTP_PASSWORD', env('SPENDB_MANDRILL_PASSWORD'))
 
 MAIL_DEFAULT_SENDER = env('SPENDB_MAIL_SENDER', 'SpenDB <info@mapthemoney.org>')
 
+STORAGE_TYPE = env('SPENDB_STORAGE_TYPE', 's3') #Alternative: 'file'
+STORAGE_PATH = env('SPENDB_STORAGE_PATH', '/usr/local/lib/spendb') #Only used if 'file' selected above
+
 AWS_KEY_ID = env('SPENDB_AWS_KEY_ID')
 AWS_SECRET = env('SPENDB_AWS_SECRET')
 AWS_DATA_BUCKET = env('SPENDB_AWS_DATA_BUCKET')
